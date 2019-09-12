@@ -1,0 +1,8 @@
+In this simulation, the variance covariance matrix of the reconcilied forecast 
+distribution is calculated as, 
+
+sigma = SPWP'S' = S(S'W^-S)^-S'
+
+Different estimates for W were calculated and the forecast accuracy was evaluated
+
+Joint distributions were evaluated with respect to only the bottom level series

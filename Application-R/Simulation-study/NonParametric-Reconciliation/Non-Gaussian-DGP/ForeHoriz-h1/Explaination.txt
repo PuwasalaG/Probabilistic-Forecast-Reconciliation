@@ -1,0 +1,8 @@
+Simulation for hierarchical structure 2. (m=4, n=7)
+P = (S'WS)^(-1)S'W
+
+In this simulation we are estimating the P matrix in three ways
+1. Estimate W
+2. Estimate through the reparameterisation using cholesky decomposition
+3. Estimating P directly, imposing the constraint PS=I
+
