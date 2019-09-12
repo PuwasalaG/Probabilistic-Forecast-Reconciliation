@@ -1,0 +1,17 @@
+*.log
+*.aux
+*.idx
+*.bbl
+*.blg
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.ilg
+*.ind
+*.fdb_latexmk
+*.fls
+*.synctex\.gz
+*.out
+*.csv
+
