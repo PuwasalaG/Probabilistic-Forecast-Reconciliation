@@ -388,4 +388,8 @@ rbind(DF_UniV_1_100, DF_UniV_1_100) %>%
 DF_UniV_ARIMA <- DF_UniV[complete.cases(DF_UniV[ , "R.method"]),] %>% 
   filter(`F.method`=="ARIMA")
 
+DF_UniV_ETS <- DF_UniV[complete.cases(DF_UniV[ , "R.method"]),] %>% 
+  filter(`F.method`=="ETS")
+
 write.csv(x=DF_UniV_ARIMA, file = "DF_UniV_ARIMA.csv")
+write.csv(x=DF_UniV_ETS, file = "DF_UniV_ETS.csv")
