@@ -33,7 +33,7 @@ m <- ncol(OvernightTrips_Region)
 L <- 100 #Size of the training window
 p <- nrow(AllTS) - L #number of replications
 B <- 2500 # Number of random numbers generated from the predictive distributions
-H <- 6 #Forecast horizones
+H <- 12 #Forecast horizones
 
 #Generating the summing matrix
 S <- smatrix(Hierarchy)
@@ -243,8 +243,8 @@ for (j in 101:152) {#p
     OLS_G <- solve(t(S) %*% S) %*% t(S)
     
     #MinT shrink G
-    targ <- lowerD(ForeError_all_ETS)
-    shrink <- shrink.estim(ForeError_all_ETS,targ)
+    targ <- diag(diag(var(na.omit(ForeError_all_ETS))), n, n)
+    shrink <- shrink.estim(na.omit(ForeError_all_ETS),targ)
     Shr.cov_ETS <- shrink[[1]]
     Inv_Shr.cov_ETS <- solve(Shr.cov_ETS)
     
@@ -252,7 +252,7 @@ for (j in 101:152) {#p
     
     #WLS G
     Cov_WLS_ETS <- diag(diag(Shr.cov_ETS), n, n)
-    Inv_WLS_ETS <- solve(Cov_WLS_ETS)
+    Inv_WLS_ETS <- diag(1/diag(var(na.omit(ForeError_all_ARIMA))), n, n)
     
     WLS_G_ETS <- solve(t(S) %*% Inv_WLS_ETS %*% S) %*% t(S) %*% Inv_WLS_ETS
     
@@ -638,19 +638,18 @@ for (j in 101:152) {#p
     ##Calculating different G matrices required for reconciliation of ARIMA base forecasts##
     
     #MinT shrink G
-    targ <- lowerD(ForeError_all_ARIMA)
-    shrink <- shrink.estim(ForeError_all_ARIMA,targ)
+    targ <- diag(diag(var(na.omit(ForeError_all_ARIMA))), n, n)
+    shrink <- shrink.estim(na.omit(ForeError_all_ARIMA),targ)
     Shr.cov_ARIMA <- shrink[[1]]
     Inv_Shr.cov_ARIMA <- solve(Shr.cov_ARIMA)
     
     MinT.Shr_G_ARIMA <- solve(t(S) %*% Inv_Shr.cov_ARIMA %*% S) %*% t(S) %*% Inv_Shr.cov_ARIMA
     
     #WLS G
-    Cov_WLS_ARIMA <- diag(diag(Shr.cov_ARIMA), n, n)
-    Inv_WLS_ARIMA <- solve(Cov_WLS_ARIMA)
+    Inv_WLS_ARIMA <- diag(1/diag(var(na.omit(ForeError_all_ARIMA))), n, n)
+    
     
     WLS_G_ARIMA <- solve(t(S) %*% Inv_WLS_ARIMA %*% S) %*% t(S) %*% Inv_WLS_ARIMA
-    
     
     
     ###Reconciliation of base forecasts from ARIMA###

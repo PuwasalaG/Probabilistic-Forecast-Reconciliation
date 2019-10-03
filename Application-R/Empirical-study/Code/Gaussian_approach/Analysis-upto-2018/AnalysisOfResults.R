@@ -100,6 +100,7 @@ DF_MultScore_SS_AllTS_ARIMA %>%
 DF_MultiV_States_1_100 <- read.csv("Results/DF_MultiV_States_1-100.csv")[,-1]
 DF_MultiV_States_101_152 <- read.csv("Results/DF_MultiV_States_101-152.csv")[,-1]
 
+# DF_MultiV_States_1_100 <- DF_MultiV_States_1_100 %>% select(-Log.score)
 rbind(DF_MultiV_States_1_100, DF_MultiV_States_101_152) %>% 
   as.data.frame() -> DF_MultiV_States
 write.csv(x=DF_MultiV_States, file = "DF_MultiV_States.csv")
@@ -192,6 +193,8 @@ DF_MultScore_SS_States_ARIMA %>%
 
 DF_MultiV_Zones_1_100 <- read.csv("Results/DF_MultiV_Zones_1-100.csv")[,-1]
 DF_MultiV_Zones_101_152 <- read.csv("Results/DF_MultiV_Zones_101-152.csv")[,-1]
+
+# DF_MultiV_Zones_1_100 <- DF_MultiV_Zones_1_100 %>% select(-Log.score)
 
 rbind(DF_MultiV_Zones_1_100, DF_MultiV_Zones_101_152) %>% 
   as.data.frame() -> DF_MultiV_Zones
@@ -288,6 +291,8 @@ DF_MultScore_SS_Zones_ARIMA %>%
 DF_MultiV_Regions_1_100 <- read.csv("Results/DF_MultiV_Regions_1-100.csv")[,-1]
 DF_MultiV_Regions_101_152 <- read.csv("Results/DF_MultiV_Regions_101-152.csv")[,-1]
 
+# DF_MultiV_Regions_1_100 <- DF_MultiV_Regions_1_100 %>% select(-Log.score)
+
 rbind(DF_MultiV_Regions_1_100, DF_MultiV_Regions_101_152) %>% 
   as.data.frame() -> DF_MultiV_Regions
 write.csv(x=DF_MultiV_Regions, file = "DF_MultiV_Regions.csv")
@@ -382,7 +387,7 @@ DF_MultScore_SS_Regions_ARIMA %>%
 DF_UniV_1_100 <- read.csv("Results/DF_UniV_1-100.csv")[,-1]
 DF_UniV_101_152 <- read.csv("Results/DF_UniV_101-152.csv")[,-1]
 
-rbind(DF_UniV_1_100, DF_UniV_1_100) %>% 
+rbind(DF_UniV_1_100, DF_UniV_101_152) %>% 
   as.data.frame() -> DF_UniV
 
 DF_UniV_ARIMA <- DF_UniV[complete.cases(DF_UniV[ , "R.method"]),] %>% 

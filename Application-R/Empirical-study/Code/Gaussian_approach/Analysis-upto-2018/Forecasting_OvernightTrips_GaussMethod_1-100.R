@@ -33,7 +33,7 @@ m <- ncol(OvernightTrips_Region)
 L <- 100 #Size of the training window
 p <- nrow(AllTS) - L #number of replications
 B <- 2500 # Number of random numbers generated from the predictive distributions
-H <- 6 #Forecast horizones
+H <- 12 #Forecast horizones
 
 #Generating the summing matrix
 S <- smatrix(Hierarchy)

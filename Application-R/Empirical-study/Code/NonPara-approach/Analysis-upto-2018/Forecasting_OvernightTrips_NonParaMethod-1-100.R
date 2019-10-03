@@ -33,7 +33,7 @@ m <- ncol(OvernightTrips_Region)
 L <- 100 #Size of the training window
 p <- nrow(AllTS) - L #number of replications
 B <- 2500 # Number of random numbers generated from the predictive distributions
-H <- 6 #Forecast horizones
+H <- 12 #Forecast horizones
 
 #Generating the summing matrix
 S <- smatrix(Hierarchy)
@@ -162,7 +162,7 @@ for (j in 1:100) {#p
     
     
     #Forecsting with ARIMA
-    fit_ARIMA[[i]] <- auto.arima(TS) # stepwise=FALSE,approx=FALSE
+    fit_ARIMA[[i]] <- auto.arima(TS, stepwise=FALSE,approx=FALSE) # stepwise=FALSE,approx=FALSE
     Forecast_ARIMA <- forecast(fit_ARIMA[[i]], h = min(H, nrow(Test[,i])))
     ModelResid_all_ARIMA[,i] <- residuals(fit_ARIMA[[i]])
     ForeError_all_ARIMA[,i] <- as.vector(TS - fitted(fit_ARIMA[[i]]))
@@ -686,6 +686,15 @@ for (j in 1:100) {#p
     CRPS_MinT.Shr_ARIMA <- matrix(0, nrow = min(H, nrow(Test)), ncol = n)
     CRPS_Unrecon_ARIMA <- matrix(0, nrow = min(H, nrow(Test)), ncol = n)
     
+    # Unrecon_future_paths_ARIMA <- lapply(Unrecon_future_paths_ARIMA, na.omit)
+    # 
+    # Unrecon_future_paths_States_ARIMA <- lapply(Unrecon_future_paths_States_ARIMA, na.omit)
+    # 
+    # Unrecon_future_paths_Zones_ARIMA <- lapply(Unrecon_future_paths_Zones_ARIMA, na.omit)
+    # 
+    # Unrecon_future_paths_Regions_ARIMA <- lapply(Unrecon_future_paths_Regions_ARIMA, na.omit)
+    
+    
     
     for (h in 1: min(H, nrow(Test))) {
       
@@ -746,6 +755,7 @@ for (j in 1:100) {#p
                                      "Replication" = rep(j, n*min(H, nrow(Test))))
       
     }
+    
     
     
     Test.list_full <- split(Test[1:min(H, nrow(Test)),], 1:min(H, nrow(Test)))
@@ -1035,10 +1045,10 @@ DF_MultiV_States[complete.cases(DF_MultiV_States[ , "R-method"]),] -> DF_MultiV_
 DF_MultiV_Zones[complete.cases(DF_MultiV_Zones[ , "R-method"]),] -> DF_MultiV_Zones
 DF_MultiV_Regions[complete.cases(DF_MultiV_Regions[ , "R-method"]),] -> DF_MultiV_Regions
 
-write.csv(DF_MultiV_Total, "DF_MultiV_Total_1-100.csv")
-write.csv(DF_MultiV_States, "DF_MultiV_States_1-100.csv")
-write.csv(DF_MultiV_Zones, "DF_MultiV_Zones_1-100.csv")
-write.csv(DF_MultiV_Regions, "DF_MultiV_Regions_1-100.csv")
-write.csv(DF_UniV, "DF_UniV_1-100.csv")
+write.csv(DF_MultiV_Total, "Results/DF_MultiV_Total_1-100.csv")
+write.csv(DF_MultiV_States, "Results/DF_MultiV_States_1-100.csv")
+write.csv(DF_MultiV_Zones, "Results/DF_MultiV_Zones_1-100.csv")
+write.csv(DF_MultiV_Regions, "Results/DF_MultiV_Regions_1-100.csv")
+write.csv(DF_UniV, "Results/DF_UniV_1-100.csv")
 
-save.image("Forecasting_OvernightTrips_NonParaMethod_1-100.RData")
+save.image("Results/Forecasting_OvernightTrips_NonParaMethod_1-100.RData")

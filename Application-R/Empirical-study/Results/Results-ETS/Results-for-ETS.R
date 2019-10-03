@@ -9,7 +9,7 @@ library(ggpubr)
    ##Gaussian Approach##
 #############################
 
-DF_MultiV_Gauss_Total <- read.csv("Gaussian_approach/DF_MultiV_Total.csv")
+DF_MultiV_Gauss_Total <- read.csv("../Gaussian_approach/DF_MultiV_Total.csv")
 ### Total Hierarchy ###
 
 DF_MultiV_Gauss_Total %>% 
@@ -82,6 +82,7 @@ SS_E.ES_Gauss_AllTS_ETS %>%
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (ES) %") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -97,6 +98,7 @@ SS_E.VS_Gauss_AllTS_ETS %>%
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (VS) %") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -105,7 +107,7 @@ SS_E.VS_Gauss_AllTS_ETS %>%
 
 ### -- State level of the Hierarchy -- ###
 
-DF_MultiV_Gauss_States <- read.csv("Gaussian_approach/DF_MultiV_States.csv")
+DF_MultiV_Gauss_States <- read.csv("../Gaussian_approach/DF_MultiV_States.csv")
 
 DF_MultiV_Gauss_States %>% 
   dplyr::select(-"Replication") -> DF_MultScores_Gauss_States
@@ -173,6 +175,7 @@ SS_E.ES_Gauss_States_ETS %>%
   geom_point(size = 3) + 
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (ES) %") + ggtitle("States") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -187,6 +190,7 @@ SS_E.VS_Gauss_States_ETS %>%
   geom_point(size = 3) + 
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (VS) %") + ggtitle("States") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -195,7 +199,7 @@ SS_E.VS_Gauss_States_ETS %>%
 
 ### -- Zone level of the Hierarchy -- ###
 
-DF_MultiV_Gauss_Zones <- read.csv("Gaussian_approach/DF_MultiV_Zones.csv")
+DF_MultiV_Gauss_Zones <- read.csv("../Gaussian_approach/DF_MultiV_Zones.csv")
 
 DF_MultiV_Gauss_Zones %>% 
   dplyr::select(-"Replication") -> DF_MultScores_Gauss_Zones
@@ -264,6 +268,7 @@ SS_E.ES_Gauss_Zones_ETS %>%
   geom_point(size = 3) + 
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (ES) %") + ggtitle("Zones") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -278,6 +283,7 @@ SS_E.VS_Gauss_Zones_ETS %>%
   geom_point(size = 3) + 
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (VS) %") + ggtitle("Zones") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -286,7 +292,7 @@ SS_E.VS_Gauss_Zones_ETS %>%
 
 ### -- Regional(Bottom) level of the Hierarchy -- ###
 
-DF_MultiV_Gauss_Regions <- read.csv("Gaussian_approach/DF_MultiV_Regions.csv")
+DF_MultiV_Gauss_Regions <- read.csv("../Gaussian_approach/DF_MultiV_Regions.csv")
 
 DF_MultiV_Gauss_Regions %>% 
   dplyr::select(-"Replication") -> DF_MultScores_Gauss_Regions
@@ -357,6 +363,7 @@ SS_E.ES_Gauss_Regions_ETS %>%
   geom_point(size = 3) + 
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (ES) %") + ggtitle("Regions") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -371,6 +378,7 @@ SS_E.VS_Gauss_Regions_ETS %>%
   geom_point(size = 3) + 
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (VS) %") + ggtitle("Regions") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -381,7 +389,7 @@ SS_E.VS_Gauss_Regions_ETS %>%
 ##Non-Parametric Approach##
 #############################
 
-DF_MultiV_NonPara_Total <- read.csv("NonPara_approach/DF_MultiV_Total.csv")
+DF_MultiV_NonPara_Total <- read.csv("../NonPara_approach/DF_MultiV_Total.csv")
 ### Total Hierarchy ###
 
 DF_MultiV_NonPara_Total %>% 
@@ -454,6 +462,7 @@ SS_E.ES_NonPara_AllTS_ETS %>%
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (ES) %") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -469,6 +478,7 @@ SS_E.VS_NonPara_AllTS_ETS %>%
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (VS) %") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -477,7 +487,7 @@ SS_E.VS_NonPara_AllTS_ETS %>%
 
 ### -- State level of the Hierarchy -- ###
 
-DF_MultiV_NonPara_States <- read.csv("NonPara_approach/DF_MultiV_States.csv")
+DF_MultiV_NonPara_States <- read.csv("../NonPara_approach/DF_MultiV_States.csv")
 
 DF_MultiV_NonPara_States %>% 
   dplyr::select(-"Replication") -> DF_MultScores_NonPara_States
@@ -545,6 +555,7 @@ SS_E.ES_NonPara_States_ETS %>%
   geom_point(size = 3) + 
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (ES) %") + ggtitle("States") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -559,6 +570,7 @@ SS_E.VS_NonPara_States_ETS %>%
   geom_point(size = 3) + 
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (VS) %") + ggtitle("States") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -567,7 +579,7 @@ SS_E.VS_NonPara_States_ETS %>%
 
 ### -- Zone level of the Hierarchy -- ###
 
-DF_MultiV_NonPara_Zones <- read.csv("NonPara_approach/DF_MultiV_Zones.csv")
+DF_MultiV_NonPara_Zones <- read.csv("../NonPara_approach/DF_MultiV_Zones.csv")
 
 DF_MultiV_NonPara_Zones %>% 
   dplyr::select(-"Replication") -> DF_MultScores_NonPara_Zones
@@ -636,6 +648,7 @@ SS_E.ES_NonPara_Zones_ETS %>%
   geom_point(size = 3) + 
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (ES) %") + ggtitle("Zones") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -650,6 +663,7 @@ SS_E.VS_NonPara_Zones_ETS %>%
   geom_point(size = 3) + 
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (VS) %") + ggtitle("Zones") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -658,7 +672,7 @@ SS_E.VS_NonPara_Zones_ETS %>%
 
 ### -- Regional(Bottom) level of the Hierarchy -- ###
 
-DF_MultiV_NonPara_Regions <- read.csv("NonPara_approach/DF_MultiV_Regions.csv")
+DF_MultiV_NonPara_Regions <- read.csv("../NonPara_approach/DF_MultiV_Regions.csv")
 
 DF_MultiV_NonPara_Regions %>% 
   dplyr::select(-"Replication") -> DF_MultScores_NonPara_Regions
@@ -729,6 +743,7 @@ SS_E.ES_NonPara_Regions_ETS %>%
   geom_point(size = 3) + 
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (ES) %") + ggtitle("Regions") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -743,6 +758,7 @@ SS_E.VS_NonPara_Regions_ETS %>%
   geom_point(size = 3) + 
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (VS) %") + ggtitle("Regions") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
@@ -804,7 +820,7 @@ grid.arrange(arrangeGrob(Plot_Gauss_levels, Plot_NonPara_levels),
 
 rm(list = ls())
 
-DF_UniV_Gauss_ETS <- read.csv("Gaussian_approach/DF_UniV_ETS.csv")
+DF_UniV_Gauss_ETS <- read.csv("../Gaussian_approach/DF_UniV_ETS.csv")
 
 DF_UniV_Gauss_ETS %>% 
   select(Series, `R.method`, `Forecast.Horizon`, CRPS) %>% 
