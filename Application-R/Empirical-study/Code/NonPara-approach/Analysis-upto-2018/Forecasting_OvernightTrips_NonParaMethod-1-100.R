@@ -12,6 +12,7 @@ library(gridExtra)
 library(MASS)
 library(scoringRules)
 
+set.seed(1989)
 source("Score-functions.R")
 
 #Importing data
@@ -150,7 +151,7 @@ for (j in 1:100) {#p
   ForeError_all_Benchmark <- matrix(NA, nrow = nrow(Train), ncol = n) #Benchmark method: seasonal RW with a drift
   
   Start_fc <- Sys.time()
-  for(i in 1:n) {
+  for(i in 2:n) {
     
     TS <- ts(Train[,i], frequency = 12)
     
@@ -1049,6 +1050,6 @@ write.csv(DF_MultiV_Total, "Results/DF_MultiV_Total_1-100.csv")
 write.csv(DF_MultiV_States, "Results/DF_MultiV_States_1-100.csv")
 write.csv(DF_MultiV_Zones, "Results/DF_MultiV_Zones_1-100.csv")
 write.csv(DF_MultiV_Regions, "Results/DF_MultiV_Regions_1-100.csv")
-write.csv(DF_UniV, "Results/DF_UniV_1-100.csv")
+write.csv(DF_UniV, "Results/DF_UniV_59.csv")
 
 save.image("Results/Forecasting_OvernightTrips_NonParaMethod_1-100.RData")

@@ -79,6 +79,7 @@ SS_E.ES_Gauss_AllTS_ARIMA %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
@@ -95,6 +96,7 @@ SS_E.VS_Gauss_AllTS_ARIMA %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
@@ -173,6 +175,7 @@ SS_E.ES_Gauss_States_ARIMA %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -188,6 +191,7 @@ SS_E.VS_Gauss_States_ARIMA %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -266,6 +270,7 @@ SS_E.ES_Gauss_Zones_ARIMA %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -281,6 +286,7 @@ SS_E.VS_Gauss_Zones_ARIMA %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -360,7 +366,8 @@ SS_E.ES_Gauss_Regions_ARIMA %>%
   rename(`Method`=`R.method`) %>% 
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
-  geom_point(size = 3) + 
+  geom_point(size = 3) +
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -376,6 +383,7 @@ SS_E.VS_Gauss_Regions_ARIMA %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -459,6 +467,7 @@ SS_E.ES_NonPara_AllTS_ARIMA %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
@@ -475,6 +484,7 @@ SS_E.VS_NonPara_AllTS_ARIMA %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
@@ -553,6 +563,7 @@ SS_E.ES_NonPara_States_ARIMA %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -568,6 +579,7 @@ SS_E.VS_NonPara_States_ARIMA %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -646,6 +658,7 @@ SS_E.ES_NonPara_Zones_ARIMA %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -661,6 +674,7 @@ SS_E.VS_NonPara_Zones_ARIMA %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -741,6 +755,7 @@ SS_E.ES_NonPara_Regions_ARIMA %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -756,6 +771,7 @@ SS_E.VS_NonPara_Regions_ARIMA %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -820,10 +836,10 @@ grid.arrange(arrangeGrob(Plot_Gauss_levels, Plot_NonPara_levels),
 
 rm(list = ls())
 
-DF_UniV_Gauss_ARIMA <- read.csv("../Gaussian_approach/DF_UniV_ARIMA.csv")
+DF_UniV_Gauss_ARIMA <- read.csv("../Gaussian_approach/DF_UniV_ARIMA.csv")[,-1]
 
 DF_UniV_Gauss_ARIMA %>% 
-  select(Series, `R.method`, `Forecast.Horizon`, CRPS) %>% 
+  dplyr::select(Series, `R.method`, `Forecast.Horizon`, CRPS) %>% 
   group_by(Series, `R.method`, `Forecast.Horizon`) %>% 
   summarise(E.CRPS = mean(CRPS)) -> DF_UnivScores_Gauss_AllTS
 
@@ -844,7 +860,7 @@ DF_UnivScores_Gauss_AllTS %>%
 
 DF_UnivScore_SS_Gauss_Top.series %>% 
   ungroup() %>% 
-  select(`R.method`, `Forecast.Horizon`, SS_E.CRPS) %>% 
+  dplyr::select(`R.method`, `Forecast.Horizon`, SS_E.CRPS) %>% 
   filter(`R.method` != "Base") %>% 
   mutate(`R.method` = recode(`R.method`, "MinT Shrink" = "MinT(Shrink)")) %>%
   mutate(`R.method` = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up"))) %>%
@@ -852,6 +868,7 @@ DF_UnivScore_SS_Gauss_Top.series %>%
   ggplot(aes(x = h, y = SS_E.CRPS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+
@@ -863,7 +880,7 @@ DF_UnivScore_SS_Gauss_Top.series %>%
 DF_UniV_NonPara_ARIMA <- read.csv("../NonPara_approach/DF_UniV_ARIMA.csv")
 
 DF_UniV_NonPara_ARIMA %>% 
-  select(Series, `R.method`, `Forecast.Horizon`, CRPS) %>% 
+  dplyr::select(Series, `R.method`, `Forecast.Horizon`, CRPS) %>% 
   group_by(Series, `R.method`, `Forecast.Horizon`) %>% 
   summarise(E.CRPS = mean(CRPS)) -> DF_UnivScores_NonPara_AllTS
 
@@ -884,7 +901,7 @@ DF_UnivScores_NonPara_AllTS %>%
 
 DF_UnivScore_SS_NonPara_Top.series %>% 
   ungroup() %>% 
-  select(`R.method`, `Forecast.Horizon`, SS_E.CRPS) %>% 
+  dplyr::select(`R.method`, `Forecast.Horizon`, SS_E.CRPS) %>% 
   filter(`R.method` != "Base") %>% 
   mutate(`R.method` = recode(`R.method`, "MinT Shrink" = "MinT(Shrink)")) %>%
   mutate(`R.method` = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up"))) %>%
@@ -892,6 +909,7 @@ DF_UnivScore_SS_NonPara_Top.series %>%
   ggplot(aes(x = h, y = SS_E.CRPS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12))+

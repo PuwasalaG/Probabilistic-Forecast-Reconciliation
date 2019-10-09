@@ -79,6 +79,7 @@ SS_E.ES_Gauss_AllTS_ETS %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
@@ -95,6 +96,7 @@ SS_E.VS_Gauss_AllTS_ETS %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
@@ -173,6 +175,7 @@ SS_E.ES_Gauss_States_ETS %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12)) +
@@ -187,7 +190,8 @@ SS_E.VS_Gauss_States_ETS %>%
   rename(`Method`=`R.method`) %>% 
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
-  geom_point(size = 3) + 
+  geom_point(size = 3) +
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12)) +
@@ -266,6 +270,7 @@ SS_E.ES_Gauss_Zones_ETS %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12)) +
@@ -281,6 +286,7 @@ SS_E.VS_Gauss_Zones_ETS %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12)) +
@@ -361,6 +367,7 @@ SS_E.ES_Gauss_Regions_ETS %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12)) +
@@ -376,6 +383,7 @@ SS_E.VS_Gauss_Regions_ETS %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12)) +
@@ -459,6 +467,7 @@ SS_E.ES_NonPara_AllTS_ETS %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
@@ -475,6 +484,7 @@ SS_E.VS_NonPara_AllTS_ETS %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
@@ -553,6 +563,7 @@ SS_E.ES_NonPara_States_ETS %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12)) +
@@ -568,6 +579,7 @@ SS_E.VS_NonPara_States_ETS %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12)) +
@@ -646,6 +658,7 @@ SS_E.ES_NonPara_Zones_ETS %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12)) +
@@ -661,6 +674,7 @@ SS_E.VS_NonPara_Zones_ETS %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12)) +
@@ -741,6 +755,7 @@ SS_E.ES_NonPara_Regions_ETS %>%
   ggplot(aes(x = h, y = ES, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12)) +
@@ -756,6 +771,7 @@ SS_E.VS_NonPara_Regions_ETS %>%
   ggplot(aes(x = h, y = VS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
   scale_x_discrete(limits = c(1:12)) +
@@ -852,14 +868,16 @@ DF_UnivScore_SS_Gauss_Top.series %>%
   ggplot(aes(x = h, y = SS_E.CRPS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (CRPS) %") + ggtitle("Top level") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
   theme(axis.title.y = element_text(size = 10)) -> Plot_Total_Gauss_UniV
 
-DF_UniV_NonPara_ETS <- read.csv("NonPara_approach/DF_UniV_ETS.csv")
+DF_UniV_NonPara_ETS <- read.csv("../NonPara_approach/DF_UniV_ETS.csv")
 
 DF_UniV_NonPara_ETS %>% 
   select(Series, `R.method`, `Forecast.Horizon`, CRPS) %>% 
@@ -891,8 +909,10 @@ DF_UnivScore_SS_NonPara_Top.series %>%
   ggplot(aes(x = h, y = SS_E.CRPS, color = Method, shape = Method)) + 
   geom_hline(yintercept = 0, color = "grey") +
   geom_point(size = 3) + 
+  geom_line(aes(group = Method, color = Method)) +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(15, 16, 17, 3)) +
+  scale_x_discrete(limits = c(1:12)) +
   theme(legend.position = "bottom") +
   ylab("Skill score (CRPS) %") + ggtitle("Top level") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
