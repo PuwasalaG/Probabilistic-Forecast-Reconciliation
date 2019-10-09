@@ -399,19 +399,18 @@ title = {{Aggregate Versus Subaggregate Models in Local Area Forecasting}},
 volume = {71},
 year = {1976}
 }
-@article{Hyndman2011,
-abstract = {In many applications, there are multiple time series that are hierarchically organized and can be aggregated at several different levels in groups based on products, geography or some other features. We call these "hierarchical time series". They are commonly forecast using either a "bottom-up" or a "top-down" method. In this paper we propose a new approach to hierarchical forecasting which provides optimal forecasts that are better than forecasts produced by either a top-down or a bottom-up approach. Our method is based on independently forecasting all series at all levels of the hierarchy and then using a regression model to optimally combine and reconcile these forecasts. The resulting revised forecasts add up appropriately across the hierarchy, are unbiased and have minimum variance amongst all combination forecasts under some simple assumptions. We show in a simulation study that our method performs well compared to the top-down approach and the bottom-up method. We demonstrate our proposed method by forecasting Australian tourism demand where the data are disaggregated by purpose of travel and geographical region. {\textcopyright} 2011 Elsevier B.V. All rights reserved.},
+@Article{HynEtAl2011,
 author = {Hyndman, Rob J. and Ahmed, Roman A. and Athanasopoulos, George and Shang, Han Lin},
-doi = {10.1016/j.csda.2011.03.006},
-file = {:C$\backslash$:/Users/Puwasala/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Hyndman et al. - 2011 - Optimal combination forecasts for hierarchical time series.pdf:pdf},
+title = {Optimal combination forecasts for hierarchical time series},
 journal = {Computational Statistics and Data Analysis},
-keywords = {Bottom-up forecasting,Combining forecasts,GLS regression,Hierarchical forecasting,Reconciling forecasts,Top-down forecasting},
+year = {2011},
+volume = {55},
 number = {9},
 pages = {2579--2589},
+doi = {10.1016/j.csda.2011.03.006},
+isbn = {0167-9473},
+keywords = {Bottom-up forecasting,Combining forecasts,GLS regression,Hierarchical forecasting,Reconciling forecasts,Top-down forecasting},
 publisher = {Elsevier B.V.},
-title = {{Optimal combination forecasts for hierarchical time series}},
-volume = {55},
-year = {2011}
 }
 @article{Gross1990,
 abstract = {This paper addresses the issue of forecasting individual items within a product line; where each line includes several independent but closely related products. The purpose of the research was to reduce the overall forecasting burden by developing and assessing schemes of disaggregating forecasts of a total product line to the related individual items. Measures were developed to determine appropriate disaggregated methodologies and to compare the forecast accuracy of individual product forecasts versus disaggregated totals. Several of the procedures used were based upon extensions of the combination of forecast research and applied to disaggregations of total forecasts of product lines. The objective was to identify situations when it was advantageous to produce disaggregated forecasts, and if advantageous, which method of disaggregation to utilize. This involved identification of the general conceptual characteristics within a set of product line data that might cause a disaggregation method to produce relatively accurate forecasts. These conceptual characteristics provided guidelines for forecasters on how to select a disaggregation method and under what conditions a particular method is applicable.},
@@ -426,16 +425,13 @@ title = {{Disaggregation methods to expedite product line forecasting}},
 volume = {9},
 year = {1990}
 }
-@book{VanErven2015a,
-abstract = {In hierarchical time series (HTS) forecasting, the hierarchical relation be- tween multiple time series is exploited to make better forecasts. This hierarchical relation implies one or more aggregate consistency constraints that the series are known to satisfy. Many existing approaches, like for example bottom-up or top- down forecasting, therefore attempt to achieve this goal in a way that guarantees that the forecasts will also be aggregate consistent. We propose to split the problem of HTS into two independent steps: first one comes up with the best possible fore- casts for the time series without worrying about aggregate consistency; and then a reconciliation procedure is used to make the forecasts aggregate consistent. We introduce a Game-Theoretically OPtimal (GTOP) reconciliation method, which is guaranteed to only improve any given set of forecasts. This opens up new possibil- ities for constructing the forecasts. For example, it is not necessary to assume that bottom-level forecasts are unbiased, and aggregate forecasts may be constructed by regressing both on bottom-level forecasts and on other covariates that may only be available at the aggregate level. We illustrate the benefits of our approach both on simulated data and on real electricity consumption data.},
-author = {van Erven, Tim and Cugliari, Jairo},
-booktitle = {Spinger Lecture Notes in Statistics. Paris: Springer,},
-doi = {10.1007/978-3-319-18732-7_15},
-editor = {Antoniadis, A and Brossat, X and Poggi, JM},
-file = {:C$\backslash$:/Users/Puwasala/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/van Erven, Cugliari - 2014 - Game-Theoretically Optimal reconciliation of contemporaneous hierarchical time series forecasts.pdf:pdf},
-pages = {297--317},
-title = {{Game-Theoretically Optimal reconciliation of contemporaneous hierarchical time series forecasts}},
-year = {2014}
+@incollection{VanErven2015a,
+title={Game-theoretically optimal reconciliation of contemporaneous hierarchical time series forecasts},
+author={Van Erven, Tim and Cugliari, Jairo},
+booktitle={Modeling and Stochastic Learning for Forecasting in High Dimensions},
+pages={297--317},
+year={2015},
+publisher={Springer}
 }
 
 @Manual{Rcore,
@@ -473,5 +469,90 @@ keywords = "Australia, Exponential smoothing, Hierarchical forecasting, Innovati
   author={{Tourism Research Australia}},
   year={2019},
   institution={Tourism Research Australia, Canberra}
-  type={~},
+  }
+
+@techreport{PanEtAl2019HF,
+author = {Panagiotelis, Anastasios and Gamakumara, Puwasala and Athanasopoulos, George and Hyndman, Rob J},
+institution = {Monash University Econometrics \& Business Statistics},
+type = {Working paper},
+number = {18/19},
+title = {Forecast reconciliation: A geometric view with new insights on bias correction},
+year = {2019}
+}
+
+@Article{ShaHyn2017,
+author = {Shang, Han Lin and Hyndman, Rob J.},
+title = {Grouped Functional Time Series Forecasting: An Application to Age-Specific Mortality Rates},
+journal = {Journal of Computational and Graphical Statistics},
+year = {2017},
+volume = {26},
+number = {2},
+pages = {330--343},
+issn = {15372715},
+archiveprefix = {arXiv},
+arxivid = {1609.04222},
+doi = {10.1080/10618600.2016.1237877},
+eprint = {1609.04222},
+file = {:C$\backslash$:/Users/gathana/Dropbox (Personal)/PDFs/Shang, Hyndman - 2017 - Grouped Functional Time Series Forecasting An Application to Age-Specific Mortality Rates.pdf:pdf},
+isbn = {6126125053},
+keywords = {Bottom-up,Forecast reconciliation,Hierarchical time series forecasting,Japanese mortality database,Optimal combination},
+publisher = {Taylor {\&} Francis},
+}
+
+@article{zarnowitz1987,
+title={Consensus and uncertainty in economic prediction},
+author={Zarnowitz, Victor and Lambros, Louis A},
+journal={Journal of Political economy},
+volume={95},
+number={3},
+pages={591--621},
+year={1987},
+publisher={The University of Chicago Press}
+}
+
+@article{rossi2014,
+title={Density forecasts in economics, forecasting and policymaking},
+author={Rossi, Barbara},
+year={2014},
+publisher={Citeseer}
+}
+
+@article{mclean2013,
+title={Probabilistic wind vector forecasting using ensembles and Bayesian model averaging},
+author={McLean Sloughter, J and Gneiting, Tilmann and Raftery, Adrian E},
+journal={Monthly Weather Review},
+volume={141},
+number={6},
+pages={2107--2119},
+year={2013}
+}
+
+@inproceedings{wytock2013,
+title={Large-scale probabilistic forecasting in energy systems using sparse gaussian conditional random fields},
+author={Wytock, Matt and Kolter, J Zico},
+booktitle={Decision and Control (CDC), 2013 IEEE 52nd Annual Conference on},
+pages={1019--1024},
+year={2013},
+organization={IEEE}
+}
+
+@article{bose2017,
+title={Probabilistic demand forecasting at scale},
+author={B{\"o}se, Joos-Hendrik and Flunkert, Valentin and Gasthaus, Jan and Januschowski, Tim and Lange, Dustin and Salinas, David and Schelter, Sebastian and Seeger, Matthias and Wang, Yuyang},
+journal={Proceedings of the VLDB Endowment},
+volume={10},
+number={12},
+pages={1694--1705},
+year={2017},
+publisher={VLDB Endowment}
+}
+
+@inproceedings{Taieb2017,
+title={Coherent probabilistic forecasts for hierarchical time series},
+author={{Ben Taieb}, Souhaib and Taylor, James W and Hyndman, Rob J},
+booktitle={Proceedings of the 34th International Conference on Machine Learning},
+volume = {70},
+pages={3348--3357},
+year={2017},
+publisher={PMLR}
 }

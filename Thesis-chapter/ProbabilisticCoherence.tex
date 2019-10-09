@@ -108,7 +108,9 @@
 \section{Introduction}\label{sec:intro_chap3}
 
 
-Large collections of time series often follow some aggregation structure. For example, tourism flows of a country can be disaggregated along a geographic hierarchy of states, zones, and cities. Such collections generally referred to as hierarchical time series. To ensure aligned decision making, it is important that forecasts across all levels of aggregation must add up. This property is called ``coherence''. If the forecasts are not coherent, then these can be adjusted to make them coherent. This process is referred to as ``reconciliation''. Earlier approaches for obtaining coherent forecasts involve generating first-stage forecasts for series in a single level of the hierarchy and aggregate them up or disaggregate them down to obtain the forecasts for the remaining series. These are often call ``bottom-up'' and ``top-down'' forecasts respectively. For example see \citet{Dunn1976}, \citet{Gross1990} and references therein. Reconciliation is distinct from the single-level forecasting approaches as it starts with a set of incoherent forecasts for the entire hierarchy and then revise these so that they are coherent with the aggregate constraints, see for example \citet{AthEtAl2009, HynEtAl2011, VanErven2015a, ShaHyn2017}, and references therein. From these literature we see that coherency and reconciliation has been extensively developed  for point forecasting case. Generalising both of these concepts, particularly the latter, to probabilistic forecasting is a gap that we seek to address in this chapter. 
+Large collections of time series often follow some aggregation structure. For example, tourism flows of a country can be disaggregated along a geographic hierarchy of states, zones, and cities. Such collections of time series generally referred to as hierarchical time series. To ensure aligned decision making, it is important that forecasts across all levels of aggregation are adding up. This property is called ``coherence''. If the forecasts are not coherent, then these can be adjusted so that they become coherent. Earlier approaches for obtaining coherent forecasts involve generating first-stage forecasts for series in a single level of the hierarchy and aggregate them up or disaggregate them down to obtain forecasts for the remaining series. These are often call ``bottom-up'' and ``top-down'' forecasts respectively. For example see \citet{Dunn1976}, \citet{Gross1990} and references therein. 
+
+An alternative approach to these single level forecasting methods is to do forecast ``reconciliation''. Reconciliation starts with a set of incoherent forecasts for the entire hierarchy and then revises these so that they are coherent with the aggregate constraints, see for example \citet{AthEtAl2009, HynEtAl2011, VanErven2015a, ShaHyn2017}. From this literature we see that coherency and reconciliation has been extensively developed for the point forecasting case. Generalising both of these concepts, particularly the latter, to probabilistic forecasting is a gap that we seek to address in this chapter. 
 %We do so by extending the geometric interpretation to coherence and reconciliation in the point forecasting case outlined in Chapter \ref{Chap:ForeRecon} to the probabilistic framework. This allows us to derive further results for parametric as well as non-parametric distributional forecasts for hierarchical time series.
 %elliptical distributions as well as provide insight into forecast evaluation via multivariate scoring rules. 
 
@@ -120,12 +122,12 @@ Large collections of time series often follow some aggregation structure. For ex
 
 % This requirement motivated researchers to ﬁnd the entire probability distribution of the future values so that it provides a full description of the uncertainty associated with the prediction
 
-In contrast to the point forecasts, the entire probability distribution of future values provides a full description of the uncertainty associate with the predictions \citep{Abramson1995, Gneiting2014}. Therefore the probabilistic forecasting has become of the great interest in many disciplines such as, economics \citep{zarnowitz1987, rossi2014}, meteorology studies \citep{pinson2009, mclean2013}, energy forecasting \citep{wytock2013, BenTaieb2017} and retail forecasting \citep{bose2017}. However the attention on probabilistic forecasts in hierarchical forecasting is very limited in the literature. Indeed to the best of our knowledge, \citet{BenTaieb2017} and \citet{JeoEtAl2019} are the only papers to deal with probabilistic forecasts in hierarchical time series. In \citet{BenTaieb2017}, although they reconcile the means of predictive distributions, the overall distributions are constructed in a bottom-up fashion rather than using a reconciliation process. \citet{JeoEtAl2019} proposed a novel method for probabilistic forecast reconciliation based on cross-validation which in particular applied to the temporal hierarchies. In contrast to these studies, the main objective of our chapter is to generalise both coherence and reconciliation from point to probabilistic forecasting.
+In contrast to the point forecasts, the entire probability distribution of future values provides a full description of the uncertainty associate with the predictions \citep{Abramson1995, Gneiting2014}. Therefore probabilistic forecasting has become of great interest in many disciplines such as, economics \citep{zarnowitz1987, rossi2014}, meteorological studies \citep{pinson2009, mclean2013}, energy forecasting \citep{wytock2013, BenTaieb2017} and retail forecasting \citep{bose2017}. However, the attention on probabilistic forecasts in the hierarchical literature is very limited. Indeed to the best of our knowledge, \citet{Taieb2017} and \citet{JeoEtAl2019} are the only papers to deal with probabilistic forecasts in the hierarchical time series. Although \citet{Taieb2017} reconcile the means of predictive distributions, the overall distributions are constructed in a bottom-up fashion rather than using a reconciliation approach. \citet{JeoEtAl2019} propose a novel method for probabilistic forecast reconciliation based on cross-validation which is particularly applied to temporal hierarchies. In contrast to these studies, the main objective of this chapter is to generalise both the concepts of coherence and reconciliation from point to probabilistic forecasting.
 
 %To facilitate the extension of point forecast reconciliation to probabilistic forecasting, we first provide a geometric interpretation of existing point reconciliation methods, framing them in terms of projections. In addition to being highly intuitive, this allows us to establish a number of theoretical results. We prove two new theorems about point forecast reconciliation, the first showing that reconciliation via projections preserves the unbiasedness of base forecasts, while the second shows that reconciled forecasts dominate unreconciled forecasts via the distance reducing property of projections. 
 
 
-Extending the geometric interpretation on point forecast reconciliation in Chapter \ref{Chap:ForeRecon} we provide new definitions of coherence and forecast reconciliation in the probabilistic setting. We also cover the topic of forecast evaluation of probabilistic forecasts via scoring rules. In particular, we prove that for a coherent data generating process, the log score is not proper with respect to incoherent forecasts. Therefore we recommend the use of the energy score or variogram score for comparing reconciled to unreconciled forecasts. Two or more reconciled forecasts can be compared using log score, energy score or variogram score, although we show that comparisons should be made on the full hierarchy for the latter two scores.
+Extending the geometric interpretation related to point forecast reconciliation derived in \citep{PanEtAl2019HF} we provide new definitions of coherence and forecast reconciliation in the probabilistic setting. We also cover the topic of forecast evaluation of probabilistic forecasts via scoring rules. In particular, we prove that for a coherent data generating process, the log score is not proper with respect to incoherent forecasts. Therefore we recommend the use of the energy score or variogram score for comparing reconciled to unreconciled forecasts. Two or more reconciled forecasts can be compared using log score, energy score or variogram score, although we show that comparisons should be made on the full hierarchy for the latter two scores.
 
 When parametric density assumptions are made we describe how the probabilistic forecast definitions lead to a reconciliation procedure that merely involves a change of basis and marginalisation. We show that probabilistic reconciliation via linear transformations can recover the true predictive distribution as long as the latter is in the elliptical class. We provide conditions for which this linear transformation is a projection, and although this projection cannot be feasibly estimated in practice, we provide a heuristic argument in favour of MinT reconciliation.
 
@@ -138,11 +140,11 @@ The remainder of the paper is structured as follows. In Section~\ref{sec:Notat&P
 
 \section{Notations and preliminaries}\label{sec:Notat&Prelim}
 
-Following Chapter \ref{Chap:ForeRecon} we define our notations and some preliminary work on hierarchical time series and forecasting. 
+Following \citep{PanEtAl2019HF} we define notation and some preliminary work on hierarchical time series and forecasting. 
 
 \subsection{Notations}\label{sec:notation_chap3}
 
-\emph{Hierarchical time series} are a collection of $n$ time series some of which are aggregates of other series. In a conventional hierarchy, $m$ number of \emph{bottom level series} are aggregate to form the series in upper levels. Further these bottom level series can be considered as linearly independent since they cannot be formed as linear combination of other series. Let us denote with $\bm{y}_t$, a $n$ dimensional vector containing observations of all series in the hierarchy at time $t$. Further, let $\bm{b}_t \in \mathbb{R}^m$ contain the observations of only the \emph{bottom level series} of the hierarchy at time $t$. Due to the aggregation constraints of the hierarchy we can write, 
+\emph{Hierarchical time series} are a collection of $n$ time series some of which are aggregates of other series. In a conventional hierarchy, $m$ number of \emph{bottom-level series} are aggregated to form series in upper levels. These bottom-level series can be considered as linearly independent since they cannot be formed as linear combination of other series. Let us denote with $\bm{y}_t$, a $n$ dimensional vector containing observations of all series in the hierarchy at time $t$. Further, let $\bm{b}_t \in \mathbb{R}^m$ contain the observations of only the \emph{bottom-level series} of the hierarchy at time $t$. Due to the aggregation constraints of the hierarchy we can write, 
 \begin{equation}\label{eq:coheObservations}
 \bm{y}_t = \bm{Sb}_t,
 \end{equation}
@@ -160,7 +162,7 @@ where $\bm{S}$ is an $n \times m$ constant matrix for a given hierarchical struc
 	\caption{An example of a two level hierarchical structure.}\label{fig:twoL-hier}
 \end{figure}
 
-To make explicit this notation, we refer to the hierarchy in Figure~\ref{fig:twoL-hier}. This hierarchy consists of $m=4$ bottom level series with $n=7$ total number of series. Further, $\bm{y}_t = [y_{Tot,t},y_{A,t}, y_{B,t},y_{AA,t}, y_{AB,t}, y_{BA,t}, y_{BB,t}]'$, $\bm{b}_t = [y_{AA,t}, y_{AB,t}, y_{BA,t}, y_{BB,t}]'$ and
+To make explicit this notation, we refer to the hierarchy in Figure~\ref{fig:twoL-hier}. This hierarchy consists of $m=4$ bottom-level series with $n=7$ total number of series. Further, $\bm{y}_t = [y_{Tot,t},y_{A,t}, y_{B,t},y_{AA,t}, y_{AB,t}, y_{BA,t}, y_{BB,t}]'$, $\bm{b}_t = [y_{AA,t}, y_{AB,t}, y_{BA,t}, y_{BB,t}]'$ and
 \[
 \bm{S} = \begin{pmatrix}
 1 & 1 & 1 & 1  \\
@@ -214,7 +216,7 @@ It will sometimes be useful to think of pre-multiplication by $\bm{S}$ in equati
 
 \subsection{Hierarchical point forecasts}\label{subsec:preliminary}
 
-Chapter \ref{Chap:ForeRecon} provides insights to coherent point forecasts and forecast reconciliation in terms of geometric concepts. We briefly discuss these to facilitate extensions into the probabilistic framework presented in Section~\ref{sec:ProbForecasts}.   
+\citep{PanEtAl2019HF} provides insights to coherent point forecasts and forecast reconciliation in terms of geometric concepts. We briefly discuss these to facilitate extensions into the probabilistic framework presented in Section~\ref{sec:ProbForecasts}.   
 
 %It is desirable that forecasts, whether point forecasts or probabilistic forecasts, should in some sense respect inherent aggregation constraints. We follow other authors \citep{Wickramasuriya2017, FPP2018} in using the nomenclature \emph{coherence} to describe this property.  We now provide new definitions for coherent forecasts in terms of vector spaces that give a geometric understanding of the problem, thus facilitating the development of probabilistic forecast reconciliation in Section~\ref{sec:reconciliation}.
 %
@@ -233,7 +235,7 @@ Chapter \ref{Chap:ForeRecon} provides insights to coherent point forecasts and f
 
 %\subsection{Point forecast reconciliation}
 
-Suppose we have a vector of point forecasts at time $t+h$ derived by using information up to and including time $t$. Let these forecasts be stacked in a vector with the same order as $\bm{y}_t$ and denoted by $\hat{\bm{y}}_{t+h} \in \mathbb{R}^n$. These are referred to as \emph{incoherent point forecasts} as they do not satisfy the aggregation constraints. Assume a linear function that maps these incoherent forecasts into new bottom level forecasts.
+Suppose we have a vector of point forecasts at time $t+h$ derived by using information up to and including time $t$. Let these forecasts be stacked in a vector with the same order as $\bm{y}_t$ and denoted by $\hat{\bm{y}}_{t+h} \in \mathbb{R}^n$. These are referred to as \emph{incoherent point forecasts} as they do not satisfy the aggregation constraints. Assume a linear function that maps these incoherent forecasts into new bottom-level forecasts.
 Let $\bm{G}$ and $\bm{d}$ be an $m\times n$ matrix and $m\times 1$ vector respectively, and let $g:\mathbb{R}^n \rightarrow \mathbb{R}^m$ be the mapping $g(\bm{y})=\bm{G}\bm{y}+\bm{d}$.  A composition of $g(.)$ and $s(.)$ gives the reconciled point forecasts as, 
 
 \begin{equation} \label{eq:ReconPoint}
@@ -241,9 +243,9 @@ Let $\bm{G}$ and $\bm{d}$ be an $m\times n$ matrix and $m\times 1$ vector respec
 \end{equation}
 
 
-Several choices of $g(.)$ are currently extant in the literature, including the bottom-up, OLS, WLS and MinT methods, see for example \citep{Dunn1976}, \citet{HynEtAl2011} and \citet{WicEtAl2019}. These are special cases where $s\circ g$ is a projection. These can be defined so that $\bm{G}=({\bm{R}'_{\perp}}\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{d}=\bm{0}$, where, ${\bm{R}_{\perp}}$ is a $n\times m$ orthogonal complement to an $n \times (n-m)$ matrix $\bm{R}$, where the columns of the latter span the null space of $\mathfrak{s}$. For example, a straightforward choice of $\bm{R}$ for the most simple three variable hierarchy where $y_{1,t}=y_{2,t}+y_{3,t}$, is the vector $(1,-1,-1)$ which is orthogonal (in the Euclidean sense) to the columns of $\bm{S}$. In this case, the matrix $\bm{R}$ can be interpreted as a `restrictions' matrix since it has the property that $\bm{R}'\bm{y}=\bm{0}$ for coherent $\bm{y}$. For this three variable hierarchy, $\bm{R}_\perp'=\bm{S}$ and reconciliation corresponds to the OLS method. For the case where $\bm{R}_\perp'\neq\bm{S}$, for example WLS and MinT, 
+Several choices of $g(.)$ are currently extant in the literature, including the bottom-up \citep{Dunn1976}, OLS, WLS and MinT \citep{HynEtAl2011,WicEtAl2019} methods. These are special cases where $s\circ g$ is a projection. These can be defined so that $\bm{G}=({\bm{R}'_{\perp}}\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{d}=\bm{0}$, where, ${\bm{R}_{\perp}}$ is a $n\times m$ orthogonal complement to an $n \times (n-m)$ matrix $\bm{R}$, where the columns of the latter span the null space of $\mathfrak{s}$. For example, a straightforward choice of $\bm{R}$ for the most simple three variable hierarchy where $y_{1,t}=y_{2,t}+y_{3,t}$, is the vector $(1,-1,-1)$ which is orthogonal (in the Euclidean sense) to the columns of $\bm{S}$. In this case, the matrix $\bm{R}$ can be interpreted as a `restrictions' matrix since it has the property that $\bm{R}'\bm{y}=\bm{0}$ for coherent $\bm{y}$. For this three variable hierarchy, $\bm{R}_\perp'=\bm{S}$ and reconciliation corresponds to the OLS method. For the case where $\bm{R}_\perp'\neq\bm{S}$, for example WLS and MinT, 
 %there are two possible interpretations. One is that these are oblique projections in Euclidean space where the columns of $\bm{R}$ are `directions' along which incoherent point forecasts are projected onto the coherent space $\mathfrak{s}$. Alternatively, since 
-$\bm{R}_\perp'$ is usually written in the form $\bm{S}'{\bm{W}}^{-1}$. These projections can be thought of as orthogonal projections after pre-multiplying by ${\bm{W}^{-1/2}}$. More detailed explanation on this can be found in Sections \ref{sec:orthogonal} and \ref{sec:oblique} of Chapter \ref{Chap:ForeRecon}. Table~\ref{table:ReconMethods} summarises existing reconciliation methods.
+$\bm{R}_\perp'$ is usually written in the form $\bm{S}'{\bm{W}}^{-1}$. These projections can be thought of as orthogonal projections after pre-multiplying by ${\bm{W}^{-1/2}}$. More detailed explanation on this can be found in Sections \ref{sec:orthogonal} and \ref{sec:oblique} of \citep{PanEtAl2019HF}. Table~\ref{table:ReconMethods} summarises existing reconciliation methods.
 
 \begin{table}[!h]
 	\caption{Summary of reconciliation methods that are projections. Here, $\hat{\bm{W}}^{sam}$ is the variance covariance matrix of one-step ahead in-sample forecast errors, $\hat{\bm{W}}^{shr}$ is a shrinkage estimator more suited to large dimensions proposed by \citet{Schafer2005}, $\hat{\bm{W}}^{wls}$ is the diagonal matrix with diagonal elements $w_{ii}$, and $\tau = \frac{\sum_{i \neq j}\hat{\var}(\hat{w}_{ij})}{\sum_{i \neq j}{\hat{w}}^2_{ij}}$, where $w_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{W}}^{sam}$.}\label{table:ReconMethods}
@@ -360,7 +362,7 @@ To the best of our knowledge, the only other definition of coherent probabilisti
 
 We now extend the methodology of point forecast reconciliation to probabilistic forecasts.
 %For probabilistic forecasts, reconciliation implies finding the probability measure of the coherent forecasts using the information from an incoherent probabilistic forecast measure. A more formal definition is given below.
-Let $(\mathbb{R}^n, \mathscr{F}_{\mathbb{R}^n}, \hat{\nu})$ be a probability triple that is not coherent and which characterises forecast uncertainty for all variables in the hierarchy at time $t+h$ conditional on all information up to time $t$. This is obtained from the first stage of the forecasting process; e.g., fit univariate or multivariate models to forecast each series in the hierarchy. Let $g:\mathbb{R}^n \rightarrow \mathbb{R}^m $ be a linear function, and let $(\mathbb{R}^m, \mathscr{F}_{\mathbb{R}^m}, \nu)$ be a probability triple defined on $\mathbb{R}^m$.
+Let $(\mathbb{R}^n, \mathscr{F}_{\mathbb{R}^n}, \hat{\nu})$ be a probability triple that is not coherent and which characterises forecast uncertainty for all variables in the hierarchy at time $t+h$ conditional on all information up to time $t$. This is obtained from the first stage of the forecasting process; by modelling and forecasting each series in the hierarchy. Let $g:\mathbb{R}^n \rightarrow \mathbb{R}^m $ be a linear function, and let $(\mathbb{R}^m, \mathscr{F}_{\mathbb{R}^m}, \nu)$ be a probability triple defined on $\mathbb{R}^m$.
 
 \begin{definition} \label{def:reconprob}
 	The reconciled probability measure of $\hat{\nu}$ with respect to the mapping $g(.)$ is a probability measure $\tilde{\nu}$ on $\mathfrak{s}$ with $\sigma$-algebra $\mathscr{F}_\mathfrak{s}$ such that
@@ -486,29 +488,30 @@ The properties of multivariate scoring rules in the context of evaluating reconc
 
 \section{Parametric reconciliation} \label{sec:ParamRecon}
 
-Recall that when $s\circ g$ is a projection, the case of point forecast reconciliation can be broken down into three steps.
+Recall that when $s\circ g$ is a projection, the case of point forecast reconciliation can be broken down into three steps. In what follows we drop the subscript $t+h$ from conditional forecasts for brevity.  
 \begin{compactenum}
-	\item  $\hat{\bm{y}}_{t+h}$ is transformed into coordinates $\tilde{\bm{b}}_{t+h}$ and $\tilde{\bm{a}}_{t+h}$ via a change of basis.
-	\item $\tilde{\bm{a}}_{t+h}$ is discarded and $\tilde{\bm{b}}_{t+h}$ are kept as the bottom-level reconciled forecasts.
-	\item Reconciled forecasts for the entire hierarchy are recovered via $\tilde{\bm{y}}_{t+h}=\bm{S}\tilde{\bm{b}}_{t+h}$.
+	\item  $\hat{\bm{y}}$ is transformed into coordinates $\tilde{\bm{b}}$ and $\tilde{\bm{a}}$ via a change of basis.
+	\item $\tilde{\bm{a}}$ is discarded and $\tilde{\bm{b}}$ are kept as the bottom-level reconciled forecasts.
+	\item Reconciled forecasts for the entire hierarchy are recovered via $\tilde{\bm{y}}=\bm{S}\tilde{\bm{b}}$.
 \end{compactenum}
 
 We now outline the analogous steps for probabilistic forecasts when predictive densities are available.
 
-While $\hat{\nu}$ is a probability measure for an $n$-vector $\hat{\bm{y}}_{t+h}$, probability statements in terms of a different coordinate system can be made via an appropriate change of basis. Letting $f(.)$ be generic notation for a probability density function, and following the notation from point forecast reconciliation where $\hat{\bm{y}}_{t+h}=\bm{S}\tilde{\bm{b}}_{t+h}+\bm{R}\tilde{\bm{a}}_{t+h}$, we obtain
+While $\hat{\nu}$ is a probability measure for an $n$-vector $\hat{\bm{y}}$, probability statements in terms of a different coordinate system can be made via an appropriate change of basis. Letting $f(.)$ be generic notation for a probability density function, and following the notation from point forecast reconciliation where $\hat{\bm{y}}=\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}$, we obtain
 \begin{equation}
-f(\hat{\bm{y}}_{t+h})=f(\bm{S}\tilde{\bm{b}}_{t+h}+\bm{R}\tilde{\bm{a}}_{t+h})|(\bm{S}~\bm{R})|
+f(\hat{\bm{y}})=f(\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}})|(\bm{S}~\bm{R})|
 \end{equation}
-The expression $\hat{\nu}(g^{-1}(\mathcal{B}))$ in Definition~\ref{def:reconprob} is equivalent to the probability statement $\text{Pr}(\hat{\bm{y}}_{t+h}\in g^{-1}(\mathcal{B}))$. After the change of basis, this is equivalent to $\text{Pr}(\tilde{\bm{b}}\in \mathcal{B})$, which implies
+The expression $\hat{\nu}(g^{-1}(\mathcal{B}))$ in Definition~\ref{def:reconprob} is equivalent to the probability statement $\text{Pr}(\hat{\bm{y}}\in g^{-1}(\mathcal{B}))$. After the change of basis, this is equivalent to $\text{Pr}(\tilde{\bm{b}}\in \mathcal{B})$, which implies
 \begin{align}
-\text{Pr}(\hat{\bm{y}}_{t+h}\in g^{-1}(\mathcal{B}))&=\int\limits_{g^{-1}(\mathcal{B})}f(\hat{\bm{y}}_{t+h})d\hat{\bm{y}}_{t+h}\\
-&=\int\limits_{\mathcal{B}}\int f(\bm{S}\tilde{\bm{b}}_{t+h}+\bm{R}\tilde{\bm{a}}_{t+h})|(\bm{S}~\bm{R})|d\tilde{\bm{a}}_{t+h}d\tilde{\bm{b}}_{t+h}.
+\text{Pr}(\hat{\bm{y}}\in g^{-1}(\mathcal{B}))&=\int\limits_{g^{-1}(\mathcal{B})}f(\hat{\bm{y}})d\hat{\bm{y}}\\
+&=\int\limits_{\mathcal{B}}\int f(\bm{S}\tilde{\bm{b}}
++\bm{R}\tilde{\bm{a}})|(\bm{S}~\bm{R})|d\tilde{\bm{a}}d\tilde{\bm{b}}.
 \end{align}
-After integrating out over $\tilde{\bm{a}}_{t+h}$, a step analogous to setting $\tilde{\bm{a}}_{t+h}=0$ for point forecasting, we obtain an expression that gives the probability that the reconciled bottom-level series lies in the region $\mathcal{B}$. This corresponds to $\nu(\mathcal{B})$ in Definition~\ref{def:reconprob}. To make a valid probability statement about the entire hierarchy we simply use the bottom-level probabilistic forecasts together with Definition~\ref{def:cohprob}.
+After integrating out over $\tilde{\bm{a}}$, a step analogous to setting $\tilde{\bm{a}}=0$ for point forecasting, we obtain an expression that gives the probability that the reconciled bottom-level series lies in the region $\mathcal{B}$. This corresponds to $\nu(\mathcal{B})$ in Definition~\ref{def:reconprob}. To make a valid probability statement about the entire hierarchy we simply use the bottom-level probabilistic forecasts together with Definition~\ref{def:cohprob}.
 
 \subsubsection*{Example: Gaussian Distributions}
 
-Suppose an unreconciled probabilistic forecast is Gaussian with mean $\hat{\bm{\mu}}$ and variance-covariance matrix $\hat{\bm{\Sigma}}$. The subscripts $t+h$ are suppressed for brevity. Let the unreconciled density be given by
+Suppose an unreconciled probabilistic forecast is Gaussian with mean $\hat{\bm{\mu}}$ and variance-covariance matrix $\hat{\bm{\Sigma}}$. Let the unreconciled density be given by
 \begin{equation}
 f(\hat{\bm{y}})=(2\pi)^{-n/2}|\hat{\bm{\Sigma}}|^{-1/2}\exp\left\{-\frac{1}{2}\left[(\hat{\bm{y}}-\hat{\bm{\mu}})'\hat{\bm{\Sigma}}^{-1}(\hat{\bm{y}}-\hat{\bm{\mu}})\right]\right\}.
 \end{equation}
@@ -661,13 +664,13 @@ Errors were jointly generated from a normal distribution, and denoted by $\{\var
 
 \subsubsection*{Non-Gaussian errors:}
 
-Non-Gaussian errors were generated from a Gumbel copula model with beta margins. Using a copula model helps to impose a non-linear dependency structure among the series. A two dimensional Gumbel copula is given by, 
+Non-Gaussian errors were generated from a Gumbel copula model with beta margins. Using a copula model helps to impose a non-linear dependence structure among the series. A two dimensional Gumbel copula is given by, 
 \begin{equation*}
 C_\theta(u_1, u_2) = exp\{-[(-ln(u_1))^\theta + (-ln(u_2))^\theta]^{1/\theta}\}. 
 \end{equation*}
 We generate random variates $\{u_{AA}, u_{AB}\}$ from $C_{\theta=10}(.)$ and $\{u_{BA}, u_{BB}\}$ from $C_{\theta=8}(.)$ for series $\{AA, AB\}$ and $\{BA, BB\}$ respectively. Next we generate the errors, $\{\varepsilon_{AA}, \varepsilon_{AB}, \varepsilon_{BA}, \varepsilon_{BB}\}$ as the quantiles from beta distributions with shape parameters $\alpha = 1$ and $\beta = 3$ correspond to $\{u_{AA}, u_{AB}, u_{BA}, u_{BB}\}$. 
 
-Although the copulas go beyond the concepts of linear dependence, we will apply a Gaussian assumption to the data to investigate model misspecification. To give some idea of the covariance matrix of $\{\varepsilon_{AA}, \varepsilon_{AB}, \varepsilon_{BA}, \varepsilon_{BB}\}$, the sample estimate is,
+Although copulas go beyond the concepts of linear dependence, we will apply a Gaussian assumption to the data to investigate model misspecification. To give some idea of the covariance matrix of $\{\varepsilon_{AA}, \varepsilon_{AB}, \varepsilon_{BA}, \varepsilon_{BB}\}$, the sample estimate is,
 
 \begin{equation} \label{eq:SigmaNonGauss}
 \bm{\Sigma} = \begin{pmatrix}
@@ -715,12 +718,12 @@ We generate $2000$ observations for each series from this Gaussian and non-Gauss
 To assess the predictive performance of different forecasting methods, we use scoring rules as discussed in Section~\ref{sec:evaluation}. To facilitate comparisons, we report skill scores \citep{Gneiting2007}. For a given forecasting method, evaluated by a particular scoring rule, the skill score 
 gives the percentage improvement of the preferred forecasting method relative to a reference method. A negative valued skill score indicates that a method is worse than the reference method, whereas any positive value indicates that the method is superior to the reference method.
 
-Table~\ref{tab:SimResults_Gauss_MultivScores} summarises the forecasting performance of incoherent, bottom-up, OLS, WLS and two MinT reconciliation methods using log score, energy score and variogram score. The top panel refers to the Gaussian DGP whereas the bottom panel refers to the non-Gaussian DGP. Recall that the log score is improper with respect to incoherent forecasts. Therefore we calculate the skill scores with reference to the bottom-up forecasts instead of incoherent forecasts in all cases and also the cell for log score of the incoherent forecasts is left blank. Further, all log scores are evaluated on the basis of bottom-level series only, however these only differ from the log scores for the full hierarchy by a fixed constant. Overall, the MinT methods provide the best performance irrespective of the scoring rule, and all methods that reconcile using information at all levels of the forecast improve upon incoherent forecasts. Bottom-up forecasts perform even worse than incoherent forecasts in some cases. These results hold for both the Gaussian as well as the non-Gaussian DGP. 
+Table~\ref{tab:SimResults_Gauss_MultivScores} summarises the forecasting performance of incoherent, bottom-up, OLS, WLS and two MinT reconciliation methods using log score, energy score and variogram score. The top panel refers to the Gaussian DGP whereas the bottom panel refers to the non-Gaussian DGP. Recall that the log score is improper with respect to incoherent forecasts. Therefore we calculate the skill scores with reference to the bottom-up forecasts instead of incoherent forecasts in all cases and leave blank the cell for log score of the incoherent forecasts. Further, all log scores are evaluated on the basis of bottom-level series only, however these only differ from the log scores for the full hierarchy by a fixed constant. Overall, the MinT methods provide the best performance irrespective of the scoring rule, and all methods that reconcile using information at all levels of the forecast improve upon incoherent forecasts. Bottom-up forecasts perform even worse than incoherent forecasts in some cases. These results hold for both the Gaussian as well as the non-Gaussian DGP. 
 
-Tables~\ref{tab:SimResults_Gauss_UnivScores_Aggre} and~\ref{tab:SimResults_Gauss_UnivScores_Disaggre} break down the forecasting performance of the different methods by considering univariate scores on each individual margin.  Table~\ref{tab:SimResults_Gauss_UnivScores_Aggre} summarises the results for the top and middle levels, Table~\ref{tab:SimResults_Gauss_UnivScores_Aggre} does the same for bottom-level. Univariate log score and CRPS are considered, while skill scores are computed with the incoherent forecasts as a reference. When broken down in this fashion, irrespective of DGP, the methods based on MinT perform best for most series and always outperform bottom-up forecasts by quite a margin.
+Tables~\ref{tab:SimResults_Gauss_UnivScores_Aggre} and~\ref{tab:SimResults_Gauss_UnivScores_Disaggre} break down the forecasting performance of the different methods by considering univariate scores on each individual margin.  Table~\ref{tab:SimResults_Gauss_UnivScores_Aggre} summarises the results for the top and middle levels, Table~\ref{tab:SimResults_Gauss_UnivScores_Aggre} does the same for bottom-level. Univariate log score and CRPS are considered, while skill scores are computed with the incoherent forecasts as a reference. When broken down in this fashion, irrespective of DGP, the methods based on MinT perform best for most series and outperform bottom-up forecasts in almost all cases.
 
 \begin{table}[H]
-	\caption{Comparison of coherent forecasts in forecast for $h=1$ to $3$ steps- ahead. All entries shows the percentage skill score with reference to the bottom-up method. The top panel shows results from the Gaussian DGP and bottom panel shows the results from the non-Gaussian DGP. ``ES'' and ``VS'' columns give scores based on the joint forecast distribution across the entire hierarchy. ``LS'' column gives the log scores of the joint forecast distribution of the bottom-level. }\label{tab:SimResults_Gauss_MultivScores}
+	\caption{Comparison of coherent forecasts in forecast for $h=1$ to $3$ steps-ahead. All entries shows the percentage skill score with reference to the bottom-up method. The top panel shows results from the Gaussian DGP and bottom panel shows the results from the non-Gaussian DGP. ``ES'' and ``VS'' columns give scores based on the joint forecast distribution across the entire hierarchy. The ``LS'' column gives the log scores of the joint forecast distribution of the bottom-level. }\label{tab:SimResults_Gauss_MultivScores}
 	\centering
 	\resizebox{\linewidth}{!}{
 		\begin{tabular}{lccccccccc}
@@ -914,7 +917,7 @@ consequently we have,
 \tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}\hat{\bm{\Upsilon}}'_{T+h},
 \end{equation} 
 
-where, each row in $\tilde{\bm{\Upsilon}}_{T+h}$ represent a single reconciled sample path. Further $\tilde{\bm{\Upsilon}}'_{T+h}$ form an empirical sample from the reconciled forecast distribution of the hierarchy. Any $\bm{G}$ matrix introduced in point forecast reconciliation (also given in Table \ref{table:ReconMethods}) can be used for this sample path reconciliation. However, in the following subsection we discuss a method to find $\bm{G}$ that is optimal for probabilistic forecasts with respect to a proper scoring rule. 
+where, each row in $\tilde{\bm{\Upsilon}}_{T+h}$ represent a single reconciled sample path. Further $\tilde{\bm{\Upsilon}}_{T+h}$ form an empirical sample from the reconciled forecast distribution of the hierarchy. Any $\bm{G}$ matrix introduced in point forecast reconciliation (also given in Table \ref{table:ReconMethods}) can be used for this sample path reconciliation. However, in the following subsection we discuss a method to find $\bm{G}$ that is optimal for probabilistic forecasts with respect to a proper scoring rule. 
 
 \subsection{Optimal reconciliation of incoherent future paths}\label{subsec:Optimal_recon}
 
@@ -984,7 +987,7 @@ We now compare different reconciliation methods with optimal reconciliation in a
 		
 		$\{\hat{\bm{\Upsilon}}_{T+h,j=1},...,\hat{\bm{\Upsilon}}_{T+h,j=100}\}$ by minimising the average energy score as explained in Subsection \ref{subsec:Optimal_recon}. Also use the different reparameterisations of $\bm{G}_h$ as explained in Subsection $\ref{subsubsec:ReparameterisationG}$. Denote this as $\bm{G}^{Opt}_h$. 
 		\item Roll the inner rolling window another one step ahead and repeat steps (ii) and (iii). Denote these future paths by $\hat{\bm{\Upsilon}}_{T+h}$ for $h=1,2,3$. 
-		\item Compute $\tilde{\bm{\Upsilon}}_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,2,3$ using $\bm{G}^{Opt}_h$ as well as using other $\bm{G}$ matrices given in Table \ref{table:ReconMethods}.
+		\item Compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,2,3$ using $\bm{G}^{Opt}_h$ as well as using other $\bm{G}$ matrices given in Table \ref{table:ReconMethods}.
 		
 	\end{enumerate}
 	
@@ -1032,7 +1035,7 @@ However we note that optimal reconciliation required a high computational cost f
 			\end{tabular}
 		}
 	\end{center}
-	\textit{The methods noted by ``*'' are statistically insignificant among each other, but significantly different from incoherent method}
+	\textit{The differences in scores between methods noted by ``*'' are statistically insignificant. The differences between these and the incoherent forecasts are statistically significant.}
 \end{table}
 
 
@@ -1055,13 +1058,13 @@ As a measure of domestic tourism flows, we consider the ``overnight trips" to di
 %An Australian citizen going on a trip within the country, to a minimum of 40km away from the residence and spending at least one night is considered as an overnight trip. 
 Data are collected through the National Visitor Survey (NVS) managed by Tourism Research Australia based on an annual sample of $120,000$ Australian residents aged $15$ years or more, through telephone interviews \citep{TourismResearch2019}. 
 
-The total number of overnight trips in Australia can be naturally disaggregated through a geographical hierarchy. This hierarchy consists of 7 states \footnote{We have considered ACT as a part of New South Wales and Northern Territory as a state.} in the 1st level of disaggregation, 27 zones in the 2nd level of disaggregation and 76 regions in the bottom level and thus comprises 110 series in total. More details about the individual series are provided in Table \ref{table:A1}. 
+The total number of overnight trips in Australia can be naturally disaggregated through a geographical hierarchy. This hierarchy consists of 7 states \footnote{We have considered ACT as a part of New South Wales and Northern Territory as a state.} in the 1st level of disaggregation, 27 zones in the 2nd level of disaggregation and 76 regions in the bottom-level and thus comprises 110 series in total. More details about the individual series are provided in Table \ref{table:A1}. 
 We consider monthly overnight trips for all series spanning the period January 1998 to December 2018. This gives 152 observations per series.  
 
 \subsection{Forecasting methodology}
 
-We apply the both parametric and non-parametric reconciliation approaches as discussed in previous sections. We use a rolling window of 100 observations as the training sample where the first training sample will span the period Jan-1998 to Apr-2006.  Based on this training set we fit univariate ARIMA and ETS models for each series in the hierarchy using automated functions \verb|auto.arima()| and \verb|ets()| from the \verb|forecast| package \citep{hyndman2019forecasting} in R software \citep{Rcore}.
-From the estimated models we generate parametric and non-parametric probabilistic forecasts for an one year ahead, i.e for $h=1,...,12$. For the parametric forecasts, we assume Gaussian densities and obtain the incoherent mean and variance forecasts. These are then reconciled using the methods described in Section \ref{sec:ParamRecon}. For non-parametric forecasts, we generate the bootstrapped future paths and then reconcile each sample path as described in Section \ref{sec:non-para}. We note that we did not implement the MinT(Sample) approach as the sample size of training data set is less than the dimension of the hierarchy. Using a rolling window, one month at a time, we replicate the process until the end of the sample. This yields, $152$ 1-step ahead, $151$ 2-steps ahead through to $141$ 12-step ahead probabilistic forecasts available for evaluation. We note that we only present the results for ARIMA models in the following section. The results are similar for ETS models as well and we present these in the appendix. 
+We apply both the parametric and non-parametric reconciliation approaches as discussed in previous sections. We use a rolling window of 100 observations as the training sample where the first training sample will span the period Jan-1998 to Apr-2006.  Based on this training set we fit univariate ARIMA and ETS models for each series in the hierarchy using automated functions \verb|auto.arima()| and \verb|ets()| from the \verb|forecast| package \citep{hyndman2019forecasting} in R software \citep{Rcore}.
+From the estimated models we generate parametric and non-parametric probabilistic forecasts for one year ahead, i.e for $h=1,...,12$. For the parametric forecasts, we assume Gaussian densities and obtain the incoherent mean and variance forecasts. These are then reconciled using the methods described in Section \ref{sec:ParamRecon}. For the non-parametric forecasts, we generate the bootstrapped future paths and then reconcile each sample path as described in Section \ref{sec:non-para}. We note that we do not implement the MinT(Sample) approach as the sample size of training data set is less than the dimension of the hierarchy. Using a rolling window, one month at a time, we replicate the process until the end of the sample. This yields, $152$ 1-step ahead, $151$ 2-steps ahead through to $141$ 12-step ahead probabilistic forecasts available for evaluation. We note that we only present the results for ARIMA models in the following section. The results for ETS models are similar and we present these in the Appendix. 
 
 
 \subsection{Evaluation, results and discussion}
@@ -1089,7 +1092,7 @@ We evaluate the predictive accuracy using scoring rules. More specifically we us
 	\caption{Skill score based on CRPS (with reference to the incoherent forecasts) for univariate probabilistic forecasts for the Total (top level) overnight trips. A positive (negative) skill score indicates a gain (loss) in forecast accuracy over the incoherent forecast distribution. Left panel shows the results from the Gaussian approach and right panel shows the results from the non-parametric approach. }\label{fig:EmpResults_TopLevel}
 \end{figure}
 
-Figure \ref{fig:EmpResults_AllTS} shows the skill scores with respect to the multivariate predictive distributions across the entire hierarchy from the different methods. Figure \ref{fig:EmpResults_Levels} shows the evaluation across each level. The top panels present the results from the Gaussian approach while the bottom panels present the results from the non-parametric approach. Both figures show that almost all reconciliation methods improve forecast accuracy irrespective of whether the parametric or non-parametric approaches are implemented. Furthermore, the bottom-up approach shows losses compared to the incoherent forecasts at all forecast horizons. This reflects the fact that bottom level series are noisier and therefore challenging to forecast. Finally and most importantly, MinT(Shrink) outperforms all probabilistic forecast reconciliation methods for both parametric and non-parametric approaches. 
+Figure \ref{fig:EmpResults_AllTS} shows the skill scores with respect to the multivariate predictive distributions across the entire hierarchy from the different methods. Figure \ref{fig:EmpResults_Levels} shows the evaluation across each level. The top panels present the results from the Gaussian approach while the bottom panels present the results from the non-parametric approach. Both figures show that almost all reconciliation methods improve forecast accuracy irrespective of whether the parametric or non-parametric approaches are implemented. Furthermore, the bottom-up approach shows losses compared to the incoherent forecasts at all forecast horizons. This reflects the fact that bottom-level series are noisier and therefore more challenging to forecast. Finally and most importantly, MinT(Shrink) outperforms all probabilistic forecast reconciliation methods for both parametric and non-parametric approaches. 
 
 Figure \ref{fig:EmpResults_TopLevel} shows the predictive accuracy of the univariate forecast distributions for the Total overnight trips. OLS and MinT(Shrink) reconciliation methods show gains in accuracy for the top level of the hierarchy for both Gaussian and non-parametric approaches. 
 
@@ -1202,11 +1205,8 @@ In many ways this chapter sets up a substantial future research agenda. For exam
 	}
 \end{table}
 
-\newpage
-
 \bibliographystyle{agsm}
 
 \bibliography{References_paper2}
 
 \end{document}
-
