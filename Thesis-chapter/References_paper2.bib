@@ -58,11 +58,12 @@ title = {{Grouped Functional Time Series Forecasting: An Application to Age-Spec
 volume = {26},
 year = {2017}
 }
-@article{hyndman2019forecasting,
-author = {Hyndman, R},
-journal = {URL: http://github.com/robjhyndman/forecast},
-title = {{forecast: Forecasting Functions for Time Series and Linear Models, R package version 8.9}},
-year = {2019}
+@Manual{Rforecast,
+title = {forecast: Forecasting Functions for Time Series and Linear Models},
+year = {2019},
+author = {Rob J Hyndman and George Athanasopoulos and Christoph Bergmeir and Gabriel Caceres and Leanne Chhay and Mitchell O'Hara-Wild and Fotios Petropoulos and Slava Razbash and Earo Wang and Farah Yasmeen and {R Core Team} and Ross Ihaka and Daniel Reid and David Shaub and Yuan Tang and Zhenyu Zhou},
+url = {https://CRAN.R-project.org/package=forecast},
+note = {Version 8.9},
 }
 @article{WicEtAl2019,
 abstract = {AbstractLarge collections of time series often have aggregation constraints due to product or geographical groupings. The forecasts for the most disaggregated series are usually required to add-up exactly to the forecasts of the aggregated series, a constraint we refer to as “coherence”. Forecast reconciliation is the process of adjusting forecasts to make them coherent. The reconciliation algorithm proposed by Hyndman et al. (2011) is based on a generalized least squares estimator that requires an estimate of the covariance matrix of the coherency errors (i.e., the errors that arise due to incoherence). We show that this matrix is impossible to estimate in practice due to identifiability conditions. We propose a new forecast reconciliation approach that incorporates the information from a full covariance matrix of forecast errors in obtaining a set of coherent forecasts. Our approach minimizes the mean squared error of the coherent forecasts across the entire collection of time series under the assumption of unbiasedness. The minimization problem has a closed form solution. We make this solution scalable by providing a computationally efficient representation. We evaluate the performance of the proposed method compared to alternative methods using a series of simulation designs which take into account various features of the collected time series. This is followed by an empirical application using Australian domestic tourism data. The results indicate that the proposed method works well with artificial and real data.},
@@ -352,16 +353,18 @@ title = {{Probabilistic Forecasting}},
 volume = {1},
 year = {2014}
 }
-@unpublished{Gneiting2008,
+@article{Gneiting2008,
 abstract = {We discuss methods for the evaluation of probabilistic predictions of vector-valued quantities, that can take the form of a discrete forecast ensemble or a density forecast. In particular, we propose a multivariate version of the univariate verification rank histogram or Talagrand diagram that can be used to check the calibration of ensemble forecasts. In the case of density forecasts, Box's density ordinate transform provides an attractive alternative. The multivariate energy score generalizes the continuous ranked probability score. It addresses both calibration and sharpness, and can be used to compare deterministic forecasts, ensemble forecasts and density forecasts, using a single loss function that is proper. An application to the University of Washington mesoscale ensemble points at strengths and deficiencies of probabilistic short-range forecasts of surface wind vectors over the North American Pacific Northwest.},
 author = {Gneiting, Tilmann and Stanberry, Larissa I. and Grimit, Eric P. and Held, Leonhard and Johnson, Nicholas A.},
-booktitle = {Test},
 doi = {10.1007/s11749-008-0114-x},
 file = {:C$\backslash$:/Users/Puwasala/AppData/Local/Mendeley Ltd./Mendeley Desktop/Downloaded/Gneiting et al. - 2008 - Assessing probabilistic forecasts of multivariate quantities, with an application to ensemble predictions of su.pdf:pdf},
+isbn = {1174900801186},
+issn = {11330686},
+journal = {Test},
 keywords = {Calibration,Density forecast,Ensemble postprocessing,Exchangeability,Forecast verification,Probability integral transform,Proper scoring rule,Rank histogram,Sharpness},
 number = {2},
 pages = {211--235},
-title = {{Assessing probabilistic forecasts of multivariate quantities, with an application to ensemble predictions of surface winds}},
+title = {Assessing probabilistic forecasts of multivariate quantities, with an application to ensemble predictions of surface winds},
 volume = {17},
 year = {2008}
 }
