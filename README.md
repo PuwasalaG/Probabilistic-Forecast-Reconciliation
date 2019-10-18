@@ -24,3 +24,16 @@ Possible Structure.  Things that require significant work of deicsions are in **
   - Description of DGP to be shortened and parts to be put in an **appendix** 
 8. Application
 9. Conclusions
+
+George's comments: 
+
+Simulation discussion is based on scoring rules. But these will be 
+introduced in Section 6? Ok after I wrote this I realised that the 
+suggestion is that all simulations go to Section 7. I am very happy about 
+this. 
+
+The proposed strusture is really good. We definitely need to shorten the 
+paper is various sections and place content in the Appendix. I think we 
+can have a go at JASA if we want - before we go to JBES. Not sure which 
+one is better/more suitable. 
+
