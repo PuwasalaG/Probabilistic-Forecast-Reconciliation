@@ -59,7 +59,7 @@
 		        \author{Puwasala Gamakumara\\
 			    Department of Econometrics and Business Statistics,\\
 			    Monash University,\\ VIC 3800, Australia.\\
-			    Email: puwasala.pamakumara@monash.edu \\
+			    Email: puwasala.gamakumara@monash.edu \\
 			    and \\
 			    Anastasios Panagiotelis\thanks{
 			    	The authors gratefully acknowledge the support of Australian Research Council Grant DP140103220.  We also thank Professor Mervyn Silvapulle for valuable comments.}\hspace{.2cm}\\
@@ -377,6 +377,269 @@ This definition extends the notion of forecast reconciliation to the probabilist
 
 Following these definitions we can derive probabilistic forecasts for parametric distributions which we will elaborate in Section \ref{sec:ParamRecon}. Now we turn our attention to the evaluation of hierarchical probabilistic forecasts.
 
+\section{Parametric reconciliation} \label{sec:ParamRecon}
+
+Recall that when $s\circ g$ is a projection, the case of point forecast reconciliation can be broken down into three steps. In what follows we drop the subscript $t+h$ from conditional forecasts for brevity.
+\begin{compactenum}
+	\item $\hat{\bm{y}}$ is transformed into coordinates $\tilde{\bm{b}}$ and $\tilde{\bm{a}}$ via a change of basis.
+	\item $\tilde{\bm{a}}$ is discarded and $\tilde{\bm{b}}$ are kept as the bottom-level reconciled forecasts.
+	\item Reconciled forecasts for the entire hierarchy are recovered via $\tilde{\bm{y}}=\bm{S}\tilde{\bm{b}}$.
+\end{compactenum}
+
+We now outline the analogous steps for probabilistic forecasts when predictive densities are available.
+
+While $\hat{\nu}$ is a probability measure for an $n$-vector $\hat{\bm{y}}$, probability statements in terms of a different coordinate system can be made via an appropriate change of basis. Letting $f(.)$ be generic notation for a probability density function, and following the notation from point forecast reconciliation where $\hat{\bm{y}}=\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}$, we obtain
+\begin{equation}
+f(\hat{\bm{y}})=f(\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}})|(\bm{S}~\bm{R})|
+\end{equation}
+The expression $\hat{\nu}(g^{-1}(\mathcal{B}))$ in Definition~\ref{def:reconprob} is equivalent to the probability statement $\text{Pr}(\hat{\bm{y}}\in g^{-1}(\mathcal{B}))$. After the change of basis, this is equivalent to $\text{Pr}(\tilde{\bm{b}}\in \mathcal{B})$, which implies
+\begin{align}
+	\text{Pr}(\hat{\bm{y}}\in g^{-1}(\mathcal{B}))&=\int\limits_{g^{-1}(\mathcal{B})}f(\hat{\bm{y}})d\hat{\bm{y}}\\
+	&=\int\limits_{\mathcal{B}}\int f(\bm{S}\tilde{\bm{b}}
+	+\bm{R}\tilde{\bm{a}})|(\bm{S}~\bm{R})|d\tilde{\bm{a}}d\tilde{\bm{b}}.
+\end{align}
+After integrating out over $\tilde{\bm{a}}$, a step analogous to setting $\tilde{\bm{a}}=0$ for point forecasting, we obtain an expression that gives the probability that the reconciled bottom-level series lies in the region $\mathcal{B}$. This corresponds to $\nu(\mathcal{B})$ in Definition~\ref{def:reconprob}. To make a valid probability statement about the entire hierarchy we simply use the bottom-level probabilistic forecasts together with Definition~\ref{def:cohprob}.
+
+\subsubsection*{Example: Gaussian Distributions}
+
+Suppose an unreconciled probabilistic forecast is Gaussian with mean $\hat{\bm{\mu}}$ and variance-covariance matrix $\hat{\bm{\Sigma}}$. Let the unreconciled density be given by
+\begin{equation}
+f(\hat{\bm{y}})=(2\pi)^{-n/2}|\hat{\bm{\Sigma}}|^{-1/2}\exp\left\{-\frac{1}{2}\left[(\hat{\bm{y}}-\hat{\bm{\mu}})'\hat{\bm{\Sigma}}^{-1}(\hat{\bm{y}}-\hat{\bm{\mu}})\right]\right\}.
+\end{equation}
+In an alternative basis,
+\begin{equation}
+f(\tilde{\bm{b}},\tilde{\bm{a}})=(2\pi)^{-\frac{n}{2}}\Big|\hat{\bm{\Sigma}}\Big|^{-\frac{1}{2}}\Big|(\bm{S} ~  \bm{R})\Big|\exp\{-\frac{1}{2}q\}\,,
+\end{equation}
+where
+\begin{equation}
+q=(\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}-\hat{\bm{\mu}})' \hat{\bm{\Sigma}}^{-1}(\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}-\hat{\bm{\mu}}).
+\end{equation}
+The quadratic form $q$ can be rearranged as
+\begin{align*}
+	q& =
+	\left((\bm{S} ~  \bm{R})\bt-\hat{\bm{\mu}}\right)' \hat{\bm{\Sigma}}^{-1}\left((\bm{S} ~ \bm{R})\bt-\hat{\bm{\mu}}\right),\\
+	& =
+	\left(\bt-(\bm{S} ~ \bm{R})^{-1}\hat{\bm{\mu}}\right)' \Big[(\bm{S}  \bm{R})^{-1}\hat{\bm{\Sigma}}\left((\bm{S} ~ \bm{R})^{-1}\right)'\Big]^{-1}
+	\left(\bt-(\bm{S} ~ \bm{R})^{-1}\hat{\bm{\mu}}\right)\,.
+\end{align*}
+Recall that
+\[
+(\bm{S} ~ \bm{R})^{-1} =
+\begin{pmatrix}(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot  \\ (\bm{S}'_\bot \bm{R})^{-1}\bm{S}'_\bot \end{pmatrix} :=
+\begin{pmatrix}
+\bm{G} \\\bm{H}
+\end{pmatrix}\,.
+\]
+Then $q$ can be rearranged further as
+\begin{align*}
+	q& =%\frac{1}{(2\pi)^{\frac{n}{2}}\Big|\hat{\bm{\Sigma}}_{t+h}\Big|^{\frac{1}{2}}\Big|\PQ \Big|}
+	%\exp \Big\{-\frac{1}{2}
+	\left[\bt-\PQ\hat{\bm{\mu}}\right]'%\\[-0.5cm]
+	\left[\PQ\hat{\bm{\Sigma}}\PQ'\right]^{-1}\left[\bt-\PQ\hat{\bm{\mu}}\right] %\Big\},
+	\\[0.5cm]
+	& =%\frac{1}{(2\pi)^{\frac{n}{2}}\Big|\PQ\hat{\bm{\Sigma}_{t+h}}\PQ'\Big|^{\frac{1}{2}}}
+	%\exp \Big\{-\frac{1}{2}
+	\begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix}' %&\\[-0.5cm]
+	%& \hspace*{7cm}
+	\left[\PQ\hat{\bm{\Sigma}}\PQ'\right]^{-1}\begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix}. %\Big\}.
+\end{align*}
+%Since $\Big[\PQ\hat{\bm{\Sigma}_{t+h}}\PQ'\Big] = \begin{pmatrix}
+%\bm{P}\hat{\bm{\Sigma}_{t+h}}\bm{P}' & \bm{P}\hat{\bm{\Sigma}_{t+h}}\bm{Q}'
+%\bm{Q}\hat{\bm{\Sigma}_{t+h}}\bm{P}' & \bm{Q}\hat{\bm{\Sigma}_{t+h}}\bm{Q}'
+%\end{pmatrix}$ we have
+
+Similar manipulations on the determinant of the covariance matrix lead to the following expression for the density:
+\begin{align*}
+	f(\tilde{\bm{b}},\tilde{\bm{a}})&
+	=(2\pi)^{-\frac{n}{2}}\left|
+	\begin{pmatrix}
+		\bm{G}\hat{\bm{\Sigma}}\bm{G}' & \bm{G}\hat{\bm{\Sigma}}\bm{H}' \\
+		\bm{H}\hat{\bm{\Sigma}}\bm{G}' & \bm{H}\hat{\bm{\Sigma}}\bm{H}'
+	\end{pmatrix}
+	\right|^{-\frac{1}{2}}
+	\exp \left\{-\frac{1}{2} \begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix}'\right.\\
+	&\hspace*{7cm}
+	\left.\begin{pmatrix}
+		\bm{G}\hat{\bm{\Sigma}}\bm{G}' & \bm{G}\hat{\bm{\Sigma}}\bm{H}' \\
+		\bm{H}\hat{\bm{\Sigma}}\bm{G}' & \bm{H}\hat{\bm{\Sigma}}\bm{H}'
+	\end{pmatrix}^{-1}
+	\begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix} \right\}.
+\end{align*}
+Marginalising out $\tilde{\bm{a}}$ leads to the following bottom-level reconciled forecasts:
+\begin{equation}\label{ex:2.1}
+f(\tilde{\bm{b}})=(2\pi)^{-\frac{m}{2}}\Big|\bm{G}\hat{\bm{\Sigma}}\bm{G}'\Big|^{\frac{1}{2}}
+\exp \Big\{-\frac{1}{2} (\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}})' (\bm{G}\hat{\bm{\Sigma}}\bm{G}')^{-1}(\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}) \Big\}.
+\end{equation}
+
+%Equation \eqref{ex:2.1} implies $\tilde{\bm{b}}_{t+h} \sim \mathcal{N}(\bm{P}\hat{\bm{\mu}}_{t+h}, \bm{P}\hat{\bm{\Sigma}}_{t+h}\bm{P}')$, where $\bm{P} = (\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot$. Then from \eqref{4.7} it follows that
+%\begin{equation}\label{eq:gaussianreconciled}
+%\tilde{\bm{f}}(\tilde{\bm{y}}_{t+h})=\tilde{\bm{f}}(\bm{S}\tilde{\bm{b}}_{t+h}).
+%\end{equation}
+This implies that the reconciled probabilistic forecast for the bottom-level series is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$. The reconciled probabilistic forecasts for the whole hierarchy follow a degenerate Gaussian distribution with mean $\bm{SG}\hat{\bm{\mu}}$ and rank deficient covariance matrix $\bm{SG}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'$.
+
+
+
+\subsection{Elliptical distributions}
+
+We now show that the true predictive distribution can be recovered for elliptical distributions by linear reconciliation via pre-multiplication and translation respectively by a matrix we denote ${\bm G}_{opt}$ and vector we denote ${\bm d}_{opt}$. Here, for any square matrix $\bm{C}$, $\bm{C}^{1/2}$ and $\bm{C}^{-1/2}$ are defined to satisfy $\bm{C}^{1/2}(\bm{C}^{1/2})'=\bm{C}$ and $\bm{C}^{-1/2}(\bm{C}^{-1/2})'=\bm{C}^{-1}$, for example $\bm{C}^{1/2}$ may be obtained via the Cholesky or eigenvalue decompositions.
+
+\begin{theo}[Reconciliation for Elliptical Distributions]
+	Let an unreconciled probabilistic forecast come from the elliptical class with location parameter $\hat{\bm{\mu}}$ and scale matrix $\hat{\bm{\Sigma}}$. Let the true predictive distribution of $\bm{y}$ also belong to the elliptical class with location parameter $\bm{\mu}$ and scale matrix $\bm{\Sigma}$. Then the linear reconciliation mapping $g(\breve{\bm{y}})=\bm{G}_{opt}\breve{\bm{y}}+\bm{d}_{opt}$ with $\bm{G}_{opt}={\bm{a}}\hat{\bm\Sigma}^{-1/2}$ and $\bm{d}_{opt}=\bm{\mu}-\bm{S}\bm{G}_{opt}\hat{\bm{\mu}}$ recovers the true predictive density where ${\bm{a}}$ is any $m\times n$ matrix such that ${\bm{a}}{\bm{a}}'=\bm{\Omega}$ and $\bm{\Omega}$ is a sub-matrix of $\bm{\Sigma}$ corresponding to the bottom-level series.
+\end{theo}
+
+\begin{proof}
+	Since elliptical distributions are closed under affine transformations, and are closed under marginalisation, reconciliation of an elliptical distribution yields an elliptical distribution (although the unreconciled and reconciled distributions may be different members of the class of elliptical distributions). The scale matrix of the reconciled forecast is given by $\bm{S}\bm{G}_{opt}\hat{\bm{\Sigma}}\bm{G}_{opt}'\bm{S}'$, while the location matrix is given by $\bm{S}\bm{G}_{opt}\hat{\bm{\mu}}+\bm{d}_{opt}$. The reconciled scale matrix is
+	\[
+	\tilde{\bm{\Sigma}}_{opt}
+	= \bm{S}{\bm{a}}\hat{\bm\Sigma}^{-1/2}\hat{\bm{\Sigma}}\left(\hat{\bm\Sigma}^{-1/2}\right)'{\bm{a}}'\bm{S}'
+	= \bm{S}\bm{\Omega}\bm{S}'
+	= \bm{\Sigma}.
+	\]
+	For the choices of $\bm{G}_{opt}$ and $\bm{d}_{opt}$ given above, the reconciled location vector is
+	\[
+	\tilde{\bm{\mu}}_{opt}= \bm{S}\bm{G}_{opt}\hat{\bm{\mu}}+\bm{\mu}-\bm{S}\bm{G}_{opt}\hat{\bm{\mu}}
+	= \bm{\mu}.
+	\]
+\end{proof}
+
+A number of insights can be drawn from this theorem. First, although a linear function $g(.)$ can be used to recover the true predictive in the elliptical case, the same does not hold in general. Second, $g(.)$ is not, in general, a projection matrix. The conditions for which a the true predictive density can be recovered by a projection are given below.
+
+\begin{theo}[True predictive via projection]
+	Assume that the true predictive distribution is elliptical with location $\bm{\mu}$ and scale $\bm{\Sigma}$. Consider reconciliation via a projection $g(\bm{y})=(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\bm{y}$. The true predictive distribution can be recovered via reconciliation of an elliptical distribution with location $\hat{\bm{\mu}}$ and scale $\hat{\bm{\Sigma}}$ when the following conditions hold:
+	\begin{align}
+		sp(\hat{\bm\mu}-\bm{\mu})&\subset sp(\bm{R})\\
+		sp(\hat{\bm{\Sigma}}^{1/2}-\bm{\Sigma}^{1/2})&\subset sp(\bm{R})\\
+	\end{align}
+\end{theo}
+
+\begin{proof}
+	The reconciled location vector will be given by
+	\begin{align*}
+		\tilde{\bm{\mu}}&=\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\hat{\bm{\mu}}\\
+		&=\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\left(\hat{\bm{\mu}}+\bm{\mu}-\bm{\mu}\right)\\
+		&=\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\bm{\mu}+\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\left(\hat{\bm{\mu}}-\bm{\mu}\right).
+	\end{align*}
+	Since $\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}$ is a projection onto $\mathfrak{s}$ and $\bm{\mu}\in\mathfrak{s}$, the first term simplifies to $\bm{\mu}$. If $\bm{\mu}-\hat{\bm{\mu}}$ lies in the span of $\bm{R}$, then multiplication by $\bm{R}'_{\perp}$ reduces the second term to $\bm{0}$. By a similar argument it can be shown that $\tilde{\bm{\Sigma}}^{1/2}=\bm{\Sigma}^{1/2}$. The closure property of elliptical distributions under affine transformations ensures that the full true predictive distribution can be recovered.
+\end{proof}
+
+Although these conditions will rarely hold in practice and only apply to a limited class of distributions, they do provide some insight into selecting a projection for reconciliation. If the value of $\hat{\bm{\mu}}$ were equi-probable in all directions, then a projection orthogonal to $\mathfrak{s}$ would be a sensible choice for $\bm{R}$ since it would in some sense represent a `median' direction for $\bm{\mu}-\hat{\bm{\mu}}$. However, the one-step-ahead in-sample errors are usually correlated suggesting that $\hat{\bm{\mu}}$ is more likely to fall in some directions than others. Therefore an orthogonal projection after transformation by the inverse of the one-step-ahead in-sample error covariance matrix may be more intuitively appealing. This is exactly what the MinT projection provides, and we demonstrate this in a simulation setting in the following subsection.
+
+
+
+%However, these expressions do provide some insight on why some choices for $\bm{G}$ in the point forecast reconciliation literature may also work well for probabilistic forecasts. To illustrate, first rearrange the equation for the optimal value of $\bm{G}_{opt}={\bm\Omega}^{1/2}\hat{\bm\Sigma}^{-1/2}$ as ${\bm\Omega}^{1/2}=\bm{G}_{opt}\hat{\bm\Sigma}^{1/2}$. For arbitrary $\bm{G}\hat{\bm\Sigma}^{1/2}$ is an approximation for ${\bm\Omega}^{1/2}$. This approximation has similarities with the way bottom-level estimates are produced for point forecast reconciliation. Rather than mapping a vector of point forecasts to reconcilied bottom-level forecasts, the columns of $\hat{\bm\Sigma}^{1/2}$ are mapped to an approximation of the columns of ${\bm\Omega}^{1/2}$. The value for $\tilde{\bm{\mu}}_{opt}$ includes a projection of $\hat{\bm{\mu}}$ onto $\mathfrak{s}$. While it is infeasible to obtain the translation $\bm{d}$, it is worthwhile noting that this measures the difference between the reconciled mean and true mean.
+
+\section{Sample based solution: A novel non-parametric bootstrap approach}\label{sec:non-para}
+
+Often in practice we come across hierarchical time series that have high level of disaggregation and/or contain even discrete data. For these time series, parametric distributional assumptions are misleading. An alternative for such cases is to apply non-parametric approaches. Hence we propose a novel non-parametric bootstrap based approach for obtaining coherent probabilistic forecasts.
+
+Our proposed method initially involves obtaining probabilistic forecasts without considering the aggregation constraints. These incoherent probabilistic forecasts are then reconciled to make them coherent. We first focus on the methodology for obtaining base forecasts.
+
+\subsection{Incoherent probabilistic forecasts} \label{Subsec:Incoherent_samplePaths}
+First we fit appropriate univariate models for each series in the hierarchy based on the training data $\bm{y}_{1:T}$. We then compute 1-step-ahead training errors as $e_{i,t} = y_{i,t} - \hat{y}_{i,t}$ for $i=1,\dots,n$ and $t = 1,\dots,T$ where $\hat{y}_{i,t} = E(y_{i,t}|y_{i,1:t-1})$. The training errors are stored in a matrix $\bm{\Gamma}_{(T \times n)} = (\bm{e}_1,\dots,\bm{e}_T)'$ where $\bm{e}_t = (e_{1,t},\dots,e_{n,t})$ is stored in the same order as $\bm{y}_t$ for $t=1,\dots,T$. Next we block bootstrap a sample of size $H$ from $\bm{\Gamma_{(T \times n)}}$. That is, we randomly select $H$ consecutive rows from $\bm{\Gamma}$ and store in a matrix $\bm{\Gamma}^b_{(H \times n)} = (\bm{e}^b_1,\dots,\bm{e}^b_H)'$ and repeat this for $b = 1,\dots,B$.
+
+Finally we generate the $h$-step-ahead future paths using the fitted univariate models conditioning on the past observations. We also incorporate the bootstrapped training errors as the error series for generating these future paths. By doing so we implicitly model the contemporaneous correlation structure of the hierarchy. Further the use of consecutive (block) training errors will ensure that the serial correlation of the series is accounted for. To explain this process more explicitly consider the following example.
+
+\noindent
+\textbf{Example:}
+Suppose we fit an $ARMA(p,q)$ model for the $i^\text{th}$ series of the hierarchy. i.e.,
+\begin{align*}
+	y_{i,t} &= \alpha_1y_{i,t-1} + \alpha_2y_{i,t-2}+\dots+\alpha_py_{i,t-p} + \beta_1\epsilon_{i,t-1} + \beta_1\epsilon_{i,t-2}+\dots+\beta_q\epsilon_{i,t-q} + \epsilon_{i,t},\\
+	y_{i,t} &= (\alpha_1 + \alpha_2L+\dots+\alpha_pL^{p-1})y_{i,t-1} + (\beta_1 + \beta_1L+\dots+\beta_qL^{q-1})\epsilon_{i,t-1} + \epsilon_{i,t}
+\end{align*}
+where $L$ is the usual lag operator. Then the $h$-step-ahead $b^\text{th}$ future path conditional on past information up to and including time $t$, for the $i^\text{th}$ series is produced as,
+\begin{align*}
+	\hat{y}^b_{i,t+h} &= (\hat{\alpha}_1 + \hat{\alpha}_2L +\dots+ \hat{\alpha}_pL^{p-1})y_{i,t+h-1} + (\hat{\beta}_1 + \hat{\beta}_1L+\dots+\hat{\beta}_qL^{q-1})\epsilon_{i,t+h-1} + e^b_{i,h}
+\end{align*}
+where, $e^b_{i,h}$ is the $(h\times i)^\text{th}$ element from $\bm{\Gamma}^b$,
+\begin{equation*}
+	y_{i,t+h-1} =
+	\begin{cases}
+		y_{i,1}:y_{i,T}       & \quad \text{for } t+h-1 \le T\\
+		\hat{y}^b_{i,T+1}:\hat{y}^b_{i,T+h-1}  & \quad \text{for } t+h-1 > T
+	\end{cases}
+\end{equation*}
+and
+\begin{equation*}
+	\epsilon_{i,t+h-1} =
+	\begin{cases}
+		\epsilon_{i,1}:\epsilon_{i,T}       & \quad \text{for } t+h-1 \le T\\
+		e^b_{i,1}:e^b_{i,h-1}  & \quad \text{for } t+h-1 > T
+	\end{cases}.
+\end{equation*}
+
+Once we obtain the $h$-step-ahead sample path for all $n$ series in the hierarchy, we stack them in the same order as $\hat{\bm{y}}_{t+h}$. Repeating the same process for $b = 1,\dots,B$ we obtain a set of $h$-step-ahead bootstrapped future paths of size $B$. We denote this as $\hat{\bm{\Upsilon}}_{T+h} = (\hat{\bm{y}}^1_{T+h},\dots,\hat{\bm{y}}^B_{T+h})'$ where the $b^\text{th}$ row of $\hat{\bm{\Upsilon}}_{T+h}$ represents the $h$-step-ahead $b^\text{th}$ sample path for all series in the hierarchy.
+
+We note that $\hat{\bm{\Upsilon}}_{T+h}$ is an empirical sample from the incoherent probability distribution of the hierarchy. Since the aggregation constraints are not imposed while generating $\hat{\bm{\Upsilon}}_{T+h}$, it is very unlikely that they lie on the coherent subspace. Thus it requires reconciliation to which we now turn our attention.
+
+\subsection{Reconciliation of incoherent future paths}
+
+To reconcile the incoherent sample paths, we follow the definition of reconciliation. We project each sample path in $\hat{\bm{\Upsilon}}_{T+h}$ to the coherent subspace via the projection $\bm{SG}$. i.e. for any $\bm{G}$ we can write,
+
+\begin{equation} \label{eq:sampleRecon_1}
+\tilde{\bm{y}}_{T+h}^b = \bm{SG}\hat{\bm{y}}_{T+h}^b,
+\end{equation}
+consequently we have,
+
+\begin{equation} \label{eq:sampleRecon_2}
+\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}\hat{\bm{\Upsilon}}'_{T+h},
+\end{equation}
+
+where, each row in $\tilde{\bm{\Upsilon}}_{T+h}$ represent a single reconciled sample path. Further $\tilde{\bm{\Upsilon}}_{T+h}$ form an empirical sample from the reconciled forecast distribution of the hierarchy. Any $\bm{G}$ matrix introduced in point forecast reconciliation (also given in Table \ref{table:ReconMethods}) can be used for this sample path reconciliation. However, in the following subsection we discuss a method to find $\bm{G}$ that is optimal for probabilistic forecasts with respect to a proper scoring rule.
+
+\subsection{Optimal reconciliation of incoherent future paths}\label{subsec:Optimal_recon}
+
+Let us now propose to find an optimal $\bm{G}$ for reconciling future paths by minimising a proper multivariate scoring rule. The respective objective function can be written as,
+
+\begin{equation} \label{eq:Obj_func_1}
+\operatornamewithlimits{argmin}_{\bm{G}_h} \quad \E_{\bm{Q}}[S(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}, \bm{y}_{T+h})],
+\end{equation}
+where $S$ is a proper scoring rule that follows equation (\ref{eq:prop_score}). We use the subscript $h$ on $\bm{G}$ to emphasise distinct $\bm{G}$ matrices for different forecast horizons. Recall that the energy score given in equation (\ref{eq:Energy_score}) is a proper scoring rule. Let $\alpha = 1$ and following equation (\ref{eq:ES_with_MCSamples}) we can write,
+
+\begin{equation}\label{eq:ES_with_Samplespaths}
+\text{ES}(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}, \bm{y}_{T+h}) \approx \frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\hat{\bm{y}}_{T+h,j}^b -\bm{y}_{T+h}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\hat{\bm{y}}_{T+h,j}^b -\hat{\bm{y}}_{T+h,j}^{b+1})||.
+\end{equation}
+where $B$ is the empirical sample size from the coherent forecast distribution. Now we can rewrite the objective function in (\ref{eq:Obj_func_1}) as,
+
+\begin{equation}\label{eq:Obj_func_2}
+\operatornamewithlimits{argmin}_{\bm{G}} \frac{1}{N}\sum_{j=1}^{N}\left\{\frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}^{b+1})||\right\}
+\end{equation}
+where, the expectation $E_{\bm{Q}}$ over true forecast distribution $\bm{Q}$ is approximated through the sample mean over $\{\text{ES}(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h,1}, \bm{y}_{T+h,1}),\dots,\text{ES}(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h,N}, \bm{y}_{T+h,N})\}$.
+We can use numerical optimization methods to estimate the matrix $\bm{G}_h$ that minimises the above objective function and thus obtain the optimally reconciled future paths.
+
+\subsubsection{Reparameterisation of $\bm{G}$ }\label{subsubsec:ReparameterisationG}
+
+We consider different parameterisations when estimating the optimal $\bm{G}_h$ via the proposed optimisation process. Let,
+\begin{equation}\label{eq:StructureofG}
+\bm{G}_h = (\bm{S'W}_h\bm{S})^{-1}\bm{S'W}_h.
+\end{equation}
+This structure for $\bm{G}_h$ will ensure $\bm{SG}_h$ is a projection matrix and it projects each sample path onto $\mathfrak{s}$.
+\begin{itemize}
+	\item[\textbf{Method 1}] Minimising the objective function in (\ref{eq:Obj_func_2}) over symmetric $\bm{W}_h$. This solves an unconstrained optimisation problem
+	\item[\textbf{Method 2}] Consider the Cholesky decomposition of $\bm{W}_h$. i.e. let $\bm{W}_h = \bm{U}_h'\bm{U}_h$ where $\bm{U}_h$ is an upper triangular matrix. Thus minimising (\ref{eq:Obj_func_2}) over $\bm{U}_h$
+	\item[\textbf{Method 3}] Similar to method 2, minimising (\ref{eq:Obj_func_2}) over the Cholesky decomposition of $\bm{W}_h$, but imposing restrictions for scaling. i.e., $\bm{W}_h=\bm{U}_h'\bm{U}_h \quad \text{s.t} \quad \bm{i'}\bm{W}_h\bm{i}=1$ where $\bm{i}=(1,0,..,0)'$
+	\item[\textbf{Method 4}] Minimising (\ref{eq:Obj_func_2}) over $\bm{G}_h$ such that $\bm{G}_h\bm{S}=\bm{I}$. This constraint is an alternative way to ensure that $\bm{SG}_h$ is a projection onto $\mathfrak{s}$
+	
+\end{itemize}
+
+%We propose to find an optimal $\bm{G}$ for reconciling future paths by minimizing a proper scoring rule defined in \ref{eq:prop_score}. Scoring rule is a numerical value $Sc(\breve{\bm{Y}},\bm{y})$ assign to each pair $(\breve{\bm{Y}},\bm{y})$, where $\breve{\bm{Y}}$ is a $n$-dimensional random vector from the forecast distribution $\breve{\bm{F}}$ and $\bm{y}$ is a realization. A proper scoring rule is defined as,
+%\begin{equation}\label{eq:(2.3)}
+%\E_{\bm{G}}[Sc(\bm{Y},\bm{y})] \le \E_{\bm{G}}[Sc(\breve{\bm{Y}},\bm{y})],
+%\end{equation}
+%where $\bm{Y}$ is a random variable from the true distribution $\bm{G}$ \citep{Gneiting2014}.
+%
+%Thus the minimization problem for finding the optimal $\bm{R}_\bot$ will be
+%\begin{equation}
+%\operatornamewithlimits{argmin}_{\bm{R}'_\bot} \quad \E_{\bm{G}}[Sc(\bm{S}(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot\bm{y}_{t+h}^b, \bm{y}_{t+h})].
+%\end{equation}
+
+
+%We generate data with a sample size of $T=501$. Univariate ARIMA models are selected for each series using the \textit{auto.arima} function in the \textit{forecast} package \citep{hyndman2017forecasting} in R \citep{Rcore}. The same package was used to fit each series independently using the first 500 observations, and evaluate 1-step ahead base (incoherent) probabilistic forecasts. These were then reconciled using different projections summarised in Table~\ref{table:2}. This process was replicated using $1000$ different data sets from the same data generating processes.
+
+%
+%Table~\ref{table:3} summarizes the forecasting performance of unreconciled, bottom-up, OLS, WLS and two MinT reconciliation methods using log score, energy score and variogram score. In all cases skill scores are calculated with the bottom-up method as reference. All log scores are evaluated on the basis of bottom-level series only, however these only differ from the log scores for the full hierarchy by a fixed constant. The cell for log score of unreconciled forecasts is left blank since the log score is not proper in this context. Overall, the MinT methods provide the best performance irrespective of the scoring rule, and all methods that reconcile using information at all levels of the forecast improve upon unreconciled forecasts. Bottom-up forecasts perform even worse than unreconciled forecasts in some cases.
+%
+%Tables~\ref{table:4} and~\ref{table:5} break down the forecasting performance of different reconciliation methods by considering univariate scores on each individual margin. Tables~\ref{table:4} summarises results for the top and middle-level, Table~\ref{table:5} does the same for bottom-level. The log score and CRPS are considered, while skill scores are computed with the unreconciled forecast as a reference. When broken down in this fashion, the methods based on MinT perform best for all series and always outperform bottom-up and unreconciled forecasts.
+%
 
 \section{Evaluation of hierarchical probabilistic forecasts}\label{sec:evaluation}
 
@@ -482,159 +745,13 @@ The properties of multivariate scoring rules in the context of evaluating reconc
 \end{table}
 
 
-\section{Parametric reconciliation} \label{sec:ParamRecon}
+\section{Simulations}
 
-Recall that when $s\circ g$ is a projection, the case of point forecast reconciliation can be broken down into three steps. In what follows we drop the subscript $t+h$ from conditional forecasts for brevity.
-\begin{compactenum}
-	\item $\hat{\bm{y}}$ is transformed into coordinates $\tilde{\bm{b}}$ and $\tilde{\bm{a}}$ via a change of basis.
-	\item $\tilde{\bm{a}}$ is discarded and $\tilde{\bm{b}}$ are kept as the bottom-level reconciled forecasts.
-	\item Reconciled forecasts for the entire hierarchy are recovered via $\tilde{\bm{y}}=\bm{S}\tilde{\bm{b}}$.
-\end{compactenum}
-
-We now outline the analogous steps for probabilistic forecasts when predictive densities are available.
-
-While $\hat{\nu}$ is a probability measure for an $n$-vector $\hat{\bm{y}}$, probability statements in terms of a different coordinate system can be made via an appropriate change of basis. Letting $f(.)$ be generic notation for a probability density function, and following the notation from point forecast reconciliation where $\hat{\bm{y}}=\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}$, we obtain
-\begin{equation}
-f(\hat{\bm{y}})=f(\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}})|(\bm{S}~\bm{R})|
-\end{equation}
-The expression $\hat{\nu}(g^{-1}(\mathcal{B}))$ in Definition~\ref{def:reconprob} is equivalent to the probability statement $\text{Pr}(\hat{\bm{y}}\in g^{-1}(\mathcal{B}))$. After the change of basis, this is equivalent to $\text{Pr}(\tilde{\bm{b}}\in \mathcal{B})$, which implies
-\begin{align}
-\text{Pr}(\hat{\bm{y}}\in g^{-1}(\mathcal{B}))&=\int\limits_{g^{-1}(\mathcal{B})}f(\hat{\bm{y}})d\hat{\bm{y}}\\
-&=\int\limits_{\mathcal{B}}\int f(\bm{S}\tilde{\bm{b}}
-+\bm{R}\tilde{\bm{a}})|(\bm{S}~\bm{R})|d\tilde{\bm{a}}d\tilde{\bm{b}}.
-\end{align}
-After integrating out over $\tilde{\bm{a}}$, a step analogous to setting $\tilde{\bm{a}}=0$ for point forecasting, we obtain an expression that gives the probability that the reconciled bottom-level series lies in the region $\mathcal{B}$. This corresponds to $\nu(\mathcal{B})$ in Definition~\ref{def:reconprob}. To make a valid probability statement about the entire hierarchy we simply use the bottom-level probabilistic forecasts together with Definition~\ref{def:cohprob}.
-
-\subsubsection*{Example: Gaussian Distributions}
-
-Suppose an unreconciled probabilistic forecast is Gaussian with mean $\hat{\bm{\mu}}$ and variance-covariance matrix $\hat{\bm{\Sigma}}$. Let the unreconciled density be given by
-\begin{equation}
-f(\hat{\bm{y}})=(2\pi)^{-n/2}|\hat{\bm{\Sigma}}|^{-1/2}\exp\left\{-\frac{1}{2}\left[(\hat{\bm{y}}-\hat{\bm{\mu}})'\hat{\bm{\Sigma}}^{-1}(\hat{\bm{y}}-\hat{\bm{\mu}})\right]\right\}.
-\end{equation}
-In an alternative basis,
-\begin{equation}
-f(\tilde{\bm{b}},\tilde{\bm{a}})=(2\pi)^{-\frac{n}{2}}\Big|\hat{\bm{\Sigma}}\Big|^{-\frac{1}{2}}\Big|(\bm{S} ~  \bm{R})\Big|\exp\{-\frac{1}{2}q\}\,,
-\end{equation}
-where
-\begin{equation}
-q=(\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}-\hat{\bm{\mu}})' \hat{\bm{\Sigma}}^{-1}(\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}-\hat{\bm{\mu}}).
-\end{equation}
-The quadratic form $q$ can be rearranged as
-\begin{align*}
-q& =
-\left((\bm{S} ~  \bm{R})\bt-\hat{\bm{\mu}}\right)' \hat{\bm{\Sigma}}^{-1}\left((\bm{S} ~ \bm{R})\bt-\hat{\bm{\mu}}\right),\\
-& =
-\left(\bt-(\bm{S} ~ \bm{R})^{-1}\hat{\bm{\mu}}\right)' \Big[(\bm{S}  \bm{R})^{-1}\hat{\bm{\Sigma}}\left((\bm{S} ~ \bm{R})^{-1}\right)'\Big]^{-1}
-\left(\bt-(\bm{S} ~ \bm{R})^{-1}\hat{\bm{\mu}}\right)\,.
-\end{align*}
-Recall that
-\[
-(\bm{S} ~ \bm{R})^{-1} =
-\begin{pmatrix}(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot  \\ (\bm{S}'_\bot \bm{R})^{-1}\bm{S}'_\bot \end{pmatrix} :=
-\begin{pmatrix}
-\bm{G} \\\bm{H}
-\end{pmatrix}\,.
-\]
-Then $q$ can be rearranged further as
-\begin{align*}
-q& =%\frac{1}{(2\pi)^{\frac{n}{2}}\Big|\hat{\bm{\Sigma}}_{t+h}\Big|^{\frac{1}{2}}\Big|\PQ \Big|}
-%\exp \Big\{-\frac{1}{2}
-\left[\bt-\PQ\hat{\bm{\mu}}\right]'%\\[-0.5cm]
-\left[\PQ\hat{\bm{\Sigma}}\PQ'\right]^{-1}\left[\bt-\PQ\hat{\bm{\mu}}\right] %\Big\},
-\\[0.5cm]
-& =%\frac{1}{(2\pi)^{\frac{n}{2}}\Big|\PQ\hat{\bm{\Sigma}_{t+h}}\PQ'\Big|^{\frac{1}{2}}}
-%\exp \Big\{-\frac{1}{2}
-\begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix}' %&\\[-0.5cm]
-%& \hspace*{7cm}
-\left[\PQ\hat{\bm{\Sigma}}\PQ'\right]^{-1}\begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix}. %\Big\}.
-\end{align*}
-%Since $\Big[\PQ\hat{\bm{\Sigma}_{t+h}}\PQ'\Big] = \begin{pmatrix}
-%\bm{P}\hat{\bm{\Sigma}_{t+h}}\bm{P}' & \bm{P}\hat{\bm{\Sigma}_{t+h}}\bm{Q}'
-%\bm{Q}\hat{\bm{\Sigma}_{t+h}}\bm{P}' & \bm{Q}\hat{\bm{\Sigma}_{t+h}}\bm{Q}'
-%\end{pmatrix}$ we have
-
-Similar manipulations on the determinant of the covariance matrix lead to the following expression for the density:
-\begin{align*}
-f(\tilde{\bm{b}},\tilde{\bm{a}})&
-=(2\pi)^{-\frac{n}{2}}\left|
-\begin{pmatrix}
-\bm{G}\hat{\bm{\Sigma}}\bm{G}' & \bm{G}\hat{\bm{\Sigma}}\bm{H}' \\
-\bm{H}\hat{\bm{\Sigma}}\bm{G}' & \bm{H}\hat{\bm{\Sigma}}\bm{H}'
-\end{pmatrix}
-\right|^{-\frac{1}{2}}
-\exp \left\{-\frac{1}{2} \begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix}'\right.\\
-&\hspace*{7cm}
-\left.\begin{pmatrix}
-\bm{G}\hat{\bm{\Sigma}}\bm{G}' & \bm{G}\hat{\bm{\Sigma}}\bm{H}' \\
-\bm{H}\hat{\bm{\Sigma}}\bm{G}' & \bm{H}\hat{\bm{\Sigma}}\bm{H}'
-\end{pmatrix}^{-1}
-\begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix} \right\}.
-\end{align*}
-Marginalising out $\tilde{\bm{a}}$ leads to the following bottom-level reconciled forecasts:
-\begin{equation}\label{ex:2.1}
-f(\tilde{\bm{b}})=(2\pi)^{-\frac{m}{2}}\Big|\bm{G}\hat{\bm{\Sigma}}\bm{G}'\Big|^{\frac{1}{2}}
-\exp \Big\{-\frac{1}{2} (\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}})' (\bm{G}\hat{\bm{\Sigma}}\bm{G}')^{-1}(\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}) \Big\}.
-\end{equation}
-
-%Equation \eqref{ex:2.1} implies $\tilde{\bm{b}}_{t+h} \sim \mathcal{N}(\bm{P}\hat{\bm{\mu}}_{t+h}, \bm{P}\hat{\bm{\Sigma}}_{t+h}\bm{P}')$, where $\bm{P} = (\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot$. Then from \eqref{4.7} it follows that
-%\begin{equation}\label{eq:gaussianreconciled}
-%\tilde{\bm{f}}(\tilde{\bm{y}}_{t+h})=\tilde{\bm{f}}(\bm{S}\tilde{\bm{b}}_{t+h}).
-%\end{equation}
-This implies that the reconciled probabilistic forecast for the bottom-level series is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$. The reconciled probabilistic forecasts for the whole hierarchy follow a degenerate Gaussian distribution with mean $\bm{SG}\hat{\bm{\mu}}$ and rank deficient covariance matrix $\bm{SG}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'$.
-
-
-
-\subsection{Elliptical distributions}
-
-We now show that the true predictive distribution can be recovered for elliptical distributions by linear reconciliation via pre-multiplication and translation respectively by a matrix we denote ${\bm G}_{opt}$ and vector we denote ${\bm d}_{opt}$. Here, for any square matrix $\bm{C}$, $\bm{C}^{1/2}$ and $\bm{C}^{-1/2}$ are defined to satisfy $\bm{C}^{1/2}(\bm{C}^{1/2})'=\bm{C}$ and $\bm{C}^{-1/2}(\bm{C}^{-1/2})'=\bm{C}^{-1}$, for example $\bm{C}^{1/2}$ may be obtained via the Cholesky or eigenvalue decompositions.
-
-\begin{theo}[Reconciliation for Elliptical Distributions]
-	Let an unreconciled probabilistic forecast come from the elliptical class with location parameter $\hat{\bm{\mu}}$ and scale matrix $\hat{\bm{\Sigma}}$. Let the true predictive distribution of $\bm{y}$ also belong to the elliptical class with location parameter $\bm{\mu}$ and scale matrix $\bm{\Sigma}$. Then the linear reconciliation mapping $g(\breve{\bm{y}})=\bm{G}_{opt}\breve{\bm{y}}+\bm{d}_{opt}$ with $\bm{G}_{opt}={\bm{a}}\hat{\bm\Sigma}^{-1/2}$ and $\bm{d}_{opt}=\bm{\mu}-\bm{S}\bm{G}_{opt}\hat{\bm{\mu}}$ recovers the true predictive density where ${\bm{a}}$ is any $m\times n$ matrix such that ${\bm{a}}{\bm{a}}'=\bm{\Omega}$ and $\bm{\Omega}$ is a sub-matrix of $\bm{\Sigma}$ corresponding to the bottom-level series.
-\end{theo}
-
-\begin{proof}
-	Since elliptical distributions are closed under affine transformations, and are closed under marginalisation, reconciliation of an elliptical distribution yields an elliptical distribution (although the unreconciled and reconciled distributions may be different members of the class of elliptical distributions). The scale matrix of the reconciled forecast is given by $\bm{S}\bm{G}_{opt}\hat{\bm{\Sigma}}\bm{G}_{opt}'\bm{S}'$, while the location matrix is given by $\bm{S}\bm{G}_{opt}\hat{\bm{\mu}}+\bm{d}_{opt}$. The reconciled scale matrix is
-	\[
-	\tilde{\bm{\Sigma}}_{opt}
-	= \bm{S}{\bm{a}}\hat{\bm\Sigma}^{-1/2}\hat{\bm{\Sigma}}\left(\hat{\bm\Sigma}^{-1/2}\right)'{\bm{a}}'\bm{S}'
-	= \bm{S}\bm{\Omega}\bm{S}'
-	= \bm{\Sigma}.
-	\]
-	For the choices of $\bm{G}_{opt}$ and $\bm{d}_{opt}$ given above, the reconciled location vector is
-	\[
-	\tilde{\bm{\mu}}_{opt}= \bm{S}\bm{G}_{opt}\hat{\bm{\mu}}+\bm{\mu}-\bm{S}\bm{G}_{opt}\hat{\bm{\mu}}
-	= \bm{\mu}.
-	\]
-\end{proof}
-
-A number of insights can be drawn from this theorem. First, although a linear function $g(.)$ can be used to recover the true predictive in the elliptical case, the same does not hold in general. Second, $g(.)$ is not, in general, a projection matrix. The conditions for which a the true predictive density can be recovered by a projection are given below.
-
-\begin{theo}[True predictive via projection]
-	Assume that the true predictive distribution is elliptical with location $\bm{\mu}$ and scale $\bm{\Sigma}$. Consider reconciliation via a projection $g(\bm{y})=(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\bm{y}$. The true predictive distribution can be recovered via reconciliation of an elliptical distribution with location $\hat{\bm{\mu}}$ and scale $\hat{\bm{\Sigma}}$ when the following conditions hold:
-	\begin{align}
-	sp(\hat{\bm\mu}-\bm{\mu})&\subset sp(\bm{R})\\
-	sp(\hat{\bm{\Sigma}}^{1/2}-\bm{\Sigma}^{1/2})&\subset sp(\bm{R})\\
-	\end{align}
-\end{theo}
-
-\begin{proof}
-	The reconciled location vector will be given by
-	\begin{align*}
-	\tilde{\bm{\mu}}&=\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\hat{\bm{\mu}}\\
-	&=\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\left(\hat{\bm{\mu}}+\bm{\mu}-\bm{\mu}\right)\\
-	&=\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\bm{\mu}+\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\left(\hat{\bm{\mu}}-\bm{\mu}\right).
-	\end{align*}
-	Since $\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}$ is a projection onto $\mathfrak{s}$ and $\bm{\mu}\in\mathfrak{s}$, the first term simplifies to $\bm{\mu}$. If $\bm{\mu}-\hat{\bm{\mu}}$ lies in the span of $\bm{R}$, then multiplication by $\bm{R}'_{\perp}$ reduces the second term to $\bm{0}$. By a similar argument it can be shown that $\tilde{\bm{\Sigma}}^{1/2}=\bm{\Sigma}^{1/2}$. The closure property of elliptical distributions under affine transformations ensures that the full true predictive distribution can be recovered.
-\end{proof}
-
-Although these conditions will rarely hold in practice and only apply to a limited class of distributions, they do provide some insight into selecting a projection for reconciliation. If the value of $\hat{\bm{\mu}}$ were equi-probable in all directions, then a projection orthogonal to $\mathfrak{s}$ would be a sensible choice for $\bm{R}$ since it would in some sense represent a `median' direction for $\bm{\mu}-\hat{\bm{\mu}}$. However, the one-step-ahead in-sample errors are usually correlated suggesting that $\hat{\bm{\mu}}$ is more likely to fall in some directions than others. Therefore an orthogonal projection after transformation by the inverse of the one-step-ahead in-sample error covariance matrix may be more intuitively appealing. This is exactly what the MinT projection provides, and we demonstrate this in a simulation setting in the following subsection.
-
-\subsection{Simulations}
 
 To compare different reconciliation methods in parametric densities we assume a Gaussian predictive distribution for the hierarchy. We choose the Gaussian case due to its analytical tractability which allows for evaluation using all scoring rules (including the log score).
 
 
-\subsubsection{Data generating process (DGP)} \label{subsec:DGP}
+\subsection{Data generating process (DGP)} \label{subsec:DGP}
 
 The data generating process, we consider is the hierarchy given in Figure \ref{fig:twoL-hier}, comprising two aggregation levels with four bottom-level series. Each bottom-level series will be generated first, and then summed to obtain the data for the upper-level series.
 
@@ -713,6 +830,8 @@ We generate $2000$ observations for each series from this Gaussian and non-Gauss
 
 To assess the predictive performance of different forecasting methods, we use scoring rules as discussed in Section~\ref{sec:evaluation}. To facilitate comparisons, we report skill scores \citep{Gneiting2007}. For a given forecasting method, evaluated by a particular scoring rule, the skill score
 gives the percentage improvement of the preferred forecasting method relative to a reference method. A negative valued skill score indicates that a method is worse than the reference method, whereas any positive value indicates that the method is superior to the reference method.
+
+\subsection{Simulations for parametric solution}
 
 Table~\ref{tab:SimResults_Gauss_MultivScores} summarises the forecasting performance of incoherent, bottom-up, OLS, WLS and two MinT reconciliation methods using log score, energy score and variogram score. The top panel refers to the Gaussian DGP whereas the bottom panel refers to the non-Gaussian DGP. Recall that the log score is improper with respect to incoherent forecasts. Therefore we calculate the skill scores with reference to the bottom-up forecasts instead of incoherent forecasts in all cases and leave blank the cell for log score of the incoherent forecasts. Further, all log scores are evaluated on the basis of bottom-level series only, however these only differ from the log scores for the full hierarchy by a fixed constant. Overall, the MinT methods provide the best performance irrespective of the scoring rule, and all methods that reconcile using information at all levels of the forecast improve upon incoherent forecasts. Bottom-up forecasts perform even worse than incoherent forecasts in some cases. These results hold for both the Gaussian as well as the non-Gaussian DGP.
 
@@ -852,114 +971,7 @@ Tables~\ref{tab:SimResults_Gauss_UnivScores_Aggre} and~\ref{tab:SimResults_Gauss
 	}
 \end{table}
 
-%However, these expressions do provide some insight on why some choices for $\bm{G}$ in the point forecast reconciliation literature may also work well for probabilistic forecasts. To illustrate, first rearrange the equation for the optimal value of $\bm{G}_{opt}={\bm\Omega}^{1/2}\hat{\bm\Sigma}^{-1/2}$ as ${\bm\Omega}^{1/2}=\bm{G}_{opt}\hat{\bm\Sigma}^{1/2}$. For arbitrary $\bm{G}\hat{\bm\Sigma}^{1/2}$ is an approximation for ${\bm\Omega}^{1/2}$. This approximation has similarities with the way bottom-level estimates are produced for point forecast reconciliation. Rather than mapping a vector of point forecasts to reconcilied bottom-level forecasts, the columns of $\hat{\bm\Sigma}^{1/2}$ are mapped to an approximation of the columns of ${\bm\Omega}^{1/2}$. The value for $\tilde{\bm{\mu}}_{opt}$ includes a projection of $\hat{\bm{\mu}}$ onto $\mathfrak{s}$. While it is infeasible to obtain the translation $\bm{d}$, it is worthwhile noting that this measures the difference between the reconciled mean and true mean.
-
-
-\section{A novel non-parametric bootstrap approach}\label{sec:non-para}
-
-Often in practice we come across hierarchical time series that have high level of disaggregation and/or contain even discrete data. For these time series, parametric distributional assumptions are misleading. An alternative for such cases is to apply non-parametric approaches. Hence we propose a novel non-parametric bootstrap based approach for obtaining coherent probabilistic forecasts.
-
-Our proposed method initially involves obtaining probabilistic forecasts without considering the aggregation constraints. These incoherent probabilistic forecasts are then reconciled to make them coherent. We first focus on the methodology for obtaining base forecasts.
-
-\subsection{Incoherent probabilistic forecasts} \label{Subsec:Incoherent_samplePaths}
-First we fit appropriate univariate models for each series in the hierarchy based on the training data $\bm{y}_{1:T}$. We then compute 1-step-ahead training errors as $e_{i,t} = y_{i,t} - \hat{y}_{i,t}$ for $i=1,\dots,n$ and $t = 1,\dots,T$ where $\hat{y}_{i,t} = E(y_{i,t}|y_{i,1:t-1})$. The training errors are stored in a matrix $\bm{\Gamma}_{(T \times n)} = (\bm{e}_1,\dots,\bm{e}_T)'$ where $\bm{e}_t = (e_{1,t},\dots,e_{n,t})$ is stored in the same order as $\bm{y}_t$ for $t=1,\dots,T$. Next we block bootstrap a sample of size $H$ from $\bm{\Gamma_{(T \times n)}}$. That is, we randomly select $H$ consecutive rows from $\bm{\Gamma}$ and store in a matrix $\bm{\Gamma}^b_{(H \times n)} = (\bm{e}^b_1,\dots,\bm{e}^b_H)'$ and repeat this for $b = 1,\dots,B$.
-
-Finally we generate the $h$-step-ahead future paths using the fitted univariate models conditioning on the past observations. We also incorporate the bootstrapped training errors as the error series for generating these future paths. By doing so we implicitly model the contemporaneous correlation structure of the hierarchy. Further the use of consecutive (block) training errors will ensure that the serial correlation of the series is accounted for. To explain this process more explicitly consider the following example.
-
-\noindent
-\textbf{Example:}
-Suppose we fit an $ARMA(p,q)$ model for the $i^\text{th}$ series of the hierarchy. i.e.,
-\begin{align*}
-y_{i,t} &= \alpha_1y_{i,t-1} + \alpha_2y_{i,t-2}+\dots+\alpha_py_{i,t-p} + \beta_1\epsilon_{i,t-1} + \beta_1\epsilon_{i,t-2}+\dots+\beta_q\epsilon_{i,t-q} + \epsilon_{i,t},\\
-y_{i,t} &= (\alpha_1 + \alpha_2L+\dots+\alpha_pL^{p-1})y_{i,t-1} + (\beta_1 + \beta_1L+\dots+\beta_qL^{q-1})\epsilon_{i,t-1} + \epsilon_{i,t}
-\end{align*}
-where $L$ is the usual lag operator. Then the $h$-step-ahead $b^\text{th}$ future path conditional on past information up to and including time $t$, for the $i^\text{th}$ series is produced as,
-\begin{align*}
-\hat{y}^b_{i,t+h} &= (\hat{\alpha}_1 + \hat{\alpha}_2L +\dots+ \hat{\alpha}_pL^{p-1})y_{i,t+h-1} + (\hat{\beta}_1 + \hat{\beta}_1L+\dots+\hat{\beta}_qL^{q-1})\epsilon_{i,t+h-1} + e^b_{i,h}
-\end{align*}
-where, $e^b_{i,h}$ is the $(h\times i)^\text{th}$ element from $\bm{\Gamma}^b$,
-\begin{equation*}
-y_{i,t+h-1} =
-\begin{cases}
-y_{i,1}:y_{i,T}       & \quad \text{for } t+h-1 \le T\\
-\hat{y}^b_{i,T+1}:\hat{y}^b_{i,T+h-1}  & \quad \text{for } t+h-1 > T
-\end{cases}
-\end{equation*}
-and
-\begin{equation*}
-\epsilon_{i,t+h-1} =
-\begin{cases}
-\epsilon_{i,1}:\epsilon_{i,T}       & \quad \text{for } t+h-1 \le T\\
-e^b_{i,1}:e^b_{i,h-1}  & \quad \text{for } t+h-1 > T
-\end{cases}.
-\end{equation*}
-
-Once we obtain the $h$-step-ahead sample path for all $n$ series in the hierarchy, we stack them in the same order as $\hat{\bm{y}}_{t+h}$. Repeating the same process for $b = 1,\dots,B$ we obtain a set of $h$-step-ahead bootstrapped future paths of size $B$. We denote this as $\hat{\bm{\Upsilon}}_{T+h} = (\hat{\bm{y}}^1_{T+h},\dots,\hat{\bm{y}}^B_{T+h})'$ where the $b^\text{th}$ row of $\hat{\bm{\Upsilon}}_{T+h}$ represents the $h$-step-ahead $b^\text{th}$ sample path for all series in the hierarchy.
-
-We note that $\hat{\bm{\Upsilon}}_{T+h}$ is an empirical sample from the incoherent probability distribution of the hierarchy. Since the aggregation constraints are not imposed while generating $\hat{\bm{\Upsilon}}_{T+h}$, it is very unlikely that they lie on the coherent subspace. Thus it requires reconciliation to which we now turn our attention.
-
-\subsection{Reconciliation of incoherent future paths}
-
-To reconcile the incoherent sample paths, we follow the definition of reconciliation. We project each sample path in $\hat{\bm{\Upsilon}}_{T+h}$ to the coherent subspace via the projection $\bm{SG}$. i.e. for any $\bm{G}$ we can write,
-
-\begin{equation} \label{eq:sampleRecon_1}
-\tilde{\bm{y}}_{T+h}^b = \bm{SG}\hat{\bm{y}}_{T+h}^b,
-\end{equation}
-consequently we have,
-
-\begin{equation} \label{eq:sampleRecon_2}
-\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}\hat{\bm{\Upsilon}}'_{T+h},
-\end{equation}
-
-where, each row in $\tilde{\bm{\Upsilon}}_{T+h}$ represent a single reconciled sample path. Further $\tilde{\bm{\Upsilon}}_{T+h}$ form an empirical sample from the reconciled forecast distribution of the hierarchy. Any $\bm{G}$ matrix introduced in point forecast reconciliation (also given in Table \ref{table:ReconMethods}) can be used for this sample path reconciliation. However, in the following subsection we discuss a method to find $\bm{G}$ that is optimal for probabilistic forecasts with respect to a proper scoring rule.
-
-\subsection{Optimal reconciliation of incoherent future paths}\label{subsec:Optimal_recon}
-
-Let us now propose to find an optimal $\bm{G}$ for reconciling future paths by minimising a proper multivariate scoring rule. The respective objective function can be written as,
-
-\begin{equation} \label{eq:Obj_func_1}
-\operatornamewithlimits{argmin}_{\bm{G}_h} \quad \E_{\bm{Q}}[S(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}, \bm{y}_{T+h})],
-\end{equation}
-where $S$ is a proper scoring rule that follows equation (\ref{eq:prop_score}). We use the subscript $h$ on $\bm{G}$ to emphasise distinct $\bm{G}$ matrices for different forecast horizons. Recall that the energy score given in equation (\ref{eq:Energy_score}) is a proper scoring rule. Let $\alpha = 1$ and following equation (\ref{eq:ES_with_MCSamples}) we can write,
-
-\begin{equation}\label{eq:ES_with_Samplespaths}
-\text{ES}(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}, \bm{y}_{T+h}) \approx \frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\hat{\bm{y}}_{T+h,j}^b -\bm{y}_{T+h}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\hat{\bm{y}}_{T+h,j}^b -\hat{\bm{y}}_{T+h,j}^{b+1})||.
-\end{equation}
-where $B$ is the empirical sample size from the coherent forecast distribution. Now we can rewrite the objective function in (\ref{eq:Obj_func_1}) as,
-
-\begin{equation}\label{eq:Obj_func_2}
-\operatornamewithlimits{argmin}_{\bm{G}} \frac{1}{N}\sum_{j=1}^{N}\left\{\frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}^{b+1})||\right\}
-\end{equation}
-where, the expectation $E_{\bm{Q}}$ over true forecast distribution $\bm{Q}$ is approximated through the sample mean over $\{\text{ES}(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h,1}, \bm{y}_{T+h,1}),\dots,\text{ES}(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h,N}, \bm{y}_{T+h,N})\}$.
-We can use numerical optimization methods to estimate the matrix $\bm{G}_h$ that minimises the above objective function and thus obtain the optimally reconciled future paths.
-
-\subsubsection{Reparameterisation of $\bm{G}$ }\label{subsubsec:ReparameterisationG}
-
-We consider different parameterisations when estimating the optimal $\bm{G}_h$ via the proposed optimisation process. Let,
-\begin{equation}\label{eq:StructureofG}
-\bm{G}_h = (\bm{S'W}_h\bm{S})^{-1}\bm{S'W}_h.
-\end{equation}
-This structure for $\bm{G}_h$ will ensure $\bm{SG}_h$ is a projection matrix and it projects each sample path onto $\mathfrak{s}$.
-\begin{itemize}
-	\item[\textbf{Method 1}] Minimising the objective function in (\ref{eq:Obj_func_2}) over symmetric $\bm{W}_h$. This solves an unconstrained optimisation problem
-	\item[\textbf{Method 2}] Consider the Cholesky decomposition of $\bm{W}_h$. i.e. let $\bm{W}_h = \bm{U}_h'\bm{U}_h$ where $\bm{U}_h$ is an upper triangular matrix. Thus minimising (\ref{eq:Obj_func_2}) over $\bm{U}_h$
-	\item[\textbf{Method 3}] Similar to method 2, minimising (\ref{eq:Obj_func_2}) over the Cholesky decomposition of $\bm{W}_h$, but imposing restrictions for scaling. i.e., $\bm{W}_h=\bm{U}_h'\bm{U}_h \quad \text{s.t} \quad \bm{i'}\bm{W}_h\bm{i}=1$ where $\bm{i}=(1,0,..,0)'$
-	\item[\textbf{Method 4}] Minimising (\ref{eq:Obj_func_2}) over $\bm{G}_h$ such that $\bm{G}_h\bm{S}=\bm{I}$. This constraint is an alternative way to ensure that $\bm{SG}_h$ is a projection onto $\mathfrak{s}$
-	
-\end{itemize}
-
-%We propose to find an optimal $\bm{G}$ for reconciling future paths by minimizing a proper scoring rule defined in \ref{eq:prop_score}. Scoring rule is a numerical value $Sc(\breve{\bm{Y}},\bm{y})$ assign to each pair $(\breve{\bm{Y}},\bm{y})$, where $\breve{\bm{Y}}$ is a $n$-dimensional random vector from the forecast distribution $\breve{\bm{F}}$ and $\bm{y}$ is a realization. A proper scoring rule is defined as,
-%\begin{equation}\label{eq:(2.3)}
-%\E_{\bm{G}}[Sc(\bm{Y},\bm{y})] \le \E_{\bm{G}}[Sc(\breve{\bm{Y}},\bm{y})],
-%\end{equation}
-%where $\bm{Y}$ is a random variable from the true distribution $\bm{G}$ \citep{Gneiting2014}.
-%
-%Thus the minimization problem for finding the optimal $\bm{R}_\bot$ will be
-%\begin{equation}
-%\operatornamewithlimits{argmin}_{\bm{R}'_\bot} \quad \E_{\bm{G}}[Sc(\bm{S}(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot\bm{y}_{t+h}^b, \bm{y}_{t+h})].
-%\end{equation}
-
-\subsection{Simulation study}\label{sec:Bootsrap-sim}
+\subsection{Simulation results for sample based solution}\label{sec:Bootsrap-sim}
 
 We now compare different reconciliation methods with optimal reconciliation in a simulation setting. We use the same Gaussian and non-Gaussian DGP explained in Subsection \ref{subsec:DGP} corresponding to the hierarchy in Figure~\ref{fig:twoL-hier}.
 
@@ -1031,17 +1043,6 @@ However we note that optimal reconciliation required a high computational cost f
 	\end{center}
 	\textit{The differences in scores between methods noted by ``*'' are statistically insignificant. The differences between these and the incoherent forecasts are statistically significant.}
 \end{table}
-
-
-
-%We generate data with a sample size of $T=501$. Univariate ARIMA models are selected for each series using the \textit{auto.arima} function in the \textit{forecast} package \citep{hyndman2017forecasting} in R \citep{Rcore}. The same package was used to fit each series independently using the first 500 observations, and evaluate 1-step ahead base (incoherent) probabilistic forecasts. These were then reconciled using different projections summarised in Table~\ref{table:2}. This process was replicated using $1000$ different data sets from the same data generating processes.
-
-%
-%Table~\ref{table:3} summarizes the forecasting performance of unreconciled, bottom-up, OLS, WLS and two MinT reconciliation methods using log score, energy score and variogram score. In all cases skill scores are calculated with the bottom-up method as reference. All log scores are evaluated on the basis of bottom-level series only, however these only differ from the log scores for the full hierarchy by a fixed constant. The cell for log score of unreconciled forecasts is left blank since the log score is not proper in this context. Overall, the MinT methods provide the best performance irrespective of the scoring rule, and all methods that reconcile using information at all levels of the forecast improve upon unreconciled forecasts. Bottom-up forecasts perform even worse than unreconciled forecasts in some cases.
-%
-%Tables~\ref{table:4} and~\ref{table:5} break down the forecasting performance of different reconciliation methods by considering univariate scores on each individual margin. Tables~\ref{table:4} summarises results for the top and middle-level, Table~\ref{table:5} does the same for bottom-level. The log score and CRPS are considered, while skill scores are computed with the unreconciled forecast as a reference. When broken down in this fashion, the methods based on MinT perform best for all series and always outperform bottom-up and unreconciled forecasts.
-%
-
 
 \section{Application: Forecasting Australian domestic tourism flow}\label{sec:Application}
 
