@@ -358,18 +358,47 @@ This definition of probabilistic forecast reconciliation can be applied to any m
 \end{figure}
 
 
-\section{Parametric reconciliation} \label{sec:ParamRecon}
+\section{Analytical solution} \label{sec:ParamRecon}
 
-Recall that when $s\circ g$ is a projection, the case of point forecast reconciliation can be broken down into three steps. In what follows we drop the subscript $t+h$ from conditional forecasts for brevity.
-\begin{compactenum}
-	\item $\hat{\bm{y}}$ is transformed into coordinates $\tilde{\bm{b}}$ and $\tilde{\bm{a}}$ via a change of basis.
-	\item $\tilde{\bm{a}}$ is discarded and $\tilde{\bm{b}}$ are kept as the bottom-level reconciled forecasts.
-	\item Reconciled forecasts for the entire hierarchy are recovered via $\tilde{\bm{y}}=\bm{S}\tilde{\bm{b}}$.
-\end{compactenum}
+In this section we describe how a reconciled distribution can be derived analytically, from an incoherent (or base) multivariate probabilistic distribution.  We restrict our attention to the case where $s$ and $g$ are linear mappings, in which case reconciliation involves a change of coordinates and marginalisation.  This is particularly useful when the base probabilistic forecast is in the elliptical class since the elliptical class is closed under a change of coordinates and marginalisation meaning the reconciled distribution can be obtained analytically. 
 
-We now outline the analogous steps for probabilistic forecasts when predictive densities are available.
+%Recall that when $s\circ g$ is a projection, the case of point forecast reconciliation can be broken down into three steps. In what follows we drop the subscript $t+h$ from conditional forecasts for brevity.
+%\begin{compactenum}
+%	\item $\hat{\bm{y}}$ is transformed into coordinates $\tilde{\bm{b}}$ and $\tilde{\bm{a}}$ via a change of basis.
+%	\item $\tilde{\bm{a}}$ is discarded and $\tilde{\bm{b}}$ are kept as the bottom-level reconciled forecasts.
+%	\item Reconciled forecasts for the entire hierarchy are recovered via $\tilde{\bm{y}}=\bm{S}\tilde{\bm{b}}$.
+%\end{compactenum}
+%
+%We now outline the analogous steps for probabilistic forecasts when predictive densities are available.
 
-While $\hat{\nu}$ is a probability measure for an $n$-vector $\hat{\bm{y}}$, probability statements in terms of a different coordinate system can be made via an appropriate change of basis. Letting $f(.)$ be generic notation for a probability density function, and following the notation from point forecast reconciliation where $\hat{\bm{y}}=\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}$, we obtain
+For ease of exposition we begin by considering the probability that the bottom level series ${\bm b}$ lies in a region $\mathcal{I}$ a region that is the Cartesian product of intervals $(l_1,u_1),(l_2,u_2),\ldots(l_m,u_m)$.  We denote this as $\bm{l}\succ\bm{b}\succ\bm{u}$ where ${\bm l}=(l_1,l_2,\ldots,l_m)$, ${\bm u}=(u_1,u_2,\ldots,u_m)$ and $\succ$ denotes element-wise inequality between vectors.  The pre-image of $\mathcal{I}$ under $g$ can similarly be denoted as all points ${\bm y}$ satisfying $\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}$.  By Definition~\ref{def:reconprob} 
+
+\[
+\mbox{Pr}({\bm b}\in \mathcal{I})=\int\limits_{\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d{\bm y}\,,
+\]
+
+where $\hat{f}$ is the density of the base probabilistic forecast.  Now consider a change of variables to an $n$-dimensional vector ${\bm z}$ where $y={\bm \Gamma}{\bm z}$. Here, $\bm\Gamma=\left({\bm G^{-}}\vdots{\bm G_\perp}\right)$ where ${\bm G^{-}}$ is an $n\times m$ pseudo inverse of $\bm{G}$ such that $\bm{G}\bm{G}^{-}=\bm{I}$ and ${\bm G_\perp}$ is an $n\times(n-m)$ orthogonal complement of $\bm{G}$ such that $\bm{G}\bm{G}_\perp=\bm{0}$.  By the change of variables
+
+\begin{align}
+\mbox{Pr}({\bm b}\in \mathcal{I})&=\int\limits_{\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d{\bm y}\nonumber\\
+&=\int\limits_{\bm{l}\succ\bm{G}\bm{\Gamma}\bm{z}\succ\bm{u}}\hat{f}(\bm{\Gamma}\bm{z})|\bm{\Gamma}|d{\bm z}\nonumber\\
+&=\int\limits_{\bm{l}\succ\bm{z}_1\succ\bm{u}}\hat{f}(\bm{\Gamma}\bm{z})|\bm{\Gamma}|d{\bm z}\nonumber\,,
+\end{align}
+
+where $\bm{b}$ denotes the first $m$ elements of $\bm z$.  Also letting $\bm{a}$ denote the last n-m elements of $\bm{z}$ the integral above can be written as
+
+\[ 
+\mbox{Pr}({\bm b}\in \mathcal{I})=\int\limits_{\bm{l}\succ\bm{b}\succ\bm{u}}\int\hat{f}(\bm{G}^{-}\bm{b}+\bm{G}_{\perp}\bm{a})|\bm{\Gamma}|d{\bm a}d{\bm b}\nonumber\\
+\]
+
+From the above, the density of the reconciled probabilistic forecast for the bottom level series is given by
+
+\begin{equation}
+\tilde{f}(\bm{b})=\int\hat{f}(\bm{G}^{-}\bm{b}+\bm{G}_{\perp}\bm{a})|\bm{\Gamma}|d{\bm a}
+\end{equation}
+
+
+{\color{blue} OLD VERSION: While $\hat{\nu}$ is a probability measure for an $n$-vector $\hat{\bm{y}}$, probability statements in terms of a different coordinate system can be made via an appropriate change of basis. Letting $f(.)$ be generic notation for a probability density function, and following the notation from point forecast reconciliation where $\hat{\bm{y}}=\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}$, we obtain
 \begin{equation}
 f(\hat{\bm{y}})=f(\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}})|(\bm{S}~\bm{R})|
 \end{equation}
@@ -379,7 +408,7 @@ The expression $\hat{\nu}(g^{-1}(\mathcal{B}))$ in Definition~\ref{def:reconprob
 	&=\int\limits_{\mathcal{B}}\int f(\bm{S}\tilde{\bm{b}}
 	+\bm{R}\tilde{\bm{a}})|(\bm{S}~\bm{R})|d\tilde{\bm{a}}d\tilde{\bm{b}}.
 \end{align}
-After integrating out over $\tilde{\bm{a}}$, a step analogous to setting $\tilde{\bm{a}}=0$ for point forecasting, we obtain an expression that gives the probability that the reconciled bottom-level series lies in the region $\mathcal{B}$. This corresponds to $\nu(\mathcal{B})$ in Definition~\ref{def:reconprob}. To make a valid probability statement about the entire hierarchy we simply use the bottom-level probabilistic forecasts together with Definition~\ref{def:cohprob}.
+After integrating out over $\tilde{\bm{a}}$, a step analogous to setting $\tilde{\bm{a}}=0$ for point forecasting, we obtain an expression that gives the probability that the reconciled bottom-level series lies in the region $\mathcal{B}$. This corresponds to $\nu(\mathcal{B})$ in Definition~\ref{def:reconprob}. To make a valid probability statement about the entire hierarchy we simply use the bottom-level probabilistic forecasts together with Definition~\ref{def:cohprob}.}
 
 \subsubsection*{Example: Gaussian Distributions}
 
