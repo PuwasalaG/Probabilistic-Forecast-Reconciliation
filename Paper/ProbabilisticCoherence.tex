@@ -1,7 +1,8 @@
 %&latex
 \documentclass[12pt]{article}
 \usepackage{amsmath}
-\usepackage{graphicx,psfrag,epsf,enumerate}
+\usepackage[dvipdfm]{graphicx}
+\usepackage{psfrag,epsf,enumerate}
 \usepackage{enumerate}
 \usepackage{natbib}
 \usepackage{url} % not crucial - just used below for the URL 
@@ -136,14 +137,17 @@ Finally we applied both parametric and non-parametric approaches to generate pro
 
 The remainder of the paper is structured as follows. In Section~\ref{sec:Notat&Prelim} notation and some preliminary work on point forecast reconciliation is discussed. Section~\ref{sec:ProbForecasts} contains the definitions and interpretation of coherent probabilistic forecasts and reconciliation. In Section~\ref{sec:evaluation} we consider the evaluation of probabilistic hierarchical forecasts via scoring rules. Parametric forecast reconciliation and some theoretical results related to elliptical distributions are discussed in Section~\ref{sec:ParamRecon} while the non-parametric approach is introduced in Section~\ref{sec:non-para}. An empirical application on tourism forecasting is contained in Section~\ref{sec:Application}. Finally Section~\ref{sec:conclusions_chap3} concludes with some discussion and thoughts on future research.
 
+\section{Hierarchical probabilistic forecasts}\label{sec:ProbForecasts}
 
-\section{Notation and preliminaries}\label{sec:Notat&Prelim}
+The geometric intuition in hierarchical point forecasts provides a solid basis for extending the idea into the probabilistic framework. We start with providing definitions for coherent probabilistic forecasts and probabilistic forecast reconciliation.
 
-Following \citep{PanEtAl2019HF} we define notation and some preliminary work on hierarchical time series and forecasting.
 
-\subsection{Notation}\label{sec:notation_chap3}
+\subsection{Point Forecasting}\label{sec:Notat&Prelim}
 
-\emph{Hierarchical time series} are a collection of $n$ time series some of which are aggregates of other series. In a conventional hierarchy, $m$ of \emph{bottom-level series} are aggregated to form series in upper levels. These bottom-level series can be considered as linearly independent since they cannot be formed as linear combination of other series. Let us denote with $\bm{y}_t$, a $n$ dimensional vector containing observations of all series in the hierarchy at time $t$. Further, let $\bm{b}_t \in \mathbb{R}^m$ contain the observations of only the \emph{bottom-level series} of the hierarchy at time $t$. Due to the aggregation constraints of the hierarchy we can write,
+Before extending the concepts of coherence and reconciliation to the probabilistic setting we first briefly refresh these concepts in the case of the point forecasts.  In do so, we
+follow the more geometric intepretation introduced by \citep{PanEtAl2019HF}.
+
+A \emph{hierarchical time series} is a collection of time series adhering to some known linear constraints.  Stacking the value of each series at time $t$ into a vector ${\bm y}_t$, the constraints imply that ${\bm y}_t$ lies in an $m$-dimensional linear subspace of $\mathbb{R}^n$ for all $t$.  This subspace is referred to as the {\em coherent subspace} and is denoted as $\mathfrak{s}$.  A typical (and the original) motivating example is collections of time series some of which are aggregates of other series. In this case $\bm{b}_t \in \mathbb{R}^m$ can be defined as the values of the \emph{bottom-level series} at time $t$ and the aggregation constraints can be formulated as,
 \begin{equation}\label{eq:coheObservations}
 \bm{y}_t = \bm{Sb}_t,
 \end{equation}
@@ -161,7 +165,7 @@ where $\bm{S}$ is an $n \times m$ constant matrix for a given hierarchical struc
 	\caption{An example of a two level hierarchical structure.}\label{fig:twoL-hier}
 \end{figure}
 
-To make explicit this notation, we refer to the hierarchy in Figure~\ref{fig:twoL-hier}. This hierarchy consists of $m=4$ bottom-level series with $n=7$ total number of series. Further, $\bm{y}_t = [y_{Tot,t},y_{A,t}, y_{B,t},y_{AA,t}, y_{AB,t}, y_{BA,t}, y_{BB,t}]'$, $\bm{b}_t = [y_{AA,t}, y_{AB,t}, y_{BA,t}, y_{BB,t}]'$ and
+An example of such a hierarchy is depicted in Figure~\ref{fig:twoL-hier}. This hierarchy consists of $m=4$ bottom-level series with $n=7$ total number of series. Further, $\bm{y}_t = [y_{Tot,t},y_{A,t}, y_{B,t},y_{AA,t}, y_{AB,t}, y_{BA,t}, y_{BB,t}]'$, $\bm{b}_t = [y_{AA,t}, y_{AB,t}, y_{BA,t}, y_{BB,t}]'$ and
 \[
 \bm{S} = \begin{pmatrix}
 1 & 1 & 1 & 1 \\
@@ -172,77 +176,60 @@ To make explicit this notation, we refer to the hierarchy in Figure~\ref{fig:two
 \]
 where $\bm{I}_4$ is the $4\times 4$ identity matrix.
 
-The columns of $\bm{S}$ define the aggregation constraints of the hierarchy and they span a subspace $\mathfrak{s} \subset \mathbb{R}^n$ which all $\bm{y}_t$ lie on. This subspace is referred to as the \emph{coherent subspace}. Any point that lies in this subspace is referred to as a \emph{coherent point}. In particular, all observations are coherent by construction. Further, any point forecast $\bm{\breve{y}}_{t+h}$ that is conditional on past information up to and including time $t$, is said to be coherent if it lies in the coherent subspace.
+The connection between this characterisation and the coherent subspace is that the columns of $\bm{S}$ span $\mathfrak{s}$.  Below, it will be convenient at times to think of premultiplication by $\bm{S}$ as a mapping from $\mathbb{R}^m\rightarrow\mathbb{R}^n$ in which case we use the notation $s(.)$.  Finally we note that while $\bm{S}$ depends on defining coherence in terms of bottom level series, and alternative definitions will lead to a different $\bm{S}$ matrix, the columns of all such matrices will span the same coherent subspace $\mathfrak{s}$.
 
-It will sometimes be useful to think of pre-multiplication by $\bm{S}$ in equation (\ref{eq:coheObservations}) as a mapping from $\mathbb{R}^m$ to $\mathbb{R}^n$, in which case we use the notation $s(.)$. Although the codomain of $s(.)$ is $\mathbb{R}^n$, its image is the coherent space $\mathfrak{s}$ as depicted in Figure~\ref{fig2}.
 
-\begin{figure}[H]
-	\begin{center}
-		\begin{tikzpicture}[
-		>=stealth,
-		bullet/.style={
-			fill=black,
-			circle,
-			minimum width=1.5cm,
-			inner sep=0pt
-		},
-		projection/.style={
-			->,
-			thick,
-			label,
-			shorten <=2pt,
-			shorten >=2pt
-		},
-		every fit/.style={
-			ellipse,
-			draw,
-			inner sep=0pt
-		}
-		]
-		\node at (2,3) {$s$};
-		\node at (0,5) {$\mathbb{R}^m$(domain of $s$)};
-		\node at (4,5) {$\mathbb{R}^n$(codomain of $s$)};
-		\node at (4.7,2.0) {$\mathfrak{s}$(image of $s$)};
-		%\node[bullet,label=below:$f(x)$] at (4,2.5){};
-		\draw (0,2.5) ellipse (1.02cm and 2.2cm);
-		\draw (4,2.5) ellipse (1.02cm and 2.2cm);
-		\draw (4,2.5) ellipse (0.51cm and 1.1cm);
-		\draw[projection, label=below:$f$] (0.3,2.5) -- (3.8,2.5) ;
-		\end{tikzpicture}
-	\end{center}
-	\caption{The domain, codomain and image of the mapping $s$.}\label{fig2}
-\end{figure}
+%\begin{figure}[H]
+%	\begin{center}
+%		\begin{tikzpicture}[
+%		>=stealth,
+%		bullet/.style={
+%			fill=black,
+%			circle,
+%			minimum width=1.5cm,
+%			inner sep=0pt
+%		},
+%		projection/.style={
+%			->,
+%			thick,
+%			label,
+%			shorten <=2pt,
+%			shorten >=2pt
+%		},
+%		every fit/.style={
+%			ellipse,
+%			draw,
+%			inner sep=0pt
+%		}
+%		]
+%		\node at (2,3) {$s$};
+%		\node at (0,5) {$\mathbb{R}^m$(domain of $s$)};
+%		\node at (4,5) {$\mathbb{R}^n$(codomain of $s$)};
+%		\node at (4.7,2.0) {$\mathfrak{s}$(image of $s$)};
+%		%\node[bullet,label=below:$f(x)$] at (4,2.5){};
+%		\draw (0,2.5) ellipse (1.02cm and 2.2cm);
+%		\draw (4,2.5) ellipse (1.02cm and 2.2cm);
+%		\draw (4,2.5) ellipse (0.51cm and 1.1cm);
+%		\draw[projection, label=below:$f$] (0.3,2.5) -- (3.8,2.5) ;
+%		\end{tikzpicture}
+%	\end{center}
+%	\caption{The domain, codomain and image of the mapping $s$.}\label{fig2}
+%\end{figure}
 
-\subsection{Hierarchical point forecasts}\label{subsec:preliminary}
+When forecasting hierarchical time series there a number of reasons why forecasts may not adhere to constraints. 
+%MOVE TO INTRO EVENTUALLY: forecasts of each series may be obtained using independent univariate models, multivariate models may not be able to easily incorporate the constraints, or judgemental adjustments may be made.  
+In this case forecasts are called {\em incoherent} and denoted $\hat{\bm y}_{t+h}$, with the subscript $t+h$ implying a h step made at time $t$.  To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as {\em forecast reconciliation}.  At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm y}_{t+h}=\psi(\hat{\bm y}_{t+h})$, where $\tilde{\bm y}_{t+h}\in\mathfrak{s}$ is called the {\em reconciled} forecast.  This mapping itself may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ produces a new set of bottom level forecasts using the forecasts of all series, and these are then aggregated via $s$.  When both mappings are linear this corresponds to premultiplying by a matrix $\bm{S}\bm{G}$.  Several choices of $\bm{G}$ are currently extant in the literature, including the bottom-up \citep{Dunn1976}, OLS, WLS and MinT \citep{HynEtAl2011,WicEtAl2019} methods. These are special cases where $s\circ g$ is a projection and are summarised in Table\ref{table:ReconMethods}.  As an extension, \cite{PanEtAl2019HF} also consider a bias correction step, which can be thought of as applying a translation followed by a projection.
 
-\citet{PanEtAl2019HF} provides insights to coherent point forecasts and forecast reconciliation in terms of geometric concepts. We briefly discuss these to facilitate extensions into the probabilistic framework presented in Section~\ref{sec:ProbForecasts}.
 
-%It is desirable that forecasts, whether point forecasts or probabilistic forecasts, should in some sense respect inherent aggregation constraints. We follow other authors \citep{Wickramasuriya2017, FPP2018} in using the nomenclature \emph{coherence} to describe this property. We now provide new definitions for coherent forecasts in terms of vector spaces that give a geometric understanding of the problem, thus facilitating the development of probabilistic forecast reconciliation in Section~\ref{sec:reconciliation}.
+%Suppose we have a vector of point forecasts at time $t+h$ derived by using information up to and including time $t$. Let these forecasts be stacked in a vector with the same order as $\bm{y}_t$ and denoted by $\hat{\bm{y}}_{t+h} \in \mathbb{R}^n$. These are referred to as \emph{incoherent point forecasts} as they do not satisfy the aggregation constraints. Assume a linear function that maps these incoherent forecasts into new bottom-level forecasts.
+%Let $\bm{G}$ and $\bm{d}$ be an $m\times n$ matrix and $m\times 1$ vector respectively, and let $g:\mathbb{R}^n \rightarrow \mathbb{R}^m$ be the mapping $g(\bm{y})=\bm{G}\bm{y}+\bm{d}$. A composition of $g(.)$ and $s(.)$ gives the reconciled point forecasts as,
+%\begin{equation} \label{eq:ReconPoint}
+%\tilde{\bm{y}}_{t+h}=\bm{S}(\bm{G}\hat{\bm{y}}_{t+h}+\bm{d})\,.
+%\end{equation}
 %
-%\begin{definition}[Coherent subspace]\label{def:cohspace}
-% The $m$-dimensional linear subspace $\mathfrak{s}\subset \mathbb{R}^n$ that is spanned by the columns of $\bm{S}$, i.e.\ $\mathfrak{s}=\text{span}(\bm{S})$, is defined as the \emph{coherent space}.
-%\end{definition}
-%
-
-%Suppose we have a set of point forecasts from all series of the hierarchy at time $t+h$ which are obtained by conditioning on all information upto time $t$. Let these forecasts stacked in a $n$ dimensional vector in the same order as $\bm{y}_t$ and denoted by $\breve{\bm{y}}_{t+h|t}$. $\breve{\bm{y}}_{t+h|t}$ is then said to be \emph{coherent} if $\breve{\bm{y}}_{t+h|t} \in \mathfrak{s}$.
-
-
-%\begin{definition}[Coherent Point Forecasts]\label{def:cohpoint}
-% Let $\breve{\bm{y}}_{t+h|t} \in \mathbb{R}^n$ be a point forecast of the values of all series in the hierarchy at time $t+h$, made using information up to and including time $t$. Then $\breve{\bm{y}}_{t+h|t}$ is \emph{coherent} if $\breve{\bm{y}}_{t+h|t} \in \mathfrak{s}$.
-%\end{definition}
-
-
-%\subsection{Point forecast reconciliation}
-
-Suppose we have a vector of point forecasts at time $t+h$ derived by using information up to and including time $t$. Let these forecasts be stacked in a vector with the same order as $\bm{y}_t$ and denoted by $\hat{\bm{y}}_{t+h} \in \mathbb{R}^n$. These are referred to as \emph{incoherent point forecasts} as they do not satisfy the aggregation constraints. Assume a linear function that maps these incoherent forecasts into new bottom-level forecasts.
-Let $\bm{G}$ and $\bm{d}$ be an $m\times n$ matrix and $m\times 1$ vector respectively, and let $g:\mathbb{R}^n \rightarrow \mathbb{R}^m$ be the mapping $g(\bm{y})=\bm{G}\bm{y}+\bm{d}$. A composition of $g(.)$ and $s(.)$ gives the reconciled point forecasts as,
-\begin{equation} \label{eq:ReconPoint}
-\tilde{\bm{y}}_{t+h}=\bm{S}(\bm{G}\hat{\bm{y}}_{t+h}+\bm{d})\,.
-\end{equation}
-
-Several choices of $g(.)$ are currently extant in the literature, including the bottom-up \citep{Dunn1976}, OLS, WLS and MinT \citep{HynEtAl2011,WicEtAl2019} methods. These are special cases where $s\circ g$ is a projection. These can be defined so that $\bm{G}=({\bm{R}'_{\perp}}\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{d}=\bm{0}$, where, ${\bm{R}_{\perp}}$ is a $n\times m$ orthogonal complement to an $n \times (n-m)$ matrix $\bm{R}$, where the columns of the latter span the null space of $\mathfrak{s}$. For example, a straightforward choice of $\bm{R}$ for the most simple three variable hierarchy where $y_{1,t}=y_{2,t}+y_{3,t}$, is the vector $(1,-1,-1)$ which is orthogonal (in the Euclidean sense) to the columns of $\bm{S}$. In this case, the matrix $\bm{R}$ can be interpreted as a `restrictions' matrix since it has the property that $\bm{R}'\bm{y}=\bm{0}$ for coherent $\bm{y}$. For this three variable hierarchy, $\bm{R}_\perp'=\bm{S}$ and reconciliation corresponds to the OLS method. For the case where $\bm{R}_\perp'\neq\bm{S}$, for example WLS and MinT,
-%there are two possible interpretations. One is that these are oblique projections in Euclidean space where the columns of $\bm{R}$ are `directions' along which incoherent point forecasts are projected onto the coherent space $\mathfrak{s}$. Alternatively, since
-$\bm{R}_\perp'$ is usually written in the form $\bm{S}'{\bm{W}}^{-1}$. These projections can be thought of as orthogonal projections after pre-multiplying by ${\bm{W}^{-1/2}}$. More detailed explanation on this can be found in Sections 3.1 and 3.2 of \citet{PanEtAl2019HF}. Table~\ref{table:ReconMethods} summarises existing reconciliation methods.
+%Several choices of $g(.)$ are currently extant in the literature, including the bottom-up \citep{Dunn1976}, OLS, WLS and MinT \citep{HynEtAl2011,WicEtAl2019} methods. These are special cases where $s\circ g$ is a projection. These can be defined so that $\bm{G}=({\bm{R}'_{\perp}}\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{d}=\bm{0}$, where, ${\bm{R}_{\perp}}$ is a $n\times m$ orthogonal complement to an $n \times (n-m)$ matrix $\bm{R}$, where the columns of the latter span the null space of $\mathfrak{s}$. For example, a straightforward choice of $\bm{R}$ for the most simple three variable hierarchy where $y_{1,t}=y_{2,t}+y_{3,t}$, is the vector $(1,-1,-1)$ which is orthogonal (in the Euclidean sense) to the columns of $\bm{S}$. In this case, the matrix $\bm{R}$ can be interpreted as a `restrictions' matrix since it has the property that $\bm{R}'\bm{y}=\bm{0}$ for coherent $\bm{y}$. For this three variable hierarchy, $\bm{R}_\perp'=\bm{S}$ and reconciliation corresponds to the OLS method. For the case where $\bm{R}_\perp'\neq\bm{S}$, for example WLS and MinT,
+%%there are two possible interpretations. One is that these are oblique projections in Euclidean space where the columns of $\bm{R}$ are `directions' along which incoherent point forecasts are projected onto the coherent space $\mathfrak{s}$. Alternatively, since
+%$\bm{R}_\perp'$ is usually written in the form $\bm{S}'{\bm{W}}^{-1}$. These projections can be thought of as orthogonal projections after pre-multiplying by ${\bm{W}^{-1/2}}$. More detailed explanation on this can be found in Sections 3.1 and 3.2 of \citet{PanEtAl2019HF}. Table~\ref{table:ReconMethods} summarises existing reconciliation methods.
 
 \begin{table}[!h]
 	\caption{Summary of reconciliation methods that are projections. Here, $\hat{\bm{W}}^{sam}$ is the variance covariance matrix of one-step ahead in-sample forecast errors, $\hat{\bm{W}}^{shr}$ is a shrinkage estimator more suited to large dimensions proposed by \citet{Schafer2005}, $\hat{\bm{W}}^{wls}$ is the diagonal matrix with diagonal elements $w_{ii}$, and $\tau = \frac{\sum_{i \neq j}\hat{\var}(\hat{w}_{ij})}{\sum_{i \neq j}{\hat{w}}^2_{ij}}$, where $w_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{W}}^{sam}$.}\label{table:ReconMethods}
@@ -267,31 +254,31 @@ $\bm{R}_\perp'$ is usually written in the form $\bm{S}'{\bm{W}}^{-1}$. These pro
 	\end{tabular}
 \end{table}
 
-The columns of $\bm{S}$ and $\bm{R}$ provide a basis for $\mathbb{R}^n$. Therefore any incoherent set of point forecasts $\hat{\bm{y}}_{t+h}$ can be expressed in terms of coordinates in the basis defined by $\bm{S}$ and $\bm{R}$. Let $\tilde{\bm{b}}_{t+h}$ and $\tilde{\bm{a}}_{t+h}$ be the coordinates corresponding to $\bm{S}$ and $\bm{R}$ respectively, after a change of basis. The process of reconciliation involves setting the values of the reconciled bottom-level forecasts to be $\tilde{\bm{b}}_{t+h}$, and ignoring $\tilde{\bm{a}}_{t+h}$ to ensure coherence. From properties of linear algebra it follows that
-\[
-\hat{\bm{y}}_{t+h} = (\bm{S} ~ \bm{R})
-\begin{pmatrix}
-\tilde{\bm{b}}_{t+h}\\ \tilde{\bm{a}}_{t+h}
-\end{pmatrix}= \bm{S}\tilde{\bm{b}}_{t+h} + \bm{R}\tilde{\bm{a}}_{t+h},
-\]
-while the reconciled point forecast is
-\[
-\tilde{\bm{y}}_{t+h} = \bm{S}\tilde{\bm{b}}_{t+h}.
-\]
+%The columns of $\bm{S}$ and $\bm{R}$ provide a basis for $\mathbb{R}^n$. Therefore any incoherent set of point forecasts $\hat{\bm{y}}_{t+h}$ can be expressed in terms of coordinates in the basis defined by $\bm{S}$ and $\bm{R}$. Let $\tilde{\bm{b}}_{t+h}$ and $\tilde{\bm{a}}_{t+h}$ be the coordinates corresponding to $\bm{S}$ and $\bm{R}$ respectively, after a change of basis. The process of reconciliation involves setting the values of the reconciled bottom-level forecasts to be $\tilde{\bm{b}}_{t+h}$, and ignoring $\tilde{\bm{a}}_{t+h}$ to ensure coherence. From properties of linear algebra it follows that
+%\[
+%\hat{\bm{y}}_{t+h} = (\bm{S} ~ \bm{R})
+%\begin{pmatrix}
+%\tilde{\bm{b}}_{t+h}\\ \tilde{\bm{a}}_{t+h}
+%\end{pmatrix}= \bm{S}\tilde{\bm{b}}_{t+h} + \bm{R}\tilde{\bm{a}}_{t+h},
+%\]
+%while the reconciled point forecast is
+%\[
+%\tilde{\bm{y}}_{t+h} = \bm{S}\tilde{\bm{b}}_{t+h}.
+%\]
+%
+%In order to find $\tilde{\bm{b}}_{t+h}$ we require the inverse $(\bm{S} ~ \bm{R})^{-1}$ which is given by
+%\begin{equation}
+%(\bm{S} ~ \bm{R})^{-1} = \begin{pmatrix}
+%(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot \\ (\bm{S}'_\bot \bm{R})^{-1}\bm{S}'_\bot
+%\end{pmatrix}\,,
+%\end{equation}
+%where $\bm{S}_{\bot}$ is the orthogonal complements of $\bm{S}$. Thus it follows that $\tilde{\bm{b}}_{t+h}=(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot \hat{\bm{y}}_{t+h}$ and $\tilde{\bm{y}}_{t+h}=\bm{S}(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot \hat{\bm{y}}_{t+h}$. Here $(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot$ corresponds to $\bm{G}$ as defined previously.
 
-In order to find $\tilde{\bm{b}}_{t+h}$ we require the inverse $(\bm{S} ~ \bm{R})^{-1}$ which is given by
-\begin{equation}
-(\bm{S} ~ \bm{R})^{-1} = \begin{pmatrix}
-(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot \\ (\bm{S}'_\bot \bm{R})^{-1}\bm{S}'_\bot
-\end{pmatrix}\,,
-\end{equation}
-where $\bm{S}_{\bot}$ is the orthogonal complements of $\bm{S}$. Thus it follows that $\tilde{\bm{b}}_{t+h}=(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot \hat{\bm{y}}_{t+h}$ and $\tilde{\bm{y}}_{t+h}=\bm{S}(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot \hat{\bm{y}}_{t+h}$. Here $(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot$ corresponds to $\bm{G}$ as defined previously.
-
-\section{Hierarchical probabilistic forecasts}\label{sec:ProbForecasts}
-
-The geometric intuition in hierarchical point forecasts provides a solid basis for extending the idea into the probabilistic framework. We start with providing definitions for coherent probabilistic forecasts and probabilistic forecast reconciliation.
 
 \subsection{Coherent probabilistic forecasts}\label{subsec:cohprobf}
+
+We now turn our attention towards defining the concept of coherence in a probabilistic setting.  Put simply, this merely involves defining a probability distribution on $\mathfrak{s}$.  The following method bears some resemblance to defining coherence in the point setting by selecting bottom level series and defining an appropriate $\bm{S}$ matrix. 
+
 
 Let $(\mathbb{R}^m, \mathscr{F}_{\mathbb{R}^m}, \nu)$ be a probability triple, where $\mathscr{F}_{\mathbb{R}^m}$ is the usual Borel $\sigma$-algebra on $\mathbb{R}^m$. Let $\breve{\nu}$ be a probability measure on $\mathfrak{s}$ with $\sigma$-algebra $\mathscr{F}_{\mathfrak{s}}$. Here $\mathscr{F}_{\mathfrak{s}}$ is a collection of sets $s(\mathcal{B})$, where $s(\mathcal{B})$ denotes the image of the set $\mathcal{B}\in \mathscr{F}_{\mathbb{R}^m}$ under the mapping $s(.)$.
 
