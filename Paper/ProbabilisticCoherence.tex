@@ -626,13 +626,9 @@ We have also considered different parameterisation methods for estimation optima
 
 An important issue in all forecasting problems is evaluating forecast accuracy. In the probabilistic setting, it is common to evaluate forecasts using proper scoring rules \citep[see][and references therein]{Gneiting2007,Gneiting2014}. Throughout we follow the convention of negatively-oriented scoring rules such that smaller values of the score indicate more accurate forecasts.  A scoring rule $S(P,\bm{\omega})$ is a function that takes two inputs, a probabilistic forecast $P$ and a realisation $\bm{\omega}$ from the true data generating $Q$.  A scoring rule is {\em proper} if $\E_{\bm{Q}}[S(Q,\omega)] \le \E_{\bm{Q}}[S(P,{\bm\omega})]$ where $\E_{Q}[S(P,{\bm\omega})]$ is the expected score under the true distribution $Q$. When this inequality is strict, the scoring rule is said to be {\em strictly proper}.
 
-Here we focus on three scoring rules: the log score (LS), the energy score (ES) and the variogram score (VS).  Since hierarchical forecasting is by its very nature a multivariate problem (the linear constraints affect all variables), our focus is on multivariate scoring rules.  However, in our simulations we will at time restrict our attention to evaluating individual margins of interest using the univariate counterpart of the log score and energy score, where the latter is the commonly used CRPS.
+Here we focus on three scoring rules: the log score (LS), the energy score (ES) and the variogram score (VS).  Since hierarchical forecasting is by its very nature a multivariate problem (the linear constraints affect all variables), our focus is on multivariate scoring rules.  However, in our simulations we will at times restrict our attention to evaluating individual margins of interest using the univariate counterparts of the log score and energy score (the latter is called the CRPS).
 
-The log score simply involves evaluating the negative log density function at the value of the realisation,
-\[
-LS(P,\bm\omega)=-\log p(\bm\omega)\,,
-\]
-where $p$ is the density associated with a distribution $P$.  The log score is more commonly used when a parametric form for the density is available. However, even in cases only a sample of values from the probabilistic forecast are available, this density can be approximated \citep[see][]{Jordan2017}.
+The log score simply involves evaluating the negative log density function at the value of the realisation, $LS(P,\bm\omega)=-\log p(\bm\omega)$, where $p$ is the density associated with a distribution $P$.  The log score is more commonly used when a parametric form for the density is available. However, even in cases only a sample of values from the probabilistic forecast are available, this density can be approximated \citep[see][]{Jordan2017}.
 
 The energy score is defined in terms of the characteristic function of the probabilistic forecast. It is, however more commonly calculated using the following representation
 \begin{equation}\label{eq:Energy_score}
@@ -640,15 +636,15 @@ The energy score is defined in terms of the characteristic function of the proba
 \E_{P}
 ||\breve{\bm{y}}-\bm{\omega}||^\alpha -\frac{1}{2}\E_{P}||\bm{y}-\bm{y}^*||^\alpha, \,\, \alpha \in (0,2]\,,
 \end{equation}
-where $\bm {y}$ and $\bm{y^*}$ are independent copies drawn from the distribution $P$.  These expectations can be easily approximated via Monte Carlo when samples from the probabilistic forecast are available.  An interesting limiting case is $\alpha=2$, where energy score simplifies to mean squared error around the mean of the predictive distribution. This limiting case, the energy score is proper but not strictly proper. 
+where $\bm {y}$ and $\bm{y^*}$ are independent copies drawn from the distribution $P$.  These expectations can be easily approximated via Monte Carlo when samples from the probabilistic forecast are available.  An interesting limiting case is $\alpha=2$, where energy score simplifies to mean squared error around the mean of the predictive distribution. In this case, the energy score is proper but not strictly proper. 
 
 The energy score has been criticised by \citet{Pinson2013a} for its low discriminative ability for incorrectly specified covariances.  The variogram score  \citep{SCHEUERER2015}, overcomes this issue and is defined as
 \begin{equation}
 \text{VS}(\breve{P}, \bm{\omega}) = \displaystyle\sum_{i=1}^{n}\displaystyle\sum_{j=1}^{n}w_{ij}\left(|\omega_{i} - \omega_{j}|^p - E_{P} |{y}_{i}-{y}_{j}|^p\right)^2\,,
 \end{equation}
-where $y_i$ and $y_j$ are the $i^{th}$ and $j^{th}$ elements of $\bm{y}\sim P$. \citet{SCHEUERER2015} recommend using $p=0.5$.
+where $y_i$ and $y_j$ are the $i^{th}$ and $j^{th}$ elements of $\bm{y}\sim P$ and $p$ is usually set to $0.5$.
 
-In the context of probabilistic forecast reconciliation there could be two motivations for using scoring rules. The first is to compare incoherent base probabilistic forecasts to their reconciled counterparts. In the point forecasting setting, reconciliation has also been shown to improve forecast performance \citep{AthEtAl2017, WicEtAl2019}. As such, it will be worthwhile to see whether the same holds in the probabilistic setting. The second motivation for using scoring rules will be to compare reconciled probabilistic forecasts to one another.  This may be useful to see which choice of $g(.)$ performs best in practice.  
+In the context of probabilistic forecast reconciliation there could be two motivations for using scoring rules. The first is to compare incoherent base probabilistic forecasts to their reconciled counterparts, to see whether reconciliation improves forecast accuracy. The second motivation is to compare two reconciled probabilistic forecasts to one another, to see which choice of $\bm{G}$ performs best in practice.  
 
 \subsection{Comparing base forecasts to reconciled forecasts}
 
@@ -659,40 +655,23 @@ Section~\ref{sec:ProbForecasts} describes how the density of a reconciled foreca
 \end{theo}
 
 \begin{proof}
-	Consider a change of variables, 
-	\[
-	\bm{y}=\left(\bm{S}\,\vdots\,\bm{S_\perp}\right)\begin{pmatrix}\bm{b}\\\bm{u}\end{pmatrix}\,.
-	\] 
-	The $m$-dimensional vector $\bm{b}$ corresponds to the bottom level series.  For a coherent distribution the density is degenerate when the $n-m$ vector $\bm{u}$ equals $0$ (i.e. the aggregation constraints hold).  Also we define $\bm{S}^*:=\left(\bm{S}\,\vdots\,\bm{S_\perp}\right)$
-	
-	Consider the case where the true predictive density $f(\bm{y})$ is, after a change of variables written as $|\bm{S^*}|f_{\bm b}(\bm{b})\mathbb{1}\left\{\bm{u}=\bm{0}\right\}$.  Also consider an incoherent density, which after the same change of variables can be written as $|\bm{S^*}|\hat{f}_{\bm b}(\bm{b})\hat{f}_{\bm{u}}(\bm{u})$. To prove the impropriety of the log score we will construct $f_{\bm u}$ to be highly concentrated around $0$ but still non-degenerate.  In particular we require $f_{\bm u}>1$. As an example a Gaussian with mean zero and variance $\sigma^2{\bm{I}}$ with $\sigma^2 < (2\pi)^{-1}$. 
-	
-	Consider any realisation from the true DGP $\bm{y}^*$.  After a change of variables by premultiplying by $\bm{S}^*$, let the first $m$ elements be given by $\bm{b^*}$.  The remaining elements will all be equal to zero.  The log score under the true data generating process is	
-	\begin{align}
-	LS\left(f,\bm{y}^*\right) &= -\log f(\bm{y}^*) \nonumber\\
-	&=-\log|\bm{S^*}|-\log f_{\bm{b}}\left(\bm{b}^*\right)-\log\left(\mathbb{1}\left\{\bm{u}^*=\bm{0}\right\}\right)\label{eq:diraccancel}\\
-	&=-\log|\bm{S^*}|-\log f_{\bm{b}}\left(\bm{b}^*\right),\nonumber
-	\end{align}
-	where the third term in Equation~\ref{eq:diraccancel} is equal to zero since $\bm{u}^*=\bm{0}$.  The log score for the incoherent density is
-	\[
-	LS\left(\hat{f},\bm{y}^*\right) = -\log|\bm{S^*}|-\log f_{\bm{b}}(\bm{b}^*)- \log f_{\bm u}(\bm{0})\,.
-	\]
-	Since $f_{\bm u}(\bm{0})>1$ by construction, $-\log f_{\bm u}(\bm{0})<0$, therefore
-	\[
-	LS\left(\hat{f},\bm{y}^*\right) <-\log|\bm{S^*}|-\log f_{\bm b}(\bm{b}^*)=LS\left(f,\bm{y}^*\right)
-	\]
-	Since this holds for any possible realisation of the true DGP, it will also hold after taking expectations.  This violates the condition for a proper scoring rule.
+	See Appendix.
 \end{proof}
 
-The proof above has some similarities to the case where discrete random variables are modelled as if they were continuous, an issue discussed in Section~4.1 of \citet{Gneiting2007}. As a result of Theorem~\ref{theo:logS_improp} we recommend avoiding the log score when comparing reconciled and unreconciled probabilistic forecasts.
+As a result of Theorem~\ref{theo:logS_improp} we recommend avoiding the log score when comparing reconciled and unreconciled probabilistic forecasts.
 
 \subsubsection{Comparing reconciled forecasts to one another}
 
-Coherent probabilistic forecasts can be completely characterised in terms of basis series; if a probabilistic forecast is available for the basis series, then a probabilistic forecast can be recovered for the entire hierarchy via Definition~\ref{def:cohprob}. This may suggest that it is adequate to merely compare two coherent forecasts to one another using the basis series only. We now show how this depends on the specific scoring rule used.
+If probabilistic forecasts are available for any $m$ series, then a probabilistic forecast for the full hierarchy can be derived.  Definition~\ref{def:cohprob} provides an example using the bottom level series. This suggests that it may be adequate to merely compare two coherent forecasts to one another using the bottom level series only. We now show that this is not true in general and depends on the specific scoring rule used.
 
-For the log score, suppose the coherent probabilistic forecast has density $f(\bm{b})$. The density for the full hierarchy is given by $f(\bm{y})=f(\bm{Sb})=f(\bm{b})J^{-1}$, where $J=\prod_{j=1}^{m}\lambda_j$ is a pseudo-determinant of the non-square matrix $\bm{S}$ and $\lambda_j$ are the non-zero singular values of $\bm{S}$. Therefore for any coherent density, the log score of the full hierarchy differs from the log score for the bottom-level series by the term $log(J)$. This term depends only on the structure of the hierarchy and is fixed across different reconciliation methods. Therefore if one method achieves a lower expected log score compared to an alternative method using the bottom-level series only, the same ordering is preserved when an assessment is made on the basis of the full hierarchy.
+For the log score, suppose a coherent probabilistic forecast $P$ has density $f_{\bm{y}}$ for the full hierarchy and a density $f_{\bm{b}}$ for the bottom level series. By Theorem~\ref{theo:fulldens}, $f_{\bm{y}}(\bm{y})=|\bm{S}^*|f_{\bm{b}}(S^-\bm{y})\mathbb{1}{y\in\mathfrak{s}}$.  Any realisation $\bm{y}^*$ will lie on the coherent subspace and can be written as $\bm{S}\bm{b}^*$.  The expression for the log score is therefore
+\begin{align}
+LS(f,\bm{y}^*)&=-\log\left(|\bm{S}^*|f_{\bm{b}}(\bm{S}^-\bm{S}\bm{b}^*)\right)\nonumber\\
+&=-log|\bm{S}^*|-\log f_{\bm{b}}(\bm{b}^*)\,.\nonumber
+\end{align}
+For coherent densities, the log score for the full hierarchy differs from the log score for the bottom-level series only by the term $-log(|\bm{S}^*|)$. This term is fixed for different choices of ${\bm G}$. As such, the density of only $m$ series in the hierarchy are needed to compute the ranking of forecast accuracy for different reconciliation methods.
 
-The same property does not hold for all scores in general. For example, the energy score can be expressed in terms of expectations of norms. In general, since norms are invariant under orthogonal rotations, the energy score is also invariant under orthogonal transformations \citep{Szekely2013,Gneiting2007}. In the context of two coherent forecasts, the same is true of a semi-orthogonal transformation from a lower dimensional basis series to the full hierarchy. However, when $\bm{S}$ is the usual summing matrix, it is not semi-orthogonal. Therefore the energy score computed on the bottom-level series will differ from the energy score computed using the full hierarchy and the ordering of different reconciliation methods may change depending on the basis series used. In this case we recommend computing the energy score using the full hierarchy. Although the discussion here is related to energy score, the same logic holds for other multivariate scores, for example the variogram score.
+The same property does not hold for all scores in general. For example, the energy score which can be expressed in terms of norms is invariant under orthogonal transformations \citep{Szekely2013,Gneiting2007}. The same is not true of linear transformations in general. The ordering of energy scores for different reconciliation methods computed using bottom level series may change if the energy scores are recomputed after premultiplying bottom level series by $\bm{S}$. We recommend computing the energy score using the full hierarchy as well as for the variogram score, for which the same reasoning holds.
 
 The properties of multivariate scoring rules in the context of evaluating reconciled probabilistic forecasts are summarised in Table~\ref{tab:prop}.
 
@@ -710,18 +689,6 @@ The properties of multivariate scoring rules in the context of evaluating reconc
 	
 	\label{tab:prop}
 \end{table}
-
-
-\subsubsection{Skill scores}
-
-To facilitate comparisons between different forecasting methods, we use skill scores \citep{Gneiting2007}. The skill score for a given forecast distribution $P$,  with reference to a forecast distribution $P_{ref}$, evaluated by a particular scoring rule $S()$, is calculated as, 
-
-\begin{equation}
-SS(P, \omega) = \frac{E_Q[S(P_{ref}, \omega)] - E_Q[S(P, \omega)]}{E_Q[S(P_{ref}, \omega)]}
-\end{equation}
-
-The skill score gives the percentage improvement of the preferred forecasting method relative to the reference method. A negative valued skill score indicates that a method is worse than the reference method, whereas any positive value indicates that the method is superior to the reference method. 
-
 
 \section{Simulations}
 
@@ -781,7 +748,7 @@ To compare different reconciliation methods in parametric densities we assume a 
 
 We generate $2000$ observations for each series from the Gaussian and non-Gaussian DGP. We ignore the first $500$ observations from each series to avoid the impact from initial values. Using a rolling window of $T=500$ observations, we fit univariate ARIMA models for each series using the \verb|auto.arima()| function in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore}. Using the fitted models we generate $1$ to $3$ steps ahead base (incoherent) Gaussian probabilistic forecasts. We estimate the mean and the variance of this incoherent Gaussian density as the $h$-steps ahead point forecasts $\hat{\bm{y}}_{t+h}$ and shrinkage estimator for variance covariance matrix of one-step ahead forecast errors $\hat{\bm{W}}^{\text{shr}}$ respectively. These were then reconciled using different projections summarised in Table~\ref{table:ReconMethods}. This process was replicated for $1000$ times by rolling the window one step at a time.
 
-To assess the predictive performance of different forecasting methods, we use scoring rules as discussed in Section~\ref{sec:evaluation}. 
+To assess the predictive performance of different forecasting methods, we use scoring rules as discussed in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores which are the percentage improvement of a probabilistic forecast $P$ over a reference method $P_{\mbox{ref}}$ such that a positive value indicates that a method is more accurate than the reference method. 
 
 \subsubsection{Results and discussion}
 
@@ -1157,6 +1124,32 @@ Since $\bm{S}'_\perp$ is the orthogonal complement of $\bm{S}$ and since the col
 \[
 \tilde{f}_{\bm{y}}(\bm{y})=\tilde{f}(\bm{S}^-\bm{y})\mathbb{1}\left\{\bm{y}\in\mathfrak{s}\right\}\,.
 \]
+
+\section{Proof of Theorem~\ref{theo:logS_improp}}
+
+The proof below has some similarities to the case where discrete random variables are modelled as if they were continuous, an issue discussed in Section~4.1 of \citet{Gneiting2007}.  Consider a change of variables, 
+\[
+\bm{y}=\left(\bm{S}\,\vdots\,\bm{S_\perp}\right)\begin{pmatrix}\bm{b}\\\bm{u}\end{pmatrix}\,.
+\] 
+The $m$-dimensional vector $\bm{b}$ corresponds to the bottom level series.  For a coherent distribution the density is degenerate when the $n-m$ vector $\bm{u}$ equals $0$ (i.e. the aggregation constraints hold).  Also we define $\bm{S}^*:=\left(\bm{S}\,\vdots\,\bm{S_\perp}\right)$
+
+Consider the case where the true predictive density $f(\bm{y})$ is, after a change of variables written as $|\bm{S^*}|f_{\bm b}(\bm{b})\mathbb{1}\left\{\bm{u}=\bm{0}\right\}$.  Also consider an incoherent density, which after the same change of variables can be written as $|\bm{S^*}|\hat{f}_{\bm b}(\bm{b})\hat{f}_{\bm{u}}(\bm{u})$. To prove the impropriety of the log score we will construct $f_{\bm u}$ to be highly concentrated around $0$ but still non-degenerate.  In particular we require $f_{\bm u}>1$. As an example a Gaussian with mean zero and variance $\sigma^2{\bm{I}}$ with $\sigma^2 < (2\pi)^{-1}$. 
+
+Consider any realisation from the true DGP $\bm{y}^*$.  After a change of variables by premultiplying by $\bm{S}^*$, let the first $m$ elements be given by $\bm{b^*}$.  The remaining elements will all be equal to zero.  The log score under the true data generating process is	
+\begin{align}
+LS\left(f,\bm{y}^*\right) &= -\log f(\bm{y}^*) \nonumber\\
+&=-\log|\bm{S^*}|-\log f_{\bm{b}}\left(\bm{b}^*\right)-\log\left(\mathbb{1}\left\{\bm{u}^*=\bm{0}\right\}\right)\label{eq:diraccancel}\\
+&=-\log|\bm{S^*}|-\log f_{\bm{b}}\left(\bm{b}^*\right),\nonumber
+\end{align}
+where the third term in Equation~\ref{eq:diraccancel} is equal to zero since $\bm{u}^*=\bm{0}$.  The log score for the incoherent density is
+\[
+LS\left(\hat{f},\bm{y}^*\right) = -\log|\bm{S^*}|-\log f_{\bm{b}}(\bm{b}^*)- \log f_{\bm u}(\bm{0})\,.
+\]
+Since $f_{\bm u}(\bm{0})>1$ by construction, $-\log f_{\bm u}(\bm{0})<0$, therefore
+\[
+LS\left(\hat{f},\bm{y}^*\right) <-\log|\bm{S^*}|-\log f_{\bm b}(\bm{b}^*)=LS\left(f,\bm{y}^*\right)
+\]
+Since this holds for any possible realisation of the true DGP, it will also hold after taking expectations.  This violates the condition for a proper scoring rule.
 
 \section{Reparameterisation of $\bm{G}$ in optimal reconciliation of future paths} \label{Appen:ReparaG}
 
