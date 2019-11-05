@@ -659,22 +659,32 @@ Section~\ref{sec:ProbForecasts} describes how the density of a reconciled foreca
 \end{theo}
 
 \begin{proof}
-	Consider a rotated version of hierarchical time series, $\bm{z}_t=\bm{U}\bm{y}_t$, so that the first $m$ elements of $\bm{z}_t$ denoted $\bm{z}^{(1)}_t$ are unconstrained, while the remaining $n-m$ elements denoted $\bm{z}^{(2)}_t$ equal $0$ when the aggregation constraints hold. An example of the $n\times n$ $\bm{U}$ is the matrix of left singular vectors of $\bm{S}$.
-	
-	Consider the case where the true predictive density is $f_1(\bm{z}^{(1)}_t)\mathbb{1}\left(\bm{z}^{(2)}_t=\bm{0}\right)$, and we evaluate an incoherent density given by $f_1(\bm{z}^{(1)}_t)f_2(\bm{z}^{(2)}_t)$, where $f_2$ is highly concentrated around $0$ but still non-degenerate. For example, $f_2$ may be Gaussian with variance $\sigma^2{\bm{I}}$ with $\sigma^2 < (2\pi)^{-1}$. The log score under the true data generating process is
+	Consider a change of variables, 
 	\[
-	LS\left(f,\bm{z}^{(1)}_t\right) = -\log f_1\left(\bm{z}^{(1)}_t\right),
-	\]
-	while that of the unreconciled density is
+	\bm{y}=\left(\bm{S}\,\vdots\,\bm{S_\perp}\right)\begin{pmatrix}\bm{b}\\\bm{u}\end{pmatrix}\,.
+	\] 
+	The $m$-dimensional vector $\bm{b}$ corresponds to the bottom level series.  For a coherent distribution the density is degenerate when the $n-m$ vector $\bm{u}$ equals $0$ (i.e. the aggregation constraints hold).  Also we define $\bm{S}^*:=\left(\bm{S}\,\vdots\,\bm{S_\perp}\right)$
+	
+	Consider the case where the true predictive density $f(\bm{y})$ is, after a change of variables written as $|\bm{S^*}|f_{\bm b}(\bm{b})\mathbb{1}\left\{\bm{u}=\bm{0}\right\}$.  Also consider an incoherent density, which after the same change of variables can be written as $|\bm{S^*}|\hat{f}_{\bm b}(\bm{b})\hat{f}_{\bm{u}}(\bm{u})$. To prove the impropriety of the log score we will construct $f_{\bm u}$ to be highly concentrated around $0$ but still non-degenerate.  In particular we require $f_{\bm u}>1$. As an example a Gaussian with mean zero and variance $\sigma^2{\bm{I}}$ with $\sigma^2 < (2\pi)^{-1}$. 
+	
+	Consider any realisation from the true DGP $\bm{y}^*$.  After a change of variables by premultiplying by $\bm{S}^*$, let the first $m$ elements be given by $\bm{b^*}$.  The remaining elements will all be equal to zero.  The log score under the true data generating process is	
 	\begin{align}
-	LS\left(\hat{f},\bm{z}^{(1)}_t\right) &= -\log f_1(\bm{z}^{(1)}_t)- \log f_2(\bm{z}^{(1)}_t)\\
-	&= -\log f_1(\bm{z}^{(1)}_t)+\frac{n-m}{2}\log(2\pi\sigma^2)\\
-	&<-\log f_1(\bm{z}^{(1)}_t)=LS\left(f,\bm{z}^{(1)}_t\right).
+	LS\left(f,\bm{y}^*\right) &= -\log f(\bm{y}^*) \nonumber\\
+	&=-\log|\bm{S^*}|-\log f_{\bm{b}}\left(\bm{b}^*\right)-\log\left(\mathbb{1}\left\{\bm{u}^*=\bm{0}\right\}\right)\label{eq:diraccancel}\\
+	&=-\log|\bm{S^*}|-\log f_{\bm{b}}\left(\bm{b}^*\right),\nonumber
 	\end{align}
-	After taking expectations $E\left[LS(f,f)\right] > E\left[LS(\hat{f},f)\right]$, violating the condition in Equation~\eqref{eq:prop_score} for a proper scoring rule.
+	where the third term in Equation~\ref{eq:diraccancel} is equal to zero since $\bm{u}^*=\bm{0}$.  The log score for the incoherent density is
+	\[
+	LS\left(\hat{f},\bm{y}^*\right) = -\log|\bm{S^*}|-\log f_{\bm{b}}(\bm{b}^*)- \log f_{\bm u}(\bm{0})\,.
+	\]
+	Since $f_{\bm u}(\bm{0})>1$ by construction, $-\log f_{\bm u}(\bm{0})<0$, therefore
+	\[
+	LS\left(\hat{f},\bm{y}^*\right) <-\log|\bm{S^*}|-\log f_{\bm b}(\bm{b}^*)=LS\left(f,\bm{y}^*\right)
+	\]
+	Since this holds for any possible realisation of the true DGP, it will also hold after taking expectations.  This violates the condition for a proper scoring rule.
 \end{proof}
 
-A similar issue also arises when discrete random variables are modelled as if they were continuous, an issue discussed in Section~4.1 of \citet{Gneiting2007}. This implies that the log score should be avoided when comparing reconciled and unreconciled probabilistic forecasts.
+The proof above has some similarities to the case where discrete random variables are modelled as if they were continuous, an issue discussed in Section~4.1 of \citet{Gneiting2007}. As a result of Theorem~\ref{theo:logS_improp} we recommend avoiding the log score when comparing reconciled and unreconciled probabilistic forecasts.
 
 \subsubsection{Comparing reconciled forecasts to one another}
 
