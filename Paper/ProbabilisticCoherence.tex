@@ -593,20 +593,36 @@ Let us now propose to find an optimal $\bm{G}$ for reconciling future paths by m
 \begin{equation} \label{eq:Obj_func_1}
 \operatornamewithlimits{argmin}_{\bm{G}_h} \quad \E_{\bm{Q}}[S(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}, \bm{y}_{T+h})],
 \end{equation}
-where $S$ is a proper scoring rule that follows equation (\ref{eq:prop_score}). We use the subscript $h$ on $\bm{G}$ to emphasise distinct $\bm{G}$ matrices for different forecast horizons. Recall that the energy score given in equation (\ref{eq:Energy_score}) is a proper scoring rule. Let $\alpha = 1$ and following equation (\ref{eq:ES_with_MCSamples}) we can write,
+where $S$ is a proper scoring rule. We note that the proper scoring rules and their properties will be discussed in Section \ref{sec:evaluation}. The subscript $h$ on $\bm{G}$ is used to emphasise distinct $\bm{G}$ matrices for different forecast horizons. The expectation $E_{\bm{Q}}$ over the true forecast distribution $\bm{Q}$ can be approximated through sample mean and we can rewrite the objective function as follows. 
 
-\begin{equation}\label{eq:ES_with_Samplespaths}
-\text{ES}(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}, \bm{y}_{T+h}) \approx \frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\hat{\bm{y}}_{T+h,j}^b -\bm{y}_{T+h}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\hat{\bm{y}}_{T+h,j}^b -\hat{\bm{y}}_{T+h,j}^{b+1})||.
+\begin{equation} \label{eq:Obj_func_apprx}
+\operatornamewithlimits{argmin}_{\bm{G}_h} \quad \frac{1}{N}\sum_{j=1}^{N}[S(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h, j}, \bm{y}_{T+h, j})],
 \end{equation}
-where $B$ is the empirical sample size from the coherent forecast distribution. Now we can rewrite the objective function in (\ref{eq:Obj_func_1}) as,
 
-\begin{equation}\label{eq:Obj_func_2}
-\operatornamewithlimits{argmin}_{\bm{G}} \frac{1}{N}\sum_{j=1}^{N}\left\{\frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}^{b+1})||\right\}
-\end{equation}
-where, the expectation $E_{\bm{Q}}$ over true forecast distribution $\bm{Q}$ is approximated through the sample mean over $\{\text{ES}(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h,1}, \bm{y}_{T+h,1}),\dots,\text{ES}(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h,N}, \bm{y}_{T+h,N})\}$.
-We can use numerical optimization methods to estimate the matrix $\bm{G}_h$ that minimises the above objective function and thus obtain the optimally reconciled future paths.
+We now discuss our algorithm for generating optimally reconciled bootstrapped future paths. 
 
-We have also considered different parameterisation methods for estimation optimal $\bm{G}_h$. This was discussed in Section \ref{Appen:ReparaG} in Appendix. 
+\begin{enumerate}
+	
+	\item Consider a rolling window of $L$ observations. We call this the ``outer'' rolling window. Inside this outer rolling window consider an ``inner'' rolling window of $T$ observations.
+	
+	\item For this inner rolling window, fit univariate models to each series in the hierarchy. 
+	
+	\item Based on these fitted models, generate $B$ number of $h=1$ to $H$ steps-ahead incoherent future paths incorporating bootstrap errors as described in Subsection \ref{Subsec:Incoherent_samplePaths}. Thus we get $\{\hat{\bm{\Upsilon}}_{T+1,j=1}, \hat{\bm{\Upsilon}}_{T+2,j=1}, \hat{\bm{\Upsilon}}_{T+H,j=1}\}$.
+	
+	\item Repeat step (2) and (3) for $j=1,\dots,N$ by rolling the inner window one step ahead at a time.
+	
+	\item Collect $\{\hat{\bm{\Upsilon}}_{T+h,j=1},\dots,\hat{\bm{\Upsilon}}_{T+h,j=N}\}$ for $h=1,\dots,H$ into separate arrays of matrices.
+	
+	\item For each forecast horizon $h$, estimate the optimal $\bm{G}_h$ that will reconcile $\{\hat{\bm{\Upsilon}}_{T+h,j=1},\dots,\hat{\bm{\Upsilon}}_{T+h,j=N}\}$, by minimising the objective function in equation (\ref{eq:Obj_func_apprx}). Denote this optimum as $\bm{G}^{Opt}_h$.
+		
+	\item Roll the inner rolling window another one step ahead and repeat steps (2) and (3). Denote these future paths by $\hat{\bm{\Upsilon}}_{T+h}$ for $h=1,\dots,H$.
+	
+	\item Compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,\dots,H$ using $\bm{G}^{Opt}_h$.
+		
+\end{enumerate}
+
+
+
 
 %and the results are presented in Section \ref{Appen:ReparaG_sim} in Appendix. We note that the 
 
@@ -622,6 +638,7 @@ We have also considered different parameterisation methods for estimation optima
 %\operatornamewithlimits{argmin}_{\bm{R}'_\bot} \quad \E_{\bm{G}}[Sc(\bm{S}(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot\bm{y}_{t+h}^b, \bm{y}_{t+h})].
 %\end{equation}
 
+We implement this algorithm in Section \ref{sec:Bootsrap-sim} to reconcile probabilistic forecasts in a simulation setting while discussing the evaluation criteria for hierarchical forecasting in the following section. 
 
 %We generate data with a sample size of $T=501$. Univariate ARIMA models are selected for each series using the \textit{auto.arima} function in the \textit{forecast} package \citep{hyndman2017forecasting} in R \citep{Rcore}. The same package was used to fit each series independently using the first 500 observations, and evaluate 1-step ahead base (incoherent) probabilistic forecasts. These were then reconciled using different projections summarised in Table~\ref{table:2}. This process was replicated using $1000$ different data sets from the same data generating processes.
 
@@ -671,7 +688,7 @@ The energy score on the other hand can be defined in terms of the characteristic
 \end{equation}
 lends itself to easy computation when samples from the probabilistic forecast are available and given as,
 \begin{equation}\label{eq:ES_with_MCSamples}
-\text{ES}(\breve{\bm{Y}}_{T+h},\bm{y}_{T+h}) \approx \frac{1}{M}\sum_{i=1}^{M}||\bm{SG}\breve{\bm{y}}_{T+h,i} -\bm{y}_{T+h}||-\frac{1}{2(M-1)}\sum_{i=1}^{M-1}||\bm{SG}(\breve{\bm{y}}_{T+h,i} -\breve{\bm{y}}_{T+h,i+1})||,
+\text{ES}(\breve{\bm{Y}}_{T+h},\bm{y}_{T+h}) \approx \frac{1}{M}\sum_{i=1}^{M}||\bm{SG}\breve{\bm{y}}_{T+h,i} -\bm{y}_{T+h}||^\alpha-\frac{1}{2(M-1)}\sum_{i=1}^{M-1}||\bm{SG}(\breve{\bm{y}}_{T+h,i} -\breve{\bm{y}}_{T+h,i+1})||^\alpha,
 \end{equation}
 where, $\breve{\bm{y}}_{T+h,i}$ is the $i^\text{th}$ Monte-Carlo sample from the forecast distribution. An interesting limiting case is where $\alpha=2$, where it can be easily shown that energy score simplifies to mean squared error around the mean of the predictive distribution. In this limiting case, the energy score is proper but not strictly proper. \citet{Pinson2013a} also argue that the energy score has low discriminative ability for incorrectly specified covariances, even though it discriminates the misspecified means well.
 
@@ -994,41 +1011,50 @@ Tables~\ref{tab:SimResults_Gauss_UnivScores} break down the forecasting performa
 
 \subsection{Simulation setup for non-parametric solution}\label{sec:Bootsrap-sim}
 
-We now implement the non-parametric approach introduced in Section \ref{sec:non-para}.
-We use the same DGP as discussed before. First let us elaborate the simulation set up as follows.   
+We now implement the non-parametric approach introduced in Section \ref{sec:non-para}. Our main focus in this study is to compare different reconciliation methods to optimal reconciliation. We narrow down the study to find optimality with respect to energy score which was introduced in equation (\ref{eq:Energy_score}). Following equation (\ref{eq:ES_with_MCSamples}) for samples from the probability distribution and for $\alpha = 1$, we can rewrite the objective function in (\ref{eq:Obj_func_apprx}) as, 
 
-\begin{enumerate}
-	\item Generate time series with $2500$ data points for each series in the hierarchy.
-	
-	\item Consider a rolling window of $600$ observations. We call this the ``outer'' rolling window.
-	\begin{enumerate}[i.]
-		\item Inside this outer rolling window consider an inner rolling window of $T=500$ observations.
-		\item For this inner rolling window, fit univariate ARIMA models to each series in the hierarchy.
-		\item Based on these fitted models, generate $B=1000$ of $h=1$ to $3$ steps-ahead incoherent future paths incorporating bootstrap errors as described in Subsection \ref{Subsec:Incoherent_samplePaths}. Thus we get $\{\hat{\bm{\Upsilon}}_{T+1,j=1}, \hat{\bm{\Upsilon}}_{T+2,j=1}, \hat{\bm{\Upsilon}}_{T+3,j=1}\}$.
-		\item Repeat step (iii) for $j=1,\dots,N$ where $N=100$ by rolling the inner window one step ahead at a time.
-		\item Collect $\{\hat{\bm{\Upsilon}}_{T+h,j=1},\dots,\hat{\bm{\Upsilon}}_{T+h,j=100}\}$ for $h=1,\dots,3$ into separate arrays of matrices.
-		\item For each forecast horizon $h$, estimate the optimal $\bm{G}_h$ that will reconcile
-		
-		$\{\hat{\bm{\Upsilon}}_{T+h,j=1},\dots,\hat{\bm{\Upsilon}}_{T+h,j=100}\}$ by minimising the average energy score as explained in Subsection \ref{subsec:Optimal_recon}. Denote this as $\bm{G}^{Opt}_h$.
-		
-		\item Roll the inner rolling window another one step ahead and repeat steps (ii) and (iii). Denote these future paths by $\hat{\bm{\Upsilon}}_{T+h}$ for $h=1,2,3$.
-		\item Compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,2,3$ using $\bm{G}^{Opt}_h$ as well as using other $\bm{G}$ matrices given in Table \ref{table:ReconMethods}.
-		
-	\end{enumerate}
-	
-	\item Repeat Step 2 $1000$ times by rolling the outer rolling window one step-ahead at a time. Collect $1000$ reconciled future paths, $\tilde{\bm{\Upsilon}}_{T+h}$, from different reconciliation methods for $h=1,2,3$ and evaluate the forecasting performances.
-\end{enumerate}
+\begin{equation}\label{eq:Obj_func_apprx_ES}
+\operatornamewithlimits{argmin}_{\bm{G}} \frac{1}{N}\sum_{j=1}^{N}\left\{\frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}^{b+1})||\right\}
+\end{equation}
+
+First we generate $2500$ data points for each series in the hierarchy using the same DGP discussed in Section \ref{subsec:DGP}. Following the algorithm explained in Section \ref{subsec:Optimal_recon}, we choose $L=600$ observations for outer rolling window and $T=500$ observations for inner rolling window. We fit univariate ARIMA models using \verb|auto.arima()| function and generate $B=1000$ of $h=1$ to $3$ steps-ahead incoherent bootstrapped future paths following steps 2 and 3. We repeat these steps for $N=100$ times by moving the inner window one step at a time. Following step 6, we then estimate $\bm{G}_h^{Opt}$ using numerical optimisation methods to attain the optimum. Next, we generate $\tilde{\bm{\Upsilon}}_{T+h}$ following step 7 and compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,2,3$ as described in step 8. We use $\bm{G}_h^{Opt}$ as well as other $\bm{G}$ matrices given in Table \ref{table:ReconMethods} for reconciliation in step 8. Finally we repeat this whole process for $1000$ times by moving the outer rolling window one step-ahead at a time. Collect $1000$ reconciled future paths, $\tilde{\bm{\Upsilon}}_{T+h}$, from different reconciliation methods for $h=1,2,3$ and evaluate the forecasting performances.
+
+We also note that different parameterisation methods were used for estimation $\bm{G}_h^{Opt}$. This was discussed in detail with the simulation results in Section \ref{Appen:ReparaG} in Appendix. 
+
+
+%\begin{enumerate}
+%	\item Generate time series with $2500$ data points for each series in the hierarchy.
+%	
+%	\item Consider a rolling window of $600$ observations. We call this the ``outer'' rolling window.
+%	\begin{enumerate}[i.]
+%		\item Inside this outer rolling window consider an inner rolling window of $T=500$ observations.
+%		\item For this inner rolling window, fit univariate ARIMA models to each series in the hierarchy.
+%		\item Based on these fitted models, generate $B=1000$ of $h=1$ to $3$ steps-ahead incoherent future paths incorporating bootstrap errors as described in Subsection \ref{Subsec:Incoherent_samplePaths}. Thus we get $\{\hat{\bm{\Upsilon}}_{T+1,j=1}, \hat{\bm{\Upsilon}}_{T+2,j=1}, \hat{\bm{\Upsilon}}_{T+3,j=1}\}$.
+%		\item Repeat step (iii) for $j=1,\dots,N$ where $N=100$ by rolling the inner window one step ahead at a time.
+%		\item Collect $\{\hat{\bm{\Upsilon}}_{T+h,j=1},\dots,\hat{\bm{\Upsilon}}_{T+h,j=100}\}$ for $h=1,\dots,3$ into separate arrays of matrices.
+%		\item For each forecast horizon $h$, estimate the optimal $\bm{G}_h$ that will reconcile
+%		
+%		$\{\hat{\bm{\Upsilon}}_{T+h,j=1},\dots,\hat{\bm{\Upsilon}}_{T+h,j=100}\}$ by minimising the average energy score as explained in Subsection \ref{subsec:Optimal_recon}. Denote this as $\bm{G}^{Opt}_h$.
+%		
+%		\item Roll the inner rolling window another one step ahead and repeat steps (ii) and (iii). Denote these future paths by $\hat{\bm{\Upsilon}}_{T+h}$ for $h=1,2,3$.
+%		\item Compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,2,3$ using $\bm{G}^{Opt}_h$ as well as using other $\bm{G}$ matrices given in Table \ref{table:ReconMethods}.
+%		
+%	\end{enumerate}
+%	
+%	\item Repeat Step 2 $1000$ times by rolling the outer rolling window one step-ahead at a time. Collect $1000$ reconciled future paths, $\tilde{\bm{\Upsilon}}_{T+h}$, from different reconciliation methods for $h=1,2,3$ and evaluate the forecasting performances.
+%\end{enumerate}
+
 
 
 \subsubsection{Results and discussion}
 
-Following this simulation process, we generate reconciled non-parametric probabilistic forecasts for Gaussian as well as non-Gaussian data. To assess their predictive performance we use energy and variogram scores. Results are presented in Table \ref{table:Non-paraSimulation}.
+We use energy score and variogram score to assess the predictive performance from different reconciliation methods. Results following from Non-Gaussian and Gaussian DGP are presented in left and right panels of Table \ref{table:Non-paraSimulation} respectively.
 
-We use Mann-Whitney test to compare the difference of scores between reconciliation methods. The results support that the ES and VS for all reconciled forecasts are significantly lower than those of incoherent forecasts. This implies that all reconciliation methods produce coherent probabilistic forecasts with improved predictive ability compared to the incoherent forecasts. In addition to that, the MinT(Shrink) and Optimal method have similar prediction accuracy as there is no significant difference between the scores from these reconciliation methods. Results are consistent for both Gaussian and non-Gaussian data. 
+Mann-Whitney test was used to compare the difference of scores between reconciliation methods. The results support that the ES and VS for all reconciled forecasts are significantly lower than those of incoherent forecasts. This implies that all reconciliation methods produce coherent probabilistic forecasts with improved predictive ability compared to the incoherent forecasts. In addition to that, the MinT(Shrink) and Optimal method have similar prediction accuracy as there is no significant difference between the scores from these reconciliation methods. Although the scores are relatively large for Gaussian than non-Gaussian data, the overall conclusions are consistent. 
 
-We have also compute the reconciled probabilistic forecasts from different parameterisations for optimal method. These results are presented in Section \ref{Appen:ReparaG_sim} in Appendix. From these results we note that the scores for different optimal methods are equivalent irrespective to the forecast horizon or the DGP, implying that there is no difference in results due to different parameterisations of $\bm{G}$.
+The simulation results from reparameterisation methods presented in Section \ref{Appen:ReparaG} in Appendix, we note that the different optimal methods are equivalent irrespective to the forecast horizon or the DGP. This implies that there is no difference in results due to different parameterisations of $\bm{G}$.
 
-However we note that optimal reconciliation required a high computational cost for larger hierarchies. Further, it requires sufficient data points to learn the $\bm{G}$ matrix. Thus we suggest using the MinT $\bm{G}$ for reconciling bootstrapped future paths for two reasons. First, it is computationally efficient relative to the optimal method, and second, it produces accurate probabilistic forecasts that are at least as good as the Optimal method with respect to the energy score.
+However we also note that optimal reconciliation required a high computational cost for larger hierarchies. Further, it requires sufficient data points to learn the $\bm{G}$ matrix. Thus we suggest using the MinT $\bm{G}$ for reconciling bootstrapped future paths for two reasons. First, it is computationally efficient relative to the optimal method, and second, it produces accurate probabilistic forecasts that are at least as good as the Optimal method with respect to the energy score.
 
 \begin{table}
 	\caption{Energy scores (ES) and variogram scores (VS) for probabilistic forecasts from different reconciliation methods are presented. Bottom row represent the scores for base forecasts which are not coherent. The smaller the scores, the better the forecasts are.} \label{table:Non-paraSimulation}
@@ -1134,20 +1160,6 @@ In many ways this chapter sets up a substantial future research agenda. For exam
 
 \appendix
 
-\section{Reparameterisation of $\bm{G}$ in optimal reconciliation of future paths} \label{Appen:ReparaG}
-
-We consider different parameterisations when estimating the optimal $\bm{G}_h$ via the proposed optimisation process. Let,
-\begin{equation}\label{eq:StructureofG}
-\bm{G}_h = (\bm{S'W}_h\bm{S})^{-1}\bm{S'W}_h.
-\end{equation}
-This structure for $\bm{G}_h$ will ensure $\bm{SG}_h$ is a projection matrix and it projects each sample path onto $\mathfrak{s}$.
-\begin{itemize}
-	\item[\textbf{Method 1}] Minimising the objective function in (\ref{eq:Obj_func_2}) over symmetric $\bm{W}_h$. This solves an unconstrained optimisation problem
-	\item[\textbf{Method 2}] Consider the Cholesky decomposition of $\bm{W}_h$. i.e. let $\bm{W}_h = \bm{U}_h'\bm{U}_h$ where $\bm{U}_h$ is an upper triangular matrix. Thus minimising (\ref{eq:Obj_func_2}) over $\bm{U}_h$
-	\item[\textbf{Method 3}] Similar to method 2, minimising (\ref{eq:Obj_func_2}) over the Cholesky decomposition of $\bm{W}_h$, but imposing restrictions for scaling. i.e., $\bm{W}_h=\bm{U}_h'\bm{U}_h \quad \text{s.t} \quad \bm{i'}\bm{W}_h\bm{i}=1$ where $\bm{i}=(1,0,..,0)'$
-	\item[\textbf{Method 4}] Minimising (\ref{eq:Obj_func_2}) over $\bm{G}_h$ such that $\bm{G}_h\bm{S}=\bm{I}$. This constraint is an alternative way to ensure that $\bm{SG}_h$ is a projection onto $\mathfrak{s}$
-	
-\end{itemize}
 
 \section{Simulations}
 
@@ -1281,9 +1293,20 @@ Thus for the Gaussian DGP we choose $\sigma^2_u = 24$ and $\sigma^2_u = 18$ wher
 	}
 \end{table}
 
+\subsection{Reparameterisation of $\bm{G}$ in optimal reconciliation of future paths and simulation results} \label{Appen:ReparaG}
 
-
-\subsection{Simulation results from the comparison of different re-parameterisation methods for $\bm{G}$}\label{Appen:ReparaG_sim}
+We consider different parameterisations when estimating the optimal $\bm{G}_h$ via the proposed optimisation process. Let,
+\begin{equation}\label{eq:StructureofG}
+\bm{G}_h = (\bm{S'W}_h\bm{S})^{-1}\bm{S'W}_h.
+\end{equation}
+This structure for $\bm{G}_h$ will ensure $\bm{SG}_h$ is a projection matrix and it projects each sample path onto $\mathfrak{s}$.
+\begin{itemize}
+	\item[\textbf{Method 1}] Minimising the objective function in (\ref{eq:Obj_func_apprx}) over symmetric $\bm{W}_h$. This solves an unconstrained optimisation problem
+	\item[\textbf{Method 2}] Consider the Cholesky decomposition of $\bm{W}_h$. i.e. let $\bm{W}_h = \bm{U}_h'\bm{U}_h$ where $\bm{U}_h$ is an upper triangular matrix. Thus minimising (\ref{eq:Obj_func_apprx}) over $\bm{U}_h$
+	\item[\textbf{Method 3}] Similar to method 2, minimising (\ref{eq:Obj_func_apprx}) over the Cholesky decomposition of $\bm{W}_h$, but imposing restrictions for scaling. i.e., $\bm{W}_h=\bm{U}_h'\bm{U}_h \quad \text{s.t} \quad \bm{i'}\bm{W}_h\bm{i}=1$ where $\bm{i}=(1,0,..,0)'$
+	\item[\textbf{Method 4}] Minimising (\ref{eq:Obj_func_apprx}) over $\bm{G}_h$ such that $\bm{G}_h\bm{S}=\bm{I}$. This constraint is an alternative way to ensure that $\bm{SG}_h$ is a projection onto $\mathfrak{s}$
+	
+\end{itemize}
 
 \begin{table}
 	\caption{Energy scores (ES) and variogram scores (VS) for reconciled probabilistic forecasts from different parameterisation methods are presented.} \label{table:Non-paraSim_re-para}
