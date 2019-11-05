@@ -624,59 +624,35 @@ We have also considered different parameterisation methods for estimation optima
 
 \section{Evaluation of hierarchical probabilistic forecasts}\label{sec:evaluation}
 
-The necessary final step in hierarchical forecasting is to make sure that our forecast distributions are accurate. In general, forecasters prefer to maximize the sharpness of the forecast distribution subject to calibration \citep{Gneiting2014}. Therefore the probabilistic forecasts should be evaluated with respect to these two properties.
+An important issue in all forecasting problems is evaluating forecast accuracy. In the probabilistic setting, it is common to evaluate forecasts using proper scoring rules \citep[see][and references therein]{Gneiting2007,Gneiting2014}. Throughout we follow the convention of negatively-oriented scoring rules such that smaller values of the score indicate more accurate forecasts.  A scoring rule $S(P,\bm{\omega})$ is a function that takes two inputs, a probabilistic forecast $P$ and a realisation $\bm{\omega}$ from the true data generating $Q$.  A scoring rule is {\em proper} if $\E_{\bm{Q}}[S(Q,\omega)] \le \E_{\bm{Q}}[S(P,{\bm\omega})]$ where $\E_{Q}[S(P,{\bm\omega})]$ is the expected score under the true distribution $Q$. When this inequality is strict, the scoring rule is said to be {\em strictly proper}.
 
-Calibration refers to the statistical compatibility between probabilistic forecasts and realizations. In other words, random draws from a perfectly calibrated forecast distribution should be equivalent in distribution to the realizations. On the other hand, sharpness refers to the spread or the concentration of the predictive distributions and it is a property of the forecasts only. The more concentrated the forecast distributions, the sharper the forecasts \citep{Gneiting2008}. However, independently assessing the calibration and sharpness will not help to properly evaluate the probabilistic forecasts. Therefore we need to assess these properties simultaneously using scoring rules.
+Here we focus on three scoring rules: the log score (LS), the energy score (ES) and the variogram score (VS).  Since hierarchical forecasting is by its very nature a multivariate problem (the linear constraints affect all variables), our focus is on multivariate scoring rules.  However, in our simulations we will at time restrict our attention to evaluating individual margins of interest using the univariate counterpart of the log score and energy score, where the latter is the commonly used CRPS.
 
-Scoring rules are summary measures obtained based on the relationship between the forecast distributions and the realizations. In some studies, researchers take the scoring rules to be positively oriented, in which case the scores should be maximized \citep{Gneiting2007}. However, scoring rules have also been defined to be negatively oriented, and then the scores should be minimized \citep{Gneiting2014}. We follow the latter convention here.
+The log score simply involves evaluating the negative log density function at the value of the realisation,
+\[
+LS(P,\bm\omega)=-\log p(\bm\omega)\,,
+\]
+where $p$ is the density associated with a distribution $P$.  The log score is more commonly used when a parametric form for the density is available. However, even in cases only a sample of values from the probabilistic forecast are available, this density can be approximated \citep[see][]{Jordan2017}.
 
-Let $P$ be a forecast distribution and let $Q$ be the true data generating process respectively. Furthermore let $\omega$ be a realization from $Q$. Then a scoring rule is a function $S(P,\omega)$ that maps $P,\omega$ to $\mathbb{R}$. It is a ``proper'' scoring rule if
-\begin{equation}\label{eq:prop_score}
-\E_{\bm{Q}}[S(Q,\omega)] \le \E_{\bm{Q}}[S(P,\omega)] ,
-\end{equation}
-where $\E_{Q}[S(P,\omega)]$ is the expected score under the true distribution $Q$ \citep{Gneiting2008, Gneiting2014}. When this inequality is strict, the scoring rule is said to be strictly proper.
-
-In the context of probabilistic forecast reconciliation there could be two motivations for using scoring rules. The first is to compare unreconciled densities to reconciled densities. Reconciliation itself is a valuable goal since it can be important in aligning decision making across, for example, different units of an enterprise. In the point forecasting literature, forecast reconciliation has also been shown to improve forecast performance \citep{AthEtAl2017, WicEtAl2019}. It will be worthwhile to see whether the same holds in the probabilistic forecasting case. The second motivation for using scoring rules is to compare two or more sets of reconciled probabilistic forecasts to one another. The objective here is to evaluate which reconciliation mapping $g(.)$ works best in practice.
-
-\subsection{Univariate scoring rules}
-
-One way to evaluate hierarchical probabilistic forecasts is via the application of univariate scoring rules to each time series in the hierarchy. A summary can be taken of the expected scores across each margin, for example a mean or median. We consider two such scoring rules. The log score is given by the log density, in this case for each margin of the probabilistic forecast. The continuous rank probability score generalises mean square error and is given by
-\begin{align} \label{eq:CRPS}
-\text{CRPS}(\breve{F}_i,y_{i}) &=\int \left(\breve{F}_i(\breve{Y}_i)-\mathbb{1}(\breve{Y}_i<y_{i})\right)d\breve{Y}_i\\ &=\E_{\breve{Y}_i}|\breve{Y}_{i}-y_{i}| - \frac{1}{2}\E_{\breve{Y}_i}|\breve{Y}_{i}-\breve{Y}^*_{i}|\,,
-\end{align}
-where $\breve{F}_i$ is the cumulative distribution function of the $i^{\text{th}}$ margin of the probabilistic forecast, $\breve{Y}_i$ and $\breve{Y}^*_{i}$ are independent copies of a random variable with distribution $\breve{F}_i$, and $y_i$ is the outcome of the $i^{\text{th}}$ margin. The expectations in the second line can be approximated by Monte Carlo when a sample from the predictive distribution is available.
-
-An advantage of this approach is that it allows the forecaster to separately evaluate different levels and individual series of the hierarchy to determine where the gains from reconciliation are greatest. For this reason this approach has been used in the limited literature on probabilistic forecasting for hierarchies \citep{BenTaieb2017, JeoEtAl2019} to date. A major shortcoming of this approach however, is that evaluating univariate scores on the margins does not account for the dependence in the hierarchy.
-
-\subsection{Multivariate scoring rules}
-
-While a number of alternative proper scoring rules are available for univariate forecasts, the multivariate case is somewhat more limited. Here we focus on three scoring rules: the log score (LS), the energy score (ES) and the variogram score (VS).
-
-The log score can be approximated using a sample of values from the probabilistic forecast density \citep{Jordan2017}; however it is more commonly used when a parametric form for the density is available for the probabilistic forecast.
-
-The energy score on the other hand can be defined in terms of the characteristic function of the probabilistic forecast, but the following representation in terms of expectations
+The energy score is defined in terms of the characteristic function of the probabilistic forecast. It is, however more commonly calculated using the following representation
 \begin{equation}\label{eq:Energy_score}
-\text{ES}(\breve{\bm{Y}}_{T+h},\bm{y}_{T+h}) =
-\E_{\breve{\bm{Y}}}
-||\breve{\bm{Y}}_{T+h}-\bm{y}_{T+h}||^\alpha -\frac{1}{2}\E_{\breve{\bm{Y}}}||\breve{\bm{Y}}_{T+h}-\breve{\bm{Y}}^*_{T+h}||^\alpha, \,\, \alpha \in (0,2]\,,
+\text{ES}(P,\omega) =
+\E_{P}
+||\breve{\bm{y}}-\bm{\omega}||^\alpha -\frac{1}{2}\E_{P}||\bm{y}-\bm{y}^*||^\alpha, \,\, \alpha \in (0,2]\,,
 \end{equation}
-lends itself to easy computation when samples from the probabilistic forecast are available and given as,
-\begin{equation}\label{eq:ES_with_MCSamples}
-\text{ES}(\breve{\bm{Y}}_{T+h},\bm{y}_{T+h}) \approx \frac{1}{M}\sum_{i=1}^{M}||\bm{SG}\breve{\bm{y}}_{T+h,i} -\bm{y}_{T+h}||-\frac{1}{2(M-1)}\sum_{i=1}^{M-1}||\bm{SG}(\breve{\bm{y}}_{T+h,i} -\breve{\bm{y}}_{T+h,i+1})||,
-\end{equation}
-where, $\breve{\bm{y}}_{T+h,i}$ is the $i^\text{th}$ Monte-Carlo sample from the forecast distribution. An interesting limiting case is where $\alpha=2$, where it can be easily shown that energy score simplifies to mean squared error around the mean of the predictive distribution. In this limiting case, the energy score is proper but not strictly proper. \citet{Pinson2013a} also argue that the energy score has low discriminative ability for incorrectly specified covariances, even though it discriminates the misspecified means well.
+where $\bm {y}$ and $\bm{y^*}$ are independent copies drawn from the distribution $P$.  These expectations can be easily approximated via Monte Carlo when samples from the probabilistic forecast are available.  An interesting limiting case is $\alpha=2$, where energy score simplifies to mean squared error around the mean of the predictive distribution. This limiting case, the energy score is proper but not strictly proper. 
 
-In contrast, \citet{SCHEUERER2015} have shown that the variogram score has a higher discrimination ability for misspecified means, variances and correlation structures than the energy score. When $\breve{\bm{y}}$ is a random variable from probabilistic forecast $\breve{F}$, the empirical variogram score is defined as
+The energy score has been criticised by \citet{Pinson2013a} for its low discriminative ability for incorrectly specified covariances.  The variogram score  \citep{SCHEUERER2015}, overcomes this issue and is defined as
 \begin{equation}
-\text{VS}(\breve{F}, \bm{y}) = \displaystyle\sum_{i=1}^{n}\displaystyle\sum_{j=1}^{n}w_{ij}\left(|y_{i} - y_{j}|^p - E_{\breve{Y}_i,\breve{Y}_j} |\breve{Y}_{i}-\breve{Y}_{j}|^p\right)^2.
+\text{VS}(\breve{P}, \bm{\omega}) = \displaystyle\sum_{i=1}^{n}\displaystyle\sum_{j=1}^{n}w_{ij}\left(|\omega_{i} - \omega_{j}|^p - E_{P} |{y}_{i}-{y}_{j}|^p\right)^2\,,
 \end{equation}
-\citet{SCHEUERER2015} recommend using $p=0.5$.
+where $y_i$ and $y_j$ are the $i^{th}$ and $j^{th}$ elements of $\bm{y}\sim P$. \citet{SCHEUERER2015} recommend using $p=0.5$.
 
+In the context of probabilistic forecast reconciliation there could be two motivations for using scoring rules. The first is to compare incoherent base probabilistic forecasts to their reconciled counterparts. In the point forecasting setting, reconciliation has also been shown to improve forecast performance \citep{AthEtAl2017, WicEtAl2019}. As such, it will be worthwhile to see whether the same holds in the probabilistic setting. The second motivation for using scoring rules will be to compare reconciled probabilistic forecasts to one another.  This may be useful to see which choice of $g(.)$ performs best in practice.  
 
+\subsection{Comparing base forecasts to reconciled forecasts}
 
-\subsubsection{Comparing unreconciled forecasts to reconciled forecasts}
-
-For both reconciled and unreconciled densities it is possible to obtain a density from the probability measures defined in Section~\ref{sec:ProbForecasts}. Therefore it may seem sensible to compare unreconciled densities to reconciled densities on the basis of log score. However, the following theorem shows that using the log score may fail in the case of multivariate distributions with a degeneracy.
+Section~\ref{sec:ProbForecasts} describes how the density of a reconciled forecast can be derived from the density of the incoherent base forecast. Therefore it may seem sensible to compare base forecasts to reconciled forecasts using of log score. However, the following theorem shows that using the log score in improper in this setting.
 
 \begin{theo}[Impropriety of log score]\label{theo:logS_improp}
 	When the true data generating process is coherent, then the log score is improper with respect to the class of incoherent measures.
