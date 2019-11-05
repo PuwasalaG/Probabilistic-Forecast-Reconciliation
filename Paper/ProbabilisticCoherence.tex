@@ -32,8 +32,8 @@
 \def\E{\text{E}}
 \def\var{\text{Var}}
 
-\def\PQ{\begin{pmatrix}\bm{G}\\[-0.2cm]\bm{H}\end{pmatrix}}
-\def\bt{\begin{pmatrix}\tilde{\bm{b}}\\[-0.2cm]\tilde{\bm{a}}\end{pmatrix}}
+\def\PQ{\begin{pmatrix}\bm{G}\\[-0.2cm]\bm{G}'_{\perp}\end{pmatrix}}
+\def\bt{\begin{pmatrix}{\bm{b}}\\[-0.2cm]{\bm{a}}\end{pmatrix}}
 
 %\theoremstyle{theo}
 \newtheorem{theo}{Theorem}[section]
@@ -218,7 +218,12 @@ The connection between this characterisation and the coherent subspace is that t
 
 When forecasting hierarchical time series there a number of reasons why forecasts may not adhere to constraints. 
 %MOVE TO INTRO EVENTUALLY: forecasts of each series may be obtained using independent univariate models, multivariate models may not be able to easily incorporate the constraints, or judgemental adjustments may be made.  
-In this case forecasts are called {\em incoherent} and denoted $\hat{\bm y}_{t+h}$, with the subscript $t+h$ implying a h step made at time $t$.  To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as {\em forecast reconciliation}.  At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm y}_{t+h}=\psi(\hat{\bm y}_{t+h})$, where $\tilde{\bm y}_{t+h}\in\mathfrak{s}$ is called the {\em reconciled} forecast.  This mapping itself may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ produces a new set of bottom level forecasts using the forecasts of all series, and these are then aggregated via $s$.  When both mappings are linear this corresponds to premultiplying by a matrix $\bm{S}\bm{G}$.  Several choices of $\bm{G}$ are currently extant in the literature, including the bottom-up \citep{Dunn1976}, OLS, WLS and MinT \citep{HynEtAl2011,WicEtAl2019} methods. These are special cases where $s\circ g$ is a projection.  As an extension, \cite{PanEtAl2019HF} also consider a bias correction step, which can be thought of as applying a translation followed by a projection.
+In this case forecasts are called {\em incoherent} and denoted $\hat{\bm y}_{t+h}$, with the subscript $t+h$ implying a h step made at time $t$.  To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as {\em forecast reconciliation}.  At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm y}_{t+h}=\psi(\hat{\bm y}_{t+h})$, where $\tilde{\bm y}_{t+h}\in\mathfrak{s}$ is called the {\em reconciled} forecast.  This mapping itself may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ produces a new set of bottom level forecasts using the forecasts of all series, and these are then aggregated via $s$.  When both mappings are linear this corresponds to premultiplying by a matrix $\bm{S}\bm{G}$.  
+
+\subsection*{Example: Projections}
+\cite{PanEtAl2019HF} discuss how a number of important properties arise when $\bm{S}\bm{G}$ is a projection matrix.  In this case, ${\bm G}$ can be written as $(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$, where $\bm{R}_{\perp}$ is an $n\times m$ orthogonal complement to the $n\times(n-m)$ matrix $\bm{R}$, with $\bm{R}$ defining a direction of projection.  For instance, OLS reconciliation projects along a direction perpendicular to $\bm{S}$, in which case $\bm{R}=\bm{S}_{\perp}$, $\bm{R}_{\perp}=\bm{S}$ and $\bm{G}=(\bm{S}'\bm{S})^{-1}\bm{S}'$.  Several other choices of $\bm{G}$ currently extant in the literature, including the bottom-up \citep{Dunn1976} WLS and MinT \citep{HynEtAl2011,WicEtAl2019} methods, are also special cases where $\bm{S}\bm{G}$ is a projection.  
+
+%As an extension, \cite{PanEtAl2019HF} also consider a bias correction step, which can be thought of as applying a translation followed by a projection.
 
 
 %Suppose we have a vector of point forecasts at time $t+h$ derived by using information up to and including time $t$. Let these forecasts be stacked in a vector with the same order as $\bm{y}_t$ and denoted by $\hat{\bm{y}}_{t+h} \in \mathbb{R}^n$. These are referred to as \emph{incoherent point forecasts} as they do not satisfy the aggregation constraints. Assume a linear function that maps these incoherent forecasts into new bottom-level forecasts.
@@ -350,7 +355,7 @@ Let $(\mathbb{R}^n, \mathscr{F}_{\mathbb{R}^n}, \hat{\nu})$ be a probability tri
 
 This definition is a natural extension of the notion of forecast reconciliation to the probabilistic setting. In the point forecasting case, the reconciled point forecast is obtained by passing an incoherent point forecast through a transformation. Similarly, if the incoherent probabilistic forecast assigns a probability to a set of points, then the reconciled probabilisitic forecast will assign the same probability to the same points after they have been passed through a transformation.  The transformation $\psi$ can also be expressed as a composition of two transformations $s\circ g$.  In this case, an $m$-dimensional reconciled probabilistic distribution $\nu$ can be obtained such that $\nu(\mathcal{B})= \hat{\nu}(g^{-1}(\mathcal{B}))$ for all $\mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}$ and a probabilistic forecast for the full hierarchy can then be obtained via Definition~\ref{def:cohprob}  
 
-This definition of probabilistic forecast reconciliation can be applied to any mapping continuous mapping $\psi$, where continuity is required to ensure that the open sets in $\mathbb{R}^n$ used to construct $\mathscr{F}_{\mathbb{R}^n}$ are mapped to open sets in $\mathfrak{s}$.  However, from this point on, we restrict our attention to the case where $\psi$ is a linear mapping.  This is depicted in Figure~\ref{fig:probfr_sch} for the case when $\psi$ is a projection.  This figure is only a $2$-dimensional schematic, since even the most trivial hierarchy is $3$-dimensional.  In this figure, the arrow labelled $\bm{S}$ spans an $m$-dimensional coherent subspace $\mathfrak{s}$, while the arrow labelled $\bm{R}$ spans an $n-m$-dimensional direction of projection.  The mapping $g$ collapses all points in the blue shaded region $g^{-1}(\mathcal{B})$ to the black interval $\mathcal{B}$ which has an image under $s$ given by the red interval $s(\mathcal{B})$.  Under our definitions of coherence and reconciliation the same probability is assigned to the red shaded region under the reconciled measure as is assigned to the blue region under the incoherent measure.
+This definition of probabilistic forecast reconciliation can be applied to any continuous mapping $\psi$, where continuity is required to ensure that the open sets in $\mathbb{R}^n$ used to construct $\mathscr{F}_{\mathbb{R}^n}$ are mapped to open sets in $\mathfrak{s}$.  However, from this point on, we restrict our attention to the case where $\psi$ is a linear mapping.  This is depicted in Figure~\ref{fig:probfr_sch} for the case when $\psi$ is a projection.  This figure is only a $2$-dimensional schematic, since even the most trivial hierarchy is $3$-dimensional.  In this figure, the arrow labelled $\bm{S}$ spans an $m$-dimensional coherent subspace $\mathfrak{s}$, while the arrow labelled $\bm{R}$ spans an $n-m$-dimensional direction of projection.  The mapping $g$ collapses all points in the blue shaded region $g^{-1}(\mathcal{B})$ to the black interval $\mathcal{B}$ which has an image under $s$ given by the red interval $s(\mathcal{B})$.  Under our definitions of coherence and reconciliation the same probability is assigned to the red shaded region under the reconciled measure as is assigned to the blue region under the incoherent measure.
 
 \begin{figure}
 	\input{Figs/probforerec_schematic.tex}
@@ -374,9 +379,9 @@ In this section we describe how a reconciled distribution can be derived analyti
 \begin{theo}[Reconciled density of bottom level]\label{theo:bottomdens}
 	Consider the case where reconciliation is carried out using a composition of linear mappings $s\circ g$ where $g$ combines information from all levels of the base forecast into the bottom levels.  The density of the bottom level series under the reconciled distribution is
 	\[
-	\tilde{f}_{\bm{b}}(\bm{b})=|\bm{G^*}|\int \hat{f}(\bm{G}^{-}{\bm b}+\bm{g}_\perp {\bm a})d\bm{a}\,,
+	\tilde{f}_{\bm{b}}(\bm{b})=|\bm{G^*}|\int \hat{f}(\bm{G}^{-}{\bm b}+\bm{G}_\perp {\bm a})d\bm{a}\,,
 	\]
-	where $\bm{G^-}$ is an $n\times m$ pseudo inverse of $\bm{G}$ such that $\bm{G}\bm{G}^-=\bm{I}$, $\bm{G_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{G}$ such that $\bm{G}\bm{G}_\perp=\bm{0}$ and $\bm{G}'_\perp\bm{G}_\perp=\bm{I}$, $\bm{G^*}=\left(\bm{G}^-\,\vdots\,\bm{G}_\perp\right)$, and $\bm{b}$ and $\bm{a}$ are obtained via the change of variables
+	where $\hat{f}$ is the density of the incoherent base probabilistic forecast, $\bm{G^-}$ is an $n\times m$ pseudo inverse of $\bm{G}$ such that $\bm{G}\bm{G}^-=\bm{I}$, $\bm{G_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{G}$ such that $\bm{G}\bm{G}_\perp=\bm{0}$ and $\bm{G}'_\perp\bm{G}_\perp=\bm{I}$, $\bm{G^*}=\left(\bm{G}^-\,\vdots\,\bm{G}_\perp\right)$, and $\bm{b}$ and $\bm{a}$ are obtained via the change of variables
 	\[
 	y=\bm{G^*}\begin{pmatrix}\bm{b}\\\bm{a}\end{pmatrix}\,.
 	\] 
@@ -386,12 +391,14 @@ In this section we describe how a reconciled distribution can be derived analyti
 	See appendix.
 \end{proof}
 
-\begin{theo}[Reconciled density of full hierachy]\label{theo:fulldens}
+\begin{theo}[Reconciled density of full hierarchy]\label{theo:fulldens}
 	Consider the case where a reconciled density for the bottom level series has been obtained using Theorem~\ref{theo:bottomdens}.  The density of the full hierarchy under the reconciled distribution is
 	\[
-	\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S^*}|\tilde{f}_{\bm b}({\bm{S^-}\bm{y}})\,,
+	\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S^*}|\tilde{f}_{\bm b}({\bm{S^-}\bm{y}})\mathbb{1}\left\{\bm{y}\in\mathfrak{s}\right\}\,,
 	\]
-	where $\bm{S^-}$ is an $m\times n$ pseudo inverse of $\bm{S}$ such that $\bm{S}^-\bm{S}=\bm{I}$, $\bm{S_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{S}$ such that $\bm{S}'_\perp\bm{S}=\bm{0}$ and $\bm{S}'_\perp\bm{S}_\perp=\bm{I}$, $\bm{S^*}=\left(\bm{S}^-\,\vdots\,\bm{S}_\perp\right)$.
+	where
+	\[\bm{S^*}=\begin{pmatrix}\bm{S}^-\\\bm{S}'_\perp\end{pmatrix}\,,\]
+	and $\bm{S^-}$ is an $m\times n$ pseudo inverse of $\bm{S}$ such that $\bm{S}^-\bm{S}=\bm{I}$, $\bm{S_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{S}$ such that $\bm{S}'_\perp\bm{S}=\bm{0}$ and $\bm{S}'_\perp\bm{S}_\perp=\bm{I}$. 
 \end{theo}
 
 \begin{proof}
@@ -400,46 +407,45 @@ In this section we describe how a reconciled distribution can be derived analyti
 
 
 
-{\color{blue} OLD VERSION: While $\hat{\nu}$ is a probability measure for an $n$-vector $\hat{\bm{y}}$, probability statements in terms of a different coordinate system can be made via an appropriate change of basis. Letting $f(.)$ be generic notation for a probability density function, and following the notation from point forecast reconciliation where $\hat{\bm{y}}=\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}$, we obtain
-\begin{equation}
-f(\hat{\bm{y}})=f(\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}})|(\bm{S}~\bm{R})|
-\end{equation}
-The expression $\hat{\nu}(g^{-1}(\mathcal{B}))$ in Definition~\ref{def:reconprob} is equivalent to the probability statement $\text{Pr}(\hat{\bm{y}}\in g^{-1}(\mathcal{B}))$. After the change of basis, this is equivalent to $\text{Pr}(\tilde{\bm{b}}\in \mathcal{B})$, which implies
-\begin{align}
-	\text{Pr}(\hat{\bm{y}}\in g^{-1}(\mathcal{B}))&=\int\limits_{g^{-1}(\mathcal{B})}f(\hat{\bm{y}})d\hat{\bm{y}}\\
-	&=\int\limits_{\mathcal{B}}\int f(\bm{S}\tilde{\bm{b}}
-	+\bm{R}\tilde{\bm{a}})|(\bm{S}~\bm{R})|d\tilde{\bm{a}}d\tilde{\bm{b}}.
-\end{align}
-After integrating out over $\tilde{\bm{a}}$, a step analogous to setting $\tilde{\bm{a}}=0$ for point forecasting, we obtain an expression that gives the probability that the reconciled bottom-level series lies in the region $\mathcal{B}$. This corresponds to $\nu(\mathcal{B})$ in Definition~\ref{def:reconprob}. To make a valid probability statement about the entire hierarchy we simply use the bottom-level probabilistic forecasts together with Definition~\ref{def:cohprob}.}
+%{\color{blue} OLD VERSION: While $\hat{\nu}$ is a probability measure for an $n$-vector $\hat{\bm{y}}$, probability statements in terms of a different coordinate system can be made via an appropriate change of basis. Letting $f(.)$ be generic notation for a probability density function, and following the notation from point forecast reconciliation where $\hat{\bm{y}}=\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}$, we obtain
+%\begin{equation}
+%f(\hat{\bm{y}})=f(\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}})|(\bm{S}~\bm{R})|
+%\end{equation}
+%The expression $\hat{\nu}(g^{-1}(\mathcal{B}))$ in Definition~\ref{def:reconprob} is equivalent to the probability statement $\text{Pr}(\hat{\bm{y}}\in g^{-1}(\mathcal{B}))$. After the change of basis, this is equivalent to $\text{Pr}(\tilde{\bm{b}}\in \mathcal{B})$, which implies
+%\begin{align}
+%	\text{Pr}(\hat{\bm{y}}\in g^{-1}(\mathcal{B}))&=\int\limits_{g^{-1}(\mathcal{B})}f(\hat{\bm{y}})d\hat{\bm{y}}\\
+%	&=\int\limits_{\mathcal{B}}\int f(\bm{S}\tilde{\bm{b}}
+%	+\bm{R}\tilde{\bm{a}})|(\bm{S}~\bm{R})|d\tilde{\bm{a}}d\tilde{\bm{b}}.
+%\end{align}
+%After integrating out over $\tilde{\bm{a}}$, a step analogous to setting $\tilde{\bm{a}}=0$ for point forecasting, we obtain an expression that gives the probability that the reconciled bottom-level series lies in the region $\mathcal{B}$. This corresponds to $\nu(\mathcal{B})$ in Definition~\ref{def:reconprob}. To make a valid probability statement about the entire hierarchy we simply use the bottom-level probabilistic forecasts together with Definition~\ref{def:cohprob}.}
 
-\subsubsection*{Example: Gaussian Distributions}
+\subsubsection*{Example: Gaussian Distribution}
 
-Suppose an unreconciled probabilistic forecast is Gaussian with mean $\hat{\bm{\mu}}$ and variance-covariance matrix $\hat{\bm{\Sigma}}$. Let the unreconciled density be given by
+Suppose an unreconciled probabilistic forecast is Gaussian with mean $\hat{\bm{\mu}}$ and variance-covariance matrix $\hat{\bm{\Sigma}}$. The unreconciled density be given by
 \begin{equation}
 f(\hat{\bm{y}})=(2\pi)^{-n/2}|\hat{\bm{\Sigma}}|^{-1/2}\exp\left\{-\frac{1}{2}\left[(\hat{\bm{y}}-\hat{\bm{\mu}})'\hat{\bm{\Sigma}}^{-1}(\hat{\bm{y}}-\hat{\bm{\mu}})\right]\right\}.
 \end{equation}
-In an alternative basis,
+Using Theorem~\ref{theo:bottomdens} the reconciled density for the bottom level series is given by,
 \begin{equation}
-f(\tilde{\bm{b}},\tilde{\bm{a}})=(2\pi)^{-\frac{n}{2}}\Big|\hat{\bm{\Sigma}}\Big|^{-\frac{1}{2}}\Big|(\bm{S} ~  \bm{R})\Big|\exp\{-\frac{1}{2}q\}\,,
+\tilde{f}_{\bm{b}}(\bm{b})=\int(2\pi)^{-\frac{n}{2}}\Big|\hat{\bm{\Sigma}}\Big|^{-\frac{1}{2}}\Big|\bm{G^*}|\exp\{-\frac{1}{2}q\}d{\bm a}\,,
 \end{equation}
 where
 \begin{equation}
-q=(\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}-\hat{\bm{\mu}})' \hat{\bm{\Sigma}}^{-1}(\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}-\hat{\bm{\mu}}).
+q=(\bm{G}^-{\bm{b}}+\bm{G}_{\perp}{\bm{a}}-\hat{\bm{\mu}})' \hat{\bm{\Sigma}}^{-1}(\bm{G}^-\tilde{\bm{b}}+\bm{G}_\perp\tilde{\bm{a}}-\hat{\bm{\mu}}).
 \end{equation}
 The quadratic form $q$ can be rearranged as
 \begin{align*}
 	q& =
-	\left((\bm{S} ~  \bm{R})\bt-\hat{\bm{\mu}}\right)' \hat{\bm{\Sigma}}^{-1}\left((\bm{S} ~ \bm{R})\bt-\hat{\bm{\mu}}\right),\\
+	\left(\bm{G}^*\bt-\hat{\bm{\mu}}\right)' \hat{\bm{\Sigma}}^{-1}\left(\bm{G}^*\bt-\hat{\bm{\mu}}\right),\\
 	& =
-	\left(\bt-(\bm{S} ~ \bm{R})^{-1}\hat{\bm{\mu}}\right)' \Big[(\bm{S}  \bm{R})^{-1}\hat{\bm{\Sigma}}\left((\bm{S} ~ \bm{R})^{-1}\right)'\Big]^{-1}
-	\left(\bt-(\bm{S} ~ \bm{R})^{-1}\hat{\bm{\mu}}\right)\,.
+	\left(\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\right)' \Big[\bm{G}^{*-1}\hat{\bm{\Sigma}}\left(\bm{G}^{*-1}\right)'\Big]^{-1}
+	\left(\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\right)\,.
 \end{align*}
-Recall that
+Noting that
 \[
-(\bm{S} ~ \bm{R})^{-1} =
-\begin{pmatrix}(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot  \\ (\bm{S}'_\bot \bm{R})^{-1}\bm{S}'_\bot \end{pmatrix} :=
+\bm{G}^{*-1} =
 \begin{pmatrix}
-\bm{G} \\\bm{H}
+\bm{G} \\\bm{G}_{\perp}
 \end{pmatrix}\,.
 \]
 Then $q$ can be rearranged further as
@@ -448,46 +454,20 @@ Then $q$ can be rearranged further as
 	%\exp \Big\{-\frac{1}{2}
 	\left[\bt-\PQ\hat{\bm{\mu}}\right]'%\\[-0.5cm]
 	\left[\PQ\hat{\bm{\Sigma}}\PQ'\right]^{-1}\left[\bt-\PQ\hat{\bm{\mu}}\right] %\Big\},
-	\\[0.5cm]
-	& =%\frac{1}{(2\pi)^{\frac{n}{2}}\Big|\PQ\hat{\bm{\Sigma}_{t+h}}\PQ'\Big|^{\frac{1}{2}}}
+	%\\[0.5cm]
+	%& =%\frac{1}{(2\pi)^{\frac{n}{2}}\Big|\PQ\hat{\bm{\Sigma}_{t+h}}\PQ'\Big|^{\frac{1}{2}}}
 	%\exp \Big\{-\frac{1}{2}
-	\begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix}' %&\\[-0.5cm]
+	%\begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix}' %&\\[-0.5cm]
 	%& \hspace*{7cm}
-	\left[\PQ\hat{\bm{\Sigma}}\PQ'\right]^{-1}\begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix}. %\Big\}.
+	%\left[\PQ\hat{\bm{\Sigma}}\PQ'\right]^{-1}\begin{pmatrix}\tilde{\bm{b}} - %\bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix}. %\Big\}.
 \end{align*}
 %Since $\Big[\PQ\hat{\bm{\Sigma}_{t+h}}\PQ'\Big] = \begin{pmatrix}
 %\bm{P}\hat{\bm{\Sigma}_{t+h}}\bm{P}' & \bm{P}\hat{\bm{\Sigma}_{t+h}}\bm{Q}'
 %\bm{Q}\hat{\bm{\Sigma}_{t+h}}\bm{P}' & \bm{Q}\hat{\bm{\Sigma}_{t+h}}\bm{Q}'
 %\end{pmatrix}$ we have
 
-Similar manipulations on the determinant of the covariance matrix lead to the following expression for the density:
-\begin{align*}
-	f(\tilde{\bm{b}},\tilde{\bm{a}})&
-	=(2\pi)^{-\frac{n}{2}}\left|
-	\begin{pmatrix}
-		\bm{G}\hat{\bm{\Sigma}}\bm{G}' & \bm{G}\hat{\bm{\Sigma}}\bm{H}' \\
-		\bm{H}\hat{\bm{\Sigma}}\bm{G}' & \bm{H}\hat{\bm{\Sigma}}\bm{H}'
-	\end{pmatrix}
-	\right|^{-\frac{1}{2}}
-	\exp \left\{-\frac{1}{2} \begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix}'\right.\\
-	&\hspace*{7cm}
-	\left.\begin{pmatrix}
-		\bm{G}\hat{\bm{\Sigma}}\bm{G}' & \bm{G}\hat{\bm{\Sigma}}\bm{H}' \\
-		\bm{H}\hat{\bm{\Sigma}}\bm{G}' & \bm{H}\hat{\bm{\Sigma}}\bm{H}'
-	\end{pmatrix}^{-1}
-	\begin{pmatrix}\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}\\ \tilde{\bm{a}}- \bm{H}\hat{\bm{\mu}}\end{pmatrix} \right\}.
-\end{align*}
-Marginalising out $\tilde{\bm{a}}$ leads to the following bottom-level reconciled forecasts:
-\begin{equation}\label{ex:2.1}
-f(\tilde{\bm{b}})=(2\pi)^{-\frac{m}{2}}\Big|\bm{G}\hat{\bm{\Sigma}}\bm{G}'\Big|^{\frac{1}{2}}
-\exp \Big\{-\frac{1}{2} (\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}})' (\bm{G}\hat{\bm{\Sigma}}\bm{G}')^{-1}(\tilde{\bm{b}} - \bm{G}\hat{\bm{\mu}}) \Big\}.
-\end{equation}
-
-%Equation \eqref{ex:2.1} implies $\tilde{\bm{b}}_{t+h} \sim \mathcal{N}(\bm{P}\hat{\bm{\mu}}_{t+h}, \bm{P}\hat{\bm{\Sigma}}_{t+h}\bm{P}')$, where $\bm{P} = (\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot$. Then from \eqref{4.7} it follows that
-%\begin{equation}\label{eq:gaussianreconciled}
-%\tilde{\bm{f}}(\tilde{\bm{y}}_{t+h})=\tilde{\bm{f}}(\bm{S}\tilde{\bm{b}}_{t+h}).
-%\end{equation}
-This implies that the reconciled probabilistic forecast for the bottom-level series is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$. The reconciled probabilistic forecasts for the whole hierarchy follow a degenerate Gaussian distribution with mean $\bm{SG}\hat{\bm{\mu}}$ and rank deficient covariance matrix $\bm{SG}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'$.
+This can be recognised as a multivariate density in $\bm{b}$ and $\bm{a}$.  The mean and covariance matrix for the margin corresponding to the first $m$ elements are $\bm{G}\hat{\bm{\mu}}$ and $\bm{G}\hat{\bm{\Sigma}}\bm{G}'$ respectively.  This implies that the reconciled probabilistic forecast for the bottom-level series is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$. 
+%The reconciled probabilistic forecasts for the whole hierarchy follow a degenerate Gaussian distribution with mean $\bm{SG}\hat{\bm{\mu}}$ and rank deficient covariance matrix $\bm{SG}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'$.
 
 
 
@@ -496,21 +476,20 @@ This implies that the reconciled probabilistic forecast for the bottom-level ser
 We now show that the true predictive distribution can be recovered for elliptical distributions by linear reconciliation via pre-multiplication and translation respectively by a matrix we denote ${\bm G}_{opt}$ and vector we denote ${\bm d}_{opt}$. Here, for any square matrix $\bm{C}$, $\bm{C}^{1/2}$ and $\bm{C}^{-1/2}$ are defined to satisfy $\bm{C}^{1/2}(\bm{C}^{1/2})'=\bm{C}$ and $\bm{C}^{-1/2}(\bm{C}^{-1/2})'=\bm{C}^{-1}$, for example $\bm{C}^{1/2}$ may be obtained via the Cholesky or eigenvalue decompositions.
 
 \begin{theo}[Reconciliation for Elliptical Distributions]
-	Let an unreconciled probabilistic forecast come from the elliptical class with location parameter $\hat{\bm{\mu}}$ and scale matrix $\hat{\bm{\Sigma}}$. Let the true predictive distribution of $\bm{y}$ also belong to the elliptical class with location parameter $\bm{\mu}$ and scale matrix $\bm{\Sigma}$. Then the linear reconciliation mapping $g(\breve{\bm{y}})=\bm{G}_{opt}\breve{\bm{y}}+\bm{d}_{opt}$ with $\bm{G}_{opt}={\bm{a}}\hat{\bm\Sigma}^{-1/2}$ and $\bm{d}_{opt}=\bm{\mu}-\bm{S}\bm{G}_{opt}\hat{\bm{\mu}}$ recovers the true predictive density where ${\bm{a}}$ is any $m\times n$ matrix such that ${\bm{a}}{\bm{a}}'=\bm{\Omega}$ and $\bm{\Omega}$ is a sub-matrix of $\bm{\Sigma}$ corresponding to the bottom-level series.
+	Let an unreconciled probabilistic forecast come from the elliptical class with location parameter $\hat{\bm{\mu}}$ and scale matrix $\hat{\bm{\Sigma}}$. Let the true predictive distribution of the bottom level series $\bm{y}$ also belong to the elliptical class with location parameter $\bm{\beta}$ and scale matrix $\bm{\Omega}$. Also, let ${\bm{A}}$ be any $m\times n$ matrix such that ${\bm{A}}{\bm{A}}'=\bm{\Omega}$. Then the linear reconciliation mapping $g({\bm{y}})=\bm{G}_{opt}\breve{\bm{y}}+\bm{d}_{opt}$ with $\bm{G}_{opt}={\bm{A}}\hat{\bm\Sigma}^{-1/2}$ and $\bm{d}_{opt}=\bm{\beta}-\bm{G}_{opt}\hat{\bm{\mu}}$ recovers the true predictive density.
 \end{theo}
 
 \begin{proof}
-	Since elliptical distributions are closed under affine transformations, and are closed under marginalisation, reconciliation of an elliptical distribution yields an elliptical distribution (although the unreconciled and reconciled distributions may be different members of the class of elliptical distributions). The scale matrix of the reconciled forecast is given by $\bm{S}\bm{G}_{opt}\hat{\bm{\Sigma}}\bm{G}_{opt}'\bm{S}'$, while the location matrix is given by $\bm{S}\bm{G}_{opt}\hat{\bm{\mu}}+\bm{d}_{opt}$. The reconciled scale matrix is
+	Since elliptical distributions are closed under affine transformations, and are closed under marginalisation, reconciliation of an elliptical distribution yields an elliptical distribution (although the unreconciled and reconciled distributions may be different members of the class of elliptical distributions). By similar working to the Gaussian example shown above, the scale matrix of the reconciled forecast for the bottom level series will be given by $\bm{G}_{opt}\hat{\bm{\Sigma}}\bm{G}_{opt}'$, while the location matrix is given by $\bm{G}_{opt}\hat{\bm{\mu}}+\bm{d}_{opt}$. Substituting the values of $\bm{G}_{opt}$ and $\bm{d}_{opt}$, given in the theorem, the reconciled scale matrix is
 	\[
 	\tilde{\bm{\Sigma}}_{opt}
-	= \bm{S}{\bm{a}}\hat{\bm\Sigma}^{-1/2}\hat{\bm{\Sigma}}\left(\hat{\bm\Sigma}^{-1/2}\right)'{\bm{a}}'\bm{S}'
-	= \bm{S}\bm{\Omega}\bm{S}'
-	= \bm{\Sigma}.
+	= {\bm{A}}\hat{\bm\Sigma}^{-1/2}\hat{\bm{\Sigma}}\left(\hat{\bm\Sigma}^{-1/2}\right)'{\bm{A}}'
+	= \bm{\Omega}\,
 	\]
-	For the choices of $\bm{G}_{opt}$ and $\bm{d}_{opt}$ given above, the reconciled location vector is
+    and the reconciled location vector is
 	\[
-	\tilde{\bm{\mu}}_{opt}= \bm{S}\bm{G}_{opt}\hat{\bm{\mu}}+\bm{\mu}-\bm{S}\bm{G}_{opt}\hat{\bm{\mu}}
-	= \bm{\mu}.
+	\bm{G}_{opt}\hat{\bm{\mu}}+\bm{\beta}-\bm{G}_{opt}\hat{\bm{\mu}}
+	= \bm{\beta}.
 	\]
 \end{proof}
 
@@ -1148,30 +1127,50 @@ In many ways this chapter sets up a substantial future research agenda. For exam
 
 \section{Proof of Theorem~\ref{theo:bottomdens} and Theorem~\ref{theo:fulldens}}
 
-
-We begin by considering the probability that the bottom level series ${\bm b}$ lies in a region $\mathcal{I}$ a region that is the Cartesian product of intervals $(l_1,u_1),(l_2,u_2),\ldots(l_m,u_m)$.  We denote this as $\bm{l}\succ\bm{b}\succ\bm{u}$ where ${\bm l}=(l_1,l_2,\ldots,l_m)$, ${\bm u}=(u_1,u_2,\ldots,u_m)$ and $\succ$ denotes element-wise inequality between vectors.  The pre-image of $\mathcal{I}$ under $g$ can similarly be denoted as all points ${\bm y}$ satisfying $\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}$.  By Definition~\ref{def:reconprob} 
-
+Consider the interval $\mathcal{I}$ given by the Cartesian product of intervals $(l_1,u_1),(l_2,u_2),\ldots(l_m,u_m)$.  We derive the probability that the bottom level series lie in the interval $\mathcal{I}$, which we denote as $\mbox{Pr}(\bm{l}\succ\bm{b}\succ\bm{u})$ where ${\bm l}=(l_1,l_2,\ldots,l_m)$, ${\bm u}=(u_1,u_2,\ldots,u_m)$ and $\succ$ denotes element-wise inequality between vectors.  The pre-image of $\mathcal{I}$ under $g$ can similarly be denoted as all points ${\bm y}$ satisfying $\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}$.  By Definition~\ref{def:reconprob} 
 \[
-\mbox{Pr}({\bm b}\in \mathcal{I})=\int\limits_{\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d{\bm y}\,,
+\mbox{Pr}(\bm{l}\succ\bm{b}\succ\bm{u})=\int\limits_{\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d{\bm y}\,,
 \]
-
-where $\hat{f}$ is the density of the base probabilistic forecast.  Now consider a change of variables to an $n$-dimensional vector ${\bm z}$ where $y={\bm \Gamma}{\bm z}$. Here, $\bm\Gamma=\left({\bm G^{-}}\,,\vdots\,,{\bm G_\perp}\right)$ where ${\bm G^{-}}$ is an $n\times m$ pseudo inverse of $\bm{G}$ such that $\bm{G}\bm{G}^{-}=\bm{I}$ and ${\bm G_\perp}$ is an $n\times(n-m)$ orthogonal complement of $\bm{G}$ such that $\bm{G}\bm{G}_\perp=\bm{0}$.  By the change of variables ${\bm y}={\bm \Gamma}{\bm z}$
+where $\hat{f}$ is the density of the base probabilistic forecast.  Now consider a change of variables to an $n$-dimensional vector ${\bm z}$ where $y={\bm G^*}{\bm z}$. Recall, ${\bm G^*}=\left({\bm G^{-}}\,,\vdots\,,{\bm G_\perp}\right)$ where ${\bm G^{-}}$ is an $n\times m$ pseudo inverse of $\bm{G}$ and ${\bm G_\perp}$ is an orthogonal complement of $\bm{G}$.  By the change of variables
 
 \begin{align}
-\mbox{Pr}({\bm b}\in \mathcal{I})&=\int\limits_{\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d{\bm y}\nonumber\\
-&=\int\limits_{\bm{l}\succ\bm{G}\bm{\Gamma}\bm{z}\succ\bm{u}}\hat{f}(\bm{\Gamma}\bm{z})|\bm{\Gamma}|d{\bm z}\nonumber\\
-&=\int\limits_{\bm{l}\succ\bm{z}_1\succ\bm{u}}\hat{f}(\bm{\Gamma}\bm{z})|\bm{\Gamma}|d{\bm z}\nonumber\,,
+\mbox{Pr}(\bm{l}\succ\bm{b}\succ\bm{u})&=\int\limits_{\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d{\bm y}\nonumber\\
+&=\int\limits_{\bm{l}\succ\bm{G}\bm{G}^*\bm{z}\succ\bm{u}}\hat{f}(\bm{G}^*\bm{z})|\bm{G}^*|d{\bm z}\nonumber\\
+&=\int\limits_{\bm{l}\succ\bm{z}_1\succ\bm{u}}\hat{f}(\bm{G}^*\bm{z})|\bm{G}^*|d{\bm z}\nonumber\,,
 \end{align}
-where $\bm{z}_1$ denotes the first $m$ elements of $\bm z$.  Letting $\bm{z}_2$ denote the last $n-m$ elements of $\bm{z}$ the integral above can be written as
+where $\bm{z}_1$ denotes the first $m$ elements of $\bm z$.  Letting $\bm{a}$ denote the last $n-m$ elements of $\bm{z}$ the integral above can be written as
 \[ 
-\mbox{Pr}({\bm b}\in \mathcal{I})=\int\limits_{\bm{l}\succ\bm{z}_1\succ\bm{u}}\int\hat{f}(\bm{G}^{-}\bm{z}_1+\bm{G}_{\perp}\bm{z}_2)|\bm{\Gamma}|d{\bm z}_2d{\bm z}_1\nonumber\\
+\mbox{Pr}({\bm b}\in \mathcal{I})=\int\limits_{\bm{l}\succ\bm{z}_1\succ\bm{u}}\int\hat{f}(\bm{G}^{-}\bm{z}_1+\bm{G}_{\perp}\bm{a})|\bm{\Gamma}|d{\bm a}d{\bm z}_1\nonumber\\
 \]
-Replacing ${\bm z}_1$ with ${\bm b}$ it becomes clear that the term in outer integral is a density for the bottom level series under the reconciled probabilistic forecast given by,
+Replacing ${\bm z}_1$ with ${\bm b}$ it can be seen that the term in outer integral is a density for the bottom level series. Therefore
 
 \begin{equation}
-\tilde{f}(\bm{b})=\int\hat{f}(\bm{G}^{-}\bm{b}+\bm{G}_{\perp}\bm{z}_2)|\bm{\Gamma}|d{\bm z}_2
+\tilde{f}_{\bm{b}}(\bm{b})=\int\hat{f}(\bm{G}^{-}\bm{b}+\bm{G}_{\perp}\bm{a})|\bm{\Gamma}|d{\bm a}\,,
+\label{eq:densb}
 \end{equation}
+is the density of ${\bm b}$. To obtain the density of the full hierarchy we first augment the density in Equation\ref{eq:densb} by $n-m$ variables denoted $\bm{u}$
 
+\begin{equation}
+f(\bm{b},\bm{u})=\tilde{f}(\bm{b})\mathbb{1}\left\{\bm{u}=0\right\}\,,
+\label{eq:densb}
+\end{equation}
+such that the density $f(\bm{b},\bm{u})$ is a density for $n$-dimensional vector that is degenerate across the dimensions corresponding to $u$.  We then consider a change of variables,
+\[
+\bm{y}=\left(\bm{S}\,\vdots\,\bm{S}_{\perp}\right)\begin{pmatrix}\bm{b}\\\bm{u}
+\end{pmatrix}\,.
+\] 
+The inverse of $\left(\bm{S}\,\vdots\,\bm{S}_{\perp}\right)$ is given by
+\[
+\begin{pmatrix}\bm{S}^{-}\\\bm{S}'_{\perp}\end{pmatrix}\,,
+\] 
+therefore $\bm{b}=\bm{S}^-\bm{y}$ and $\bm{u}=\bm{S}'_\perp\bm{y}$.  Applying this change of variables we obtain the density
+\[
+\tilde{f}_{\bm{y}}(\bm{y})=\tilde{f}(\bm{S}^-\bm{y})\mathbb{1}\left\{\bm{S}'_\perp\bm{y}=0\right\}\,.
+\]
+Since $\bm{S}'_\perp$ is the orthogonal complement of $\bm{S}$ and since the columns of $\bm{S}$ span the coherent subspace, the statement $\bm{S}'_\perp\bm{y}=0$ is equivalent to the statement $\bm{y}\in\mathfrak{s}$.  As such, the reconciled density is given by
+\[
+\tilde{f}_{\bm{y}}(\bm{y})=\tilde{f}(\bm{S}^-\bm{y})\mathbb{1}\left\{\bm{y}\in\mathfrak{s}\right\}\,.
+\]
 
 \section{Reparameterisation of $\bm{G}$ in optimal reconciliation of future paths} \label{Appen:ReparaG}
 
