@@ -1,7 +1,7 @@
-%&latex
+%%%%&latex
 \documentclass[12pt]{article}
 \usepackage{amsmath}
-\usepackage[dvipdfm]{graphicx}
+\usepackage{graphicx}
 \usepackage{psfrag,epsf,enumerate}
 \usepackage{enumerate}
 \usepackage{natbib}
@@ -360,7 +360,7 @@ This definition of probabilistic forecast reconciliation can be applied to any m
 
 \section{Analytical solution} \label{sec:ParamRecon}
 
-In this section we describe how a reconciled distribution can be derived analytically, from an incoherent (or base) multivariate probabilistic distribution.  We restrict our attention to the case where $s$ and $g$ are linear mappings, in which case reconciliation involves a change of coordinates and marginalisation.  This is particularly useful when the base probabilistic forecast is in the elliptical class since the elliptical class is closed under a change of coordinates and marginalisation meaning the reconciled distribution can be obtained analytically. 
+In this section we describe how a reconciled distribution can be derived analytically, from an incoherent (or base) multivariate probabilistic distribution.  We restrict our attention to the case where $s$ and $g$ are linear mappings, in which case reconciliation involves changes of coordinates and marginalisation.  This is particularly useful when the base probabilistic forecast is in the elliptical class. Since the elliptical class is closed under a change of coordinates and marginalisation, the reconciled distribution can easily be obtained analytically in this case. 
 
 %Recall that when $s\circ g$ is a projection, the case of point forecast reconciliation can be broken down into three steps. In what follows we drop the subscript $t+h$ from conditional forecasts for brevity.
 %\begin{compactenum}
@@ -371,31 +371,33 @@ In this section we describe how a reconciled distribution can be derived analyti
 %
 %We now outline the analogous steps for probabilistic forecasts when predictive densities are available.
 
-For ease of exposition we begin by considering the probability that the bottom level series ${\bm b}$ lies in a region $\mathcal{I}$ a region that is the Cartesian product of intervals $(l_1,u_1),(l_2,u_2),\ldots(l_m,u_m)$.  We denote this as $\bm{l}\succ\bm{b}\succ\bm{u}$ where ${\bm l}=(l_1,l_2,\ldots,l_m)$, ${\bm u}=(u_1,u_2,\ldots,u_m)$ and $\succ$ denotes element-wise inequality between vectors.  The pre-image of $\mathcal{I}$ under $g$ can similarly be denoted as all points ${\bm y}$ satisfying $\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}$.  By Definition~\ref{def:reconprob} 
+\begin{theo}[Reconciled density of bottom level]\label{theo:bottomdens}
+	Consider the case where reconciliation is carried out using a composition of linear mappings $s\circ g$ where $g$ combines information from all levels of the base forecast into the bottom levels.  The density of the bottom level series under the reconciled distribution is
+	\[
+	\tilde{f}_{\bm{b}}(\bm{b})=|\bm{G^*}|\int \hat{f}(\bm{G}^{-}{\bm b}+\bm{g}_\perp {\bm a})d\bm{a}\,,
+	\]
+	where $\bm{G^-}$ is an $n\times m$ pseudo inverse of $\bm{G}$ such that $\bm{G}\bm{G}^-=\bm{I}$, $\bm{G_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{G}$ such that $\bm{G}\bm{G}_\perp=\bm{0}$ and $\bm{G}'_\perp\bm{G}_\perp=\bm{I}$, $\bm{G^*}=\left(\bm{G}^-\,\vdots\,\bm{G}_\perp\right)$, and $\bm{b}$ and $\bm{a}$ are obtained via the change of variables
+	\[
+	y=\bm{G^*}\begin{pmatrix}\bm{b}\\\bm{a}\end{pmatrix}\,.
+	\] 
+\end{theo}
 
-\[
-\mbox{Pr}({\bm b}\in \mathcal{I})=\int\limits_{\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d{\bm y}\,,
-\]
+\begin{proof}
+	See appendix.
+\end{proof}
 
-where $\hat{f}$ is the density of the base probabilistic forecast.  Now consider a change of variables to an $n$-dimensional vector ${\bm z}$ where $y={\bm \Gamma}{\bm z}$. Here, $\bm\Gamma=\left({\bm G^{-}}\vdots{\bm G_\perp}\right)$ where ${\bm G^{-}}$ is an $n\times m$ pseudo inverse of $\bm{G}$ such that $\bm{G}\bm{G}^{-}=\bm{I}$ and ${\bm G_\perp}$ is an $n\times(n-m)$ orthogonal complement of $\bm{G}$ such that $\bm{G}\bm{G}_\perp=\bm{0}$.  By the change of variables
+\begin{theo}[Reconciled density of full hierachy]\label{theo:fulldens}
+	Consider the case where a reconciled density for the bottom level series has been obtained using Theorem~\ref{theo:bottomdens}.  The density of the full hierarchy under the reconciled distribution is
+	\[
+	\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S^*}|\tilde{f}_{\bm b}({\bm{S^-}\bm{y}})\,,
+	\]
+	where $\bm{S^-}$ is an $m\times n$ pseudo inverse of $\bm{S}$ such that $\bm{S}^-\bm{S}=\bm{I}$, $\bm{S_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{S}$ such that $\bm{S}'_\perp\bm{S}=\bm{0}$ and $\bm{S}'_\perp\bm{S}_\perp=\bm{I}$, $\bm{S^*}=\left(\bm{S}^-\,\vdots\,\bm{S}_\perp\right)$.
+\end{theo}
 
-\begin{align}
-\mbox{Pr}({\bm b}\in \mathcal{I})&=\int\limits_{\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d{\bm y}\nonumber\\
-&=\int\limits_{\bm{l}\succ\bm{G}\bm{\Gamma}\bm{z}\succ\bm{u}}\hat{f}(\bm{\Gamma}\bm{z})|\bm{\Gamma}|d{\bm z}\nonumber\\
-&=\int\limits_{\bm{l}\succ\bm{z}_1\succ\bm{u}}\hat{f}(\bm{\Gamma}\bm{z})|\bm{\Gamma}|d{\bm z}\nonumber\,,
-\end{align}
+\begin{proof}
+	See appendix.
+\end{proof}
 
-where $\bm{b}$ denotes the first $m$ elements of $\bm z$.  Also letting $\bm{a}$ denote the last n-m elements of $\bm{z}$ the integral above can be written as
-
-\[ 
-\mbox{Pr}({\bm b}\in \mathcal{I})=\int\limits_{\bm{l}\succ\bm{b}\succ\bm{u}}\int\hat{f}(\bm{G}^{-}\bm{b}+\bm{G}_{\perp}\bm{a})|\bm{\Gamma}|d{\bm a}d{\bm b}\nonumber\\
-\]
-
-From the above, the density of the reconciled probabilistic forecast for the bottom level series is given by
-
-\begin{equation}
-\tilde{f}(\bm{b})=\int\hat{f}(\bm{G}^{-}\bm{b}+\bm{G}_{\perp}\bm{a})|\bm{\Gamma}|d{\bm a}
-\end{equation}
 
 
 {\color{blue} OLD VERSION: While $\hat{\nu}$ is a probability measure for an $n$-vector $\hat{\bm{y}}$, probability statements in terms of a different coordinate system can be made via an appropriate change of basis. Letting $f(.)$ be generic notation for a probability density function, and following the notation from point forecast reconciliation where $\hat{\bm{y}}=\bm{S}\tilde{\bm{b}}+\bm{R}\tilde{\bm{a}}$, we obtain
@@ -1144,6 +1146,33 @@ In many ways this chapter sets up a substantial future research agenda. For exam
 
 \appendix
 
+\section{Proof of Theorem~\ref{theo:bottomdens} and Theorem~\ref{theo:fulldens}}
+
+
+We begin by considering the probability that the bottom level series ${\bm b}$ lies in a region $\mathcal{I}$ a region that is the Cartesian product of intervals $(l_1,u_1),(l_2,u_2),\ldots(l_m,u_m)$.  We denote this as $\bm{l}\succ\bm{b}\succ\bm{u}$ where ${\bm l}=(l_1,l_2,\ldots,l_m)$, ${\bm u}=(u_1,u_2,\ldots,u_m)$ and $\succ$ denotes element-wise inequality between vectors.  The pre-image of $\mathcal{I}$ under $g$ can similarly be denoted as all points ${\bm y}$ satisfying $\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}$.  By Definition~\ref{def:reconprob} 
+
+\[
+\mbox{Pr}({\bm b}\in \mathcal{I})=\int\limits_{\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d{\bm y}\,,
+\]
+
+where $\hat{f}$ is the density of the base probabilistic forecast.  Now consider a change of variables to an $n$-dimensional vector ${\bm z}$ where $y={\bm \Gamma}{\bm z}$. Here, $\bm\Gamma=\left({\bm G^{-}}\,,\vdots\,,{\bm G_\perp}\right)$ where ${\bm G^{-}}$ is an $n\times m$ pseudo inverse of $\bm{G}$ such that $\bm{G}\bm{G}^{-}=\bm{I}$ and ${\bm G_\perp}$ is an $n\times(n-m)$ orthogonal complement of $\bm{G}$ such that $\bm{G}\bm{G}_\perp=\bm{0}$.  By the change of variables ${\bm y}={\bm \Gamma}{\bm z}$
+
+\begin{align}
+\mbox{Pr}({\bm b}\in \mathcal{I})&=\int\limits_{\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d{\bm y}\nonumber\\
+&=\int\limits_{\bm{l}\succ\bm{G}\bm{\Gamma}\bm{z}\succ\bm{u}}\hat{f}(\bm{\Gamma}\bm{z})|\bm{\Gamma}|d{\bm z}\nonumber\\
+&=\int\limits_{\bm{l}\succ\bm{z}_1\succ\bm{u}}\hat{f}(\bm{\Gamma}\bm{z})|\bm{\Gamma}|d{\bm z}\nonumber\,,
+\end{align}
+where $\bm{z}_1$ denotes the first $m$ elements of $\bm z$.  Letting $\bm{z}_2$ denote the last $n-m$ elements of $\bm{z}$ the integral above can be written as
+\[ 
+\mbox{Pr}({\bm b}\in \mathcal{I})=\int\limits_{\bm{l}\succ\bm{z}_1\succ\bm{u}}\int\hat{f}(\bm{G}^{-}\bm{z}_1+\bm{G}_{\perp}\bm{z}_2)|\bm{\Gamma}|d{\bm z}_2d{\bm z}_1\nonumber\\
+\]
+Replacing ${\bm z}_1$ with ${\bm b}$ it becomes clear that the term in outer integral is a density for the bottom level series under the reconciled probabilistic forecast given by,
+
+\begin{equation}
+\tilde{f}(\bm{b})=\int\hat{f}(\bm{G}^{-}\bm{b}+\bm{G}_{\perp}\bm{z}_2)|\bm{\Gamma}|d{\bm z}_2
+\end{equation}
+
+
 \section{Reparameterisation of $\bm{G}$ in optimal reconciliation of future paths} \label{Appen:ReparaG}
 
 We consider different parameterisations when estimating the optimal $\bm{G}_h$ via the proposed optimisation process. Let,
@@ -1338,21 +1367,21 @@ Thus for the Gaussian DGP we choose $\sigma^2_u = 24$ and $\sigma^2_u = 18$ wher
 \begin{figure}[!hbt]
 	\centering
 	\small
-	\includegraphics[width= .95\textwidth]{Empirical-results/AllTS_MultiVScores_ETS.pdf}
+%	\includegraphics[width= .95\textwidth]{Empirical-results/AllTS_MultiVScores_ETS.pdf}
 	\caption{Skill scores with reference to ETS base forecasts for multivariate predictive distribution of the whole hierarchy from different reconciliation methods are presented. Top panel shows the results from Gaussian approach and the bottom panel shows the results from non-parametric approach. Left and right panels shows the skill scores based on energy score and variogram score respectively.}\label{fig:EmpResults_AllTS_ETS}
 \end{figure}
 
 \begin{figure}[!hbt]
 	\centering
 	\small
-	\includegraphics[width= 0.8\textwidth, height= 0.85\textheight]{Empirical-results/Levels_MultiVScores_ETS.pdf}
+%	\includegraphics[width= 0.8\textwidth, height= 0.85\textheight]{Empirical-results/Levels_MultiVScores_ETS.pdf}
 	\caption{Skill score (with reference to ETS base forecasts) for multivariate probabilistic forecasts of different levels of the hierarchy are presented. Results from Gaussian approach are presented in the top three panels and results from the non-parametric approach are presented in the bottom three panels.}\label{fig:EmpResults_Levels_ETS}
 \end{figure}
 
 \begin{figure}[!hbt]
 	\centering
 	\small
-	\includegraphics[width= \textwidth]{Empirical-results/UniVScore_TopLevel_ETS.pdf}
+%	\includegraphics[width= \textwidth]{Empirical-results/UniVScore_TopLevel_ETS.pdf}
 	\caption{Skill score based on CRPS (with reference to the ETS base forecasts) for univariate probabilistic forecasts for the Total (top level) overnight trips are presented. Left panel shows the results from Gaussian approach and right panel shows the results from non-parametric approach. }\label{fig:EmpResults_TopLevel_ETS}
 \end{figure}
 
