@@ -221,7 +221,7 @@ When forecasting hierarchical time series there a number of reasons why forecast
 In this case forecasts are called {\em incoherent} and denoted $\hat{\bm y}_{t+h}$, with the subscript $t+h$ implying a h step made at time $t$.  To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as {\em forecast reconciliation}.  At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm y}_{t+h}=\psi(\hat{\bm y}_{t+h})$, where $\tilde{\bm y}_{t+h}\in\mathfrak{s}$ is called the {\em reconciled} forecast.  This mapping itself may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ produces a new set of bottom level forecasts using the forecasts of all series, and these are then aggregated via $s$.  When both mappings are linear this corresponds to premultiplying by a matrix $\bm{S}\bm{G}$.  
 
 \subsection*{Example: Projections}
-\cite{PanEtAl2019HF} discuss how a number of important properties arise when $\bm{S}\bm{G}$ is a projection matrix.  In this case, ${\bm G}$ can be written as $(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$, where $\bm{R}_{\perp}$ is an $n\times m$ orthogonal complement to the $n\times(n-m)$ matrix $\bm{R}$, with $\bm{R}$ defining a direction of projection.  For instance, OLS reconciliation projects along a direction perpendicular to $\bm{S}$, in which case $\bm{R}=\bm{S}_{\perp}$, $\bm{R}_{\perp}=\bm{S}$ and $\bm{G}=(\bm{S}'\bm{S})^{-1}\bm{S}'$.  Several other choices of $\bm{G}$ currently extant in the literature, including the bottom-up \citep{Dunn1976} WLS and MinT \citep{HynEtAl2011,WicEtAl2019} methods, are also special cases where $\bm{S}\bm{G}$ is a projection.  
+\cite{PanEtAl2019HF} discuss how a number of important properties arise when $\bm{S}\bm{G}$ is a projection matrix.  In this case, ${\bm G}$ can be written as $(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$, where $\bm{R}_{\perp}$ is an $n\times m$ orthogonal complement to the $n\times(n-m)$ matrix $\bm{R}$, with $\bm{R}$ defining a direction of projection.  For instance, OLS reconciliation projects along a direction perpendicular to $\bm{S}$, in which case $\bm{R}=\bm{S}_{\perp}$, $\bm{R}_{\perp}=\bm{S}$ and $\bm{G}=(\bm{S}'\bm{S})^{-1}\bm{S}'$.  Several other choices of $\bm{G}$ currently extant in the literature, including the bottom-up \citep{Dunn1976} WLS and MinT \citep{HynEtAl2011,WicEtAl2019} methods, are also special cases where $\bm{S}\bm{G}$ is a projection. These methods are summarised in Table \ref{table:ReconMethods} in Appendix. 
 
 %As an extension, \cite{PanEtAl2019HF} also consider a bias correction step, which can be thought of as applying a translation followed by a projection.
 
@@ -584,7 +584,7 @@ Let us now propose to find an optimal $\bm{G}$ for reconciling future paths by m
 \begin{equation} \label{eq:Obj_func_1}
 \operatornamewithlimits{argmin}_{\bm{G}_h} \quad \E_{\bm{Q}}[S(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}, \bm{y}_{T+h})],
 \end{equation}
-where $S$ is a proper scoring rule. We note that the proper scoring rules and their properties will be discussed in Section \ref{sec:evaluation}. The subscript $h$ on $\bm{G}$ is used to emphasise distinct $\bm{G}$ matrices for different forecast horizons. The expectation $E_{\bm{Q}}$ over the true forecast distribution $\bm{Q}$ can be approximated through sample mean and we can rewrite the objective function as follows. 
+where $S$ is a proper scoring rule. The proper scoring rules and their properties will be discussed in Section \ref{sec:evaluation}. The subscript $h$ on $\bm{G}$ is used to emphasise distinct $\bm{G}$ matrices for different forecast horizons. The expectation $E_{\bm{Q}}$ over the true forecast distribution $\bm{Q}$ can be approximated through sample mean and we can rewrite the objective function as follows. 
 
 \begin{equation} \label{eq:Obj_func_apprx}
 \operatornamewithlimits{argmin}_{\bm{G}_h} \quad \frac{1}{N}\sum_{j=1}^{N}[S(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h, j}, \bm{y}_{T+h, j})],
@@ -629,7 +629,7 @@ We now discuss our algorithm for generating optimally reconciled bootstrapped fu
 %\operatornamewithlimits{argmin}_{\bm{R}'_\bot} \quad \E_{\bm{G}}[Sc(\bm{S}(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot\bm{y}_{t+h}^b, \bm{y}_{t+h})].
 %\end{equation}
 
-We implement this algorithm in Section \ref{sec:Bootsrap-sim} to reconcile probabilistic forecasts in a simulation setting while discussing the evaluation criteria for hierarchical forecasting in the following section. 
+We implement this algorithm in Section \ref{sec:Bootsrap-sim} to reconcile probabilistic forecasts in a simulation setting. Now we turn to the discussion of evaluation criteria for hierarchical probabilistic forecasts.
 
 %We generate data with a sample size of $T=501$. Univariate ARIMA models are selected for each series using the \textit{auto.arima} function in the \textit{forecast} package \citep{hyndman2017forecasting} in R \citep{Rcore}. The same package was used to fit each series independently using the first 500 observations, and evaluate 1-step ahead base (incoherent) probabilistic forecasts. These were then reconciled using different projections summarised in Table~\ref{table:2}. This process was replicated using $1000$ different data sets from the same data generating processes.
 
@@ -714,7 +714,7 @@ We now present the simulation study carried-out to evaluate the performance of p
 
 \subsection{Data generating process (DGP)} \label{subsec:DGP}
 
-The data generating process we consider is the hierarchy given in Figure \ref{fig:twoL-hier}, comprising two aggregation levels with four bottom-level series. Each bottom-level series will be generated first, and then summed to obtain the data for the upper-level series.
+The data generating process we consider corresponds to the hierarchy given in Figure \ref{fig:twoL-hier}, comprising two aggregation levels with four bottom-level series. Each bottom-level series will be generated first, and then summed to obtain the data for the upper-level series.
 
 First $\{w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}\}$ are generated from ARIMA$(p,d,q)$ processes, where $(p,q)$ and $d$ take integers from $\{1,2\}$ and $\{0,1\}$ respectively with equal probability. The parameters for the AR and MA components are randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively.
 The errors driving the ARIMA processes were generated from Gaussian and non-Gaussian distributions separately. This will allow us to demonstrate the distinct impact of true DGP for parametric and non-parametric reconciliation approaches. 
@@ -757,14 +757,14 @@ We generate random variates $\{u_{AA}, u_{AB}\}$ from $C_{\theta=10}(.)$ and $\{
 
 \subsubsection*{Signal-to-noise ratio:}
 
-In practice, hierarchical time series are likely to have relatively noisier series at lower levels of aggregation. We replicate this feature in our simulated data by adding some noise to $\{w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}\}$ as described in Section \ref{Append:sig-to-noise} in Appendix. We denote these nosier bottom-level series by $\{y_{AA,t},y_{AB,t},y_{BA,t},y_{BB,t}\}$. 
+In practice, hierarchical time series are likely to have relatively noisier series at lower levels of aggregation. Following the simulation setup in \citet{WicEtAl2019} we replicate this feature in our simulated data by adding some noise to $\{w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}\}$ (See Section \ref{Append:sig-to-noise} in Appendix for more detailed explanation). We denote these nosier bottom-level series by $\{y_{AA,t},y_{AB,t},y_{BA,t},y_{BB,t}\}$ which will be summed to obtain the data for upper levels. 
 
 
-\subsection{Simulation set up for parametric solution}
+\subsection{Simulation set up for analytical solution}
 
 To compare different reconciliation methods in parametric densities we assume a Gaussian predictive distribution for the hierarchy. We choose the Gaussian case due to its analytical tractability which allows for evaluation using all scoring rules (including the log score).
 
-We generate $2000$ observations for each series from the Gaussian and non-Gaussian DGP. We ignore the first $500$ observations from each series to avoid the impact from initial values. Using a rolling window of $T=500$ observations, we fit univariate ARIMA models for each series using the \verb|auto.arima()| function in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore}. Using the fitted models we generate $1$ to $3$ steps ahead base (incoherent) Gaussian probabilistic forecasts. We estimate the mean and the variance of this incoherent Gaussian density as the $h$-steps ahead point forecasts $\hat{\bm{y}}_{t+h}$ and shrinkage estimator for variance covariance matrix of one-step ahead forecast errors $\hat{\bm{W}}^{\text{shr}}$ respectively. These were then reconciled using different projections summarised in Table~\ref{table:ReconMethods}. This process was replicated for $1000$ times by rolling the window one step at a time.
+We generate $2000$ observations for each series from the Gaussian and non-Gaussian DGP. We ignore the first $500$ observations from each series to avoid the impact from initial values. Using a rolling window of $T=500$ observations, we fit univariate ARIMA models for each series using the \verb|auto.arima()| function in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore}. Using the fitted models we generate $1$ to $3$ steps ahead base (incoherent) Gaussian probabilistic forecasts. We estimate the mean and the variance of this incoherent Gaussian density as the $h$-steps ahead point forecasts $\hat{\bm{y}}_{t+h}$ and shrinkage estimator for variance covariance matrix of one-step ahead forecast errors $\hat{\bm{W}}^{\text{shr}}$ respectively. These were then reconciled using different projections summarised in Table~\ref{table:ReconMethods} in appendix. This process was replicated for $1000$ times by rolling the window one step at a time.
 
 To assess the predictive performance of different forecasting methods, we use scoring rules as discussed in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores which are the percentage improvement of a probabilistic forecast $P$ over a reference method $P_{\mbox{ref}}$ such that a positive value indicates that a method is more accurate than the reference method. 
 
@@ -956,15 +956,15 @@ Tables~\ref{tab:SimResults_Gauss_UnivScores} break down the forecasting performa
 
 \subsection{Simulation setup for non-parametric solution}\label{sec:Bootsrap-sim}
 
-We now implement the non-parametric approach introduced in Section \ref{sec:non-para}. Our main focus in this study is to compare different reconciliation methods to optimal reconciliation. We narrow down the study to find optimality with respect to energy score which was introduced in equation (\ref{eq:Energy_score}). Following equation (\ref{eq:ES_with_MCSamples}) for samples from the probability distribution and for $\alpha = 1$, we can rewrite the objective function in (\ref{eq:Obj_func_apprx}) as, 
+We now implement the non-parametric approach introduced in Section \ref{sec:non-para}. Our main focus in this study is to compare different reconciliation methods to optimal reconciliation. We narrow down the study to find optimality with respect to energy score. Following equation (\ref{eq:Energy_score}) for samples from the probability distribution and for $\alpha = 1$, we can rewrite the objective function in (\ref{eq:Obj_func_apprx}) as, 
 
 \begin{equation}\label{eq:Obj_func_apprx_ES}
 \operatornamewithlimits{argmin}_{\bm{G}} \frac{1}{N}\sum_{j=1}^{N}\left\{\frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}^{b+1})||\right\}
 \end{equation}
 
-First we generate $2500$ data points for each series in the hierarchy using the same DGP discussed in Section \ref{subsec:DGP}. Following the algorithm explained in Section \ref{subsec:Optimal_recon}, we choose $L=600$ observations for outer rolling window and $T=500$ observations for inner rolling window. We fit univariate ARIMA models using \verb|auto.arima()| function and generate $B=1000$ of $h=1$ to $3$ steps-ahead incoherent bootstrapped future paths following steps 2 and 3. We repeat these steps for $N=100$ times by moving the inner window one step at a time. Following step 6, we then estimate $\bm{G}_h^{Opt}$ using numerical optimisation methods to attain the optimum. Next, we generate $\tilde{\bm{\Upsilon}}_{T+h}$ following step 7 and compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,2,3$ as described in step 8. We use $\bm{G}_h^{Opt}$ as well as other $\bm{G}$ matrices given in Table \ref{table:ReconMethods} for reconciliation in step 8. Finally we repeat this whole process for $1000$ times by moving the outer rolling window one step-ahead at a time. Collect $1000$ reconciled future paths, $\tilde{\bm{\Upsilon}}_{T+h}$, from different reconciliation methods for $h=1,2,3$ and evaluate the forecasting performances.
+First we generate $2500$ data points for each series in the hierarchy using the same DGP discussed in Section \ref{subsec:DGP}. Following the algorithm explained in Section \ref{subsec:Optimal_recon}, we choose $L=600$ observations for outer rolling window and $T=500$ observations for inner rolling window. We fit univariate ARIMA models using \verb|auto.arima()| function and generate $B=1000$ of $h=1$ to $3$ steps-ahead incoherent bootstrapped future paths following steps 2 and 3. We repeat these steps for $N=100$ times by moving the inner window one step at a time. Following step 6, we then estimate $\bm{G}_h^{Opt}$. We use numerical optimisation methods to attain the optimum. Next, we generate $\tilde{\bm{\Upsilon}}_{T+h}$ following step 7 and compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,2,3$ as described in step 8. We use $\bm{G}_h^{Opt}$ as well as other $\bm{G}$ matrices given in Table \ref{table:ReconMethods} (in appendix) for reconciliation in step 8. Finally we repeat this whole process for $1000$ times by moving the outer rolling window one step-ahead at a time. Collect $1000$ reconciled future paths, $\tilde{\bm{\Upsilon}}_{T+h}$, from different reconciliation methods for $h=1,2,3$ and evaluate the forecasting performances.
 
-We also note that different parameterisation methods were used for estimation $\bm{G}_h^{Opt}$. This was discussed in detail with the simulation results in Section \ref{Appen:ReparaG} in Appendix. 
+We also note that different parameterisation methods were used for estimation $\bm{G}_h^{Opt}$. This was discussed in detail in Section \ref{Appen:ReparaG} in Appendix. 
 
 
 %\begin{enumerate}
@@ -995,9 +995,9 @@ We also note that different parameterisation methods were used for estimation $\
 
 We use energy score and variogram score to assess the predictive performance from different reconciliation methods. Results following from Non-Gaussian and Gaussian DGP are presented in left and right panels of Table \ref{table:Non-paraSimulation} respectively.
 
-Mann-Whitney test was used to compare the difference of scores between reconciliation methods. The results support that the ES and VS for all reconciled forecasts are significantly lower than those of incoherent forecasts. This implies that all reconciliation methods produce coherent probabilistic forecasts with improved predictive ability compared to the incoherent forecasts. In addition to that, the MinT(Shrink) and Optimal method have similar prediction accuracy as there is no significant difference between the scores from these reconciliation methods. Although the scores are relatively large for Gaussian than non-Gaussian data, the overall conclusions are consistent. 
+Mann-Whitney test was used to compare the difference of scores between reconciliation methods. The results support that the ES and VS for all reconciled forecasts are significantly lower than those of incoherent forecasts. This implies that all reconciliation methods produce coherent probabilistic forecasts with improved predictive ability compared to the incoherent forecasts. In addition to that, the MinT(Shrink) and Optimal method have similar prediction accuracy as there is no significant difference between the scores from these reconciliation methods. Although the scores are relatively larger for Gaussian than non-Gaussian data, the overall conclusions are consistent. 
 
-The simulation results from reparameterisation methods presented in Section \ref{Appen:ReparaG} in Appendix, we note that the different optimal methods are equivalent irrespective to the forecast horizon or the DGP. This implies that there is no difference in results due to different parameterisations of $\bm{G}$.
+The simulation results from reparameterisation methods are presented in Table \ref{table:Non-paraSim_re-para} in Appendix. From these we note that the different parameterisation of $\bm{G}$ for optimal reconciliation give equivalent results irrespective to the forecast horizon or the DGP. 
 
 However we also note that optimal reconciliation required a high computational cost for larger hierarchies. Further, it requires sufficient data points to learn the $\bm{G}$ matrix. Thus we suggest using the MinT $\bm{G}$ for reconciling bootstrapped future paths for two reasons. First, it is computationally efficient relative to the optimal method, and second, it produces accurate probabilistic forecasts that are at least as good as the Optimal method with respect to the energy score.
 
@@ -1211,6 +1211,31 @@ To ensure the disaggregate series are noisier than the aggregate series, we choo
 Similar inequalities hold when $\varepsilon_{AA,t}$ is replaced by $\varepsilon_{AB,t}$, $\varepsilon_{BA,t}$ and $\varepsilon_{BB,t}$ in the third term.
 
 Thus for the Gaussian DGP we choose $\sigma^2_u = 24$ and $\sigma^2_u = 18$ whereas for non-Gaussian DGP we choose $\sigma^2_u = 10$ and $\sigma^2_v = 7$.
+
+\subsection{Summary of hierarchical point forecasting methods}
+
+\begin{table}[!h]
+	\caption{Summary of reconciliation methods that are projections. Here, $\hat{\bm{W}}^{sam}$ is the variance covariance matrix of one-step ahead in-sample forecast errors, $\hat{\bm{W}}^{shr}$ is a shrinkage estimator more suited to large dimensions proposed by \citet{Schafer2005}, $\hat{\bm{W}}^{wls}$ is the diagonal matrix with diagonal elements $w_{ii}$, and $\tau = \frac{\sum_{i \neq j}\hat{\var}(\hat{w}_{ij})}{\sum_{i \neq j}{\hat{w}}^2_{ij}}$, where $w_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{W}}^{sam}$.}\label{table:ReconMethods}
+	\centering
+	\begin{tabular}{lll}
+		\toprule
+		\textbf{Method} & \textbf{$\bm{W}$} & \textbf{ $\bm{R}'_\bot$}      \\
+		\midrule
+		OLS             &
+		$\bm{I}$  &
+		$\bm{S}'$  \\
+		MinT(Sample)    &
+		$\hat{\bm{W}}^{sam}$ &
+		$\bm{S}'(\hat{\bm{W}}^{sam})^{-1}$ \\
+		MinT(Shrink)    &
+		$\tau\text{Diag}(\hat{\bm{W}}^{sam}) + (1-\tau)\hat{\bm{W}}^{sam}$ &
+		$\bm{S}'(\hat{\bm{W}}^{shr})^{-1}$ \\
+		WLS       &
+		$\text{Diag}(\hat{\bm{W}}^{sam})$ &
+		$\bm{S}'(\hat{\bm{W}}^{wls})^{-1}$ \\
+		\bottomrule
+	\end{tabular}
+\end{table}
 
 \subsection{Simulation results from parametric solution for marginal forecast distributions}\label{Append:Gauss_sim_Univ}
 
