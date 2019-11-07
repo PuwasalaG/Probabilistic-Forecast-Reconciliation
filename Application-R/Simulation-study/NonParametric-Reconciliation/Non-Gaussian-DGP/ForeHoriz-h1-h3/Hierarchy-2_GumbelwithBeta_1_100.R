@@ -167,7 +167,8 @@ for (j in 1:100)#1:250
     }
     
     
-    Index <- base::sample(c(1:(nrow(Residuals_all_training)-(H-1))), size = B , replace = TRUE)
+    Index <- base::sample(c(1:(nrow(Residuals_all_training)-(H-1))), size = B, 
+                          replace = TRUE)
     Index_seq <- matrix(0, B, H)
     
     for (k in 1:B) {
