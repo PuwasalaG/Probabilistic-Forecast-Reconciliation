@@ -533,60 +533,17 @@ This result implies that reconciling each member of a sample drawn from an incoh
 In the point forecasting setting it is common to generate forecasts from independent statistical models, allowing forecast reconciliation to be scaled up to large hierarchies.  Since a single point forecast is generated for each series there is no ambiguity as to how these should be stacked into a vector of base forecasts $\hat{y}$.  This is no longer the case in the probabilistic setting where multiple draws are made for each series.  \cite{JeoEtAl2019} recommend some crude heuristics that can be used to form joint samples.  In Section~\ref{Subsec:Incoherent_samplePaths} we provide an alternative based on resampling forecast errors, which is the first step towards producing reconciled forecasts. The second step is to premultiply all draws from the base distribution by a matrix $\bm{S}\bm{G}$, with strategies for choosing $\bm{G}$ discussed in Section~\ref{subsec:Optimal_recon}. 
 
 \subsection{Drawing base probabilistic forecasts} \label{Subsec:Incoherent_samplePaths}
-First we fit appropriate univariate models for each series in the hierarchy based on the training data $\bm{y}_{1:T}$. We then compute 1-step-ahead training errors as $e_{i,t} = y_{i,t} - \hat{y}_{i,t}$ for $i=1,\dots,n$ and $t = 1,\dots,T$ where $\hat{y}_{i,t} = E(y_{i,t}|y_{i,1:t-1})$. The training errors are stored in a matrix $\bm{\Gamma}_{(T \times n)} = (\bm{e}_1,\dots,\bm{e}_T)'$ where $\bm{e}_t = (e_{1,t},\dots,e_{n,t})$ is stored in the same order as $\bm{y}_t$ for $t=1,\dots,T$. Next we block bootstrap a sample of size $H$ from $\bm{\Gamma_{(T \times n)}}$. That is, we randomly select $H$ consecutive rows from $\bm{\Gamma}$ and store in a matrix $\bm{\Gamma}^b_{(H \times n)} = (\bm{e}^b_1,\dots,\bm{e}^b_H)'$ and repeat this for $b = 1,\dots,B$.
+The following method only requires that one step ahead in-sample `forecasts' $\hat{y}_{i,t}$ can be computed for each series $i$.  These are not true forecasts since they are computed over the training data $t=1,\ldots,T$; for instance  $\hat{y}_{i,t}$ may be the fitted values of $E(y_{i,t}|y_{i,t-1})$ implied by some statistical model. Let the errors $e_{i,t} = y_{i,t} - \hat{y}_{i,t}$ for $i=1,\dots,n$ and $t = 1,\dots,T$ be stacked in a $(n \times T)$ matrix $\bm{\mathcal{E}}$.  When up to $H$ step ahead forecasts are required, we randomly select $H$ consecutive columns from $\bm{\mathcal{E}}$ to form $\bm{\mathcal{E}}^b$ and repeat for $b = 1,\dots,B$.  This preserves both serial correlation of errors as well as dependence across different series.
 
-Finally we generate the $h$-step-ahead future paths using the fitted univariate models conditioning on the past observations. We also incorporate the bootstrapped training errors as the error series for generating these future paths. By doing so we implicitly model the contemporaneous correlation structure of the hierarchy. Further the use of consecutive (block) training errors will ensure that the serial correlation of the series is accounted for. To explain this process more explicitly consider the following example.
+The $\bm{\mathcal{E}}^b$ can then be used together with forecasts $\hat{\bm{y}}_{T+h}$ for $h=1,\ldots,H$ to recursively form $B$ sample paths of the full hierarchy.  As a simple example consider the case where each forecast comes from (the same) AR(1) model and $H=2$.  Then $\hat{{y}}^b_{i,T+1}=\phi{{y}}_{i,T+h}+e^b_{i,1}$ and $\hat{{y}}^b_{i,T+2}=\phi\hat{{y}}_{i,T+1}+e^b_{i,2}$ for each $i=1,\ldots,n$ and $b=1,\ldots,B$ and where $e^b_{i,h}$ is the element in row $i$ and column $h$ of $\bm{\mathcal{E}}^b$.  Each future path can be stacked into a vector $\hat{\bm{y}}^b_{T+h}:=(\hat{{y}}^b_{1,T+h},\ldots,\hat{{y}}^b_{n,T+h})'$ which in turn are stacked into a $n\times b$ matrix $\hat{\bm{\Upsilon}}_{T+h} = (\hat{\bm{y}}^1_{T+h},\dots,\hat{\bm{y}}^B_{T+h})$.
 
-\noindent
-\textbf{Example:}
-Suppose we fit an $ARMA(p,q)$ model for the $i^\text{th}$ series of the hierarchy. i.e.,
-\begin{align*}
-	y_{i,t} &= \alpha_1y_{i,t-1} + \alpha_2y_{i,t-2}+\dots+\alpha_py_{i,t-p} + \beta_1\epsilon_{i,t-1} + \beta_1\epsilon_{i,t-2}+\dots+\beta_q\epsilon_{i,t-q} + \epsilon_{i,t},\\
-	y_{i,t} &= (\alpha_1 + \alpha_2L+\dots+\alpha_pL^{p-1})y_{i,t-1} + (\beta_1 + \beta_1L+\dots+\beta_qL^{q-1})\epsilon_{i,t-1} + \epsilon_{i,t}
-\end{align*}
-where $L$ is the usual lag operator. Then the $h$-step-ahead $b^\text{th}$ future path conditional on past information up to and including time $t$, for the $i^\text{th}$ series is produced as,
-\begin{align*}
-	\hat{y}^b_{i,t+h} &= (\hat{\alpha}_1 + \hat{\alpha}_2L +\dots+ \hat{\alpha}_pL^{p-1})y_{i,t+h-1} + (\hat{\beta}_1 + \hat{\beta}_1L+\dots+\hat{\beta}_qL^{q-1})\epsilon_{i,t+h-1} + e^b_{i,h}
-\end{align*}
-where, $e^b_{i,h}$ is the $(h\times i)^\text{th}$ element from $\bm{\Gamma}^b$,
-\begin{equation*}
-	y_{i,t+h-1} =
-	\begin{cases}
-		y_{i,1}:y_{i,T}       & \quad \text{for } t+h-1 \le T\\
-		\hat{y}^b_{i,T+1}:\hat{y}^b_{i,T+h-1}  & \quad \text{for } t+h-1 > T
-	\end{cases}
-\end{equation*}
-and
-\begin{equation*}
-	\epsilon_{i,t+h-1} =
-	\begin{cases}
-		\epsilon_{i,1}:\epsilon_{i,T}       & \quad \text{for } t+h-1 \le T\\
-		e^b_{i,1}:e^b_{i,h-1}  & \quad \text{for } t+h-1 > T
-	\end{cases}.
-\end{equation*}
 
-Once we obtain the $h$-step-ahead sample path for all $n$ series in the hierarchy, we stack them in the same order as $\hat{\bm{y}}_{t+h}$. Repeating the same process for $b = 1,\dots,B$ we obtain a set of $h$-step-ahead bootstrapped future paths of size $B$. We denote this as $\hat{\bm{\Upsilon}}_{T+h} = (\hat{\bm{y}}^1_{T+h},\dots,\hat{\bm{y}}^B_{T+h})'$ where the $b^\text{th}$ row of $\hat{\bm{\Upsilon}}_{T+h}$ represents the $h$-step-ahead $b^\text{th}$ sample path for all series in the hierarchy.
-
-We note that $\hat{\bm{\Upsilon}}_{T+h}$ is an empirical sample from the incoherent probability distribution of the hierarchy. Since the aggregation constraints are not imposed while generating $\hat{\bm{\Upsilon}}_{T+h}$, it is very unlikely that they lie on the coherent subspace. Thus it requires reconciliation to which we now turn our attention.
-
-\subsection{Reconciliation of incoherent future paths}
-
-To reconcile the incoherent sample paths, we follow the definition of reconciliation. We project each sample path in $\hat{\bm{\Upsilon}}_{T+h}$ to the coherent subspace via the projection $\bm{SG}$. i.e. for any $\bm{G}$ we can write,
-
-\begin{equation} \label{eq:sampleRecon_1}
-\tilde{\bm{y}}_{T+h}^b = \bm{SG}\hat{\bm{y}}_{T+h}^b,
-\end{equation}
-consequently we have,
-
-\begin{equation} \label{eq:sampleRecon_2}
-\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}\hat{\bm{\Upsilon}}'_{T+h},
-\end{equation}
-
-where, each row in $\tilde{\bm{\Upsilon}}_{T+h}$ represent a single reconciled sample path. Further $\tilde{\bm{\Upsilon}}_{T+h}$ form an empirical sample from the reconciled forecast distribution of the hierarchy. Any $\bm{G}$ matrix introduced in point forecast reconciliation (also given in Table \ref{table:ReconMethods}) can be used for this sample path reconciliation. However, in the following subsection we discuss a method to find $\bm{G}$ that is optimal for probabilistic forecasts with respect to a proper scoring rule.
 
 \subsection{Optimal reconciliation of incoherent future paths}\label{subsec:Optimal_recon}
 
-Let us now propose to find an optimal $\bm{G}$ for reconciling future paths by minimising a proper multivariate scoring rule. The respective objective function can be written as,
+As discussed previously, reconciling each draw from an incoherent distribution yields a sample from the reconciled distribution.  Therefore setting $\tilde{\bm{\Upsilon}}_{T+h} = \bm{SG}\hat{\bm{\Upsilon}}_{T+h}$ yields a matrix whose columns $\tilde{\bm{y}}^b_{T+h} := \bm{SG}\hat{\bm{y}}^b_{T+h}$ are a sample from the reconciled distribution.  In principle $\bm{G}$ matrices from popular point forecasting reconciliation methods can be used. However, we now also propose a way to find an optimal $\bm{G}$ for reconciling future paths by minimising a proper multivariate scoring rule. 
+
+The respective objective function can be written as,
 
 \begin{equation} \label{eq:Obj_func_1}
 \operatornamewithlimits{argmin}_{\bm{G}_h} \quad \E_{\bm{Q}}[S(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}, \bm{y}_{T+h})],
