@@ -81,7 +81,7 @@ dev.off()
 
 
 
-tikz('probforerec_schematic.tex',height=5)
+tikz('probforerec_schematic.tex',height=5, width = 5, standAlone = TRUE)
 plot.new()
 plot.window(xlim = c(-0.25,4),ylim = c(-0.5,5))
 lines(c(0,0),c(-1,5))
@@ -98,6 +98,9 @@ lines(c(0,1.5),c(-1,5),lty=2)
 
 lines(c(1,2.5),c(-1,5),lty=2)
 
+lines(c(0.25,1.25),c(0,0),lwd=4)
+text(0.75,0,"{\\huge $\\mathcal{B}$}",pos = 1,offset = 1)
+
 lines(c(2/7,10/7),c(1/7,5/7),lwd=4,col='red')
 text(1.5,-0.5,"{\\huge $\\color{red}{s(\\mathcal{B})}$}",pos = 4,offset = 1.2)
 arrows(1.5,-0.5,6/7,3/7,col='red')
@@ -111,3 +114,40 @@ text(3,3,"{\\huge $\\color{blue}{g^{-1}(\\mathcal{B}})$}",col='blue',pos = 3,off
 arrows(3,3,1.5,2,col='blue')
 
 dev.off()
+tools::texi2dvi('probforerec_schematic.tex',pdf=T)
+
+
+tikz('probforerec_schematic_new.tex',height=5,pointsize = 7)
+plot.new()
+plot.window(xlim = c(-0.25,4),ylim = c(-0.5,5))
+lines(c(0,0),c(-1,5))
+lines(c(-1,5),c(0,0))
+#lines(c(-1,3.5),c(-0.5,1.75),lwd=2)
+arrows(0,0,3.5,1.75,lwd=3)
+text(3.5,1.75,"{\\huge $\\mathfrak{s}$}",pos=4)
+
+#lines(c(-0.25,1),c(-1,4),lwd=2)
+arrows(0,0,1,4,lwd=3)
+text(1,4,"{\\Large ${\\bm R}$}",pos=3)
+
+lines(c(0,1.5),c(-1,5),lty=2)
+
+lines(c(1,2.5),c(-1,5),lty=2)
+
+lines(c(0.25,1.25),c(0,0),lwd=4)
+text(0.75,0,"{\\huge $\\mathcal{B}$}",pos = 1,offset = 1)
+lines(c(2/7,10/7),c(1/7,5/7),lwd=4,col='red')
+text(1.5,-0.5,"{\\huge $\\color{red}{s(\\mathcal{B})}$}",pos = 4,offset = 1.2)
+arrows(1.5,-0.5,6/7,3/7,col='red')
+
+cord.x<-c(-0.25, 0.75, 2.75, 1.75)
+cord.y<-c(-2, -2, 6, 6)
+
+polygon(cord.x,cord.y,col=adjustcolor('blue',alpha=0.1),border = NA)
+
+text(3,3,"{\\huge $\\color{blue}{g^{-1}(\\mathcal{B}})$}",col='blue',pos = 3,offset=1.2)
+arrows(3,3,1.5,2,col='blue')
+
+dev.off()
+tools::texi2dvi('probforerec_schematic_new.tex',pdf=T)
+
