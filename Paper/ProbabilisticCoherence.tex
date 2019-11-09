@@ -467,51 +467,23 @@ This can be recognised as a multivariate density in $\bm{b}$ and $\bm{a}$.  The 
 
 \subsection{Elliptical distributions}
 
-We now show that the true predictive distribution can be recovered for elliptical distributions by linear reconciliation via pre-multiplication and translation respectively by a matrix we denote ${\bm G}_{opt}$ and vector we denote ${\bm d}_{opt}$. Here, for any square matrix $\bm{C}$, $\bm{C}^{1/2}$ and $\bm{C}^{-1/2}$ are defined to satisfy $\bm{C}^{1/2}(\bm{C}^{1/2})'=\bm{C}$ and $\bm{C}^{-1/2}(\bm{C}^{-1/2})'=\bm{C}^{-1}$, for example $\bm{C}^{1/2}$ may be obtained via the Cholesky or eigenvalue decompositions.
+We now describe how the true predictive distribution can be recovered for elliptical distributions via linear reconciliation and a translation.  Let the base probabilistic forecast be from the elliptical class with location parameter $\hat{\bm{\mu}}$ and scale matrix $\hat{\bm{\Sigma}}$. The objective is to obtain a mean vector and covariance matrix for the reconciled distribution that are equal to those from the true DGP which we denote as $\bm{\mu}$ and $\bm{\Sigma}$ respectively.  
 
-\begin{theo}[Reconciliation for Elliptical Distributions]
-	Let an unreconciled probabilistic forecast come from the elliptical class with location parameter $\hat{\bm{\mu}}$ and scale matrix $\hat{\bm{\Sigma}}$. Let the true predictive distribution of the bottom level series $\bm{y}$ also belong to the elliptical class with location parameter $\bm{\beta}$ and scale matrix $\bm{\Omega}$. Also, let ${\bm{A}}$ be any $m\times n$ matrix such that ${\bm{A}}{\bm{A}}'=\bm{\Omega}$. Then the linear reconciliation mapping $g({\bm{y}})=\bm{G}_{opt}\breve{\bm{y}}+\bm{d}_{opt}$ with $\bm{G}_{opt}={\bm{A}}\hat{\bm\Sigma}^{-1/2}$ and $\bm{d}_{opt}=\bm{\beta}-\bm{G}_{opt}\hat{\bm{\mu}}$ recovers the true predictive density.
-\end{theo}
+If reconciliation is carried out by pre-multiplying by an arbitrary matrix $\bm{S}\bm{G}$ then the location and scale parameters of the reconciled distribution are $\bm{S}\bm{G}\hat{\bm{\mu}}$ and $\bm{S}\bm{G}\hat{\bm{\Sigma}}{\bm{G}}'\bm{S}'$ respectively.  If ${\bm\Omega}$ is the true covariance matrix for the bottom level series then the correct covariance matrix can be recovered by setting ${\bm G}_{\textrm{opt}}={\bm{\Omega}}^{1/2}\hat{\bm \Sigma}^{-1/2}$ where $\hat{\bm \Sigma}^{1/2}$ is any matrix such that $\hat{\bm \Sigma}=\hat{\bm \Sigma}^{1/2}(\hat{\bm \Sigma}^{1/2})'$, for example a Cholesky factor. To ensure conformability of matrix multiplication, ${\bm{\Omega}}^{1/2}$ must be a $m\times n$ matrix so can be set to the Cholesky factor of ${\bm{\Omega}}$ augmented with an additional $n-m$ columns of zeros.
 
-\begin{proof}
-	Since elliptical distributions are closed under affine transformations, and are closed under marginalisation, reconciliation of an elliptical distribution yields an elliptical distribution (although the unreconciled and reconciled distributions may be different members of the class of elliptical distributions). By similar working to the Gaussian example shown above, the scale matrix of the reconciled forecast for the bottom level series will be given by $\bm{G}_{opt}\hat{\bm{\Sigma}}\bm{G}_{opt}'$, while the location matrix is given by $\bm{G}_{opt}\hat{\bm{\mu}}+\bm{d}_{opt}$. Substituting the values of $\bm{G}_{opt}$ and $\bm{d}_{opt}$, given in the theorem, the reconciled scale matrix is
-	\[
-	\tilde{\bm{\Sigma}}_{opt}
-	= {\bm{A}}\hat{\bm\Sigma}^{-1/2}\hat{\bm{\Sigma}}\left(\hat{\bm\Sigma}^{-1/2}\right)'{\bm{A}}'
-	= \bm{\Omega}\,
-	\]
-    and the reconciled location vector is
-	\[
-	\bm{G}_{opt}\hat{\bm{\mu}}+\bm{\beta}-\bm{G}_{opt}\hat{\bm{\mu}}
-	= \bm{\beta}.
-	\]
-\end{proof}
+We note that in general ${\bm S}{\bm G}_{\textrm{opt}}$ is not a projection matrix.  As a consequence, even if the base forecasts are unbiased (i.e. $\hat{\bm{\mu}}=\bm{\mu}$) the reconciled forecasts will not be since ${\bm S}{\bm G}_{\textrm{opt}}\hat{\bm{\mu}}\neq\bm{\mu}$.  To recover the correct mean, reconciliation should also include the addition of ${\bm d}_{\textrm{opt}}={\bm\mu}-{\bm S}{\bm G}_{\textrm{opt}}\hat{\bm{\mu}}$.
 
-A number of insights can be drawn from this theorem. First, although a linear function $g(.)$ can be used to recover the true predictive in the elliptical case, the same does not hold in general. Second, $g(.)$ is not, in general, a projection matrix. The conditions for which a the true predictive density can be recovered by a projection are given below.
+Although ${\bm S}{\bm G}_{\textrm{opt}}$ is not a projection matrix in general, there are some conditions under which it will be.  To illustrate let
+\[
+\hat{\bm{\Sigma}}=\bm{\Sigma}+{\bm D}=\bm{S}\bm{\Omega}{\bm{S}}'+{\bm D}
+\]
+In general ${\bm D}$ will be a rank $n$ matrix.  However if $\textrm{rank}({\bm D})\le n-m$ then ${\bm D}$ can be decomposed (via an eigenvalue decomposition) as ${\bm R}{\bm \Lambda}{\bm R}'$. Here ${\bm R}$ is an $n\times (n-m)$ matrix that spanning the a optimal `direction' of projection.  The reconciled variance covariance matrix will be given by
+\begin{align}
+\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'&=\bm{S}\bm{G}\bm{\Sigma}\bm{G}'\bm{S}'+\bm{S}\bm{G}{\bm D}\bm{G}'\bm{S}'\nonumber\\&=\bm{S}\bm{G}\bm{S}\bm{\Omega}{\bm{S}}'\bm{G}'\bm{S}'+\bm{S}\bm{G}{\bm R}{\bm \Lambda}{\bm R}'\bm{G}'\bm{S}'\nonumber\\&=\bm{S}\bm{\Omega}{\bm{S}}'\nonumber\,,
+\end{align}
+where the above holds since ${\bm G}{\bm S}=\bm{I}$ and ${\bm G}{\bm R}={\bm 0}$ when $\bm{SG}$ is a projection along $\bm R$ onto $\mathfrak{s}$.  With respect to the location, if $\bm{SG}$ is a projection then reconciled forecasts will be unbiased as long as the base forecasts are also unbiased.  When base forecasts are biased they can be bias corrected before reconciliation as described by \cite{PanEtAl2019HF} in the point forecasting setting.
 
-\begin{theo}[True predictive via projection]
-	Assume that the true predictive distribution is elliptical with location $\bm{\mu}$ and scale $\bm{\Sigma}$. Consider reconciliation via a projection $g(\bm{y})=(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\bm{y}$. The true predictive distribution can be recovered via reconciliation of an elliptical distribution with location $\hat{\bm{\mu}}$ and scale $\hat{\bm{\Sigma}}$ when the following conditions hold:
-	\begin{align}
-		sp(\hat{\bm\mu}-\bm{\mu})&\subset sp(\bm{R})\\
-		sp(\hat{\bm{\Sigma}}^{1/2}-\bm{\Sigma}^{1/2})&\subset sp(\bm{R})\\
-	\end{align}
-\end{theo}
-
-\begin{proof}
-	The reconciled location vector will be given by
-	\begin{align*}
-		\tilde{\bm{\mu}}&=\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\hat{\bm{\mu}}\\
-		&=\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\left(\hat{\bm{\mu}}+\bm{\mu}-\bm{\mu}\right)\\
-		&=\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\bm{\mu}+\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}\left(\hat{\bm{\mu}}-\bm{\mu}\right).
-	\end{align*}
-	Since $\bm{S}(\bm{R}'_{\perp}\bm{S})^{-1}\bm{R}'_{\perp}$ is a projection onto $\mathfrak{s}$ and $\bm{\mu}\in\mathfrak{s}$, the first term simplifies to $\bm{\mu}$. If $\bm{\mu}-\hat{\bm{\mu}}$ lies in the span of $\bm{R}$, then multiplication by $\bm{R}'_{\perp}$ reduces the second term to $\bm{0}$. By a similar argument it can be shown that $\tilde{\bm{\Sigma}}^{1/2}=\bm{\Sigma}^{1/2}$. The closure property of elliptical distributions under affine transformations ensures that the full true predictive distribution can be recovered.
-\end{proof}
-
-Although these conditions will rarely hold in practice and only apply to a limited class of distributions, they do provide some insight into selecting a projection for reconciliation. If the value of $\hat{\bm{\mu}}$ were equi-probable in all directions, then a projection orthogonal to $\mathfrak{s}$ would be a sensible choice for $\bm{R}$ since it would in some sense represent a `median' direction for $\bm{\mu}-\hat{\bm{\mu}}$. However, the one-step-ahead in-sample errors are usually correlated suggesting that $\hat{\bm{\mu}}$ is more likely to fall in some directions than others. Therefore an orthogonal projection after transformation by the inverse of the one-step-ahead in-sample error covariance matrix may be more intuitively appealing. This is exactly what the MinT projection provides, and we demonstrate this in a simulation setting in the following subsection.
-
-
-
-%However, these expressions do provide some insight on why some choices for $\bm{G}$ in the point forecast reconciliation literature may also work well for probabilistic forecasts. To illustrate, first rearrange the equation for the optimal value of $\bm{G}_{opt}={\bm\Omega}^{1/2}\hat{\bm\Sigma}^{-1/2}$ as ${\bm\Omega}^{1/2}=\bm{G}_{opt}\hat{\bm\Sigma}^{1/2}$. For arbitrary $\bm{G}\hat{\bm\Sigma}^{1/2}$ is an approximation for ${\bm\Omega}^{1/2}$. This approximation has similarities with the way bottom-level estimates are produced for point forecast reconciliation. Rather than mapping a vector of point forecasts to reconcilied bottom-level forecasts, the columns of $\hat{\bm\Sigma}^{1/2}$ are mapped to an approximation of the columns of ${\bm\Omega}^{1/2}$. The value for $\tilde{\bm{\mu}}_{opt}$ includes a projection of $\hat{\bm{\mu}}$ onto $\mathfrak{s}$. While it is infeasible to obtain the translation $\bm{d}$, it is worthwhile noting that this measures the difference between the reconciled mean and true mean.
+%Although these conditions will rarely hold in practice and only apply to a limited class of distributions, they do provide some insight into selecting a projection for reconciliation. If the value of $\hat{\bm{\mu}}$ were equi-probable in all directions, then a projection orthogonal to $\mathfrak{s}$ would be a sensible choice for $\bm{R}$ since it would in some sense represent a `median' direction for $\bm{\mu}-\hat{\bm{\mu}}$. However, the one-step-ahead in-sample errors are usually correlated suggesting that $\hat{\bm{\mu}}$ is more likely to fall in some directions than others. Therefore an orthogonal projection after transformation by the inverse of the one-step-ahead in-sample error covariance matrix may be more intuitively appealing. This is exactly what the MinT projection provides, and we demonstrate this in a simulation setting in the following subsection.
 
 \section{Sample based solution: A novel non-parametric bootstrap approach}\label{sec:non-para}
 
