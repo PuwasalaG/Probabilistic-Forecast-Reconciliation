@@ -14,6 +14,7 @@
 \usetikzlibrary{arrows,positioning,shapes,fit,calc}
 \usepackage{amsfonts}
 \usepackage[section]{placeins}
+\usepackage{amsthm,algorithm,algorithmicx,algpseudocode}
 \pdfminorversion=4
 % NOTE: To produce blinded version, replace "0" with "1" below.
 \newcommand{\blind}{1}
@@ -509,65 +510,8 @@ The following method only requires that one step ahead in-sample `forecasts' $\h
 
 The $\bm{\mathcal{E}}^b$ can then be used together with forecasts $\hat{\bm{y}}_{T+h}$ for $h=1,\ldots,H$ to recursively form $B$ sample paths of the full hierarchy.  As a simple example consider the case where each forecast comes from (the same) AR(1) model and $H=2$.  Then $\hat{{y}}^b_{i,T+1}=\phi{{y}}_{i,T}+e^b_{i,1}$ and $\hat{{y}}^b_{i,T+2}=\phi\hat{{y}}^b_{i,T+1}+e^b_{i,2}$ for each $i=1,\ldots,n$ and $b=1,\ldots,B$ and where $e^b_{i,h}$ is the element in row $i$ and column $h$ of $\bm{\mathcal{E}}^b$.  Each future path can be stacked into a vector $\hat{\bm{y}}^b_{T+h}:=(\hat{{y}}^b_{1,T+h},\ldots,\hat{{y}}^b_{n,T+h})'$ which in turn are stacked into a $n\times B$ matrix $\hat{\bm{\Upsilon}}_{T+h} = (\hat{\bm{y}}^1_{T+h},\dots,\hat{\bm{y}}^B_{T+h})$.
 
+As discussed previously, reconciling each draw from an incoherent distribution yields a sample from the reconciled distribution.  Therefore setting $\tilde{\bm{\Upsilon}}_{T+h} = \bm{SG}\hat{\bm{\Upsilon}}_{T+h}$ yields a matrix whose columns $\tilde{\bm{y}}^b_{T+h} := \bm{SG}\hat{\bm{y}}^b_{T+h}$ are a sample from the reconciled distribution.  In principle $\bm{G}$ matrices from popular point forecasting reconciliation methods can be used. In Section~\ref{subsec:Optimal_recon}, we propose a way to find an optimal $\bm{G}$ for reconciling future paths by minimising a proper multivariate scoring rule. 
 
-
-\subsection{Optimal reconciliation of incoherent future paths}\label{subsec:Optimal_recon}
-
-As discussed previously, reconciling each draw from an incoherent distribution yields a sample from the reconciled distribution.  Therefore setting $\tilde{\bm{\Upsilon}}_{T+h} = \bm{SG}\hat{\bm{\Upsilon}}_{T+h}$ yields a matrix whose columns $\tilde{\bm{y}}^b_{T+h} := \bm{SG}\hat{\bm{y}}^b_{T+h}$ are a sample from the reconciled distribution.  In principle $\bm{G}$ matrices from popular point forecasting reconciliation methods can be used. However, we now also propose a way to find an optimal $\bm{G}$ for reconciling future paths by minimising a proper multivariate scoring rule. 
-
-The respective objective function can be written as,
-
-\begin{equation} \label{eq:Obj_func_1}
-\operatornamewithlimits{argmin}_{\bm{G}_h} \quad \E_{\bm{Q}}[S(\tilde{\nu}_{\bm{G}_h}, \bm{y})],
-\end{equation}
-where $\tilde{\nu}_{\bm{G}_h}$ is the reconciled measure with respect to $\bm{G}_h$, $\bm{Q}$ is the true predictive distribution and $\bm{y}\sim\bm{Q}$ and $S(.,.)$ is a proper scoring rule \citep[see][and references therein]{Gneiting2007,Gneiting2014}. A scoring rule $S(P,\bm{\omega})$ is a function that takes two inputs, a probabilistic forecast $P$ and a realisation $\bm{\omega}$ from the true data generating process $Q$.  A scoring rule is {\em proper} if $\E_{\bm{Q}}[S(Q,\bm{\omega})] \le \E_{\bm{Q}}[S(P,{\bm\omega})]$ for all $P$. When this inequality is strict for $P\neq Q$, the scoring rule is said to be {\em strictly proper}. Throughout, we follow the convention of negatively-oriented scoring rules; smaller values of the score indicate more accurate forecasts.  The specific scoring rules that we use are discussed in Section \ref{sec:evaluation}. 
-
-The subscript $h$ on $\bm{G}$ is used to emphasise distinct $\bm{G}$ matrices for different forecast horizons. The expectation $E_{\bm{Q}}$ over the true forecast distribution $\bm{Q}$ can be approximated through sample mean and we can rewrite the objective function as follows. 
-
-\begin{equation} \label{eq:Obj_func_apprx}
-\operatornamewithlimits{argmin}_{\bm{G}_h} \quad \frac{1}{N}\sum_{j=1}^{N}[S(\bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h, j}, \bm{y}_{T+h, j})],
-\end{equation}
-
-We now discuss our algorithm for generating optimally reconciled bootstrapped future paths. 
-
-\begin{enumerate}
-	
-	\item Consider a rolling window of $L$ observations. We call this the ``outer'' rolling window. Inside this outer rolling window consider an ``inner'' rolling window of $T$ observations.
-	
-	\item For this inner rolling window, fit univariate models to each series in the hierarchy. 
-	
-	\item Based on these fitted models, generate $B$ number of $h=1$ to $H$ steps-ahead incoherent future paths incorporating bootstrap errors as described in Subsection \ref{Subsec:Incoherent_samplePaths}. Thus we get $\{\hat{\bm{\Upsilon}}_{T+1,j=1}, \hat{\bm{\Upsilon}}_{T+2,j=1}, \hat{\bm{\Upsilon}}_{T+H,j=1}\}$.
-	
-	\item Repeat step (2) and (3) for $j=1,\dots,N$ by rolling the inner window one step ahead at a time.
-	
-	\item Collect $\{\hat{\bm{\Upsilon}}_{T+h,j=1},\dots,\hat{\bm{\Upsilon}}_{T+h,j=N}\}$ for $h=1,\dots,H$ into separate arrays of matrices.
-	
-	\item For each forecast horizon $h$, estimate the optimal $\bm{G}_h$ that will reconcile $\{\hat{\bm{\Upsilon}}_{T+h,j=1},\dots,\hat{\bm{\Upsilon}}_{T+h,j=N}\}$, by minimising the objective function in equation (\ref{eq:Obj_func_apprx}). Denote this optimum as $\bm{G}^{Opt}_h$.
-		
-	\item Roll the inner rolling window another one step ahead and repeat steps (2) and (3). Denote these future paths by $\hat{\bm{\Upsilon}}_{T+h}$ for $h=1,\dots,H$.
-	
-	\item Compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,\dots,H$ using $\bm{G}^{Opt}_h$.
-		
-\end{enumerate}
-
-
-
-
-%and the results are presented in Section \ref{Appen:ReparaG_sim} in Appendix. We note that the 
-
-
-%We propose to find an optimal $\bm{G}$ for reconciling future paths by minimizing a proper scoring rule defined in \ref{eq:prop_score}. Scoring rule is a numerical value $Sc(\breve{\bm{Y}},\bm{y})$ assign to each pair $(\breve{\bm{Y}},\bm{y})$, where $\breve{\bm{Y}}$ is a $n$-dimensional random vector from the forecast distribution $\breve{\bm{F}}$ and $\bm{y}$ is a realization. A proper scoring rule is defined as,
-%\begin{equation}\label{eq:(2.3)}
-%\E_{\bm{G}}[Sc(\bm{Y},\bm{y})] \le \E_{\bm{G}}[Sc(\breve{\bm{Y}},\bm{y})],
-%\end{equation}
-%where $\bm{Y}$ is a random variable from the true distribution $\bm{G}$ \citep{Gneiting2014}.
-%
-%Thus the minimization problem for finding the optimal $\bm{R}_\bot$ will be
-%\begin{equation}
-%\operatornamewithlimits{argmin}_{\bm{R}'_\bot} \quad \E_{\bm{G}}[Sc(\bm{S}(\bm{R}'_\bot \bm{S})^{-1}\bm{R}'_\bot\bm{y}_{t+h}^b, \bm{y}_{t+h})].
-%\end{equation}
-
-We implement this algorithm in Section \ref{sec:Bootsrap-sim} to reconcile probabilistic forecasts in a simulation setting. Now we turn to the discussion of evaluation criteria for hierarchical probabilistic forecasts.
 
 %We generate data with a sample size of $T=501$. Univariate ARIMA models are selected for each series using the \textit{auto.arima} function in the \textit{forecast} package \citep{hyndman2017forecasting} in R \citep{Rcore}. The same package was used to fit each series independently using the first 500 observations, and evaluate 1-step ahead base (incoherent) probabilistic forecasts. These were then reconciled using different projections summarised in Table~\ref{table:2}. This process was replicated using $1000$ different data sets from the same data generating processes.
 
@@ -579,7 +523,7 @@ We implement this algorithm in Section \ref{sec:Bootsrap-sim} to reconcile proba
 
 \section{Evaluation of hierarchical probabilistic forecasts}\label{sec:evaluation}
 
-%An important issue in all forecasting problems is evaluating forecast accuracy. In the probabilistic setting, it is common to evaluate forecasts using proper scoring rules \citep[see][and references therein]{Gneiting2007,Gneiting2014}. Throughout, we follow the convention of negatively-oriented scoring rules such that smaller values of the score indicate more accurate forecasts.  
+An important issue in all forecasting problems is evaluating forecast accuracy. In the probabilistic setting, it is common to evaluate forecasts using proper scoring rules \citep[see][and references therein]{Gneiting2007,Gneiting2014}. Throughout, we follow the convention of negatively-oriented scoring rules such that smaller values of the score indicate more accurate forecasts.  In general, a scoring rule is {\em proper} if $\E_{Q}[K(Q,\bm{\omega})] \le \E_{Q}[S(P,{\bm\omega})]$ for all $P$. When this inequality is strict for all $P\neq Q$, the scoring rule is said to be {\em strictly proper}. Throughout, we follow the convention of negatively-oriented scoring rules; smaller values of the score indicate more accurate forecasts.
 
 Since hierarchical forecasting is by its very nature a multivariate problem (the linear constraints affect all variables), our focus is on multivariate scoring rules.  We consider the log score (LS), energy score (ES) and the variogram score (VS).  However, in our simulations we evaluate individual margins of interest using the univariate counterparts of the log score and energy score (where the latter is the CRPS).
 
@@ -640,6 +584,40 @@ The same property does not hold for all scores. For example, the energy score is
 \section{Simulations}
 
 We now present the simulation study carried-out to evaluate the performance of probabilistic forecasts in both parametric and non-parametric setting. Let us first discuss the data generating process.
+
+\subsection{Optimal reconciliation of incoherent future paths}\label{subsec:Optimal_recon}
+
+{\color{blue} The respective objective function can be written as,
+
+\begin{equation} \label{eq:Obj_func_1}
+\operatornamewithlimits{argmin}_{\bm{G}_h} \quad \E_{Q}[K(\tilde{\nu}_{\bm{G}_h}, \bm{y})],
+\end{equation}
+where $\tilde{\nu}_{\bm{G}_h}$ is the reconciled measure with respect to $\bm{G}_h$ (the subscript $h$ emphasises distinct matrices for different forecast horizons), $Q$ is the true predictive distribution, $\bm{y}\sim Q$ and $K(.,.)$ is a proper scoring rule \citep[see][and references therein]{Gneiting2007,Gneiting2014}.  
+
+To approximate the expectation in Equation~\ref{eq:Obj_func_1} we break up the training sample into $J$ rolling windows each of length $T-J+1$.  For the $j^{th}$ rolling window we use $\bm{y}_{j},\ldots,\bm{y}_{T-J+j}$ to evaluate a $h$-step ahead base probabilistic forecast $\hat{\nu}$.  Reconciling with respect to $\bm{G}_h$ yields the distribution $\tilde{\nu}_{\bm{G}_h}$.  The expectation in Equation~\ref{eq:Obj_func_1} can then be approximated by
+
+\begin{equation} \label{eq:Obj_func_apprx} \E_{Q}[K(\tilde{\nu}_{\bm{G}_h}, \bm{y})]\approx\frac{1}{J}\sum_{j=1}^{J}K(\tilde{\nu}_{\bm{G}_h},\bm{y}_{T-J+j+h})\nonumber
+\end{equation}
+
+
+%\begin{algorithm}
+%	\caption{Algorithm for finding $\bm{G}_{\textrm{opt}}$ \label{alg:gopt}}.
+%	\begin{algorithmic}[1]
+%		\Procedure{WFPBB}{$\bm{G},L,J,T$}.
+%		\For{$l=1:(T-L)$}
+%		\For{$j=1:(L-J)$}
+%		\State Set training data as $t=l+j-1,\ldots,l+J-1$; 
+%		\State Draw from the $h$-step ahead base forecast;
+%		\State Compute the score as;
+%		\EndFor
+%		\EndFor
+%		\EndProcedure
+%	\end{algorithmic}
+%\end{algorithm}
+
+
+We implement this algorithm in Section \ref{sec:Bootsrap-sim} to reconcile probabilistic forecasts in a simulation setting. Now we turn to the discussion of evaluation criteria for hierarchical probabilistic forecasts.}
+
 
 \subsection{Data generating process (DGP)} \label{subsec:DGP}
 
