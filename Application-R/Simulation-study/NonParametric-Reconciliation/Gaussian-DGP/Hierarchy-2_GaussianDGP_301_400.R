@@ -19,6 +19,8 @@ library(tidyverse)
 library(plyr)
 library(purrr)
 library(furrr)
+library(popbio)
+library(gdata)
 
 
 source("Optim-functions.R")
@@ -31,15 +33,16 @@ set.seed(1989)
 
 start<-Sys.time()
 
-# C <- 1      #C - Length of the outer rolling window
-N <- 2500   #N - Length of the original data dagenerated
-L <- 500    #L - Length of the inner rolling window 
-r <- 100    #r - Length of the training set using to learn G matrix
-m <- 4      #m - Number of bottom level series
-B <- 1000   #B - The size of the future paths generated 
-H <- 3      #H - Forecast horizons
-
 Bottom_level <- read.csv("Bottom_level.csv")[,-1]
+
+# C <- 1                  #C - Length of the outer rolling window
+N <- nrow(Bottom_level)   #N - Length of the original data dagenerated
+L <- 500                  #L - Length of the inner rolling window 
+r <- 100                  #r - Length of the training set using to learn G matrix
+m <- 4                    #m - Number of bottom level series
+B <- 1000                 #B - The size of the future paths generated 
+H <- 3                    #H - Forecast horizons
+
 
 #Generating the hierarchy
 
@@ -92,12 +95,12 @@ DF_MultiV <- tibble("Replication" = integer(),
 #Simulation starts from here.
 Start_sim <- Sys.time()
 
-for (j in 201:300)#1:250
+for (j in 301:400)#1:250
   
 {
   DF_MultiV <- DF_MultiV %>% add_row("Replication" = j)
   
-  AllTS_a <- AllTS[j : (605+j),]
+  AllTS_a <- AllTS[j : (602+j),]
   
   Testing_h1 <- matrix(0,r,n)
   Testing_h2 <- matrix(0,r,n)
@@ -167,7 +170,8 @@ for (j in 201:300)#1:250
     }
     
     
-    Index <- base::sample(c(1:(nrow(Residuals_all_training)-(H-1))), size = B , replace = TRUE)
+    Index <- base::sample(c(1:(nrow(Residuals_all_training)-(H-1))), size = B, 
+                          replace = TRUE)
     Index_seq <- matrix(0, B, H)
     
     for (k in 1:B) {
@@ -546,8 +550,8 @@ End_sim <- Sys.time()
 
 DF_MultiV[complete.cases(DF_MultiV[ , "R-method"]),] -> DF_MultiV
 
-write.csv(x=DF_MultiV, file = "Results/DF_MultiV_201-300.csv")
-save.image("Results/Hierarchy-2_GumbelwithBeta_201_300.Rdata")
+write.csv(x=DF_MultiV, file = "Results/DF_MultiV_301-400.csv")
+save.image("Results/Hierarchy-2_GaussianDGP_301_400.Rdata")
 #View(DF_MultiV)
 
 

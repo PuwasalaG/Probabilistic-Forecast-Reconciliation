@@ -109,18 +109,19 @@ DF_MultScore_SS_AllTS_GausDGP %>%
   ungroup() %>% 
   add_column(SS_E.LS = SS_E.LS) -> SkillScore_full_hier
 
+
 SkillScore_full_hier %>% 
   gather(key = key, value = value, SS_E.ES, SS_E.VS, SS_E.LS) %>% 
   unite(temp, Forecast.Horizon, key) %>% 
   spread(key = temp, value = value) %>% 
-  dplyr::select(R.method, `1_SS_E.ES`, `1_SS_E.VS`, `1_SS_E.LS`, 
-         `2_SS_E.ES`, `2_SS_E.VS`, `2_SS_E.LS`, 
-         `3_SS_E.ES`, `3_SS_E.VS`, `3_SS_E.LS`) %>% 
-  rename("ES" = `1_SS_E.ES`, "VS" = `1_SS_E.VS`, "LS" = `1_SS_E.LS`,
-         "ES" = `2_SS_E.ES`, "VS" = `2_SS_E.VS`, "LS" = `2_SS_E.LS`,
-         "ES" = `3_SS_E.ES`, "VS" = `3_SS_E.VS`, "LS" = `3_SS_E.LS`) %>% 
+  dplyr::select(R.method, `1_SS_E.LS`, `2_SS_E.LS`, `3_SS_E.LS`, 
+         `1_SS_E.ES`, `2_SS_E.ES`, `3_SS_E.ES`, 
+         `1_SS_E.VS`, `2_SS_E.VS`, `3_SS_E.VS`) %>% 
+  rename("1" = `1_SS_E.LS`, "2" = `2_SS_E.LS`, "3" = `3_SS_E.LS`, 
+         "1" = `1_SS_E.ES`, "2" = `2_SS_E.ES`, "3" = `3_SS_E.ES`, 
+         "1" = `1_SS_E.VS`, "2" = `2_SS_E.VS`, "3" = `3_SS_E.VS`)%>% 
    kable(format = "latex") %>% kable_styling("striped") %>% 
-  kableExtra::add_header_above(c(" " = 1, "h=1" = 3, "h=2" = 3, "h=3" = 3))
+  kableExtra::add_header_above(c(" " = 1, "Log Score(%)" = 3, "Energy Score(%)" = 3, "Variogram Score(%)" = 3))
 
 ```
 
@@ -230,14 +231,14 @@ SkillScore_full_hier %>%
   gather(key = key, value = value, SS_E.ES, SS_E.VS, SS_E.LS) %>% 
   unite(temp, Forecast.Horizon, key) %>% 
   spread(key = temp, value = value) %>% 
-  dplyr::select(R.method, `1_SS_E.ES`, `1_SS_E.VS`, `1_SS_E.LS`, 
-                `2_SS_E.ES`, `2_SS_E.VS`, `2_SS_E.LS`, 
-                `3_SS_E.ES`, `3_SS_E.VS`, `3_SS_E.LS`) %>% 
-  rename("ES" = `1_SS_E.ES`, "VS" = `1_SS_E.VS`, "LS" = `1_SS_E.LS`,
-         "ES" = `2_SS_E.ES`, "VS" = `2_SS_E.VS`, "LS" = `2_SS_E.LS`,
-         "ES" = `3_SS_E.ES`, "VS" = `3_SS_E.VS`, "LS" = `3_SS_E.LS`) %>% 
-  kable(format = "latex") %>% kable_styling("striped") %>% 
-  kableExtra::add_header_above(c(" " = 1, "h=1" = 3, "h=2" = 3, "h=3" = 3))
+  dplyr::select(R.method, `1_SS_E.LS`, `2_SS_E.LS`, `3_SS_E.LS`, 
+         `1_SS_E.ES`, `2_SS_E.ES`, `3_SS_E.ES`, 
+         `1_SS_E.VS`, `2_SS_E.VS`, `3_SS_E.VS`) %>% 
+  rename("1" = `1_SS_E.LS`, "2" = `2_SS_E.LS`, "3" = `3_SS_E.LS`, 
+         "1" = `1_SS_E.ES`, "2" = `2_SS_E.ES`, "3" = `3_SS_E.ES`, 
+         "1" = `1_SS_E.VS`, "2" = `2_SS_E.VS`, "3" = `3_SS_E.VS`)%>% 
+   kable(format = "latex") %>% kable_styling("striped") %>% 
+  kableExtra::add_header_above(c(" " = 1, "Log Score(%)" = 3, "Energy Score(%)" = 3, "Variogram Score(%)" = 3))
 
 ```
 

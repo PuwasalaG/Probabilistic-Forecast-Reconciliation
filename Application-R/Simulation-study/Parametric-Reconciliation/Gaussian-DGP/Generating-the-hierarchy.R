@@ -14,13 +14,8 @@ require(copula)
 
 set.seed(1989)
 
-N <- 2500
-L <- 500
-r <- 500
+N <- 2002
 m <- 4
-B <- 5000
-H <- 1
-
 
 #Randomly generating errors from a Gaussian distribution 
 Bottom_pop_cov<-matrix(c(5,3.1,0.6,0.4,3.1,4,0.9,1.4,0.6,
@@ -63,15 +58,15 @@ for (i in 1:m)
 }
 
 
-Vt <- rnorm(n = N, mean = 0, sd = sqrt(19)) #u_t
-Wt <- rnorm(n = N, mean = 0, sd = sqrt(18)) #v_t
+Ut <- rnorm(n = N, mean = 0, sd = sqrt(28)) #u_t
+Vt <- rnorm(n = N, mean = 0, sd = sqrt(22)) #v_t
 
 Bottom_level_noisy <- matrix(0, nrow = N, ncol = m)
 
-Bottom_level_noisy[,1] <- Bottom_level[,1]+Vt-0.5*Wt
-Bottom_level_noisy[,2] <- Bottom_level[,2]-Vt-0.5*Wt
-Bottom_level_noisy[,3] <- Bottom_level[,3]+Vt+0.5*Wt
-Bottom_level_noisy[,4] <- Bottom_level[,4]-Vt+0.5*Wt
+Bottom_level_noisy[,1] <- Bottom_level[,1]+Ut-0.5*Vt
+Bottom_level_noisy[,2] <- Bottom_level[,2]-Ut-0.5*Vt
+Bottom_level_noisy[,3] <- Bottom_level[,3]+Ut+0.5*Vt
+Bottom_level_noisy[,4] <- Bottom_level[,4]-Ut+0.5*Vt
 
 
 write.csv(Bottom_level_noisy, "Bottom_level.csv")

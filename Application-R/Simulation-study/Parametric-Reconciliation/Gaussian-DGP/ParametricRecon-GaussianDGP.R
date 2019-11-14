@@ -16,10 +16,10 @@ source("Score-functions.R")
 
 set.seed(1989)
 
-start<-Sys.time()
+start <- Sys.time()
 
 C <- 1000   #C - Length of the outer rolling window
-N <- 2500   #N - Length of the original data dagenerated
+N <- 2002  #N - Length of the original data dagenerated
 L <- 500    #L - Length of the rolling window 
 m <- 4      #m - Number of bottom level series
 B <- 2500   #B - Number of random numbers generated from the predictive distributions
