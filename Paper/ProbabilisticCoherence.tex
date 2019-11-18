@@ -350,8 +350,7 @@ In the context of probabilistic forecast reconciliation there could be two motiv
 
 \subsection{Scoring Rules for Hierarchical Time Series}
 
-\textcolor{red}{Tas to fix}
-Section~\ref{sec:ProbForecasts} describes how the density of a reconciled forecast can be derived from the density of the incoherent base forecast. Therefore it may seem sensible to compare base forecasts to reconciled forecasts using log score. However, the following theorem shows that the log score is improper in this setting.
+When a expression for the density of an incoherent base forecast is available, Section~\ref{sec:ProbForecasts} describes how the density of a reconciled forecast can be recovered.  With both densities can be computed, the most straightforward scoring rule to use to compare them to one another is the log score, which is simply given by the log density evaluated at the realisation.  However, the following theorem shows that the log score is improper in the setting of comparing incoherent to coherent forecasts.
 
 \begin{theo}[Impropriety of log score]\label{theo:logS_improp}
 	When the true data generating process is coherent, then the log score is improper with respect to the class of incoherent measures.
