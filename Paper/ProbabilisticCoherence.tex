@@ -282,24 +282,19 @@ This can be recognised as a multivariate Gaussian density in $\bm{b}$ and $\bm{a
 
 We now describe how the true predictive distribution can be recovered for elliptical distributions via linear reconciliation and a translation.  Let the base probabilistic forecast be from the elliptical class with location parameter $\hat{\bm{\mu}}$ and scale matrix $\hat{\bm{\Sigma}}$. The objective is to obtain a mean vector and covariance matrix for the reconciled distribution that are equal to those from the true DGP which we denote as $\bm{\mu}$ and $\bm{\Sigma}$ respectively.
 
-If reconciliation is carried out by pre-multiplying by an arbitrary matrix $\bm{S}\bm{G}$ then the location and scale parameters of the reconciled distribution are $\bm{S}\bm{G}\hat{\bm{\mu}}$ and $\bm{S}\bm{G}\hat{\bm{\Sigma}}{\bm{G}}'\bm{S}'$ respectively.  If ${\bm\Omega}$ is the true covariance matrix for the bottom-level series then the correct covariance matrix can be recovered by setting ${\bm G}_0={\bm{\Omega}}^{1/2}\hat{\bm \Sigma}^{-1/2}$ where $\hat{\bm \Sigma}^{1/2}$ is any matrix such that $\hat{\bm \Sigma}=\hat{\bm \Sigma}^{1/2}(\hat{\bm \Sigma}^{1/2})'$, for example a Cholesky factor. To ensure conformability of matrix multiplication, ${\bm{\Omega}}^{1/2}$ must be a $m\times n$ matrix so can be set to the Cholesky factor of ${\bm{\Omega}}$ augmented with an additional $n-m$ columns of zeros.
+If reconciliation is carried out by pre-multiplying by an arbitrary matrix $\bm{S}\bm{G}$ then the location and scale parameters of the reconciled distribution are $\bm{S}\bm{G}\hat{\bm{\mu}}$ and $\bm{S}\bm{G}\hat{\bm{\Sigma}}{\bm{G}}'\bm{S}'$ respectively.  If ${\bm\Omega}$ is the true scale matrix for the bottom-level series then the correct scale matrix can be recovered by setting ${\bm G}_0={\bm{\Omega}}^{1/2}\hat{\bm \Sigma}^{-1/2}$ where $\hat{\bm \Sigma}^{1/2}$ is any matrix such that $\hat{\bm \Sigma}=\hat{\bm \Sigma}^{1/2}(\hat{\bm \Sigma}^{1/2})'$, for example a Cholesky factor. To ensure conformability of matrix multiplication, ${\bm{\Omega}}^{1/2}$ must be a $m\times n$ matrix so can be set to the Cholesky factor of ${\bm{\Omega}}$ augmented with an additional $n-m$ columns of zeros.
 
 We note that in general ${\bm S}{\bm G}_0$ is not a projection matrix.  As a consequence, even if the base forecasts are unbiased (i.e. $\hat{\bm{\mu}}=\bm{\mu}$) the reconciled forecasts will not be since ${\bm S}{\bm G}_{0}\hat{\bm{\mu}}\neq\bm{\mu}$.  To recover the correct mean, reconciliation should also include translation by ${\bm d}_{0}={\bm\mu}-{\bm S}{\bm G}_{0}\hat{\bm{\mu}}$.
 
-Although ${\bm S}{\bm G}_0$ is not a projection matrix in general, there are some conditions under which it will be.  To illustrate let
-\[
-\hat{\bm{\Sigma}}=\bm{\Sigma}+{\bm D}=\bm{S}\bm{\Omega}{\bm{S}}'+{\bm D}\,.
-\]
-If reconciliation is carried out via a projection onto $\mathfrak{s}$, then $\bm{S}\bm{G}\bm{S}=\bm{S}$ and
-\begin{align}
-\tilde{\bm{\Sigma}}&=\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'\nonumber\\
-&\bm{S}\bm{G}\bm{S}\bm{\Omega}\bm{S}'\bm{G}'{\bm{S}}'+\bm{S}\bm{G}{\bm D}\bm{G}'\bm{S}'\nonumber\\
-&\bm{S}\bm{\Omega}{\bm{S}}'+\bm{S}\bm{G}{\bm D}\bm{G}'\bm{S}'\nonumber\\
-&\bm{\Sigma}+\bm{S}\bm{G}{\bm D}\bm{G}'\bm{S}'\nonumber\,.
-\end{align}
-Therefore to recover the true predictive using a projection, some ${\bm G}_0$ must be found such that ${\bm G}_0{\bm D}=\bm{0}$. Let the eigenvalue decomposition of $\bm {D}$ be given by  ${\bm R}{\bm \Lambda}{\bm R}'$ , where ${\bm R}$ is an $n\times q$ matrix with $q=\textrm{rank}({\bm{D}})$ and ${\bm\Lambda}$ is an $q\times q$ diagonal matrix containing non-zero eigenvalues of ${\bm D}$.  By the rank nullity theorem, $\bm{R}$ will have an orthogonal complement $\bm{R}_{\perp}$ of dimension $n\times (n-q)$.  If $q=n-m$ then the number of columns of $\bm{R}_{\perp}$ is $m$ and ${\bm G}_0$ can be formed as the $m\times n$ matrix $(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$.  If $q<n-m$ the number of columns of $\bm{R}_{\perp}$ is greater than $m$, and any $m$ columns of $\bm{R}_{\perp}$ can be used to form ${\bm G}_0$ in a similar fashion.  However when $q>n-m$, $\bm{R}_{\perp}$ is less than $m$ and no such $m\times n$ matrix ${\bm G}_0$ can be formed.  Therefore the true predictive can only be recovered via a projection when $\textrm{rank}({\bm D})\leq n-m$.
- 
-With respect to the location, if $\bm{SG}$ is a projection then reconciled forecasts will be unbiased as long as the base forecasts are also unbiased.  When base forecasts are biased they can be bias corrected before reconciliation as described by \cite{PanEtAl2019HF} in the point forecasting setting.
+Although ${\bm S}{\bm G}_0$ is not a projection matrix in general, there are some conditions under which it will be.  These are described by the following theorem.
+
+\begin{theo}[Optimal Projection for Reconciliation]\label{theo:optrecproj}
+	Let $\hat{\bm{\Sigma}}$ be the scale matrix from an elliptical but incoherent base forecast and assume base forecasts are also unbiased.  When the true predictive is also elliptical, then this can be recovered via reconciliation using a projection if $\textrm{rank}(\hat{\bm{\Sigma}}-\bm{\Sigma})\leq n-m$.
+\end{theo}
+\begin{proof}
+	See Appendix~\ref{Appen:optrecproj}.
+\end{proof}
+
 
 \section{Sample based solution}\label{sec:non-para}
 
@@ -725,6 +720,23 @@ Since $\bm{S}'_\perp$ is the orthogonal complement of $\bm{S}$ and since the col
 \[
 \tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_b(\bm{S}^-\bm{y})\mathbb{1}\left\{\bm{y}\in\mathfrak{s}\right\}.
 \]
+\section{Proof of Theorem~\ref{theo:optrecproj}}
+\label{Appen:optrecproj}
+
+To illustrate let
+\[
+\hat{\bm{\Sigma}}=\bm{\Sigma}+{\bm D}=\bm{S}\bm{\Omega}{\bm{S}}'+{\bm D}\,.
+\]
+If reconciliation is carried out via a projection onto $\mathfrak{s}$, then $\bm{S}\bm{G}\bm{S}=\bm{S}$ and
+\begin{align}
+\tilde{\bm{\Sigma}}&=\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'\nonumber\\
+&\bm{S}\bm{G}\bm{S}\bm{\Omega}\bm{S}'\bm{G}'{\bm{S}}'+\bm{S}\bm{G}{\bm D}\bm{G}'\bm{S}'\nonumber\\
+&\bm{S}\bm{\Omega}{\bm{S}}'+\bm{S}\bm{G}{\bm D}\bm{G}'\bm{S}'\nonumber\\
+&\bm{\Sigma}+\bm{S}\bm{G}{\bm D}\bm{G}'\bm{S}'\nonumber\,.
+\end{align}
+Therefore to recover the true predictive using a projection, some ${\bm G}_0$ must be found such that ${\bm G}_0{\bm D}=\bm{0}$. Let the eigenvalue decomposition of $\bm {D}$ be given by  ${\bm R}{\bm \Lambda}{\bm R}'$ , where ${\bm R}$ is an $n\times q$ matrix with $q=\textrm{rank}({\bm{D}})$ and ${\bm\Lambda}$ is an $q\times q$ diagonal matrix containing non-zero eigenvalues of ${\bm D}$.  By the rank nullity theorem, $\bm{R}$ will have an orthogonal complement $\bm{R}_{\perp}$ of dimension $n\times (n-q)$.  If $q=n-m$ then the number of columns of $\bm{R}_{\perp}$ is $m$ and ${\bm G}_0$ can be formed as the $m\times n$ matrix $(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$.  If $q<n-m$ the number of columns of $\bm{R}_{\perp}$ is greater than $m$, and any $m$ columns of $\bm{R}_{\perp}$ can be used to form ${\bm G}_0$ in a similar fashion.  However when $q>n-m$, $\bm{R}_{\perp}$ is less than $m$ and no such $m\times n$ matrix ${\bm G}_0$ can be formed.  Therefore the true predictive can only be recovered via a projection when $\textrm{rank}({\bm D})\leq n-m$.
+
+With respect to the location, if $\bm{SG}$ is a projection then reconciled forecasts will be unbiased as long as the base forecasts are also unbiased.  When base forecasts are biased they can be bias corrected before reconciliation as described by \cite{PanEtAl2019HF} in the point forecasting setting.
 
 \section{Proof of Theorem~\ref{theo:logS_improp}}\label{Appen:logS_improp}
 
