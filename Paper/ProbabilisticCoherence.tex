@@ -23,7 +23,7 @@
 \addtolength{\oddsidemargin}{-.5in}%
 \addtolength{\evensidemargin}{-.5in}%
 \addtolength{\textwidth}{1in}%
-\addtolength{\textheight}{-.3in}%
+\addtolength{\textheight}{1in}%
 \addtolength{\topmargin}{-.8in}%
 
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -179,7 +179,7 @@ When forecasts of all $n$ series are produced, they may not adhere to constraint
 
 In this case forecasts are called {\em incoherent base} forecasts and are denoted $\hat{\bm y}_{t+h}$, with the subscript $t+h$ implying a $h$-step ahead forecast at time $t$.  To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as {\em forecast reconciliation}.  At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm y}_{t+h}=\psi(\hat{\bm y}_{t+h})$, where $\tilde{\bm y}_{t+h}\in\mathfrak{s}$ is called the {\em reconciled} forecast.  The mapping $\psi$ may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ combines incoherent base forecasts of all series to produce new bottom-level forecasts, which are then aggregated via $s$.  When $g$ is a linear mapping this corresponds to pre-multiplying base forecasts by a matrix $\bm{S}\bm{G}$.
 
-\cite{PanEtAl2019HF} discuss how a number of important properties arise when $\bm{S}\bm{G}$ is a projection matrix.  In this case, ${\bm G}$ can be written as $(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$, where $\bm{R}_{\perp}$ is an $n\times m$ orthogonal complement to the $n\times(n-m)$ matrix $\bm{R}$, with $\bm{R}$ defining a direction of projection.  For instance, OLS reconciliation \citep{HynEtAl2011} projects along a direction perpendicular to $\bm{S}$, in which case $\bm{R}=\bm{S}_{\perp}$, $\bm{R}_{\perp}=\bm{S}$ and $\bm{G}=(\bm{S}'\bm{S})^{-1}\bm{S}'$.  Several other choices of $\bm{G}$ currently extant in the literature, including the bottom-up \citep{Dunn1976} WLS \citep[][]{Hyndman2016,AthEtAl2017} and MinT \citep{WicEtAl2019} methods, are also special cases where $\bm{S}\bm{G}$ is a projection. 
+\cite{PanEtAl2019HF} discuss how a number of important properties arise when $\bm{S}\bm{G}$ is a projection matrix.  In this case, ${\bm G}$ can be written as $(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$, where $\bm{R}_{\perp}$ is an $n\times m$ orthogonal complement to the $n\times(n-m)$ matrix $\bm{R}$, with $\bm{R}$ defining a direction of projection.  For instance, OLS reconciliation \citep{HynEtAl2011} projects along a direction perpendicular to $\bm{S}$, in which case $\bm{R}=\bm{S}_{\perp}$, $\bm{R}_{\perp}=\bm{S}$ and $\bm{G}=(\bm{S}'\bm{S})^{-1}\bm{S}'$.  Several other choices of $\bm{G}$ currently extant in the literature, including the bottom-up \citep{Dunn1976} WLS \citep[][]{Hyndman2016,AthEtAl2017} and MinT \citep{WicEtAl2019} methods, are also special cases where $\bm{S}\bm{G}$ is a projection.
 
 \subsection{Coherent probabilistic forecasts}\label{subsec:cohprobf}
 
@@ -269,7 +269,7 @@ where $q=(\bm{G}^-{\bm{b}}+\bm{G}_{\perp}{\bm{a}}-\hat{\bm{\mu}})' \hat{\bm{\Sig
 	\left(\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\right)\\
     & =\left[\bt-\PQ\hat{\bm{\mu}}\right]' \left[\PQ\hat{\bm{\Sigma}}\PQ'\right]^{-1}\left[\bt-\PQ\hat{\bm{\mu}}\right],
 \end{align*}
-where 
+where
 \[
 \begin{pmatrix}
 \bm{G} \\\bm{G}_{\perp}
@@ -287,7 +287,6 @@ If reconciliation is carried out by pre-multiplying by an arbitrary matrix $\bm{
 We note that in general ${\bm S}{\bm G}_0$ is not a projection matrix.  As a consequence, even if the base forecasts are unbiased (i.e. $\hat{\bm{\mu}}=\bm{\mu}$) the reconciled forecasts will not be since ${\bm S}{\bm G}_{0}\hat{\bm{\mu}}\neq\bm{\mu}$.  To recover the correct mean, reconciliation should also include translation by ${\bm d}_{0}={\bm\mu}-{\bm S}{\bm G}_{0}\hat{\bm{\mu}}$.
 
 Although ${\bm S}{\bm G}_0$ is not a projection matrix in general, there are some conditions under which it will be.  These are described by the following theorem.
-
 \begin{theo}[Optimal Projection for Reconciliation]\label{theo:optrecproj}
 	Let $\hat{\bm{\Sigma}}$ be the scale matrix from an elliptical but incoherent base forecast and assume base forecasts are also unbiased.  When the true predictive is also elliptical, then this can be recovered via reconciliation using a projection if $\textrm{rank}(\hat{\bm{\Sigma}}-\bm{\Sigma})\leq n-m$.
 \end{theo}
@@ -334,7 +333,7 @@ The log score simply involves evaluating the negative log density at the value o
 \E_{P}
 ||{\bm{y}}-\bm{\omega}||^\alpha -\frac{1}{2}\E_{P}||\bm{y}-\bm{y}^*||^\alpha, \,\, \alpha \in (0,2]\,,
 \end{equation*}
-where $\bm {y}$ and $\bm{y^*}$ are independent copies drawn from the distribution $P$.  These expectations can be easily approximated via Monte Carlo with samples drawn from the probabilistic forecast.  
+where $\bm {y}$ and $\bm{y^*}$ are independent copies drawn from the distribution $P$.  These expectations can be easily approximated via Monte Carlo with samples drawn from the probabilistic forecast.
 
 The energy score has been criticised by \citet{Pinson2013a} for its low discriminative ability for incorrectly specified covariances.  The variogram score  \citep{SCHEUERER2015}, overcomes this issue and is defined as
 \begin{equation*}
@@ -383,10 +382,7 @@ The same property does not hold for all scores. For example, the energy score is
 	\label{tab:prop}
 \end{table}
 
-\section{Simulations}
-
-We now present the simulation study carried-out to evaluate the performance of probabilistic forecasts in both parametric and non-parametric setting. Let us first discuss the data generating process.
-
+\clearpage
 \subsection{Optimal reconciliation of incoherent future paths}\label{subsec:Optimal_recon}
 
 {\color{blue} The respective objective function can be written as,
@@ -404,61 +400,41 @@ To approximate the expectation in Equation~\eqref{eq:Obj_func_1} we break up the
 We implement this algorithm in Section \ref{sec:Bootsrap-sim} to reconcile probabilistic forecasts in a simulation setting. Now we turn to the discussion of evaluation criteria for hierarchical probabilistic forecasts.}
 
 
-\subsection{Data generating process (DGP)} \label{subsec:DGP}
 
-The data generating process we consider corresponds to the hierarchy given in Figure \ref{fig:twoL-hier}, comprising two aggregation levels with four bottom-level series. Each bottom-level series will be generated first, and then summed to obtain the data for the upper-level series.
+\clearpage
+\section{Simulations}
 
-First $\{w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}\}$ are generated from ARIMA$(p,d,q)$ processes, where $(p,q)$ and $d$ take integers from $\{1,2\}$ and $\{0,1\}$ respectively with equal probability. The parameters for the AR and MA components are randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively.
-The errors driving the ARIMA processes were generated from Gaussian and non-Gaussian distributions separately. This will allow us to demonstrate the distinct impact of true DGP for parametric and non-parametric reconciliation approaches.
+The aim of the simulations that follow is to evaluate the performance of both analytical and sample based reconciliation approaches for generating probabilistic hierarchical forecasts, respectively presented in Sections \ref{sec:ParamRecon} and \ref{sec:non-para}. The data generating process we consider corresponds to the 2-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. We consider a Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically we generate Gaussian errors jointly from a multivariate distribution, and non-Gaussian errors from a Gumbel copula model with beta margins. All details of the data generating process are presented in Appendix \ref{Append:Gauss_sim_Univ}.
 
+For each series we generate 2002 observations from which we ignore the first 500 to avoid the impact of initial values. Using a training window of 500 observations, we fit univariate ARIMA and exponential smoothing (ETS) models to each series using the \verb|auto.arima()| and \verb|ets()| functions in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore} and generate incoherent base probabilistic forecasts assuming Gaussian errors, for $h = 1, 2$ and 3-steps ahead. \textcolor{red}{Ok this at least for the copula errors means that we have error mis-specification for the models. For example we could have used a bootstrap error rather than Gaussian. Something we may comment about below.} The incoherent base probabilistic forecasts are reconciled using the alternative approaches as described below. The process is repeated by rolling the training window forward one observation at a time. This yields 1,000 probabilistic forecasts for evaluation.
 
-\subsubsection*{Gaussian errors:}
+The predictive accuracy of the alternative methods is evaluated using the scoring rules presented in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores, i.e., the percentage improvement of a probabilistic forecast over a reference method. A positive (negative) value indicates a percentage gain (loss) in forecast accuracy over the reference method. In order to save space in what follows we only present the results from reconciling the ARIMA incoherent base forecasts. Results and conclusions are very similar for the ETS incoherent base forecasts. These are available upon request. \textcolor{red}{Puwasala to make sure that these are available.}
 
-Errors were jointly generated from a normal distribution, and denoted by $\{\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}\} \overset{iid}{\sim} \mathcal{N}(\bm{0}, \bm{\Sigma})~\forall t$, where,
+\subsection{Reconciliation via the analytical solution}
 
-
-\begin{equation}\label{eq:SigmaGaussian}
-\bm{\Sigma} =
-\begin{pmatrix}
-5.0 & 3.1 & 0.6 & 0.4 \\
-3.1 & 4.0 & 0.9 & 1.4 \\
-0.6 & 0.9 & 2.0 & 1.8 \\
-0.4 & 1.4 & 1.8 & 3.0 \\
-\end{pmatrix}\,.
-\end{equation}
+We assume a Gaussian predictive density for the simulated hierarchical time series, i.e., $\hat{\bm{y}}\sim N(\hat{\bm{\mu}},\hat{\bm{\Sigma}})$. We note that the analytical tractability of the normal distribution allows for evaluation using all scoring rules (including the log-score). $\hat{\bm{\mu}}$ is given by the mean of the incoherent base probabilistic forecasts. We estimate $\hat{\bm{\Sigma}}$ from the in-sample one-step ahead forecast errors using the shrinkage estimator of \citet{Schafer2005} (as the one presented in Table \ref{table:ReconMethods}). Coherent probabilistic forecasts are then generated as $\tilde{\bm{y}}
+\sim N(\bm{S}\bm{G}\hat{\bm{\mu}},\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$ where ${\bm G}=(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{R}'_\bot=\bm{S}'\bm{W}^{-1}$ for the different choices of $\bm{W}$ as presented in Table \ref{table:ReconMethods}.
 
 
-\subsubsection*{Non-Gaussian errors:}
-
-Non-Gaussian errors were generated from a Gumbel copula model with beta margins. Using a copula model helps to impose a non-linear dependence structure among the series. A two dimensional Gumbel copula is given by,
-\begin{equation*}
-C_\theta(u_1, u_2) = exp\{-[(-ln(u_1))^\theta + (-ln(u_2))^\theta]^{1/\theta}\}.
-\end{equation*}
-We generate random variates $\{u_{AA}, u_{AB}\}$ from $C_{\theta=10}(.)$ and $\{u_{BA}, u_{BB}\}$ from $C_{\theta=8}(.)$ for series $\{AA, AB\}$ and $\{BA, BB\}$ respectively. Next we generate the errors, $\{\varepsilon_{AA}, \varepsilon_{AB}, \varepsilon_{BA}, \varepsilon_{BB}\}$ as the quantiles from beta distributions with shape parameters $\alpha = 1$ and $\beta = 3$ correspond to $\{u_{AA}, u_{AB}, u_{BA}, u_{BB}\}$.
-
-%Although copulas go beyond the concepts of linear dependence, we will apply a Gaussian assumption to the data to investigate model misspecification. To give some idea of the covariance matrix of $\{\varepsilon_{AA}, \varepsilon_{AB}, \varepsilon_{BA}, \varepsilon_{BB}\}$, the sample estimate is,
-%
-%\begin{equation} \label{eq:SigmaNonGauss}
-%\bm{\Sigma} = \begin{pmatrix}
-%0.0388 & 0.0385 & 0.0010 & 0.0010\\
-%0.0385 & 0.0390 & 0.0008 & 0.0008 \\
-%0.0010 & 0.0008 & 0.0387 & 0.0377 \\
-%0.0010 & 0.0008 & 0.0377 & 0.0381 \\
-%\end{pmatrix}.
-%\end{equation}
-
-\subsubsection*{Signal-to-noise ratio:}
-
-In practice, hierarchical time series are likely to have relatively noisier series at lower levels of aggregation. Following the simulation setup in \citet{WicEtAl2019} we replicate this feature in our simulated data by adding some noise to $\{w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}\}$ (See Section \ref{Append:sig-to-noise} in Appendix for more detailed explanation). We denote these nosier bottom-level series by $\{y_{AA,t},y_{AB,t},y_{BA,t},y_{BB,t}\}$ which will be summed to obtain the data for upper levels.
+\begin{table}[!t]
+	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix, so that ${\bm G}=(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{R}'_\bot=\bm{S}'\bm{W}^{-1}$. The rows present alternative choices of $\bm{W}$. $\hat{\bm{W}}^{\text{sam}}$ is the sample variance-covariance matrix estimated from one-step ahead in-sample forecast errors from the base incoherent forecasts. $\hat{\bm{W}}^{\text{wls}}$ is a diagonal matrix with elements from $\hat{\bm{W}}^{\text{sam}}$. $\hat{\bm{W}}^{\text{shr}}$ is a shrinkage estimator proposed by \citet{Schafer2005},  where $\tau = \frac{\sum_{i \neq j}\hat{\var}(\hat{w}_{ij})}{\sum_{i \neq j}{\hat{w}}^2_{ij}}$ and  $w_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{W}}^{\text{sam}}$.}\label{table:ReconMethods}
+	\centering
+	\begin{tabular}{l@{\hskip 0.4in}l}
+		\toprule
+		\textbf{Reconciliation method} & \textbf{$\bm{W}$} \\
+		\midrule
+		OLS             & $\bm{I}$ \\
+		WLS             & $\text{diag}(\hat{\bm{W}}^{\text{sam}})$ \\
+		MinT(Sample)    & $\hat{\bm{W}}^{\text{sam}}$ \\
+		MinT(Shrink)    & $\tau\text{diag}(\hat{\bm{W}}^{\text{sam}}) + (1-\tau)\hat{\bm{W}}^{\text{sam}}$\\
+		\bottomrule
+	\end{tabular}
+\end{table}
 
 
-\subsection{Simulation set up for analytical solution}
 
-To compare different reconciliation methods in parametric densities we assume a Gaussian predictive distribution for the hierarchy. We choose the Gaussian case due to its analytical tractability which allows for evaluation using all scoring rules (including the log score).
 
-We generate $2000$ observations for each series from the Gaussian and non-Gaussian DGP. We ignore the first $500$ observations from each series to avoid the impact from initial values. Using a rolling window of $T=500$ observations, we fit univariate ARIMA models for each series using the \verb|auto.arima()| function in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore}. Using the fitted models we generate $1$ to $3$ steps ahead base (incoherent) Gaussian probabilistic forecasts. We estimate the mean and the variance of this incoherent Gaussian density as the $h$-steps ahead point forecasts $\hat{\bm{y}}_{t+h}$ and shrinkage estimator for variance covariance matrix of one-step ahead forecast errors $\hat{\bm{W}}^{\text{shr}}$ respectively. These were then reconciled using different projections summarised in Table~\ref{table:ReconMethods} in appendix. This process was replicated for $1000$ times by rolling the window one step at a time.
 
-To assess the predictive performance of different forecasting methods, we use scoring rules as discussed in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores which are the percentage improvement of a probabilistic forecast $P$ over a reference method $P_{\mbox{ref}}$ such that a positive value indicates that a method is more accurate than the reference method.
 
 \subsubsection{Results and discussion}
 
@@ -467,19 +443,19 @@ Table~\ref{tab:SimResults_Gauss_MultivScores} summarises the forecasting perform
 Tables~\ref{tab:SimResults_Gauss_UnivScores} break down the forecasting performance of the different methods by considering univariate scores on each individual margin. We have only presented the results for forecast horizon $h=1$ and the results for rest of the forecasts horizons are presented in table \ref{Append:Gauss_sim_Univ} in Appendix.  Univariate log score and CRPS are considered, while skill scores are computed with the incoherent forecasts as a reference. When broken down in this fashion, irrespective of DGP, the methods based on MinT perform best for most series and outperform bottom-up forecasts in almost all cases.
 
 \begin{table}[H]
-	\caption{Comparison of coherent forecasts in forecast for $h=1$ to $3$ steps-ahead. All entries shows the percentage skill score with reference to the bottom-up method. The top panel shows results from the Gaussian DGP and bottom panel shows the results from the non-Gaussian DGP. ``ES'' and ``VS'' columns give scores based on the joint forecast distribution across the entire hierarchy. The ``LS'' column gives the log scores of the joint forecast distribution of the bottom-level. }\label{tab:SimResults_Gauss_MultivScores}
+	\caption{Forecast evaluation of hierarchical probabilistic forecasts for $h=1, 2$ and $3$ steps ahead. Entries show the percentage (\%) skill score with reference to the bottom-up method. A positive (negative) entry shows a gain (loss) in forecast accuracy over the reference method. The top panel shows the results from the Gaussian DGP while the bottom panel shows the results from the non-Gaussian DGP. The Log Score entries are based on the joint forecast distribution for the bottom-level, while the Energy and Variogram skill scores are based on the joint forecast distribution across the entire hierarchy.}\label{tab:SimResults_Gauss_MultivScores}
 	\centering
 	\resizebox{\linewidth}{!}{
 		\begin{tabular}{lccccccccc}
 			\toprule
 			\multicolumn{1}{c}{} & \multicolumn{3}{c}{Log Score (\%)} & \multicolumn{3}{c}{Energy Score (\%)} & \multicolumn{3}{c}{Variogram Score (\%)} \\
 			\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
-			\text{h} & 1 & 2 & 3 & 1 & 2 & 3 & 1 & 2 & 3\\
+			$h$ & 1 & 2 & 3 & 1 & 2 & 3 & 1 & 2 & 3\\
 			\toprule
 			\multicolumn{10}{c}{Gaussian DGP}\\
 			\toprule
-			Base & -0.06 & -0.19 & -0.03 & 10.00 & 9.04 & 5.90 & -21.57 & -40.58 & -57.11\\
-			Bottom up & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+			Incoherent base & -0.06 & -0.19 & -0.03 & 10.00 & 9.04 & 5.90 & -21.57 & -40.58 & -57.11\\
+			Bottom-up & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
 			OLS & 0.26 & 1.20 & 1.02 & 15.00 & 15.46 & 12.43 & 0.47 & -0.35 & -1.85\\
 			WLS & 1.05 & 2.70 & 3.87 & 18.00 & 18.99 & 15.92 & 1.61 & 1.69 & 1.55\\
 			MinT(Sample) & 1.29 & 2.64 & 4.62 & 19.35 & 20.65 & 17.82 & 2.10 & 2.92 & 3.93\\
@@ -489,8 +465,8 @@ Tables~\ref{tab:SimResults_Gauss_UnivScores} break down the forecasting performa
 			\toprule
 			\multicolumn{10}{c}{Non-Gaussian DGP}\\
 			\toprule
-			Base & -0.07 & 0.09 & 0.03 & 8.47 & 8.94 & 9.20 & -2.79 & -2.09 & -3.62\\
-			Bottom up & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+			Incoherent base & -0.07 & 0.09 & 0.03 & 8.47 & 8.94 & 9.20 & -2.79 & -2.09 & -3.62\\
+			Bottom-up & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
 			OLS & 0.65 & 0.47 & 0.10 & 11.26 & 12.27 & 13.12 & 0.17 & 0.48 & -0.24\\
 			WLS & 0.93 & 1.34 & 0.89 & 12.72 & 14.22 & 15.20 & 0.00 & 0.41 & -0.42\\
 			MinT(Sample) & 4.40 & 4.30 & 3.42 & 15.02 & 16.94 & 17.88 & 0.59 & 1.02 & 0.64\\
@@ -503,13 +479,13 @@ Tables~\ref{tab:SimResults_Gauss_UnivScores} break down the forecasting performa
 
 
 \begin{table}[H]
-	\caption{Comparison of incoherent vs coherent forecasts based on the univariate forecast distribution of each series. Each entry represents the percentage skill score with reference to the incoherent forecasts based on ``CRPS" and ``LS". These entries show the percentage increase in score for different forecasting methods relative to the incoherent forecasts for $h=1$ step-ahead forecast. Results from the Gaussian DGP are presented in the top panel whereas the results from the non-Gaussian DGP are presented in the bottom panel}\label{tab:SimResults_Gauss_UnivScores}
+	\caption{Forecast evaluation of univariate hierarchical probabilistic forecasts for $h=1-$step ahead. Entries show the percentage (\%) skill score base on the Log-Score and CRPS with reference to the incoherent base forecasts. A positive (negative) entry shows a gain (loss) in forecast accuracy over the reference method. The left panel shows the results from the Gaussian DGP while the right panel shows the results from the non-Gaussian DGP.}\label{tab:SimResults_Gauss_UnivScores}
 	\centering
 	\resizebox{\linewidth}{!}{
 		\begin{tabular}{lcccccccccccccc}
 			\toprule
 			\multicolumn{1}{c}{ } & \multicolumn{7}{c}{Gaussian} & \multicolumn{7}{c}{Non-Gaussian}\\
-			\cmidrule(lr){2-8} \cmidrule(lr){9-15} 
+			\cmidrule(lr){2-8} \cmidrule(lr){9-15}
 						
 			Series & Tot & A & B & AA & AB & BA & BB & Tot & A & B & AA & AB & BA & BB \\
 			\toprule
@@ -538,6 +514,11 @@ Tables~\ref{tab:SimResults_Gauss_UnivScores} break down the forecasting performa
 		\end{tabular}
 	}
 \end{table}
+
+\subsection{Reconciliation via sampling}
+
+
+Bootstrap approach: Generate 2102 data points for each series. Ignoring first 500 observations to avoid the impact of initial values. Choose 600 observations for outer rolling window and follow the steps in the algorithm to generate reconciled probabilistic forecasts for  h = 1, 2 and 3 steps ahead forecast horizons.  Replicate the process for 1000 times by rolling the window one step at a time. This yields 1000 forecast distributions for evaluation for all forecast horizons.
 
 
 \subsection{Simulation setup for non-parametric solution}\label{sec:Bootsrap-sim}
@@ -577,7 +558,7 @@ However we also note that optimal reconciliation required a high computational c
 				\multicolumn{3}{c|}{Non-Gaussian DGP} &
 				\multicolumn{3}{c}{Gaussian DGP} &
 				\multicolumn{3}{c}{Non-Gaussian DGP}\\
-				\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13} 
+				\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
 				h & {}{1} &  {2} & {3} & {1} &  {2} & {3} & {1} &  {2} & {3} & {1} &  {2} & {3}  \\
 				\midrule
 				Base & 11.7 & 14.6 & 17.8 & 5.71 & 5.94 & 6.27 & 5.56 & 6.61 & 7.87 & 1.28 & 1.37 & 1.49 \\
@@ -592,44 +573,6 @@ However we also note that optimal reconciliation required a high computational c
 	\textit{The differences in scores between methods noted by ``*'' are statistically insignificant. The differences between these and the incoherent forecasts are statistically significant.}
 \end{table}
 
-
-
-
-%\begin{table}
-%	\caption{Energy scores (ES) and variogram scores (VS) for probabilistic forecasts from different reconciliation methods are presented. Bottom row represent the scores for base forecasts which are not coherent. The smaller the scores, the better the forecasts are.} \label{table:Non-paraSimulation1}
-%	%	\centering
-%	\begin{center}
-%		\tabcolsep=0.08cm\small
-%		\resizebox{\linewidth}{!}{
-%			\begin{tabular}{@{}lSSSSSS|SSSSSS@{}}
-%				\toprule
-%				\multicolumn{1}{c}{} & \multicolumn{6}{c|}{Non-Gaussian DGP} & \multicolumn{6}{c}{Gaussian DGP}\\
-%				\toprule
-%				Reconciliation &
-%				\multicolumn{2}{c}{h=1} &
-%				\multicolumn{2}{c}{h=2} &
-%				\multicolumn{2}{c|}{h=3} & \multicolumn{2}{c}{h=1} &
-%				\multicolumn{2}{c}{h=2} &
-%				\multicolumn{2}{c}{h=3} \\
-%				\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13}
-%				method       & {}{\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} &{\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} \\
-%				\midrule
-%				Optimal* & 5.36 & 1.21 & 5.51 & 1.27 & 5.83 & 1.38 & 9.59 & 4.86 & 11.50 & 5.38 & 13.80 & 6.13\\
-%%				Optimal(Method-2)* & 5.37 & 1.21 & 5.53 & 1.27 & 5.83 & 1.37 & 9.58 & 4.85 & 11.50 & 5.37 & 13.80 & 6.14\\
-%%				Optimal(Method-3)* & 5.37 & 1.21 & 5.53 & 1.27 & 5.83 & 1.37 & 9.58 & 4.85 & 11.50 & 5.37 &
-%%				13.80 & 6.14 \\
-%%				Optimal(Method-4)* & 5.38 & 1.21 & 5.54 & 1.27 & 5.83 & 1.38 & 9.58 & 4.85 & 11.50 & 5.37 & 13.80 & 6.14\\
-%				MinT(Shrink)*	  & 5.33 & 1.19 & 5.50 & 1.26 & 5.77 & 1.34 & 9.43 & 4.78 & 11.40 & 5.33 & 13.70 & 6.09 \\
-%				WLS          	  & 5.43 & 1.23 & 5.60 & 1.30 & 5.89 & 1.40 & 9.64 & 4.93 & 11.70 & 5.60 & 14.10 & 6.39 \\
-%				OLS          	  & 5.51 & 1.23 & 5.70 & 1.30 & 5.98 & 1.40 & 9.91 & 4.93 & 12.10 & 5.60 &
-%				14.50 & 6.39\\
-%				\textit{Incoherent} & $\mathbi{5.71}$ & $\mathbi{1.28}$ & $\mathbi{5.94}$ & $\mathbi{1.37}$ & $\mathbi{6.27}$ & $\mathbi{1.49}$ &$\mathbi{10.40}$& $\mathbi{5.31}$ & $\mathbi{12.70}$ & $\mathbi{6.22}$ & $\mathbi{15.20}$ & $\mathbi{7.14}$\\
-%				\bottomrule
-%			\end{tabular}
-%		}
-%	\end{center}
-%	\textit{The differences in scores between methods noted by ``*'' are statistically insignificant. The differences between these and the incoherent forecasts are statistically significant.}
-%\end{table}
 
 \section{Application: Forecasting Australian domestic tourism flow}\label{sec:Application}
 
@@ -786,64 +729,50 @@ LS\left(\hat{f},\bm{y}^*\right) <-\log|\bm{S^*}|-\log f_{\bm b}(\bm{b}^*)=LS\lef
 \]
 Since this holds for any possible realisation, it will also hold after taking expectations (by the monotonicity of expectations).  Thus $\hat{f}$ violates the condition for a proper scoring rule.
 
+\section{Data generating process}
 
-
-\section{Simulations}
-
-\subsection{Imposing higher signal-to-noise ratio in aggregate levels}\label{Append:sig-to-noise}
-
-In practice, hierarchical time series are likely to have relatively noisier series at lower levels of aggregation. Following the method proposed by \citet{WicEtAl2019}, we replicate this feature in our simulations by generating the bottom-level series $\{y_{AA,t},y_{AB,t},y_{BA,t},y_{BB,t}\}$ as follows:
+The hierarchy considered in the simulations is the 2-level structure shown in Figure \ref{fig:twoL-hier}. Data are first generated for the bottom-level series from
 \begin{align*}
 y_{AA,t} &= w_{AA,t} + u_t - 0.5v_t,\\
 y_{AB,t} &= w_{AB,t} - u_t - 0.5v_t,\\
 y_{BA,t} &= w_{BA,t} + u_t + 0.5v_t,\\
 y_{BB,t} &= w_{BB,t} - u_t + 0.5v_t,
 \end{align*}
-where $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathcal{N}(0,\sigma^2_v)$. The aggregate series in the middle-level are given by:
+where $w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}$ are ARIMA$(p,d,q)$ processes with error terms \linebreak $\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}$. $(p,q)$ and $(d)$ take integer values from $\{1,2\}$ and $\{0,1\}$ respectively with equal probability and the parameters for the AR and MA components are randomly and uniformly selected from $[0.3,0.5]$ and $[0.3,0.7]$ respectively. $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathcal{N}(0,\sigma^2_v)$. Aggregating the bottom-level series gives the series for the aggregated levels. More specifically,
 \begin{align*}
 y_{A,t} &= w_{AA,t} + w_{AB,t} - v_t,\\
-y_{B,t} &= w_{BA,t} + w_{BB,t} + v_t,
+y_{B,t} &= w_{BA,t} + w_{BB,t} + v_t,\\
+y_{Tot,t} &= w_{AA,t} + w_{AB,t} + w_{BA,t} + w_{BB,t}.
 \end{align*}
-and the total series is given by
-\[
-y_{Tot,t} = w_{AA,t} + w_{AB,t} + w_{BA,t} + w_{BB,t}.
-\]
 
 
-To ensure the disaggregate series are noisier than the aggregate series, we choose $\sigma^2_u$ and $\sigma^2_v$ such that
-\[
+\subsubsection*{Gaussian errors}
+
+The errors driving the bottom-level ARIMA processes are jointly generated from a Normal distribution. More specifically, $\{\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}\} \overset{iid}{\sim} \mathcal{N}(\bm{0}, \bm{\Sigma})~\forall t$. A commonly observed feature of hierarchical time series in practice, is that upper-level aggregated series are relatively less noisy than their corresponding lower-level components. This is due to the smoothing effect of aggregation, eliminating some random variation. Similarly to \cite{WicEtAl2019}, setting
+\begin{equation*}\label{eq:SigmaGaussian}
+\bm{\Sigma} =
+\begin{pmatrix}
+5.0 & 3.1 & 0.6 & 0.4 \\
+3.1 & 4.0 & 0.9 & 1.4 \\
+0.6 & 0.9 & 2.0 & 1.8 \\
+0.4 & 1.4 & 1.8 & 3.0 \\
+\end{pmatrix}
+\end{equation*} and $\sigma^2_u=28$ and $\sigma^2_v=22$ ensures that \textcolor{red}{Puwasala to complete the inequalities: \[
 \var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
 \le \var(\varepsilon_{AA,t}+\varepsilon_{AB,t}-v_t)
 \le \var(\varepsilon_{AA,t}+u_t-0.5v_t).
 \]
-Similar inequalities hold when $\varepsilon_{AA,t}$ is replaced by $\varepsilon_{AB,t}$, $\varepsilon_{BA,t}$ and $\varepsilon_{BB,t}$ in the third term.
+Similar inequalities hold when $\varepsilon_{AA,t}$ is replaced by $\varepsilon_{AB,t}$, $\varepsilon_{BA,t}$ and $\varepsilon_{BB,t}$ in the third term.}
 
-Thus for the Gaussian DGP we choose $\sigma^2_u = 24$ and $\sigma^2_u = 18$ whereas for non-Gaussian DGP we choose $\sigma^2_u = 10$ and $\sigma^2_v = 7$.
 
-\subsection{Summary of hierarchical point forecasting methods}
+\subsubsection*{Non-Gaussian errors}
 
-\begin{table}[!h]
-	\caption{Summary of reconciliation methods that are projections. Here, $\hat{\bm{W}}^{sam}$ is the variance covariance matrix of one-step ahead in-sample forecast errors, $\hat{\bm{W}}^{shr}$ is a shrinkage estimator more suited to large dimensions proposed by \citet{Schafer2005}, $\hat{\bm{W}}^{wls}$ is the diagonal matrix with diagonal elements $w_{ii}$, and $\tau = \frac{\sum_{i \neq j}\hat{\var}(\hat{w}_{ij})}{\sum_{i \neq j}{\hat{w}}^2_{ij}}$, where $w_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{W}}^{sam}$.}\label{table:ReconMethods}
-	\centering
-	\begin{tabular}{lll}
-		\toprule
-		\textbf{Method} & \textbf{$\bm{W}$} & \textbf{ $\bm{R}'_\bot$}      \\
-		\midrule
-		OLS             &
-		$\bm{I}$  &
-		$\bm{S}'$  \\
-		MinT(Sample)    &
-		$\hat{\bm{W}}^{sam}$ &
-		$\bm{S}'(\hat{\bm{W}}^{sam})^{-1}$ \\
-		MinT(Shrink)    &
-		$\tau\text{Diag}(\hat{\bm{W}}^{sam}) + (1-\tau)\hat{\bm{W}}^{sam}$ &
-		$\bm{S}'(\hat{\bm{W}}^{shr})^{-1}$ \\
-		WLS       &
-		$\text{Diag}(\hat{\bm{W}}^{sam})$ &
-		$\bm{S}'(\hat{\bm{W}}^{wls})^{-1}$ \\
-		\bottomrule
-	\end{tabular}
-\end{table}
+Non-Gaussian errors are generated from a Gumbel copula with beta margins. Using a copula model helps impose a non-linear dependence structure among the series. A two dimensional Gumbel copula is given by,
+\begin{equation*}
+C_\theta(e_1, e_2) = exp\{-[(-ln(e_1))^\theta + (-ln(e_2))^\theta]^{1/\theta}\}.
+\end{equation*}
+We generate random variates $\{e_{AA}, e_{AB}\}$ from $C_{\theta=10}(.)$ and $\{e_{BA}, e_{BB}\}$ from $C_{\theta=8}(.)$ for series $\{AA, AB\}$ and $\{BA, BB\}$ respectively. We generate the ARIMA errors, $\{\varepsilon_{AA}, \varepsilon_{AB}, \varepsilon_{BA}, \varepsilon_{BB}\}$ as the quantiles from beta distributions with shape parameters $\alpha = 1$ and $\beta = 3$ that correspond to $\{e_{AA}, e_{AB}, e_{BA}, e_{BB}\}$. \textcolor{red}{Puwasala and Tas to double check.}
+
 
 \subsection{Simulation results from parametric solution for marginal forecast distributions}\label{Append:Gauss_sim_Univ}
 
@@ -854,7 +783,7 @@ Thus for the Gaussian DGP we choose $\sigma^2_u = 24$ and $\sigma^2_u = 18$ wher
 		\begin{tabular}{lcccccccccccccc}
 			\toprule
 			\multicolumn{1}{c}{ } & \multicolumn{7}{c}{Gaussian} & \multicolumn{7}{c}{Non-Gaussian}\\
-			\cmidrule(lr){2-8} \cmidrule(lr){9-15} 
+			\cmidrule(lr){2-8} \cmidrule(lr){9-15}
 			Series & Tot & A & B & AA & AB & BA & BB & Tot & A & B & AA & AB & BA & BB \\
 			\toprule
 			\multicolumn{15}{c}{Log Score (\%)}\\
@@ -886,7 +815,7 @@ Thus for the Gaussian DGP we choose $\sigma^2_u = 24$ and $\sigma^2_u = 18$ wher
 		\begin{tabular}{lcccccccccccccc}
 			\toprule
 			\multicolumn{1}{c}{ } & \multicolumn{7}{c}{Gaussian} & \multicolumn{7}{c}{Non-Gaussian}\\
-			\cmidrule(lr){2-8} \cmidrule(lr){9-15} 
+			\cmidrule(lr){2-8} \cmidrule(lr){9-15}
 			Series & Tot & A & B & AA & AB & BA & BB & Tot & A & B & AA & AB & BA & BB \\
 			\toprule
 			\multicolumn{15}{c}{Log Score (\%)}\\
@@ -910,104 +839,6 @@ Thus for the Gaussian DGP we choose $\sigma^2_u = 24$ and $\sigma^2_u = 18$ wher
 		\end{tabular}
 	}
 \end{table}
-
-%\begin{table}[H]
-%	\caption{Comparison of incoherent vs coherent forecasts based on the univariate forecast distribution of the aggregate series. Each entry represents the percentage skill score with reference to the incoherent forecasts based on ``CRPS" and ``LS". These entries show the percentage increase in score for different forecasting methods relative to the incoherent forecasts for $h=2$ and $3$ steps-ahead forecast. Results from the Gaussian DGP are presented in the top panel whereas the results from the non-Gaussian DGP are presented in the bottom panel}\label{tab:SimResults_Gauss_UnivScores_Aggre_h2-h3}
-%	\centering
-%	\resizebox{\linewidth}{!}{
-%		\begin{tabular}{lcccccccccccc}
-%			\toprule
-%			\multicolumn{1}{c}{ } & \multicolumn{6}{c}{h=2} &
-%			\multicolumn{6}{c}{h=3} \\
-%			\cmidrule(lr){2-7} \cmidrule(lr){8-13}
-%			\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Total} & \multicolumn{2}{c}{A} & \multicolumn{2}{c}{B} & \multicolumn{2}{c}{Total} & \multicolumn{2}{c}{A} & \multicolumn{2}{c}{B} \\
-%			\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13} 
-%			
-%			R.method & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS\\
-%			\toprule
-%			\multicolumn{13}{c}{Gaussian DGP}\\
-%			\toprule
-%			
-%			MinT(Shrink) & \textbf{0.34} & -0.08 & 10.67 & 3.32 & 5.79 & 1.59 & 0.08 & -0.17 & 8.13 & 1.58 & 4.17 & 1.04\\
-%			
-%			MinT(Sample) & 0.27 & -0.10 & \textbf{10.76} & \textbf{3.39} & 5.67 & 1.62 & 0.04 & -0.23 & \textbf{8.14} & \textbf{1.69} & 4.19 & 1.10\\
-%			
-%			WLS & -0.41 & 1.02 & 9.99 & 2.97 & \textbf{6.01} & \textbf{1.73} & \textbf{0.10} & 2.97 & 7.72 & 1.57 & \textbf{4.46} & 1.26\\
-%			
-%			OLS & -5.99 & \textbf{4.05} & 7.17 & 2.03 & 5.83 & 1.70 & -2.13 & 13.11 & 5.30 & 0.97 & 4.41 & \textbf{1.30}\\
-%			
-%			Bottom up & -60.07 & 2.72 & -13.82 & -3.86 & -9.04 & -2.37 & -30.95 & \textbf{30.34} & -13.57 & -3.37 & -8.47 & -1.87\\
-%			
-%			Incoherent & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-%			
-%			\toprule
-%			\multicolumn{13}{c}{Non-Gaussian DGP}\\
-%			\toprule
-%			
-%			MinT(Shrink) & -0.70 & -1.16 & \textbf{0.71} & 0.29 & \textbf{16.53} & 6.83 & -0.30 & -1.35 & \textbf{0.60} & 0.25 & \textbf{19.53} & 8.28\\
-%			
-%			MinT(Sample) & -0.70 & -1.53 & \textbf{0.71} & \textbf{0.31} & \textbf{16.53} & \textbf{6.87} & -0.30 & -1.61 & \textbf{0.60} & \textbf{0.31} & \textbf{19.53} & \textbf{8.35}\\
-%			
-%			WLS & -0.11 & -0.15 & -2.50 & -1.09 & 13.87 & 5.55 & -0.02 & -0.40 & -3.96 & -1.60 & 16.14 & 6.78\\
-%			
-%			OLS & -44.06 & -14.27 & -0.18 & -0.12 & 8.72 & 3.44 & -22.75 & \textbf{19.51} & -0.71 & -0.32 & 10.48 & 4.27\\
-%			
-%			Bottom up & -273.80 & -68.47 & -4.20 & -1.67 & -8.78 & -2.84 & -159.47 & 10.59 & -4.71 & -1.77 & -8.06 & -2.27\\
-%			
-%			Incoherent & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-%			\bottomrule
-%		\end{tabular}
-%	}
-%\end{table}
-%
-%
-%
-%\begin{table}[H]
-%	\caption{Comparison of incoherent vs coherent forecasts based univariate forecast distribution of bottom-level series. Each entry represents the skill score with reference to Incoherent forecasts based on ``CRPS" and ``LS" for forecast horizons $h=2$ and $h=3$.}\label{tab:SimResults_Gauss_UnivScores_Disaggre_h2-h3}
-%	\centering
-%	\resizebox{\linewidth}{!}{
-%		\begin{tabular}{lcccccccccccccccc}
-%			\toprule
-%			\multicolumn{1}{c}{ } & \multicolumn{8}{c}{h=2} &
-%			\multicolumn{8}{c}{h=3} \\
-%			\cmidrule(lr){2-9} \cmidrule(lr){10-17}
-%			\multicolumn{1}{c}{ } & \multicolumn{2}{c}{AA} & \multicolumn{2}{c}{AB} & \multicolumn{2}{c}{BA} & \multicolumn{2}{c}{BB} & \multicolumn{2}{c}{AA} & \multicolumn{2}{c}{AB} & \multicolumn{2}{c}{BA} & \multicolumn{2}{c}{BB} \\
-%			\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13} \cmidrule(lr){14-15} \cmidrule(lr){16-17} 
-%			R.method & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS\\
-%			\toprule
-%			\multicolumn{17}{c}{Gaussian DGP}\\
-%			\toprule
-%			
-%			MinT(Shrink) & 3.80 & 1.28 & \textbf{19.37} & \textbf{6.55} & \textbf{13.61} & \textbf{4.44} & -0.08 & -0.14 & \textbf{2.54} & \textbf{0.83} & \textbf{19.58} & \textbf{6.92} & \textbf{13.94} & \textbf{4.83} & -2.64 & -0.96\\
-%			
-%			MinT(Sample) & \textbf{4.06} & \textbf{1.33} & 19.23 & 6.53 & 13.21 & 4.34 & -0.24 & -0.19 & 2.24 & 0.68 & 19.33 & 6.73 & 13.44 & 4.62 & -3.44 & -1.21\\
-%			
-%			WLS & -0.55 & -0.09 & 15.52 & 5.05 & 12.17 & 3.91 & -3.48 & -1.25 & -1.52 & -0.46 & 15.75 & 5.32 & 12.63 & 4.34 & -5.74 & -2.04\\
-%			
-%			OLS & -1.23 & -0.30 & 12.09 & 3.83 & 10.19 & 3.25 & -4.42 & -1.57 & -2.04 & -0.60 & 11.96 & 3.93 & 10.44 & 3.45 & -6.72 & -2.36\\
-%			
-%			Bottom up & -0.01 & 0.00 & 0.17 & -0.01 & 0.12 & 0.00 & \textbf{0.17} & 0.00 & -0.23 & 0.00 & -0.01 & -0.02 & 0.01 & -0.01 & -0.13 & 0.00\\
-%			
-%			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-%			\toprule
-%			\multicolumn{17}{c}{Non-Gaussian DGP}\\
-%			\toprule
-%			
-%			MinT(Shrink) & \textbf{3.67} & \textbf{1.30} & -0.11 & -0.18 & \textbf{16.19} & \textbf{6.12} & \textbf{2.29} & \textbf{0.80} & 3.38 & 1.22 & -1.21 & -0.47 & \textbf{17.90} & \textbf{6.92} & \textbf{2.09} & \textbf{0.76}\\
-%			
-%			MinT(Sample) & \textbf{3.67} & 1.25 & -0.11 & -0.24 & \textbf{16.19} & 6.01 & \textbf{2.29} & 0.76 & 3.38 & 1.16 & -1.21 & -0.58 & \textbf{17.90} & 6.71 & \textbf{2.09} & 0.64\\
-%			
-%			WLS & 3.34 & 1.24 & -2.51 & -1.00 & 10.79 & 3.96 & -1.27 & -0.38 & \textbf{3.47} & \textbf{1.23} & -3.11 & -1.12 & 12.60 & 4.78 & -1.21 & -0.41\\
-%			
-%			OLS & 2.95 & 1.15 & -1.85 & -0.73 & 7.61 & 2.74 & -1.19 & -0.32 & 3.22 & 1.18 & -2.13 & -0.76 & 8.85 & 3.25 & -1.13 & -0.35\\
-%			
-%			Bottom up & -0.17 & 0.00 & 0.09 & 0.00 & 0.03 & -0.01 & -0.10 & 0.00 & -0.20 & 0.00 & -0.03 & 0.00 & -0.05 & -0.01 & -0.22 & 0.00\\
-%			
-%			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-%			\bottomrule
-%		\end{tabular}
-%	}
-%\end{table}
 
 \subsection{Reparameterisation of $\bm{G}$ in optimal reconciliation of future paths and simulation results} \label{Appen:ReparaG}
 
@@ -1040,7 +871,7 @@ This structure for $\bm{G}_h$ will ensure $\bm{SG}_h$ is a projection matrix and
 				\multicolumn{3}{c|}{Non-Gaussian DGP} &
 				\multicolumn{3}{c}{Gaussian DGP} &
 				\multicolumn{3}{c}{Non-Gaussian DGP}\\
-				\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13} 
+				\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
 				h & {1} &  {2} & {3} & {1} &  {2} & {3} & {1} &  {2} & {3} & {1} &  {2} & {3}  \\
 				\midrule
 				Optimal(Method-1) & 10.6 & 12.9 & 15.7 & 5.36 & 5.51 & 5.83 & 4.85 & 5.30 & 5.86 & 1.21 & 1.27 & 1.40 \\
