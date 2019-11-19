@@ -687,34 +687,34 @@ Tables~\ref{tab:SimResults_Gauss_UnivScores} break down the forecasting performa
 	\resizebox{\linewidth}{!}{
 		\begin{tabular}{lccccccccc}
 			\toprule
-			\multicolumn{1}{c}{} & \multicolumn{3}{c}{h=1} & \multicolumn{3}{c}{h=2} & \multicolumn{3}{c}{h=3} \\
+			\multicolumn{1}{c}{} & \multicolumn{3}{c}{Log Score (\%)} & \multicolumn{3}{c}{Energy Score (\%)} & \multicolumn{3}{c}{Variogram Score (\%)} \\
 			\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
-			\text{Method} & ES(\%) & VS(\%) & LS(\%) & ES(\%) & VS(\%) & LS(\%) & ES(\%) & VS(\%) & LS(\%)\\
+			\text{h} & 1 & 2 & 3 & 1 & 2 & 3 & 1 & 2 & 3\\
 			\toprule
 			\multicolumn{10}{c}{Gaussian DGP}\\
 			\toprule
-			\text{MinT(Shrink)} & \textbf{19.48} & \textbf{9.78} & \textbf{3.16} & \textbf{19.57} & \textbf{14.16} & \textbf{6.53} & \textbf{16.47} & \textbf{16.56} & \textbf{8.34}\\
-			\text{MinT(Sample)} & \textbf{19.48} & 9.74 & 3.09 & 19.50 & 14.16 & 6.51 & 16.28 & 16.42 & 8.09\\
-			\text{WLS} & 18.08 & 7.21 & 0.64 & 17.68 & 10.97 & 2.31 & 14.99 & 13.17 & 3.76\\
-			\text{OLS} & 16.01 & 5.80 & -0.79 & 15.38 & 8.43 & 0.05 & 13.03 & 10.26 & 0.82\\
+			Base & -0.06 & -0.19 & -0.03 & 10.00 & 9.04 & 5.90 & -21.57 & -40.58 & -57.11\\
 			Bottom up & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			\text{Incoherent} & 11.65 & -0.12 &  & 10.58 & 1.71 &  & 8.75 & 3.64 & \\
+			OLS & 0.26 & 1.20 & 1.02 & 15.00 & 15.46 & 12.43 & 0.47 & -0.35 & -1.85\\
+			WLS & 1.05 & 2.70 & 3.87 & 18.00 & 18.99 & 15.92 & 1.61 & 1.69 & 1.55\\
+			MinT(Sample) & 1.29 & 2.64 & 4.62 & 19.35 & 20.65 & 17.82 & 2.10 & 2.92 & 3.93\\
+			MinT(Shrink) & \textbf{1.35} & \textbf{2.75} & \textbf{4.95} & \textbf{19.33} & \textbf{20.75} & \textbf{18.08} & \textbf{2.34} & \textbf{2.96} & \textbf{4.39}\\
 			%		\midrule
 			%		\textit{Bottom up} & $\mathbi{11.9}$ & $\mathbi{5.49}$ & $\mathbi{2.25}$ & $\mathbi{14.3}$ & $\mathbi{6.37}$ & $\mathbi{2.40}$ & $\mathbi{17.00}$ & $\mathbi{7.35}$ & $\mathbi{2.56}$\\
 			\toprule
 			\multicolumn{10}{c}{Non-Gaussian DGP}\\
 			\toprule
-			MinT(Shrink) & \textbf{15.04} & \textbf{0.69} & \textbf{4.52} & \textbf{16.98} & \textbf{1.34} & \textbf{4.55} & \textbf{18.00} & \textbf{0.66} & \textbf{4.01}\\
-			MinT(Sample) & 15.02 & 0.59 & 4.40 & 16.94 & 1.02 & 4.30 & 17.88 & 0.64 & 3.42\\
-			WLS & 12.72 & 0.00 & 0.93 & 14.22 & 0.41 & 1.34 & 15.20 & -0.42 & 0.89\\
-			OLS & 11.26 & 0.17 & 0.65 & 12.27 & 0.48 & 0.47 & 13.12 & -0.24 & 0.10\\
+			Base & -0.07 & 0.09 & 0.03 & 8.47 & 8.94 & 9.20 & -2.79 & -2.09 & -3.62\\
 			Bottom up & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			Incoherent & 8.47 & -2.79 &  & 8.94 & -2.09 &  & 9.20 & -3.62 & \\
+			OLS & 0.65 & 0.47 & 0.10 & 11.26 & 12.27 & 13.12 & 0.17 & 0.48 & -0.24\\
+			WLS & 0.93 & 1.34 & 0.89 & 12.72 & 14.22 & 15.20 & 0.00 & 0.41 & -0.42\\
+			MinT(Sample) & 4.40 & 4.30 & 3.42 & 15.02 & 16.94 & 17.88 & 0.59 & 1.02 & 0.64\\
+			MinT(Shrink) & \textbf{4.52} & \textbf{4.55} & \textbf{4.01} & \textbf{15.04} & \textbf{16.98} & \textbf{18.00} & \textbf{0.69} & \textbf{1.34} & \textbf{0.66}\\
+			
 			\bottomrule
 		\end{tabular}
 	}
 \end{table}
-
 
 
 \begin{table}[H]
@@ -723,41 +723,32 @@ Tables~\ref{tab:SimResults_Gauss_UnivScores} break down the forecasting performa
 	\resizebox{\linewidth}{!}{
 		\begin{tabular}{lcccccccccccccc}
 			\toprule
-			\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Total} & \multicolumn{2}{c}{A} & \multicolumn{2}{c}{B} & \multicolumn{2}{c}{AA} & \multicolumn{2}{c}{AB} & \multicolumn{2}{c}{BA} & \multicolumn{2}{c}{BB}\\
-			\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13} \cmidrule(lr){14-15}
+			\multicolumn{1}{c}{ } & \multicolumn{7}{c}{Gaussian} & \multicolumn{7}{c}{Non-Gaussian}\\
+			\cmidrule(lr){2-8} \cmidrule(lr){9-15} 
 						
-			R.method & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS \\
+			Series & Tot & A & B & AA & AB & BA & BB & Tot & A & B & AA & AB & BA & BB \\
 			\toprule
-			\multicolumn{15}{c}{Gaussian DGP}\\
+			\multicolumn{15}{c}{Log Score (\%)}\\
 			\toprule
-			
-			MinT(Shrink) & -0.13 & -0.01 & \textbf{9.37} & 3.12 & 5.42 & 1.67 & 3.91 & 1.30 & \textbf{12.04} & \textbf{3.82} & \textbf{10.07} & \textbf{3.12} & 1.47 & 0.47\\
-			
-			MinT(Sample) & -0.08 & -0.04 & \textbf{9.37} & \textbf{3.13} & 5.24 & 1.67 & \textbf{4.12} & \textbf{1.38} & 11.99 & \textbf{3.82} & 9.90 & 3.10 & \textbf{1.57} & \textbf{0.51} \\
-			
-			WLS & -2.91 & -1.24 & 8.78 & 2.86 & \textbf{5.49} & \textbf{1.73} & 1.10 & 0.42 & 10.37 & 3.21 & 9.12 & 2.78 & -1.14 & -0.26 \\
-			
-			OLS & -19.22 & -6.86 & 6.28 & 2.06 & 4.86 & 1.58 & 0.80 & 0.25 & 8.47 & 2.59 & 7.91 & 2.39 & -1.52 & -0.49 \\
-			
-			Bottom up & -140.27 & -33.67 & -13.75 & -3.89 & -11.10 & -3.17 & 0.01 & 0.00 & 0.04 & 0.00 & 0.15 & 0.00 & -0.09 & 0.00 \\
-			
-			Incoherent & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00  & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 \\
+			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+			Bottom up & -23.31 & -2.46 & -1.08 & 0.00 & 0.00 & 0.00 & 0.00 & -246.37 & -1.87 & -3.11 & 0.00 & 0.00 & 0.00 & 0.00\\
+			OLS & -3.92 & 3.71 & -0.42 & 1.29 & 2.39 & 0.24 & 0.12 & -84.90 & 0.08 & 2.57 & 1.07 & -0.55 & 2.25 & -0.21\\
+			WLS & -0.76 & 6.19 & -0.07 & 1.77 & 3.13 & \textbf{0.33} & 0.21 & \textbf{0.35} & -0.52 & 4.07 & 1.20 & -0.74 & 3.13 & -0.26\\
+			MinT(Sample) & 0.29 & \textbf{7.47} & 0.28 & 1.97 & \textbf{3.70} & 0.31 & 0.25 & -0.72 & \textbf{0.28} & \textbf{4.94} & 1.29 & -0.13 & 4.99 & \textbf{0.91}\\
+			MinT(Shrink) & \textbf{0.30} & 7.44 & \textbf{0.30} & \textbf{2.00} & 3.61 &\textbf{0.33} & \textbf{0.29} & -0.26 & 0.27 & 4.91 & \textbf{1.31} & -0.11 & \textbf{5.00} & 0.87\\
+			\hline
 			
 			\toprule
-			\multicolumn{15}{c}{Non-Gaussian DGP}\\
+			\multicolumn{15}{c}{CRPS (\%)}\\
 			\toprule
 			
-			MinT(Shrink) & -1.16 & -0.26 & \textbf{0.92} & 0.27 & \textbf{11.90} & 4.91 & \textbf{3.40} & \textbf{1.31} & -0.11 & -0.11 & \textbf{13.22} & \textbf{5.00} & \textbf{2.37} & 0.87 \\
+			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+			Bottom up & -103.83 & -9.87 & -3.73 & 0.16 & -0.04 & 0.10 & 0.12 & -541.40 & -4.60 & -8.99 & -0.10 & -0.12 & -0.02 & -0.08\\
+			OLS & -12.61 & 12.55 & -1.69 & 4.73 & 8.21 & 0.74 & 0.83 & -96.77 & 0.55 & 6.48 & 2.70 & -1.46 & 6.19 & -0.81\\
+			WLS & -2.09 & 20.26 & -0.38 & 6.35 & 10.75 & 1.07 & \textbf{1.23} & 0.01 & -1.02 & 9.95 & 2.92 & -1.90 & 8.50 & -0.96\\
+			MinT(Sample) & \textbf{1.08} & \textbf{23.92} & 0.67 & 7.03 & \textbf{12.46} & 1.02 & 0.95 & -1.16 & \textbf{0.92} & \textbf{11.90} & \textbf{3.40} & -0.11 & \textbf{13.22} & \textbf{2.37}\\
+			MinT(Shrink) & 0.91 & 23.74 & \textbf{0.84} & \textbf{7.13} & 12.21 & \textbf{1.18} & 1.19 & -1.16 & \textbf{0.92} & \textbf{11.90} & \textbf{3.40} & -0.11 & \textbf{13.22} & \textbf{2.37}\\
 			
-			MinT(Sample) & -1.16 & -0.72 & \textbf{0.92} & \textbf{0.28} & \textbf{11.90} & \textbf{4.94} & \textbf{3.40} & 1.29 & -0.11 & -0.13 & \textbf{13.22} & 4.99 & \textbf{2.37} & \textbf{0.91}\\
-			
-			WLS & \textbf{0.01} & \textbf{0.35} & -1.02 & -0.52 & 9.95 & 4.07 & 2.92 & 1.20 & -1.90 & -0.74 & 8.50 & 3.13 & -0.96 & -0.26\\
-			
-			OLS & -96.77 & -84.90 & 0.55 & 0.08 & 6.48 & 2.57 & 2.70 & 1.07 & -1.46 & -0.55 & 6.19 & 2.25 & -0.81 & -0.21\\
-			
-			Bottom up & -541.40 & -246.37 & -4.60 & -1.87 & -8.99 & -3.11 & -0.10 & 0.00 & -0.12 & 0.00 & -0.02 & 0.00 & -0.08 & 0.00 \\
-			
-			Incoherent & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 \\
 			\bottomrule
 		\end{tabular}
 	}
@@ -916,33 +907,66 @@ However we also note that optimal reconciliation required a high computational c
 		\resizebox{\linewidth}{!}{
 			\begin{tabular}{@{}lSSSSSS|SSSSSS@{}}
 				\toprule
-				\multicolumn{1}{c}{} & \multicolumn{6}{c|}{Non-Gaussian DGP} & \multicolumn{6}{c}{Gaussian DGP}\\
+				\multicolumn{1}{c}{} & \multicolumn{6}{c|}{Energy Score} & \multicolumn{6}{c}{Variogram Score}\\
 				\toprule
-				Reconciliation &
-				\multicolumn{2}{c}{h=1} &
-				\multicolumn{2}{c}{h=2} &
-				\multicolumn{2}{c|}{h=3} & \multicolumn{2}{c}{h=1} &
-				\multicolumn{2}{c}{h=2} &
-				\multicolumn{2}{c}{h=3} \\
-				\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13}
-				method       & {}{\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} &{\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} \\
+				 &
+				\multicolumn{3}{c}{Gaussian DGP} &
+				\multicolumn{3}{c|}{Non-Gaussian DGP} &
+				\multicolumn{3}{c}{Gaussian DGP} &
+				\multicolumn{3}{c}{Non-Gaussian DGP}\\
+				\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13} 
+				h & {}{1} &  {2} & {3} & {1} &  {2} & {3} & {1} &  {2} & {3} & {1} &  {2} & {3}  \\
 				\midrule
-				Optimal* & 5.36 & 1.21 & 5.51 & 1.27 & 5.83 & 1.38 & 9.59 & 4.86 & 11.50 & 5.38 & 13.80 & 6.13\\
-%				Optimal(Method-2)* & 5.37 & 1.21 & 5.53 & 1.27 & 5.83 & 1.37 & 9.58 & 4.85 & 11.50 & 5.37 & 13.80 & 6.14\\
-%				Optimal(Method-3)* & 5.37 & 1.21 & 5.53 & 1.27 & 5.83 & 1.37 & 9.58 & 4.85 & 11.50 & 5.37 &
-%				13.80 & 6.14 \\
-%				Optimal(Method-4)* & 5.38 & 1.21 & 5.54 & 1.27 & 5.83 & 1.38 & 9.58 & 4.85 & 11.50 & 5.37 & 13.80 & 6.14\\
-				MinT(Shrink)*	  & 5.33 & 1.19 & 5.50 & 1.26 & 5.77 & 1.34 & 9.43 & 4.78 & 11.40 & 5.33 & 13.70 & 6.09 \\
-				WLS          	  & 5.43 & 1.23 & 5.60 & 1.30 & 5.89 & 1.40 & 9.64 & 4.93 & 11.70 & 5.60 & 14.10 & 6.39 \\
-				OLS          	  & 5.51 & 1.23 & 5.70 & 1.30 & 5.98 & 1.40 & 9.91 & 4.93 & 12.10 & 5.60 &
-				14.50 & 6.39\\
-				\textit{Incoherent} & $\mathbi{5.71}$ & $\mathbi{1.28}$ & $\mathbi{5.94}$ & $\mathbi{1.37}$ & $\mathbi{6.27}$ & $\mathbi{1.49}$ &$\mathbi{10.40}$& $\mathbi{5.31}$ & $\mathbi{12.70}$ & $\mathbi{6.22}$ & $\mathbi{15.20}$ & $\mathbi{7.14}$\\
+				Base & 11.7 & 14.6 & 17.8 & 5.71 & 5.94 & 6.27 & 5.56 & 6.61 & 7.87 & 1.28 & 1.37 & 1.49 \\
+				OLS & 11.1 & 13.7 & 16.7 & 5.51 & 5.70 & 5.98 & 4.86 & 5.35 & 6.05 & 1.23 & 1.30 & 1.40 \\
+				WLS & 10.7 & 13.2 & 16.0 & 5.43 & 5.60 & 5.89 & 4.86 & 5.35 & 5.86 & 1.23 & 1.30 & 1.40 \\
+				MinT(Shrink)* & 10.5 & 12.8 & 15.7 & 5.33 & 5.50 & 5.77 & 4.77 & 5.24 & 5.86 & 1.19 & 1.26 & 1.34 \\
+				Optimal* & 10.6 & 12.9 & 15.7 & 5.36 & 5.51 & 5.83 & 4.85 & 5.30 & 5.86 & 1.21 & 1.27 & 1.40 \\
 				\bottomrule
 			\end{tabular}
 		}
 	\end{center}
 	\textit{The differences in scores between methods noted by ``*'' are statistically insignificant. The differences between these and the incoherent forecasts are statistically significant.}
 \end{table}
+
+
+
+
+%\begin{table}
+%	\caption{Energy scores (ES) and variogram scores (VS) for probabilistic forecasts from different reconciliation methods are presented. Bottom row represent the scores for base forecasts which are not coherent. The smaller the scores, the better the forecasts are.} \label{table:Non-paraSimulation1}
+%	%	\centering
+%	\begin{center}
+%		\tabcolsep=0.08cm\small
+%		\resizebox{\linewidth}{!}{
+%			\begin{tabular}{@{}lSSSSSS|SSSSSS@{}}
+%				\toprule
+%				\multicolumn{1}{c}{} & \multicolumn{6}{c|}{Non-Gaussian DGP} & \multicolumn{6}{c}{Gaussian DGP}\\
+%				\toprule
+%				Reconciliation &
+%				\multicolumn{2}{c}{h=1} &
+%				\multicolumn{2}{c}{h=2} &
+%				\multicolumn{2}{c|}{h=3} & \multicolumn{2}{c}{h=1} &
+%				\multicolumn{2}{c}{h=2} &
+%				\multicolumn{2}{c}{h=3} \\
+%				\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13}
+%				method       & {}{\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} &{\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} \\
+%				\midrule
+%				Optimal* & 5.36 & 1.21 & 5.51 & 1.27 & 5.83 & 1.38 & 9.59 & 4.86 & 11.50 & 5.38 & 13.80 & 6.13\\
+%%				Optimal(Method-2)* & 5.37 & 1.21 & 5.53 & 1.27 & 5.83 & 1.37 & 9.58 & 4.85 & 11.50 & 5.37 & 13.80 & 6.14\\
+%%				Optimal(Method-3)* & 5.37 & 1.21 & 5.53 & 1.27 & 5.83 & 1.37 & 9.58 & 4.85 & 11.50 & 5.37 &
+%%				13.80 & 6.14 \\
+%%				Optimal(Method-4)* & 5.38 & 1.21 & 5.54 & 1.27 & 5.83 & 1.38 & 9.58 & 4.85 & 11.50 & 5.37 & 13.80 & 6.14\\
+%				MinT(Shrink)*	  & 5.33 & 1.19 & 5.50 & 1.26 & 5.77 & 1.34 & 9.43 & 4.78 & 11.40 & 5.33 & 13.70 & 6.09 \\
+%				WLS          	  & 5.43 & 1.23 & 5.60 & 1.30 & 5.89 & 1.40 & 9.64 & 4.93 & 11.70 & 5.60 & 14.10 & 6.39 \\
+%				OLS          	  & 5.51 & 1.23 & 5.70 & 1.30 & 5.98 & 1.40 & 9.91 & 4.93 & 12.10 & 5.60 &
+%				14.50 & 6.39\\
+%				\textit{Incoherent} & $\mathbi{5.71}$ & $\mathbi{1.28}$ & $\mathbi{5.94}$ & $\mathbi{1.37}$ & $\mathbi{6.27}$ & $\mathbi{1.49}$ &$\mathbi{10.40}$& $\mathbi{5.31}$ & $\mathbi{12.70}$ & $\mathbi{6.22}$ & $\mathbi{15.20}$ & $\mathbi{7.14}$\\
+%				\bottomrule
+%			\end{tabular}
+%		}
+%	\end{center}
+%	\textit{The differences in scores between methods noted by ``*'' are statistically insignificant. The differences between these and the incoherent forecasts are statistically significant.}
+%\end{table}
 
 \section{Application: Forecasting Australian domestic tourism flow}\label{sec:Application}
 
@@ -1146,102 +1170,168 @@ Thus for the Gaussian DGP we choose $\sigma^2_u = 24$ and $\sigma^2_u = 18$ wher
 \subsection{Simulation results from parametric solution for marginal forecast distributions}\label{Append:Gauss_sim_Univ}
 
 \begin{table}[H]
-	\caption{Comparison of incoherent vs coherent forecasts based on the univariate forecast distribution of the aggregate series. Each entry represents the percentage skill score with reference to the incoherent forecasts based on ``CRPS" and ``LS". These entries show the percentage increase in score for different forecasting methods relative to the incoherent forecasts for $h=2$ and $3$ steps-ahead forecast. Results from the Gaussian DGP are presented in the top panel whereas the results from the non-Gaussian DGP are presented in the bottom panel}\label{tab:SimResults_Gauss_UnivScores_Aggre_h2-h3}
+	\caption{Comparison of incoherent vs coherent forecasts based on the univariate forecast distribution of each series. Each entry represents the percentage skill score with reference to the incoherent forecasts based on ``CRPS" and ``LS". These entries show the percentage increase in score for different forecasting methods relative to the incoherent forecasts for $h=2$ step-ahead forecast. Results from the Gaussian DGP are presented in the top panel whereas the results from the non-Gaussian DGP are presented in the bottom panel}\label{tab:SimResults_Gauss_UnivScores_h2}
 	\centering
 	\resizebox{\linewidth}{!}{
-		\begin{tabular}{lcccccccccccc}
+		\begin{tabular}{lcccccccccccccc}
 			\toprule
-			\multicolumn{1}{c}{ } & \multicolumn{6}{c}{h=2} &
-			\multicolumn{6}{c}{h=3} \\
-			\cmidrule(lr){2-7} \cmidrule(lr){8-13}
-			\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Total} & \multicolumn{2}{c}{A} & \multicolumn{2}{c}{B} & \multicolumn{2}{c}{Total} & \multicolumn{2}{c}{A} & \multicolumn{2}{c}{B} \\
-			\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13} 
+			\multicolumn{1}{c}{ } & \multicolumn{7}{c}{Gaussian} & \multicolumn{7}{c}{Non-Gaussian}\\
+			\cmidrule(lr){2-8} \cmidrule(lr){9-15} 
 			
-			R.method & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS\\
+			Series & Tot & A & B & AA & AB & BA & BB & Tot & A & B & AA & AB & BA & BB \\
 			\toprule
-			\multicolumn{13}{c}{Gaussian DGP}\\
+			\multicolumn{15}{c}{Log Score (\%)}\\
 			\toprule
-			
-			MinT(Shrink) & \textbf{0.34} & -0.08 & 10.67 & 3.32 & 5.79 & 1.59 & 0.08 & -0.17 & 8.13 & 1.58 & 4.17 & 1.04\\
-			
-			MinT(Sample) & 0.27 & -0.10 & \textbf{10.76} & \textbf{3.39} & 5.67 & 1.62 & 0.04 & -0.23 & \textbf{8.14} & \textbf{1.69} & 4.19 & 1.10\\
-			
-			WLS & -0.41 & 1.02 & 9.99 & 2.97 & \textbf{6.01} & \textbf{1.73} & \textbf{0.10} & 2.97 & 7.72 & 1.57 & \textbf{4.46} & 1.26\\
-			
-			OLS & -5.99 & \textbf{4.05} & 7.17 & 2.03 & 5.83 & 1.70 & -2.13 & 13.11 & 5.30 & 0.97 & 4.41 & \textbf{1.30}\\
-			
-			Bottom up & -60.07 & 2.72 & -13.82 & -3.86 & -9.04 & -2.37 & -30.95 & \textbf{30.34} & -13.57 & -3.37 & -8.47 & -1.87\\
-			
-			Incoherent & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			
+			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+			Bottom up & 1.06 & -2.32 & -0.52 & -0.01 & -0.02 & 0.00 & 0.00 & -68.47 & -1.67 & -2.84 & 0.00 & 0.00 & -0.01 & 0.00\\	
+			OLS & \textbf{1.34} & 2.94 & -2.07 & 1.85 & 3.76 & -0.79 & 0.02 & -14.27 & -0.12 & 3.44 & 1.15 & -0.73 & 2.74 & -0.32\\
+			WLS & 0.21 & 5.14 & -1.09 & \textbf{2.23} & 5.35 & -0.45 & 0.22 & -0.15 & -1.09 & 5.55 & 1.24 & -1.00 & 3.96 & -0.38\\	
+			MinT(Sample) & -0.47 & \textbf{6.48} & 0.12 & 1.97 & 6.61 & -0.10 & 0.25 & -1.53 & \textbf{0.31} & \textbf{6.87} & 1.25 & -0.24 & 6.01 & 0.76\\
+			MinT(Shrink) & -0.35 & 6.41 & \textbf{0.14} & 2.08 & \textbf{6.72} & -0.09 & \textbf{0.33} & -1.16 & 0.29 & 6.83 & \textbf{1.30} & -0.18 & \textbf{6.12} & \textbf{0.80}\\		
 			\toprule
-			\multicolumn{13}{c}{Non-Gaussian DGP}\\
+			\multicolumn{15}{c}{CRPS (\%)}\\
 			\toprule
-			
-			MinT(Shrink) & -0.70 & -1.16 & \textbf{0.71} & 0.29 & \textbf{16.53} & 6.83 & -0.30 & -1.35 & \textbf{0.60} & 0.25 & \textbf{19.53} & 8.28\\
-			
-			MinT(Sample) & -0.70 & -1.53 & \textbf{0.71} & \textbf{0.31} & \textbf{16.53} & \textbf{6.87} & -0.30 & -1.61 & \textbf{0.60} & \textbf{0.31} & \textbf{19.53} & \textbf{8.35}\\
-			
-			WLS & -0.11 & -0.15 & -2.50 & -1.09 & 13.87 & 5.55 & -0.02 & -0.40 & -3.96 & -1.60 & 16.14 & 6.78\\
-			
-			OLS & -44.06 & -14.27 & -0.18 & -0.12 & 8.72 & 3.44 & -22.75 & \textbf{19.51} & -0.71 & -0.32 & 10.48 & 4.27\\
-			
-			Bottom up & -273.80 & -68.47 & -4.20 & -1.67 & -8.78 & -2.84 & -159.47 & 10.59 & -4.71 & -1.77 & -8.06 & -2.27\\
-			
-			Incoherent & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+			Bottom up & -53.21 & -9.30 & -1.99 & -0.17 & 0.07 & -0.16 & 0.01 & -273.80 & -4.20 & -8.78 & -0.17 & 0.09 & 0.03 & -0.10\\
+			OLS & -4.84 & 12.67 & -6.63 & 6.24 & 11.75 & -2.88 & 0.35 & -44.06 & -0.18 & 8.72 & 2.95 & -1.85 & 7.61 & -1.19\\
+			WLS & -0.25 & 20.18 & -3.29 & 7.60 & 15.98 & -1.86 & 1.06 & -0.11 & -2.50 & 13.87 & 3.34 & -2.51 & 10.79 & -1.27\\
+			MinT(Sample) & 0.64 & \textbf{23.47} & 0.47 & 7.34 & 19.21 & -0.41 & 0.82 & -0.70 & \textbf{0.71} & \textbf{16.53} & \textbf{3.67} & -0.11 & \textbf{16.19} & \textbf{2.29}\\
+			MinT(Shrink) & \textbf{0.76} & 23.45 & \textbf{0.52} & \textbf{7.47} & \textbf{19.36} & -0.59 & \textbf{1.08} & -0.70 & \textbf{0.71} & \textbf{16.53} & \textbf{3.67} & -0.11 & \textbf{16.19} & \textbf{2.29}\\
 			\bottomrule
 		\end{tabular}
 	}
 \end{table}
-
-
 
 \begin{table}[H]
-	\caption{Comparison of incoherent vs coherent forecasts based univariate forecast distribution of bottom-level series. Each entry represents the skill score with reference to Incoherent forecasts based on ``CRPS" and ``LS" for forecast horizons $h=2$ and $h=3$.}\label{tab:SimResults_Gauss_UnivScores_Disaggre_h2-h3}
+	\caption{Comparison of incoherent vs coherent forecasts based on the univariate forecast distribution of each series. Each entry represents the percentage skill score with reference to the incoherent forecasts based on ``CRPS" and ``LS". These entries show the percentage increase in score for different forecasting methods relative to the incoherent forecasts for $h=3$ step-ahead forecast. Results from the Gaussian DGP are presented in the top panel whereas the results from the non-Gaussian DGP are presented in the bottom panel}\label{tab:SimResults_Gauss_UnivScores_h3}
 	\centering
 	\resizebox{\linewidth}{!}{
-		\begin{tabular}{lcccccccccccccccc}
+		\begin{tabular}{lcccccccccccccc}
 			\toprule
-			\multicolumn{1}{c}{ } & \multicolumn{8}{c}{h=2} &
-			\multicolumn{8}{c}{h=3} \\
-			\cmidrule(lr){2-9} \cmidrule(lr){10-17}
-			\multicolumn{1}{c}{ } & \multicolumn{2}{c}{AA} & \multicolumn{2}{c}{AB} & \multicolumn{2}{c}{BA} & \multicolumn{2}{c}{BB} & \multicolumn{2}{c}{AA} & \multicolumn{2}{c}{AB} & \multicolumn{2}{c}{BA} & \multicolumn{2}{c}{BB} \\
-			\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13} \cmidrule(lr){14-15} \cmidrule(lr){16-17} 
-			R.method & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS\\
+			\multicolumn{1}{c}{ } & \multicolumn{7}{c}{Gaussian} & \multicolumn{7}{c}{Non-Gaussian}\\
+			\cmidrule(lr){2-8} \cmidrule(lr){9-15} 
+			
+			Series & Tot & A & B & AA & AB & BA & BB & Tot & A & B & AA & AB & BA & BB \\
 			\toprule
-			\multicolumn{17}{c}{Gaussian DGP}\\
+			\multicolumn{15}{c}{Log Score (\%)}\\
 			\toprule
-			
-			MinT(Shrink) & 3.80 & 1.28 & \textbf{19.37} & \textbf{6.55} & \textbf{13.61} & \textbf{4.44} & -0.08 & -0.14 & \textbf{2.54} & \textbf{0.83} & \textbf{19.58} & \textbf{6.92} & \textbf{13.94} & \textbf{4.83} & -2.64 & -0.96\\
-			
-			MinT(Sample) & \textbf{4.06} & \textbf{1.33} & 19.23 & 6.53 & 13.21 & 4.34 & -0.24 & -0.19 & 2.24 & 0.68 & 19.33 & 6.73 & 13.44 & 4.62 & -3.44 & -1.21\\
-			
-			WLS & -0.55 & -0.09 & 15.52 & 5.05 & 12.17 & 3.91 & -3.48 & -1.25 & -1.52 & -0.46 & 15.75 & 5.32 & 12.63 & 4.34 & -5.74 & -2.04\\
-			
-			OLS & -1.23 & -0.30 & 12.09 & 3.83 & 10.19 & 3.25 & -4.42 & -1.57 & -2.04 & -0.60 & 11.96 & 3.93 & 10.44 & 3.45 & -6.72 & -2.36\\
-			
-			Bottom up & -0.01 & 0.00 & 0.17 & -0.01 & 0.12 & 0.00 & \textbf{0.17} & 0.00 & -0.23 & 0.00 & -0.01 & -0.02 & 0.01 & -0.01 & -0.13 & 0.00\\
-			
-			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 	0.00 & 0.00 & 0.00 & 0.00\\
+			Bottom up & \textbf{27.18} & -0.30 & 0.10 & -0.03 & -0.04 & 0.00 & 0.00 & 10.59 & -1.77 & -2.27 & 0.00 & 0.00 & -0.01 & 0.00\\
+			OLS & 7.73 & 0.45 & -6.60 & 1.99 & 4.43 & -2.22 & -1.28 & 19.51 & -0.32 & 4.27 & 1.18 & -0.76 & 3.25 & -0.35\\
+			WLS & 1.58 & 0.95 & -4.36 & \textbf{2.43} & 6.58 & -1.47 & -0.76 & -0.40 & -1.60 & 6.78 & \textbf{1.23} & -1.12 & 4.78 & -0.41\\
+			MinT(Sample) & -1.44 & \textbf{1.97} & -1.10 & 2.03 & 8.56 & -0.53 & -0.26 & -1.61 & \textbf{0.31} & \textbf{8.35} & 1.16 & -0.58 & 6.71 & 0.64\\
+			MinT(Shrink) & -0.99 & 1.82 & -0.91 & 2.25 & \textbf{8.82} & -0.54 & -0.08 & -1.35 & 0.25 & 8.28 & 1.22 & -0.47 & \textbf{6.92} & \textbf{0.76}\\
 			\toprule
-			\multicolumn{17}{c}{Non-Gaussian DGP}\\
+			\multicolumn{15}{c}{CRPS (\%)}\\
 			\toprule
-			
-			MinT(Shrink) & \textbf{3.67} & \textbf{1.30} & -0.11 & -0.18 & \textbf{16.19} & \textbf{6.12} & \textbf{2.29} & \textbf{0.80} & 3.38 & 1.22 & -1.21 & -0.47 & \textbf{17.90} & \textbf{6.92} & \textbf{2.09} & \textbf{0.76}\\
-			
-			MinT(Sample) & \textbf{3.67} & 1.25 & -0.11 & -0.24 & \textbf{16.19} & 6.01 & \textbf{2.29} & 0.76 & 3.38 & 1.16 & -1.21 & -0.58 & \textbf{17.90} & 6.71 & \textbf{2.09} & 0.64\\
-			
-			WLS & 3.34 & 1.24 & -2.51 & -1.00 & 10.79 & 3.96 & -1.27 & -0.38 & \textbf{3.47} & \textbf{1.23} & -3.11 & -1.12 & 12.60 & 4.78 & -1.21 & -0.41\\
-			
-			OLS & 2.95 & 1.15 & -1.85 & -0.73 & 7.61 & 2.74 & -1.19 & -0.32 & 3.22 & 1.18 & -2.13 & -0.76 & 8.85 & 3.25 & -1.13 & -0.35\\
-			
-			Bottom up & -0.17 & 0.00 & 0.09 & 0.00 & 0.03 & -0.01 & -0.10 & 0.00 & -0.20 & 0.00 & -0.03 & 0.00 & -0.05 & -0.01 & -0.22 & 0.00\\
-			
-			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+			Bottom up & -28.38 & -6.54 & 0.03 & 0.01 & -0.07 & \textbf{0.05} & \textbf{0.10} & -159.47 & -4.71 & -8.06 & -0.20 & -0.03 & -0.05 & -0.22\\
+			OLS & -1.20 & 11.05 & -18.30 & 6.34 & 11.76 & -7.12 & -4.18 & -22.75 & -0.71 & 10.48 & 3.22 & -2.13 & 8.85 & -1.13\\
+			WLS & \textbf{0.75} & 17.40 & -12.15 & 7.77 & 16.39 & -4.88 & -2.69 & -0.02 & -3.96 & 16.14 & \textbf{3.47} & -3.11 & 12.60 & -1.21\\
+			MinT(Sample) & 0.45 & 20.14 & -2.57 & 7.51 & 19.89 & -1.70 & -0.79 & -0.30 & \textbf{0.60} & \textbf{19.53} & 3.38 & -1.21 & \textbf{17.90} & \textbf{2.09}\\
+			MinT(Shrink) & 0.70 & \textbf{20.26} & -2.31 & \textbf{7.90} & \textbf{20.38} & -1.63 & -0.29 & -0.30 & \textbf{0.60} & \textbf{19.53} & 3.38 & -1.21 & \textbf{17.90} & \textbf{2.09}\\
 			\bottomrule
 		\end{tabular}
 	}
 \end{table}
+
+%\begin{table}[H]
+%	\caption{Comparison of incoherent vs coherent forecasts based on the univariate forecast distribution of the aggregate series. Each entry represents the percentage skill score with reference to the incoherent forecasts based on ``CRPS" and ``LS". These entries show the percentage increase in score for different forecasting methods relative to the incoherent forecasts for $h=2$ and $3$ steps-ahead forecast. Results from the Gaussian DGP are presented in the top panel whereas the results from the non-Gaussian DGP are presented in the bottom panel}\label{tab:SimResults_Gauss_UnivScores_Aggre_h2-h3}
+%	\centering
+%	\resizebox{\linewidth}{!}{
+%		\begin{tabular}{lcccccccccccc}
+%			\toprule
+%			\multicolumn{1}{c}{ } & \multicolumn{6}{c}{h=2} &
+%			\multicolumn{6}{c}{h=3} \\
+%			\cmidrule(lr){2-7} \cmidrule(lr){8-13}
+%			\multicolumn{1}{c}{ } & \multicolumn{2}{c}{Total} & \multicolumn{2}{c}{A} & \multicolumn{2}{c}{B} & \multicolumn{2}{c}{Total} & \multicolumn{2}{c}{A} & \multicolumn{2}{c}{B} \\
+%			\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13} 
+%			
+%			R.method & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS\\
+%			\toprule
+%			\multicolumn{13}{c}{Gaussian DGP}\\
+%			\toprule
+%			
+%			MinT(Shrink) & \textbf{0.34} & -0.08 & 10.67 & 3.32 & 5.79 & 1.59 & 0.08 & -0.17 & 8.13 & 1.58 & 4.17 & 1.04\\
+%			
+%			MinT(Sample) & 0.27 & -0.10 & \textbf{10.76} & \textbf{3.39} & 5.67 & 1.62 & 0.04 & -0.23 & \textbf{8.14} & \textbf{1.69} & 4.19 & 1.10\\
+%			
+%			WLS & -0.41 & 1.02 & 9.99 & 2.97 & \textbf{6.01} & \textbf{1.73} & \textbf{0.10} & 2.97 & 7.72 & 1.57 & \textbf{4.46} & 1.26\\
+%			
+%			OLS & -5.99 & \textbf{4.05} & 7.17 & 2.03 & 5.83 & 1.70 & -2.13 & 13.11 & 5.30 & 0.97 & 4.41 & \textbf{1.30}\\
+%			
+%			Bottom up & -60.07 & 2.72 & -13.82 & -3.86 & -9.04 & -2.37 & -30.95 & \textbf{30.34} & -13.57 & -3.37 & -8.47 & -1.87\\
+%			
+%			Incoherent & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+%			
+%			\toprule
+%			\multicolumn{13}{c}{Non-Gaussian DGP}\\
+%			\toprule
+%			
+%			MinT(Shrink) & -0.70 & -1.16 & \textbf{0.71} & 0.29 & \textbf{16.53} & 6.83 & -0.30 & -1.35 & \textbf{0.60} & 0.25 & \textbf{19.53} & 8.28\\
+%			
+%			MinT(Sample) & -0.70 & -1.53 & \textbf{0.71} & \textbf{0.31} & \textbf{16.53} & \textbf{6.87} & -0.30 & -1.61 & \textbf{0.60} & \textbf{0.31} & \textbf{19.53} & \textbf{8.35}\\
+%			
+%			WLS & -0.11 & -0.15 & -2.50 & -1.09 & 13.87 & 5.55 & -0.02 & -0.40 & -3.96 & -1.60 & 16.14 & 6.78\\
+%			
+%			OLS & -44.06 & -14.27 & -0.18 & -0.12 & 8.72 & 3.44 & -22.75 & \textbf{19.51} & -0.71 & -0.32 & 10.48 & 4.27\\
+%			
+%			Bottom up & -273.80 & -68.47 & -4.20 & -1.67 & -8.78 & -2.84 & -159.47 & 10.59 & -4.71 & -1.77 & -8.06 & -2.27\\
+%			
+%			Incoherent & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+%			\bottomrule
+%		\end{tabular}
+%	}
+%\end{table}
+%
+%
+%
+%\begin{table}[H]
+%	\caption{Comparison of incoherent vs coherent forecasts based univariate forecast distribution of bottom-level series. Each entry represents the skill score with reference to Incoherent forecasts based on ``CRPS" and ``LS" for forecast horizons $h=2$ and $h=3$.}\label{tab:SimResults_Gauss_UnivScores_Disaggre_h2-h3}
+%	\centering
+%	\resizebox{\linewidth}{!}{
+%		\begin{tabular}{lcccccccccccccccc}
+%			\toprule
+%			\multicolumn{1}{c}{ } & \multicolumn{8}{c}{h=2} &
+%			\multicolumn{8}{c}{h=3} \\
+%			\cmidrule(lr){2-9} \cmidrule(lr){10-17}
+%			\multicolumn{1}{c}{ } & \multicolumn{2}{c}{AA} & \multicolumn{2}{c}{AB} & \multicolumn{2}{c}{BA} & \multicolumn{2}{c}{BB} & \multicolumn{2}{c}{AA} & \multicolumn{2}{c}{AB} & \multicolumn{2}{c}{BA} & \multicolumn{2}{c}{BB} \\
+%			\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13} \cmidrule(lr){14-15} \cmidrule(lr){16-17} 
+%			R.method & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS & CRPS & LS\\
+%			\toprule
+%			\multicolumn{17}{c}{Gaussian DGP}\\
+%			\toprule
+%			
+%			MinT(Shrink) & 3.80 & 1.28 & \textbf{19.37} & \textbf{6.55} & \textbf{13.61} & \textbf{4.44} & -0.08 & -0.14 & \textbf{2.54} & \textbf{0.83} & \textbf{19.58} & \textbf{6.92} & \textbf{13.94} & \textbf{4.83} & -2.64 & -0.96\\
+%			
+%			MinT(Sample) & \textbf{4.06} & \textbf{1.33} & 19.23 & 6.53 & 13.21 & 4.34 & -0.24 & -0.19 & 2.24 & 0.68 & 19.33 & 6.73 & 13.44 & 4.62 & -3.44 & -1.21\\
+%			
+%			WLS & -0.55 & -0.09 & 15.52 & 5.05 & 12.17 & 3.91 & -3.48 & -1.25 & -1.52 & -0.46 & 15.75 & 5.32 & 12.63 & 4.34 & -5.74 & -2.04\\
+%			
+%			OLS & -1.23 & -0.30 & 12.09 & 3.83 & 10.19 & 3.25 & -4.42 & -1.57 & -2.04 & -0.60 & 11.96 & 3.93 & 10.44 & 3.45 & -6.72 & -2.36\\
+%			
+%			Bottom up & -0.01 & 0.00 & 0.17 & -0.01 & 0.12 & 0.00 & \textbf{0.17} & 0.00 & -0.23 & 0.00 & -0.01 & -0.02 & 0.01 & -0.01 & -0.13 & 0.00\\
+%			
+%			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+%			\toprule
+%			\multicolumn{17}{c}{Non-Gaussian DGP}\\
+%			\toprule
+%			
+%			MinT(Shrink) & \textbf{3.67} & \textbf{1.30} & -0.11 & -0.18 & \textbf{16.19} & \textbf{6.12} & \textbf{2.29} & \textbf{0.80} & 3.38 & 1.22 & -1.21 & -0.47 & \textbf{17.90} & \textbf{6.92} & \textbf{2.09} & \textbf{0.76}\\
+%			
+%			MinT(Sample) & \textbf{3.67} & 1.25 & -0.11 & -0.24 & \textbf{16.19} & 6.01 & \textbf{2.29} & 0.76 & 3.38 & 1.16 & -1.21 & -0.58 & \textbf{17.90} & 6.71 & \textbf{2.09} & 0.64\\
+%			
+%			WLS & 3.34 & 1.24 & -2.51 & -1.00 & 10.79 & 3.96 & -1.27 & -0.38 & \textbf{3.47} & \textbf{1.23} & -3.11 & -1.12 & 12.60 & 4.78 & -1.21 & -0.41\\
+%			
+%			OLS & 2.95 & 1.15 & -1.85 & -0.73 & 7.61 & 2.74 & -1.19 & -0.32 & 3.22 & 1.18 & -2.13 & -0.76 & 8.85 & 3.25 & -1.13 & -0.35\\
+%			
+%			Bottom up & -0.17 & 0.00 & 0.09 & 0.00 & 0.03 & -0.01 & -0.10 & 0.00 & -0.20 & 0.00 & -0.03 & 0.00 & -0.05 & -0.01 & -0.22 & 0.00\\
+%			
+%			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
+%			\bottomrule
+%		\end{tabular}
+%	}
+%\end{table}
 
 \subsection{Reparameterisation of $\bm{G}$ in optimal reconciliation of future paths and simulation results} \label{Appen:ReparaG}
 
@@ -1258,40 +1348,34 @@ This structure for $\bm{G}_h$ will ensure $\bm{SG}_h$ is a projection matrix and
 	
 \end{itemize}
 
+
 \begin{table}
-	\caption{Energy scores (ES) and variogram scores (VS) for reconciled probabilistic forecasts from different parameterisation methods are presented.} \label{table:Non-paraSim_re-para}
+	\caption{Energy scores (ES) and variogram scores (VS) for reconciled probabilistic forecasts from different parameterisation methods} \label{table:Non-paraSim_re-para}
 	%	\centering
 	\begin{center}
 		\tabcolsep=0.08cm\small
 		\resizebox{\linewidth}{!}{
 			\begin{tabular}{@{}lSSSSSS|SSSSSS@{}}
 				\toprule
-				\multicolumn{1}{c}{} & \multicolumn{6}{c|}{Non-Gaussian DGP} & \multicolumn{6}{c}{Gaussian DGP}\\
+				\multicolumn{1}{c}{} & \multicolumn{6}{c|}{Energy Score} & \multicolumn{6}{c}{Variogram Score}\\
 				\toprule
-				Reconciliation &
-				\multicolumn{2}{c}{h=1} &
-				\multicolumn{2}{c}{h=2} &
-				\multicolumn{2}{c|}{h=3} & \multicolumn{2}{c}{h=1} &
-				\multicolumn{2}{c}{h=2} &
-				\multicolumn{2}{c}{h=3} \\
-				\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13}
-				method       & {}{\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} &{\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} & {\text{ES}} &  {\text{VS}} \\
+				&
+				\multicolumn{3}{c}{Gaussian DGP} &
+				\multicolumn{3}{c|}{Non-Gaussian DGP} &
+				\multicolumn{3}{c}{Gaussian DGP} &
+				\multicolumn{3}{c}{Non-Gaussian DGP}\\
+				\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13} 
+				h & {1} &  {2} & {3} & {1} &  {2} & {3} & {1} &  {2} & {3} & {1} &  {2} & {3}  \\
 				\midrule
-				Optimal(Method-1) & 5.36 & 1.21 & 5.51 & 1.27 & 5.83 & 1.38 & 9.59 & 4.86 & 11.50 & 5.38 & 13.80 & 6.13\\
-				Optimal(Method-2) & 5.37 & 1.21 & 5.53 & 1.27 & 5.83 & 1.37 & 9.58 & 4.85 & 11.50 & 5.37 & 13.80 & 6.14\\
-				Optimal(Method-3) & 5.37 & 1.21 & 5.53 & 1.27 & 5.83 & 1.37 & 9.58 & 4.85 & 11.50 & 5.37 &
-				13.80 & 6.14 \\
-				Optimal(Method-4) & 5.38 & 1.21 & 5.54 & 1.27 & 5.83 & 1.38 & 9.58 & 4.85 & 11.50 & 5.37 & 13.80 & 6.14\\
-%				MinT(Shrink)*	  & 5.33 & 1.19 & 5.50 & 1.26 & 5.77 & 1.34 & 9.43 & 4.78 & 11.40 & 5.33 & 13.70 & 6.09 \\
-%				WLS          	  & 5.43 & 1.23 & 5.60 & 1.30 & 5.89 & 1.40 & 9.64 & 4.93 & 11.70 & 5.60 & 14.10 & 6.39 \\
-%				OLS          	  & 5.51 & 1.23 & 5.70 & 1.30 & 5.98 & 1.40 & 9.91 & 4.93 & 12.10 & 5.60 &
-%				14.50 & 6.39\\
-%				\textit{Incoherent} & $\mathbi{5.71}$ & $\mathbi{1.28}$ & $\mathbi{5.94}$ & $\mathbi{1.37}$ & $\mathbi{6.27}$ & $\mathbi{1.49}$ &$\mathbi{10.40}$& $\mathbi{5.31}$ & $\mathbi{12.70}$ & $\mathbi{6.22}$ & $\mathbi{15.20}$ & $\mathbi{7.14}$\\
+				Optimal(Method-1) & 10.6 & 12.9 & 15.7 & 5.36 & 5.51 & 5.83 & 4.85 & 5.30 & 5.86 & 1.21 & 1.27 & 1.40 \\
+				Optimal(Method-2) & 10.6 & 13.0 & 15.8 & 5.37 & 5.53 & 5.83 & 4.86 & 5.32 & 5.88 & 1.21 & 1.27 & 1.37\\
+				Optimal(Method-3) & 10.6 & 13.0 & 15.8 & 5.37 & 5.53 & 5.83 & 4.86 & 5.32 & 5.87 & 1.21 & 1.27 & 1.37\\
+				Optimal(Method-2) & 10.6 & 13.0 & 15.8 & 5.38 & 5.54 & 5.83 & 4.86 & 5.32 & 5.88 & 1.21 & 1.27 & 1.38 \\
 				\bottomrule
 			\end{tabular}
 		}
 	\end{center}
-%	\textit{The differences in scores between methods noted by ``*'' are statistically insignificant. The differences between these and the incoherent forecasts are statistically significant.}
+	
 \end{table}
 
 \section{Application}
