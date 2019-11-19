@@ -36,17 +36,17 @@ DF_MultScores %>% filter(Forecast.Horizon == 3)
 
 
 DF_MultiV %>% 
-  select(-Variogram.score) %>% 
+  dplyr::select(-Variogram.score) %>% 
   filter(Forecast.Horizon == 1) %>% 
   spread(key = R.method, value = Energy.score) -> ES_dataframe_h1
 
 DF_MultiV %>% 
-  select(-Variogram.score) %>% 
+  dplyr::select(-Variogram.score) %>% 
   filter(Forecast.Horizon == 2) %>% 
   spread(key = R.method, value = Energy.score) -> ES_dataframe_h2
 
 DF_MultiV %>% 
-  select(-Variogram.score) %>% 
+  dplyr::select(-Variogram.score) %>% 
   filter(Forecast.Horizon == 3) %>% 
   spread(key = R.method, value = Energy.score) -> ES_dataframe_h3
 

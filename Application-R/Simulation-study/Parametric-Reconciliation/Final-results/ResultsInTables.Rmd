@@ -280,51 +280,42 @@ DF_Mean_UnivScore_GausDGP %>%
          SS_E.LS = round((1-(`E.LS`/Base_E.LS_BotTS_GausDGP))*100, digits = 2)) -> DF_Mean_UnivScore_SS_GausDGP
 
 DF_Mean_UnivScore_SS_GausDGP %>% 
-  dplyr::select(-E.CRPS, -E.LS) %>% 
-  filter(Series %in% c("Total", "A", "B")) -> DF_Mean_UnivScore_SS_GausDGP_aggregate
+  filter(Forecast.Horizon == 1) %>% 
+  dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.CRPS) %>% 
+  spread(key = Series, value = SS_E.LS) %>% 
+  dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.LS_GausDGP_h1
 
-DF_Mean_UnivScore_SS_GausDGP_aggregate %>% 
-  filter(Forecast.Horizon == 1) -> DF_Mean_UnivScore_SS_GausDGP_aggregate_h1
+DF_Mean_UnivScore_SS_GausDGP %>% 
+  filter(Forecast.Horizon == 2) %>% 
+  dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.CRPS) %>% 
+  spread(key = Series, value = SS_E.LS) %>% 
+  dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.LS_GausDGP_h2
 
-DF_Mean_UnivScore_SS_GausDGP_aggregate_h1 %>% 
-  dplyr::select(-Forecast.Horizon) %>%
-  gather(key = key, value = value, SS_E.CRPS, SS_E.LS) %>% 
-  unite(temp, Series, key) %>% 
-  spread(key = temp, value = value) %>% 
-  dplyr::select(R.method, Total_SS_E.CRPS, Total_SS_E.LS, 
-                A_SS_E.CRPS, A_SS_E.LS, B_SS_E.CRPS, B_SS_E.LS) -> DF_Mean_UnivScore_SS_GausDGP_aggregate_h1
-
-DF_Mean_UnivScore_SS_GausDGP_aggregate %>% 
-  filter(Forecast.Horizon == 2) -> DF_Mean_UnivScore_SS_GausDGP_aggregate_h2
-
-DF_Mean_UnivScore_SS_GausDGP_aggregate_h2 %>% 
-  dplyr::select(-Forecast.Horizon) %>%
-  gather(key = key, value = value, SS_E.CRPS, SS_E.LS) %>% 
-  unite(temp, Series, key) %>% 
-  spread(key = temp, value = value) %>% 
-  dplyr::select(R.method, Total_SS_E.CRPS, Total_SS_E.LS, 
-                A_SS_E.CRPS, A_SS_E.LS, B_SS_E.CRPS, B_SS_E.LS) -> DF_Mean_UnivScore_SS_GausDGP_aggregate_h2
-
-DF_Mean_UnivScore_SS_GausDGP_aggregate %>% 
-  filter(Forecast.Horizon == 3) -> DF_Mean_UnivScore_SS_GausDGP_aggregate_h3
-
-DF_Mean_UnivScore_SS_GausDGP_aggregate_h3 %>% 
-  dplyr::select(-Forecast.Horizon) %>%
-  gather(key = key, value = value, SS_E.CRPS, SS_E.LS) %>% 
-  unite(temp, Series, key) %>% 
-  spread(key = temp, value = value) %>% 
-  dplyr::select(R.method, Total_SS_E.CRPS, Total_SS_E.LS, 
-                A_SS_E.CRPS, A_SS_E.LS, B_SS_E.CRPS, B_SS_E.LS) -> DF_Mean_UnivScore_SS_GausDGP_aggregate_h3
-
-left_join(DF_Mean_UnivScore_SS_GausDGP_aggregate_h1,
-          DF_Mean_UnivScore_SS_GausDGP_aggregate_h2, by = "R.method") %>%
-  left_join(DF_Mean_UnivScore_SS_GausDGP_aggregate_h3, by = "R.method") %>% 
-  as_tibble() %>% 
-  kable(format = "latex") %>% kable_styling("striped") %>% 
-  kableExtra::add_header_above(c(" " = 1, "Total" = 2, "A" = 2, "B" = 2,
-                                 "Total" = 2, "A" = 2, "B" = 2, 
-                                 "Total" = 2, "A" = 2, "B" = 2))
+DF_Mean_UnivScore_SS_GausDGP %>% 
+  filter(Forecast.Horizon == 3) %>% 
+  dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.CRPS) %>% 
+  spread(key = Series, value = SS_E.LS) %>% 
+  dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.LS_GausDGP_h3
   
+DF_Mean_UnivScore_SS_GausDGP %>% 
+  filter(Forecast.Horizon == 1) %>% 
+  dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.LS) %>% 
+  spread(key = Series, value = SS_E.CRPS) %>% 
+  dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.CRPS_GausDGP_h1
+
+DF_Mean_UnivScore_SS_GausDGP %>% 
+  filter(Forecast.Horizon == 2) %>% 
+  dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.LS) %>% 
+  spread(key = Series, value = SS_E.CRPS) %>% 
+  dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.CRPS_GausDGP_h2
+
+DF_Mean_UnivScore_SS_GausDGP %>% 
+  filter(Forecast.Horizon == 3) %>% 
+  dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.LS) %>% 
+  spread(key = Series, value = SS_E.CRPS) %>% 
+  dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.CRPS_GausDGP_h3
+  
+
 
 ```
 
@@ -366,141 +357,54 @@ DF_Mean_UnivScore_NonGausDGP %>%
   mutate(SS_E.CRPS = round((1-(`E.CRPS`/Base_E.CRPS_BotTS_NonGausDGP))*100, digits = 2),
          SS_E.LS = round((1-(`E.LS`/Base_E.LS_BotTS_NonGausDGP))*100, digits = 2)) -> DF_Mean_UnivScore_SS_NonGausDGP
 
+DF_Mean_UnivScore_SS_NonGausDGP %>% 
+  filter(Forecast.Horizon == 1) %>% 
+  dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.CRPS) %>% 
+  spread(key = Series, value = SS_E.LS) %>% 
+  dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.LS_NonGausDGP_h1
 
 DF_Mean_UnivScore_SS_NonGausDGP %>% 
-  dplyr::select(-E.CRPS, -E.LS) %>% 
-  filter(Series %in% c("Total", "A", "B")) -> DF_Mean_UnivScore_SS_NonGausDGP_aggregate
+  filter(Forecast.Horizon == 2) %>% 
+  dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.CRPS) %>% 
+  spread(key = Series, value = SS_E.LS) %>% 
+  dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.LS_NonGausDGP_h2
 
-DF_Mean_UnivScore_SS_NonGausDGP_aggregate %>% 
-  filter(Forecast.Horizon == 1) -> DF_Mean_UnivScore_SS_NonGausDGP_aggregate_h1
+DF_Mean_UnivScore_SS_NonGausDGP %>% 
+  filter(Forecast.Horizon == 3) %>% 
+  dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.CRPS) %>% 
+  spread(key = Series, value = SS_E.LS) %>% 
+  dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.LS_NonGausDGP_h3
+  
+DF_Mean_UnivScore_SS_NonGausDGP %>% 
+  filter(Forecast.Horizon == 1) %>% 
+  dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.LS) %>% 
+  spread(key = Series, value = SS_E.CRPS) %>% 
+  dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.CRPS_NonGausDGP_h1
 
-DF_Mean_UnivScore_SS_NonGausDGP_aggregate_h1 %>% 
-  dplyr::select(-Forecast.Horizon) %>%
-  gather(key = key, value = value, SS_E.CRPS, SS_E.LS) %>% 
-  unite(temp, Series, key) %>% 
-  spread(key = temp, value = value) %>% 
-  dplyr::select(R.method, Total_SS_E.CRPS, Total_SS_E.LS, 
-                A_SS_E.CRPS, A_SS_E.LS, B_SS_E.CRPS, B_SS_E.LS) -> DF_Mean_UnivScore_SS_NonGausDGP_aggregate_h1
+DF_Mean_UnivScore_SS_NonGausDGP %>% 
+  filter(Forecast.Horizon == 2) %>% 
+  dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.LS) %>% 
+  spread(key = Series, value = SS_E.CRPS) %>% 
+  dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.CRPS_NonGausDGP_h2
 
-DF_Mean_UnivScore_SS_NonGausDGP_aggregate %>% 
-  filter(Forecast.Horizon == 2) -> DF_Mean_UnivScore_SS_NonGausDGP_aggregate_h2
+DF_Mean_UnivScore_SS_NonGausDGP %>% 
+  filter(Forecast.Horizon == 3) %>% 
+  dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.LS) %>% 
+  spread(key = Series, value = SS_E.CRPS) %>% 
+  dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.CRPS_NonGausDGP_h3
 
-DF_Mean_UnivScore_SS_NonGausDGP_aggregate_h2 %>% 
-  dplyr::select(-Forecast.Horizon) %>%
-  gather(key = key, value = value, SS_E.CRPS, SS_E.LS) %>% 
-  unite(temp, Series, key) %>% 
-  spread(key = temp, value = value) %>% 
-  dplyr::select(R.method, Total_SS_E.CRPS, Total_SS_E.LS, 
-                A_SS_E.CRPS, A_SS_E.LS, B_SS_E.CRPS, B_SS_E.LS) -> DF_Mean_UnivScore_SS_NonGausDGP_aggregate_h2
-
-DF_Mean_UnivScore_SS_NonGausDGP_aggregate %>% 
-  filter(Forecast.Horizon == 3) -> DF_Mean_UnivScore_SS_NonGausDGP_aggregate_h3
-
-DF_Mean_UnivScore_SS_NonGausDGP_aggregate_h3 %>% 
-  dplyr::select(-Forecast.Horizon) %>%
-  gather(key = key, value = value, SS_E.CRPS, SS_E.LS) %>% 
-  unite(temp, Series, key) %>% 
-  spread(key = temp, value = value) %>% 
-  dplyr::select(R.method, Total_SS_E.CRPS, Total_SS_E.LS, 
-                A_SS_E.CRPS, A_SS_E.LS, B_SS_E.CRPS, B_SS_E.LS) -> DF_Mean_UnivScore_SS_NonGausDGP_aggregate_h3
-
-left_join(DF_Mean_UnivScore_SS_NonGausDGP_aggregate_h1,
-          DF_Mean_UnivScore_SS_NonGausDGP_aggregate_h2, by = "R.method") %>%
-  left_join(DF_Mean_UnivScore_SS_NonGausDGP_aggregate_h3, by = "R.method") %>% 
-  as_tibble() %>% 
-  kable(format = "latex") %>% kable_styling("striped") %>% 
-  kableExtra::add_header_above(c(" " = 1, "Total" = 2, "A" = 2, "B" = 2,
-                                 "Total" = 2, "A" = 2, "B" = 2, 
-                                 "Total" = 2, "A" = 2, "B" = 2))
 
 ```
 
-# Comparing univariate predictive accuracy in disaggregate levels
 
 ```{r}
-DF_Mean_UnivScore_SS_GausDGP %>% 
-  dplyr::select(-E.CRPS, -E.LS) %>% 
-  filter(Series %in% c("AA", "AB", "BA", "BB")) -> DF_Mean_UnivScore_SS_GausDGP_disaggregate
-
-DF_Mean_UnivScore_SS_GausDGP_disaggregate %>% 
-  filter(Forecast.Horizon == 1) -> DF_Mean_UnivScore_SS_GausDGP_disaggregate_h1
-
-DF_Mean_UnivScore_SS_GausDGP_disaggregate_h1 %>% 
-  dplyr::select(-Forecast.Horizon) %>%
-  gather(key = key, value = value, SS_E.CRPS, SS_E.LS) %>% 
-  unite(temp, Series, key) %>% 
-  spread(key = temp, value = value) -> DF_Mean_UnivScore_SS_GausDGP_disaggregate_h1
-
-DF_Mean_UnivScore_SS_GausDGP_disaggregate %>% 
-  filter(Forecast.Horizon == 2) -> DF_Mean_UnivScore_SS_GausDGP_disaggregate_h2
-
-DF_Mean_UnivScore_SS_GausDGP_disaggregate_h2 %>% 
-  dplyr::select(-Forecast.Horizon) %>%
-  gather(key = key, value = value, SS_E.CRPS, SS_E.LS) %>% 
-  unite(temp, Series, key) %>% 
-  spread(key = temp, value = value) -> DF_Mean_UnivScore_SS_GausDGP_disaggregate_h2
-
-DF_Mean_UnivScore_SS_GausDGP_disaggregate %>% 
-  filter(Forecast.Horizon == 3) -> DF_Mean_UnivScore_SS_GausDGP_disaggregate_h3
-
-DF_Mean_UnivScore_SS_GausDGP_disaggregate_h3 %>% 
-  dplyr::select(-Forecast.Horizon) %>%
-  gather(key = key, value = value, SS_E.CRPS, SS_E.LS) %>% 
-  unite(temp, Series, key) %>% 
-  spread(key = temp, value = value) -> DF_Mean_UnivScore_SS_GausDGP_disaggregate_h3
-
-left_join(DF_Mean_UnivScore_SS_GausDGP_disaggregate_h1,
-          DF_Mean_UnivScore_SS_GausDGP_disaggregate_h2, by = "R.method") %>%
-  left_join(DF_Mean_UnivScore_SS_GausDGP_disaggregate_h3, by = "R.method") %>% 
+left_join(DF_Mean_UnivScore_SS.LS_GausDGP_h1,
+          DF_Mean_UnivScore_SS.LS_NonGausDGP_h1, by = "R.method") %>%
   as_tibble() %>% 
   kable(format = "latex") %>% kable_styling("striped") %>% 
-  kableExtra::add_header_above(c(" " = 1, "AA" = 2, "AB" = 2, "BA" = 2, "BB" = 2,
-                                 "AA" = 2, "AB" = 2, "BA" = 2, "BB" = 2, 
-                                 "AA" = 2, "AB" = 2, "BA" = 2, "BB" = 2))
-```
-
-```{r}
-DF_Mean_UnivScore_SS_NonGausDGP %>% 
-  dplyr::select(-E.CRPS, -E.LS) %>% 
-  filter(Series %in% c("AA", "AB", "BA", "BB")) -> DF_Mean_UnivScore_SS_NonGausDGP_disaggregate
-
-DF_Mean_UnivScore_SS_NonGausDGP_disaggregate %>% 
-  filter(Forecast.Horizon == 1) -> DF_Mean_UnivScore_SS_NonGausDGP_disaggregate_h1
-
-DF_Mean_UnivScore_SS_NonGausDGP_disaggregate_h1 %>% 
-  dplyr::select(-Forecast.Horizon) %>%
-  gather(key = key, value = value, SS_E.CRPS, SS_E.LS) %>% 
-  unite(temp, Series, key) %>% 
-  spread(key = temp, value = value) -> DF_Mean_UnivScore_SS_NonGausDGP_disaggregate_h1
-
-DF_Mean_UnivScore_SS_NonGausDGP_disaggregate %>% 
-  filter(Forecast.Horizon == 2) -> DF_Mean_UnivScore_SS_NonGausDGP_disaggregate_h2
-
-DF_Mean_UnivScore_SS_NonGausDGP_disaggregate_h2 %>% 
-  dplyr::select(-Forecast.Horizon) %>%
-  gather(key = key, value = value, SS_E.CRPS, SS_E.LS) %>% 
-  unite(temp, Series, key) %>% 
-  spread(key = temp, value = value) -> DF_Mean_UnivScore_SS_NonGausDGP_disaggregate_h2
-
-DF_Mean_UnivScore_SS_NonGausDGP_disaggregate %>% 
-  filter(Forecast.Horizon == 3) -> DF_Mean_UnivScore_SS_NonGausDGP_disaggregate_h3
-
-DF_Mean_UnivScore_SS_NonGausDGP_disaggregate_h3 %>% 
-  dplyr::select(-Forecast.Horizon) %>%
-  gather(key = key, value = value, SS_E.CRPS, SS_E.LS) %>% 
-  unite(temp, Series, key) %>% 
-  spread(key = temp, value = value) -> DF_Mean_UnivScore_SS_NonGausDGP_disaggregate_h3
-
-left_join(DF_Mean_UnivScore_SS_NonGausDGP_disaggregate_h1,
-          DF_Mean_UnivScore_SS_NonGausDGP_disaggregate_h2, by = "R.method") %>%
-  left_join(DF_Mean_UnivScore_SS_NonGausDGP_disaggregate_h3, by = "R.method") %>% 
-  as_tibble() %>% 
-  kable(format = "latex") %>% kable_styling("striped") %>% 
-  kableExtra::add_header_above(c(" " = 1, "AA" = 2, "AB" = 2, "BA" = 2, "BB" = 2,
-                                 "AA" = 2, "AB" = 2, "BA" = 2, "BB" = 2, 
-                                 "AA" = 2, "AB" = 2, "BA" = 2, "BB" = 2))
-
-
+  kableExtra::add_header_above(c(" " = 1, "Gaussian DGP" = 7, 
+                                 "Non-Gaussian DGP" = 7))
+  
 
 ```
 

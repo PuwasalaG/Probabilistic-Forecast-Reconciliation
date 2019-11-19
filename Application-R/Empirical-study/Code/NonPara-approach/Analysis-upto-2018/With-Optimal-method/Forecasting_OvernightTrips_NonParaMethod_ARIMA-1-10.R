@@ -157,7 +157,7 @@ DF_UniV <- tibble("Series" = character(),
 
 Start <- Sys.time()
 
-for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
+for (j in 1:10) { #1:89 (To get forecasts for all H=1 to H=12)
   
   
   AllTS_a <- AllTS[j : (163+j),]
@@ -279,6 +279,7 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
   
   Method1_Opt_G <- list() #Stores Optimal G from method 1 for H forecast horizons
   
+  Start_opt <- Sys.time()
   for (h in 1:H) {
     
     Opt_Vec_W <- optim(Int_par_W, Energy_score_method1, gr = Grad_method1, method = "BFGS",
@@ -288,7 +289,7 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
     Method1_Opt_G[[h]] <- solve(t(S) %*% Inv_Opt_W %*% S) %*% t(S) %*% Inv_Opt_W
     
   }
-  
+  End_opt <- Sys.time()
   
 
   # Using optimal G and other G matrices to obtain reconciled future paths   
@@ -407,57 +408,67 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
     Reconciled_future_paths_OLS_ARIMA <- list()
     Reconciled_future_paths_WLS_ARIMA <- list()
     Reconciled_future_paths_MinT.Shr_ARIMA <- list()
+    Reconciled_future_paths_Optimal_ARIMA <- list()
     
     #List to store reconciled future paths from states
     Reconciled_future_paths_States_BU_ARIMA <- list()
     Reconciled_future_paths_States_OLS_ARIMA <- list()
     Reconciled_future_paths_States_WLS_ARIMA <- list()
     Reconciled_future_paths_States_MinT.Shr_ARIMA <- list()
+    Reconciled_future_paths_States_Optimal_ARIMA <- list()
     
     #List to store reconciled future paths from zones
     Reconciled_future_paths_Zones_BU_ARIMA <- list()
     Reconciled_future_paths_Zones_OLS_ARIMA <- list()
     Reconciled_future_paths_Zones_WLS_ARIMA <- list()
     Reconciled_future_paths_Zones_MinT.Shr_ARIMA <- list()
+    Reconciled_future_paths_Zones_Optimal_ARIMA <- list()
     
     #List to store reconciled future paths from regions
     Reconciled_future_paths_Regions_BU_ARIMA <- list()
     Reconciled_future_paths_Regions_OLS_ARIMA <- list()
     Reconciled_future_paths_Regions_WLS_ARIMA <- list()
     Reconciled_future_paths_Regions_MinT.Shr_ARIMA <- list()
+    Reconciled_future_paths_Regions_Optimal_ARIMA <- list()
     
     #To store univariate scores
     CRPS_BU_ARIMA <- matrix(0, nrow = min(H, nrow(Testing_eval)), ncol = n)
     CRPS_OLS_ARIMA <- matrix(0, nrow = min(H, nrow(Testing_eval)), ncol = n)
     CRPS_WLS_ARIMA <- matrix(0, nrow = min(H, nrow(Testing_eval)), ncol = n)
     CRPS_MinT.Shr_ARIMA <- matrix(0, nrow = min(H, nrow(Testing_eval)), ncol = n)
+    CRPS_Optimal_ARIMA <- matrix(0, nrow = min(H, nrow(Testing_eval)), ncol = n)
     CRPS_Unrecon_ARIMA <- matrix(0, nrow = min(H, nrow(Testing_eval)), ncol = n)
     
-
+    Start.rest <- Sys.time()
+    
     for (h in 1: min(H, nrow(Testing_eval))) {
       
       Reconciled_future_paths_BU_ARIMA[[h]] <- t(S %*% BU_G %*% t(Unrecon_future_paths_ARIMA[[h]]))
       Reconciled_future_paths_OLS_ARIMA[[h]] <- t(S %*% OLS_G %*% t(Unrecon_future_paths_ARIMA[[h]]))
       Reconciled_future_paths_WLS_ARIMA[[h]] <- t(S %*% WLS_G_ARIMA %*% t(Unrecon_future_paths_ARIMA[[h]]))
       Reconciled_future_paths_MinT.Shr_ARIMA[[h]] <- t(S %*% MinT.Shr_G_ARIMA %*% t(Unrecon_future_paths_ARIMA[[h]]))
+      Reconciled_future_paths_Optimal_ARIMA[[h]] <- t(S %*% Method1_Opt_G[[h]] %*% t(Unrecon_future_paths_ARIMA[[h]]))
       
       #Reconciled densities for states
       Reconciled_future_paths_States_BU_ARIMA[[h]] <- Reconciled_future_paths_BU_ARIMA[[h]][,(l1+1):(l1+l2)]
       Reconciled_future_paths_States_OLS_ARIMA[[h]] <- Reconciled_future_paths_OLS_ARIMA[[h]][,(l1+1):(l1+l2)]
       Reconciled_future_paths_States_WLS_ARIMA[[h]] <- Reconciled_future_paths_WLS_ARIMA[[h]][,(l1+1):(l1+l2)]
       Reconciled_future_paths_States_MinT.Shr_ARIMA[[h]] <- Reconciled_future_paths_MinT.Shr_ARIMA[[h]][,(l1+1):(l1+l2)]
+      Reconciled_future_paths_States_Optimal_ARIMA[[h]] <- Reconciled_future_paths_Optimal_ARIMA[[h]][,(l1+1):(l1+l2)]
       
       #Reconciled densities for zones
       Reconciled_future_paths_Zones_BU_ARIMA[[h]] <- Reconciled_future_paths_BU_ARIMA[[h]][,(l1+l2+1):(l1+l2+l3)]
       Reconciled_future_paths_Zones_OLS_ARIMA[[h]] <- Reconciled_future_paths_OLS_ARIMA[[h]][,(l1+l2+1):(l1+l2+l3)]
       Reconciled_future_paths_Zones_WLS_ARIMA[[h]] <- Reconciled_future_paths_WLS_ARIMA[[h]][,(l1+l2+1):(l1+l2+l3)]
       Reconciled_future_paths_Zones_MinT.Shr_ARIMA[[h]] <- Reconciled_future_paths_MinT.Shr_ARIMA[[h]][,(l1+l2+1):(l1+l2+l3)]
+      Reconciled_future_paths_Zones_Optimal_ARIMA[[h]] <- Reconciled_future_paths_Optimal_ARIMA[[h]][,(l1+l2+1):(l1+l2+l3)]
       
       #Reconciled densities for regions
       Reconciled_future_paths_Regions_BU_ARIMA[[h]] <- Reconciled_future_paths_BU_ARIMA[[h]][,(n-m+1):n]
       Reconciled_future_paths_Regions_OLS_ARIMA[[h]] <- Reconciled_future_paths_OLS_ARIMA[[h]][,(n-m+1):n]
       Reconciled_future_paths_Regions_WLS_ARIMA[[h]] <- Reconciled_future_paths_WLS_ARIMA[[h]][,(n-m+1):n]
       Reconciled_future_paths_Regions_MinT.Shr_ARIMA[[h]] <- Reconciled_future_paths_MinT.Shr_ARIMA[[h]][,(n-m+1):n]
+      Reconciled_future_paths_Regions_Optimal_ARIMA[[h]] <- Reconciled_future_paths_Optimal_ARIMA[[h]][,(n-m+1):n]
       
       #Calculating CRPS for univariate predictive densities
       
@@ -472,6 +483,8 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
         CRPS_WLS_ARIMA[h,i] <- crps_sample(as.numeric(Testing_eval[h,i]), dat = Reconciled_future_paths_WLS_ARIMA[[h]][,i],
                                            method = "edf")
         CRPS_MinT.Shr_ARIMA[h,i] <- crps_sample(as.numeric(Testing_eval[h,i]), dat = Reconciled_future_paths_MinT.Shr_ARIMA[[h]][,i],
+                                                method = "edf")
+        CRPS_Optimal_ARIMA[h,i] <- crps_sample(as.numeric(Testing_eval[h,i]), dat = Reconciled_future_paths_Optimal_ARIMA[[h]][,i],
                                                 method = "edf")
         
       }
@@ -506,6 +519,7 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
     ES_full_OLS_ARIMA <- mapply(Energy_score, Reconciled_future_paths_OLS_ARIMA, Real = Test.list_full)
     ES_full_WLS_ARIMA <- mapply(Energy_score, Reconciled_future_paths_WLS_ARIMA, Real = Test.list_full)
     ES_full_MinT.Shr_ARIMA <- mapply(Energy_score, Reconciled_future_paths_MinT.Shr_ARIMA, Real = Test.list_full)
+    ES_full_Optimal_ARIMA <- mapply(Energy_score, Reconciled_future_paths_Optimal_ARIMA, Real = Test.list_full)
     ES_full_Unrecon_ARIMA <- mapply(Energy_score, Unrecon_future_paths_ARIMA, Real = Test.list_full)
     
     #Calculating Variogram score for full predicive densities
@@ -513,6 +527,7 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
     VS_full_OLS_ARIMA <- mapply(Variogram_score, Reconciled_future_paths_OLS_ARIMA, Real = Test.list_full)
     VS_full_WLS_ARIMA <- mapply(Variogram_score, Reconciled_future_paths_WLS_ARIMA, Real = Test.list_full)
     VS_full_MinT.Shr_ARIMA <- mapply(Variogram_score, Reconciled_future_paths_MinT.Shr_ARIMA, Real = Test.list_full)
+    VS_full_Optimal_ARIMA <- mapply(Variogram_score, Reconciled_future_paths_Optimal_ARIMA, Real = Test.list_full)
     VS_full_Unrecon_ARIMA <- mapply(Variogram_score, Unrecon_future_paths_ARIMA, Real = Test.list_full)
     
     #Calculating Energy score for predicive densities of states
@@ -523,6 +538,8 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
     ES_states_WLS_ARIMA <- mapply(Energy_score, Reconciled_future_paths_States_WLS_ARIMA, 
                                   Real = Test.list_states)
     ES_states_MinT.Shr_ARIMA <- mapply(Energy_score, Reconciled_future_paths_States_MinT.Shr_ARIMA, 
+                                       Real = Test.list_states)
+    ES_states_Optimal_ARIMA <- mapply(Energy_score, Reconciled_future_paths_States_Optimal_ARIMA, 
                                        Real = Test.list_states)
     ES_states_Unrecon_ARIMA <- mapply(Energy_score, Unrecon_future_paths_States_ARIMA, 
                                       Real = Test.list_states)
@@ -536,6 +553,8 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
                                   Real = Test.list_states)
     VS_states_MinT.Shr_ARIMA <- mapply(Variogram_score, Reconciled_future_paths_States_MinT.Shr_ARIMA, 
                                        Real = Test.list_states)
+    VS_states_Optimal_ARIMA <- mapply(Variogram_score, Reconciled_future_paths_States_Optimal_ARIMA, 
+                                       Real = Test.list_states)
     VS_states_Unrecon_ARIMA <- mapply(Variogram_score, Unrecon_future_paths_States_ARIMA, 
                                       Real = Test.list_states)
     
@@ -548,6 +567,8 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
                                  Real = Test.list_zones)
     ES_zones_MinT.Shr_ARIMA <- mapply(Energy_score, Reconciled_future_paths_Zones_MinT.Shr_ARIMA, 
                                       Real = Test.list_zones)
+    ES_zones_Optimal_ARIMA <- mapply(Energy_score, Reconciled_future_paths_Zones_Optimal_ARIMA, 
+                                      Real = Test.list_zones)
     ES_zones_Unrecon_ARIMA <- mapply(Energy_score, Unrecon_future_paths_Zones_ARIMA, 
                                      Real = Test.list_zones)
     
@@ -559,6 +580,8 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
     VS_zones_WLS_ARIMA <- mapply(Variogram_score, Reconciled_future_paths_Zones_WLS_ARIMA, 
                                  Real = Test.list_zones)
     VS_zones_MinT.Shr_ARIMA <- mapply(Variogram_score, Reconciled_future_paths_Zones_MinT.Shr_ARIMA, 
+                                      Real = Test.list_zones)
+    VS_zones_Optimal_ARIMA <- mapply(Variogram_score, Reconciled_future_paths_Zones_Optimal_ARIMA, 
                                       Real = Test.list_zones)
     VS_zones_Unrecon_ARIMA <- mapply(Variogram_score, Unrecon_future_paths_Zones_ARIMA, 
                                      Real = Test.list_zones)
@@ -573,6 +596,8 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
                                    Real = Test.list_regions)
     ES_regions_MinT.Shr_ARIMA <- mapply(Energy_score, Reconciled_future_paths_Regions_MinT.Shr_ARIMA, 
                                         Real = Test.list_regions)
+    ES_regions_Optimal_ARIMA <- mapply(Energy_score, Reconciled_future_paths_Regions_Optimal_ARIMA, 
+                                        Real = Test.list_regions)
     ES_regions_Unrecon_ARIMA <- mapply(Energy_score, Unrecon_future_paths_Regions_ARIMA, 
                                        Real = Test.list_regions)
     
@@ -584,6 +609,8 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
     VS_regions_WLS_ARIMA <- mapply(Variogram_score, Reconciled_future_paths_Regions_WLS_ARIMA, 
                                    Real = Test.list_regions)
     VS_regions_MinT.Shr_ARIMA <- mapply(Variogram_score, Reconciled_future_paths_Regions_MinT.Shr_ARIMA, 
+                                        Real = Test.list_regions)
+    VS_regions_Optimal_ARIMA <- mapply(Variogram_score, Reconciled_future_paths_Regions_Optimal_ARIMA, 
                                         Real = Test.list_regions)
     VS_regions_Unrecon_ARIMA <- mapply(Variogram_score, Unrecon_future_paths_Regions_ARIMA, 
                                        Real = Test.list_regions)
@@ -623,6 +650,11 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
     DF_MinT.Shr[names(DF_MultiV_Total)] -> DF_MinT.Shr
     DF_MultiV_Total <- rbind(DF_MultiV_Total, DF_MinT.Shr)
     
+    cbind(Fltr, "R-method" = "Optimal", "Forecast Horizon" = c(1: min(H, nrow(Testing_eval))), 
+          "Energy score" = ES_full_Optimal_ARIMA, 
+          "Variogram score" = VS_full_Optimal_ARIMA) -> DF_Optim
+    DF_Optim[names(DF_MultiV_Total)] -> DF_Optim
+    DF_MultiV_Total <- rbind(DF_MultiV_Total, DF_Optim)
     
     #Adding to ES_states to data frame
     
@@ -659,6 +691,11 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
     DF_MinT.Shr[names(DF_MultiV_States)] -> DF_MinT.Shr
     DF_MultiV_States <- rbind(DF_MultiV_States, DF_MinT.Shr)
     
+    cbind(Fltr, "R-method" = "Optimal", "Forecast Horizon" = c(1: min(H, nrow(Testing_eval))), 
+          "Energy score" = ES_states_Optimal_ARIMA, 
+          "Variogram score" = VS_states_Optimal_ARIMA) -> DF_Optim
+    DF_Optim[names(DF_MultiV_States)] -> DF_Optim
+    DF_MultiV_States <- rbind(DF_MultiV_States, DF_Optim)
     
     #Adding to ES_zones to data frame
     
@@ -695,6 +732,11 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
     DF_MinT.Shr[names(DF_MultiV_Zones)] -> DF_MinT.Shr
     DF_MultiV_Zones <- rbind(DF_MultiV_Zones, DF_MinT.Shr)
     
+    cbind(Fltr, "R-method" = "Optimal", "Forecast Horizon" = c(1: min(H, nrow(Testing_eval))), 
+          "Energy score" = ES_zones_Optimal_ARIMA, 
+          "Variogram score" = VS_zones_Optimal_ARIMA) -> DF_Optim
+    DF_Optim[names(DF_MultiV_Zones)] -> DF_Optim
+    DF_MultiV_Zones <- rbind(DF_MultiV_Zones, DF_Optim)
     
     
     #Adding to ES_regions to data frame
@@ -732,6 +774,11 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
     DF_MinT.Shr[names(DF_MultiV_Regions)] -> DF_MinT.Shr
     DF_MultiV_Regions <- rbind(DF_MultiV_Regions, DF_MinT.Shr)
     
+    cbind(Fltr, "R-method" = "Optimal", "Forecast Horizon" = c(1: min(H, nrow(Testing_eval))), 
+          "Energy score" = ES_regions_Optimal_ARIMA, 
+          "Variogram score" = VS_regions_Optimal_ARIMA) -> DF_Optim
+    DF_Optim[names(DF_MultiV_Regions)] -> DF_Optim
+    DF_MultiV_Regions <- rbind(DF_MultiV_Regions, DF_Optim)
     
     #Addinng CRPS to the DF
     
@@ -771,6 +818,16 @@ for (j in 1:1) { #1:89 (To get forecasts for all H=1 to H=12)
     DF_MinT.Shr[names(DF_UniV)] -> DF_MinT.Shr
     DF_UniV <- rbind(DF_UniV, DF_MinT.Shr)
     
+    cbind(Fltr, "Series" = rep(names(AllTS), min(H, nrow(Testing_eval))), 
+          "Actual" = c(t(as.matrix(Testing_eval[1:min(H, nrow(Testing_eval)),]))), 
+          "R-method" = "Optimal", 
+          "Forecast Horizon" = rep(1:min(H, nrow(Testing_eval)), each = n), 
+          "CRPS" = c(t(CRPS_Optimal_ARIMA))) -> DF_Optim
+    DF_Optim[names(DF_UniV)] -> DF_Optim
+    DF_UniV <- rbind(DF_UniV, DF_Optim)
+    
+    End.rest <- Sys.time()
+    
   
 }
 
@@ -783,10 +840,10 @@ DF_MultiV_States[complete.cases(DF_MultiV_States[ , "R-method"]),] -> DF_MultiV_
 DF_MultiV_Zones[complete.cases(DF_MultiV_Zones[ , "R-method"]),] -> DF_MultiV_Zones
 DF_MultiV_Regions[complete.cases(DF_MultiV_Regions[ , "R-method"]),] -> DF_MultiV_Regions
 
-write.csv(DF_MultiV_Total, "Results/DF_MultiV_Total_1-100.csv")
-write.csv(DF_MultiV_States, "Results/DF_MultiV_States_1-100.csv")
-write.csv(DF_MultiV_Zones, "Results/DF_MultiV_Zones_1-100.csv")
-write.csv(DF_MultiV_Regions, "Results/DF_MultiV_Regions_1-100.csv")
-write.csv(DF_UniV, "Results/DF_UniV_59.csv")
+write.csv(DF_MultiV_Total, "Results/DF_MultiV_Total_1-10.csv")
+write.csv(DF_MultiV_States, "Results/DF_MultiV_States_1-10.csv")
+write.csv(DF_MultiV_Zones, "Results/DF_MultiV_Zones_1-10.csv")
+write.csv(DF_MultiV_Regions, "Results/DF_MultiV_Regions_1-10.csv")
+write.csv(DF_UniV, "Results/DF_UniV_1-10.csv")
 
-save.image("Results/Forecasting_OvernightTrips_NonParaMethod_1-100.RData")
+save.image("Results/Forecasting_OvernightTrips_NonParaMethod_1-10.RData")
