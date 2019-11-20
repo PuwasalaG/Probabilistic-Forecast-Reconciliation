@@ -396,6 +396,7 @@ DF_Mean_UnivScore_SS_NonGausDGP %>%
 
 ```
 
+# For h=1
 
 ```{r}
 left_join(DF_Mean_UnivScore_SS.LS_GausDGP_h1,
@@ -405,6 +406,50 @@ left_join(DF_Mean_UnivScore_SS.LS_GausDGP_h1,
   kableExtra::add_header_above(c(" " = 1, "Gaussian DGP" = 7, 
                                  "Non-Gaussian DGP" = 7))
   
+left_join(DF_Mean_UnivScore_SS.CRPS_GausDGP_h1,
+          DF_Mean_UnivScore_SS.CRPS_NonGausDGP_h1, by = "R.method") %>%
+  as_tibble() %>% 
+  kable(format = "latex") %>% kable_styling("striped") %>% 
+  kableExtra::add_header_above(c(" " = 1, "Gaussian DGP" = 7, 
+                                 "Non-Gaussian DGP" = 7))
 
 ```
 
+
+# For h=2
+
+```{r}
+left_join(DF_Mean_UnivScore_SS.LS_GausDGP_h2,
+          DF_Mean_UnivScore_SS.LS_NonGausDGP_h2, by = "R.method") %>%
+  as_tibble() %>% 
+  kable(format = "latex") %>% kable_styling("striped") %>% 
+  kableExtra::add_header_above(c(" " = 1, "Gaussian DGP" = 7, 
+                                 "Non-Gaussian DGP" = 7))
+  
+left_join(DF_Mean_UnivScore_SS.CRPS_GausDGP_h2,
+          DF_Mean_UnivScore_SS.CRPS_NonGausDGP_h2, by = "R.method") %>%
+  as_tibble() %>% 
+  kable(format = "latex") %>% kable_styling("striped") %>% 
+  kableExtra::add_header_above(c(" " = 1, "Gaussian DGP" = 7, 
+                                 "Non-Gaussian DGP" = 7))
+
+```
+
+# For h=3
+
+```{r}
+left_join(DF_Mean_UnivScore_SS.LS_GausDGP_h3,
+          DF_Mean_UnivScore_SS.LS_NonGausDGP_h3, by = "R.method") %>%
+  as_tibble() %>% 
+  kable(format = "latex") %>% kable_styling("striped") %>% 
+  kableExtra::add_header_above(c(" " = 1, "Gaussian DGP" = 7, 
+                                 "Non-Gaussian DGP" = 7))
+  
+left_join(DF_Mean_UnivScore_SS.CRPS_GausDGP_h3,
+          DF_Mean_UnivScore_SS.CRPS_NonGausDGP_h3, by = "R.method") %>%
+  as_tibble() %>% 
+  kable(format = "latex") %>% kable_styling("striped") %>% 
+  kableExtra::add_header_above(c(" " = 1, "Gaussian DGP" = 7, 
+                                 "Non-Gaussian DGP" = 7))
+
+```
