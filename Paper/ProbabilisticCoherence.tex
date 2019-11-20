@@ -314,7 +314,7 @@ This result implies that reconciling each member of a sample drawn from an incoh
 
 In the point forecasting setting it is common to generate forecasts from independent statistical models, allowing forecast reconciliation to be scaled up to large hierarchies.  Since a single point forecast is generated for each series there is no ambiguity as to how these should be stacked into a vector of base forecasts $\hat{\bm{y}}$.  This is no longer the case in the probabilistic setting where multiple draws are made for each series.  \cite{JeoEtAl2019} recommend some crude heuristics that can be used to form joint samples.  In Section~\ref{Subsec:Incoherent_samplePaths} we provide an alternative based on resampling forecast errors. This provides a sample from a base probabilistic forecast. A sample from the reconciled distribution can be obtained by premultiplying these draws by $\bm{S}\bm{G}$. Strategies for choosing $\bm{G}$ are discussed in Section~\ref{sec:OptRec}. \textcolor{red}{Check this cross-reference when we finish.}
 
-\subsection{Drawing base probabilistic forecasts} 
+\subsection{Drawing base probabilistic forecasts}
 
 The following method only requires that one-step ahead in-sample `forecasts' $\hat{y}_{i,t}$ can be computed for each series $i$.  These are not true forecasts since they are computed over the training data $t=1,\ldots,T$; for instance  $\hat{y}_{i,t}$ may be the fitted values of $E(y_{i,t}|y_{i,t-1})$ implied by some statistical model. Let the errors $e_{i,t} = y_{i,t} - \hat{y}_{i,t}$ be stacked in a $(n \times T)$ matrix $\bm{\mathcal{E}}:=\left\{e_{i,t}\right\}_{i=1,\dots,n,t=1,\dots,T}$.  When up to $H$ step ahead forecasts are required, we randomly select $H$ consecutive columns from $\bm{\mathcal{E}}$ to form $\bm{\mathcal{E}}^b$ and repeat for $b = 1,\dots,B$.  This preserves both serial correlation of errors as well as dependence across different series.
 
@@ -391,9 +391,9 @@ The same property does not hold for all scores. For example, the energy score is
 
 The aim of the simulations that follow is to evaluate the performance of both analytical and sample based reconciliation approaches for generating probabilistic hierarchical forecasts, respectively presented in Sections \ref{sec:AnalyticalSolution} and \ref{sec:SampleSolution}. The data generating process we consider corresponds to the 2-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. We consider a Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically we generate Gaussian errors jointly from a multivariate distribution, and non-Gaussian errors from a Gumbel copula model with beta margins. All details of the data generating process are presented in Appendix \ref{app:DGP}.
 
-For each series we generate 2002 observations from which we ignore the first 500 to avoid the impact of initial values. Using a training window of 500 observations, we fit univariate ARIMA and exponential smoothing (ETS) models to each series using the \verb|auto.arima()| and \verb|ets()| functions in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore} and generate incoherent base probabilistic forecasts assuming Gaussian errors, for $h = 1, 2$ and 3-steps ahead. \textcolor{red}{Ok this at least for the copula errors means that we have error mis-specification for the models. For example we could have used a bootstrap error rather than Gaussian. Something we may comment about below.} 
+For each series we generate 2002 observations from which we ignore the first 500 to avoid the impact of initial values. Using a training window of 500 observations, we fit univariate ARIMA and exponential smoothing (ETS) models to each series using the \verb|auto.arima()| and \verb|ets()| functions in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore} and generate incoherent base probabilistic forecasts assuming Gaussian errors, for $h = 1, 2$ and 3-steps ahead. \textcolor{red}{Ok this at least for the copula errors means that we have error mis-specification for the models. For example we could have used a bootstrap error rather than Gaussian. Something we may comment about below.}
 
-The incoherent base probabilistic forecasts are reconciled via analytical and sampling solutions, as described in Sections \ref{sec:AnalyticalSolution} and \ref{sec:SampleSolution} respectively, using alternative projection approaches as presented in Table 2 (relevant references are presented at the end of Section \ref{sec:PointForecasts}). 
+The incoherent base probabilistic forecasts are reconciled via analytical and sampling solutions, as described in Sections \ref{sec:AnalyticalSolution} and \ref{sec:SampleSolution} respectively, using alternative projection approaches as presented in Table 2 (relevant references are presented at the end of Section \ref{sec:PointForecasts}).
 \begin{table}[!t]
 	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix, so that ${\bm G}=(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{R}'_\bot=\bm{S}'\bm{W}^{-1}$. The rows present alternative choices of $\bm{W}$. $\hat{\bm{W}}^{\text{sam}}$ is the sample variance-covariance matrix estimated from one-step ahead in-sample forecast errors from the base incoherent forecasts. $\hat{\bm{W}}^{\text{wls}}$ is a diagonal matrix with elements from $\hat{\bm{W}}^{\text{sam}}$. $\hat{\bm{W}}^{\text{shr}}$ is a shrinkage estimator proposed by \citet{Schafer2005},  where $\tau = \frac{\sum_{i \neq j}\hat{\var}(\hat{w}_{ij})}{\sum_{i \neq j}{\hat{w}}^2_{ij}}$ and  $w_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{W}}^{\text{sam}}$.}\label{tab:ReconMethods}
 	\centering
@@ -432,7 +432,7 @@ We assume a Gaussian predictive density for the simulated hierarchical time seri
 
 Table~\ref{tab:SimResults_Gauss_MultivScores} summarises the forecasting performance of incoherent, bottom-up, OLS, WLS and two MinT reconciliation methods using log score, energy score and variogram score. The top panel refers to the Gaussian DGP whereas the bottom panel refers to the non-Gaussian DGP. Recall that the log score is improper with respect to incoherent forecasts. Therefore we calculate the skill scores with reference to the bottom-up forecasts instead of incoherent forecasts in all cases and leave blank the cell for log score of the incoherent forecasts. Further, all log scores are evaluated on the basis of bottom-level series only, however these only differ from the log scores for the full hierarchy by a fixed constant. Overall, the MinT methods provide the best performance irrespective of the scoring rule, and all methods that reconcile using information at all levels of the forecast improve upon incoherent forecasts. Bottom-up forecasts perform even worse than incoherent forecasts in some cases. These results hold for both the Gaussian as well as the non-Gaussian DGP.
 
-Tables~\ref{tab:SimResults_Gauss_UnivScores} break down the forecasting performance of the different methods by considering univariate scores on each individual margin. We have only presented the results for forecast horizon $h=1$ and the results for rest of the forecasts horizons are presented in table \ref{Append:Gauss_sim_Univ} in Appendix.  Univariate log score and CRPS are considered, while skill scores are computed with the incoherent forecasts as a reference. When broken down in this fashion, irrespective of DGP, the methods based on MinT perform best for most series and outperform bottom-up forecasts in almost all cases.
+Tables~\ref{tab:SimResults_Gauss_UnivScores} break down the forecasting performance of the different methods by considering univariate scores on each individual margin. We have only presented the results for forecast horizon $h=1$ and the results for rest of the forecasts horizons are presented in table \ref{app:Gauss_sim_Univ} in Appendix.  Univariate log score and CRPS are considered, while skill scores are computed with the incoherent forecasts as a reference. When broken down in this fashion, irrespective of DGP, the methods based on MinT perform best for most series and outperform bottom-up forecasts in almost all cases.
 
 \begin{table}[H]
 	\caption{Forecast evaluation of hierarchical probabilistic forecasts for $h=1, 2$ and $3$ steps ahead. Entries show the percentage (\%) skill score with reference to the bottom-up method. A positive (negative) entry shows a gain (loss) in forecast accuracy over the reference method. The top panel shows the results from the Gaussian DGP while the bottom panel shows the results from the non-Gaussian DGP. The Log Score entries are based on the joint forecast distribution for the bottom-level, while the Energy and Variogram skill scores are based on the joint forecast distribution across the entire hierarchy.}\label{tab:SimResults_Gauss_MultivScores}
@@ -565,19 +565,15 @@ However we also note that optimal reconciliation required a high computational c
 \end{table}
 
 
-\section{Application: Forecasting Australian domestic tourism flow}\label{sec:Application}
+\section{Forecasting Australian domestic tourism flows}\label{sec:Application}
 
-In this section we illustrate how the probabilistic forecast reconciliation methods can be used in practice, by forecasting domestic tourism flows in Australia. Previous studies have shown that reconciliation for this data can generate more accurate point forecasts compared to the bottom-up or incoherent base forecasts. For example see \citet{AthEtAl2009}, \citet{HynEtAl2011} and \citet{WicEtAl2019}. This study is the first to apply reconciliation methods for forecasting tourism in a probabilistic framework.
+Previous studies have shown that point forecast reconciliation for forecasting Australian tourism flows can generate more accurate forecasts compared to bottom-up or incoherent base forecasts. See for example, \citet{AthEtAl2009}, \citet{HynEtAl2011} and \citet{WicEtAl2019}. This study is the first to apply reconciliation methods for forecasting Australian tourism in a probabilistic framework. We use ``overnight trips'' to different destinations across the country as a measure of tourism flows. These naturally disaggregate through a geographic hierarchy consisting of 7 states, 27 zones and 76 regions. Hence this 3-level hierarchy comprises 110 series in total. More details about the data and the individual series are provided in Appendix \ref{app:AustralianData}. 
 
-As a measure of domestic tourism flows, we consider the ``overnight trips'' to different destinations across the country. Data are collected through the National Visitor Survey managed by Tourism Research Australia based on an annual sample of $120,000$ Australian residents aged $15$ years or more, through telephone interviews \citep{TourismResearch2019}.
+We consider monthly overnight trips for all series spanning the period January 1998 to December 2018. This gives 152 observations per series. We use a rolling window of 100 observations as the training sample and generate incoherent base probabilistic forecasts for $h=1$ to 12-steps ahead from univariate ARIMA and ETS models for each series using \verb|auto.arima()| and \verb|ets()| from the \verb|forecast| package \citep{Rforecast} in R software \citep{Rcore}.
 
-The total number of overnight trips in Australia can be naturally disaggregated through a geographic hierarchy. This hierarchy consists of 7 states in the 1st level of disaggregation, 27 zones in the 2nd level of disaggregation and 76 regions in the bottom-level and thus comprises 110 series in total. More details about the individual series are provided in Table \ref{tab:AusTourRegions}.
-We consider monthly overnight trips for all series spanning the period January 1998 to December 2018. This gives 152 observations per series.
-
-\subsection{Forecasting methodology}
-
-We apply both the parametric and non-parametric reconciliation approaches as discussed in previous sections. We use a rolling window of 100 observations as the training sample where the first training sample will span the period Jan-1998 to Apr-2006. Based on this training set we fit univariate ARIMA and ETS models for each series in the hierarchy using automated functions \verb|auto.arima()| and \verb|ets()| from the \verb|forecast| package \citep{Rforecast} in R software \citep{Rcore}.
-From the estimated models we generate parametric and non-parametric probabilistic forecasts for one year ahead, i.e for $h=1,\dots,12$. For the parametric forecasts, we assume Gaussian densities and obtain the incoherent mean and variance forecasts. These are then reconciled using the methods described in Section \ref{sec:AnalyticalSolution}. For the non-parametric forecasts, we generate the bootstrapped future paths and then reconcile each sample path as described in Section \ref{sec:SampleSolution}. We note that we do not implement the MinT(Sample) approach as the sample size of training data set is less than the dimension of the hierarchy. Using a rolling window, one month at a time, we replicate the process until the end of the sample. This yields, $152$ 1-step ahead, $151$ 2-steps ahead through to $141$ 12-step ahead probabilistic forecasts available for evaluation. We note that we only present the results for ARIMA models in the following section. The results for ETS models are similar and we present these in the Appendix.
+We apply both the analytic (by assuming Gaussianity) and non-parametric sampling reconciliation approaches discussed in Sections \ref{sec:AnalyticalSolution} and \ref{sec:SampleSolution} respectively.
+We do not implement the MinT(Sample) approach as the sample size of training data set is less than the dimension of the hierarchy.
+The process is repeated by rolling the training window forward one month at a time until the end of the sample. This yields, $152$ 1-step ahead, $151$ 2-steps ahead through to $141$ 12-step ahead probabilistic forecasts available for evaluation. In what follows we only present the results for ARIMA. The results for ETS lead to similar conclusions and are available upon request.
 
 
 \subsection{Evaluation, results and discussion}
@@ -671,6 +667,7 @@ Since $\bm{S}'_\perp$ is the orthogonal complement of $\bm{S}$ and since the col
 \[
 \tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_b(\bm{S}^-\bm{y})\mathbb{1}\left\{\bm{y}\in\mathfrak{s}\right\}.
 \]
+\clearpage
 \section{Proof of Theorem~\ref{theo:OptRecProj}}
 \label{app:OptRecProj}
 
@@ -689,6 +686,7 @@ Therefore to recover the true predictive using a projection, some ${\bm G}_0$ mu
 
 With respect to the location, if $\bm{SG}$ is a projection then reconciled forecasts will be unbiased as long as the base forecasts are also unbiased.  When base forecasts are biased they can be bias corrected before reconciliation as described by \cite{PanEtAl2019HF} in the point forecasting setting.
 
+\clearpage
 \section{Proof of Theorem~\ref{theo:logS_improp}}\label{app:logS_improp}
 
 The proof relies on the following change of variables,
@@ -713,6 +711,7 @@ LS\left(\hat{f},\bm{y}^*\right) <-\log|\bm{S^*}|-\log f_{\bm b}(\bm{b}^*)=LS\lef
 \]
 Since this holds for any possible realisation, it will also hold after taking expectations (by the monotonicity of expectations).  Thus $\hat{f}$ violates the condition for a proper scoring rule.
 
+\clearpage
 \section{Data generating process} \label{app:DGP}
 
 The hierarchy considered in the simulations is the 2-level structure shown in Figure \ref{fig:twoL-hier}. Data are first generated for the bottom-level series from
@@ -773,7 +772,7 @@ We then choose $\sigma^2_u = 10$ and $\sigma^2_v = 7$ such that they satisfy the
  \textcolor{red}{Tas to double check.}
 
 
-\subsection{Simulation results from parametric solution for marginal forecast distributions}\label{Append:Gauss_sim_Univ}
+\subsection{Simulation results from parametric solution for marginal forecast distributions}\label{app:Gauss_sim_Univ}
 
 \begin{table}[H]
 	\caption{Comparison of incoherent vs coherent forecasts based on the univariate forecast distribution of each series. Each entry represents the percentage skill score with reference to the incoherent forecasts based on ``CRPS" and ``LS". These entries show the percentage increase in score for different forecasting methods relative to the incoherent forecasts for $h=2$ step-ahead forecast. Results from the Gaussian DGP are presented in the top panel whereas the results from the non-Gaussian DGP are presented in the bottom panel}\label{tab:SimResults_Gauss_UnivScores_h2}
@@ -884,6 +883,7 @@ This structure for $\bm{G}_h$ will ensure $\bm{SG}_h$ is a projection matrix and
 	
 \end{table}
 
+\clearpage
 \section{Application}
 
 \subsection{Results from ETS base forecasts}
@@ -911,11 +911,14 @@ This structure for $\bm{G}_h$ will ensure $\bm{SG}_h$ is a projection matrix and
 
 \FloatBarrier
 
-\newpage
-\subsection{Australian Tourism Data}
+\clearpage
+
+\section{Australian Tourism Data}\label{app:AustralianData}
+
+Data are collected through the National Visitor Survey managed by Tourism Research Australia based on an annual sample of $120,000$ Australian residents aged $15$ years or more, through telephone interviews \citep{TourismResearch2019}.
 
 \begin{table}[!hb]
-	\caption{Geographic hierarchy of Australian tourism flow}\label{tab:AusTourRegions}
+	\caption{Geographic hierarchy of Australian tourism flows}\label{tab:AusTourRegions}
 	\centering\tabcolsep=0.08cm
 	\fontsize{7}{7}\selectfont
 	\resizebox{\linewidth}{!}{
@@ -973,6 +976,7 @@ This structure for $\bm{G}_h$ will ensure $\bm{SG}_h$ is a projection matrix and
 			\bottomrule
 		\end{tabular}
 	}
+\fontsize{8}{9}\selectfont
 $^*$ We consider the Australian Capital Territory as a part of New South Wales and the Northern Territory as a state.
 \end{table}
 
