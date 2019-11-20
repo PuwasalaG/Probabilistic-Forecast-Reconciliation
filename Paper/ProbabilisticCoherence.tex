@@ -757,12 +757,23 @@ The errors driving the bottom-level ARIMA processes are jointly generated from a
 0.6 & 0.9 & 2.0 & 1.8 \\
 0.4 & 1.4 & 1.8 & 3.0 \\
 \end{pmatrix}
-\end{equation*} and $\sigma^2_u=28$ and $\sigma^2_v=22$ ensures that \textcolor{red}{Puwasala to complete the inequalities: \[
+\end{equation*} and $\sigma^2_u=28$ and $\sigma^2_v=22$ ensures that the following inequalities are satisfied. 
+
+
+\begin{align*}
 \var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
 \le \var(\varepsilon_{AA,t}+\varepsilon_{AB,t}-v_t)
-\le \var(\varepsilon_{AA,t}+u_t-0.5v_t).
-\]
-Similar inequalities hold when $\varepsilon_{AA,t}$ is replaced by $\varepsilon_{AB,t}$, $\varepsilon_{BA,t}$ and $\varepsilon_{BB,t}$ in the third term.}
+\le \var(\varepsilon_{AA,t}+u_t-0.5v_t),\\
+\var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
+\le \var(\varepsilon_{AA,t}+\varepsilon_{AB,t}-v_t)
+\le \var(\varepsilon_{AB,t}-u_t-0.5v_t),\\
+\var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
+\le \var(\varepsilon_{BA,t}+\varepsilon_{BB,t}+v_t)
+\le \var(\varepsilon_{BA,t}+u_t+0.5v_t),\\
+\var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
+\le \var(\varepsilon_{BA,t}+\varepsilon_{BB,t}+v_t)
+\le \var(\varepsilon_{BB,t}-u_t+0.5v_t).\\
+\end{align*}
 
 
 \subsubsection*{Non-Gaussian errors}
@@ -771,7 +782,11 @@ Non-Gaussian errors are generated from a Gumbel copula with beta margins. Using 
 \begin{equation*}
 C_\theta(e_1, e_2) = exp\{-[(-ln(e_1))^\theta + (-ln(e_2))^\theta]^{1/\theta}\}.
 \end{equation*}
-We generate random variates $\{e_{AA}, e_{AB}\}$ from $C_{\theta=10}(.)$ and $\{e_{BA}, e_{BB}\}$ from $C_{\theta=8}(.)$ for series $\{AA, AB\}$ and $\{BA, BB\}$ respectively. We generate the ARIMA errors, $\{\varepsilon_{AA}, \varepsilon_{AB}, \varepsilon_{BA}, \varepsilon_{BB}\}$ as the quantiles from beta distributions with shape parameters $\alpha = 1$ and $\beta = 3$ that correspond to $\{e_{AA}, e_{AB}, e_{BA}, e_{BB}\}$. \textcolor{red}{Puwasala and Tas to double check.}
+We generate random variates $\{e_{AA}, e_{AB}\}$ from $C_{\theta=10}(.)$ and $\{e_{BA}, e_{BB}\}$ from $C_{\theta=8}(.)$ for series $\{AA, AB\}$ and $\{BA, BB\}$ respectively. We generate the ARIMA errors, $\{\varepsilon_{AA}, \varepsilon_{AB}, \varepsilon_{BA}, \varepsilon_{BB}\}$ as the quantiles from beta distributions with shape parameters $\alpha = 1$ and $\beta = 3$ that correspond to $\{e_{AA}, e_{AB}, e_{BA}, e_{BB}\}$.
+We then choose $\sigma^2_u = 10$ and $\sigma^2_v = 7$ such that they satisfy the inequalities explained before. 
+
+
+ \textcolor{red}{Tas to double check.}
 
 
 \subsection{Simulation results from parametric solution for marginal forecast distributions}\label{Append:Gauss_sim_Univ}
