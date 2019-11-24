@@ -14,7 +14,7 @@ require(copula)
 
 set.seed(1989)
 
-N <- 2102
+N <- 2002
 m <- 4
 
 #Randomly generating errors from a Gaussian distribution 
@@ -68,7 +68,6 @@ Bottom_level_noisy[,2] <- Bottom_level[,2]-Ut-0.5*Vt
 Bottom_level_noisy[,3] <- Bottom_level[,3]+Ut+0.5*Vt
 Bottom_level_noisy[,4] <- Bottom_level[,4]-Ut+0.5*Vt
 
-Bottom_level_noisy <- Bottom_level_noisy[-(1:500),] # To avoid impact from initial values
 
 write.csv(Bottom_level_noisy, "Bottom_level.csv")
 
