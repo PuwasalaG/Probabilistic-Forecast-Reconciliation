@@ -314,7 +314,7 @@ This result implies that reconciling each member of a sample drawn from an incoh
 
 In the point forecasting setting it is common to generate forecasts from independent statistical models, allowing forecast reconciliation to be scaled up to large hierarchies.  Since a single point forecast is generated for each series there is no ambiguity as to how these should be stacked into a vector of base forecasts $\hat{\bm{y}}$.  This is no longer the case in the probabilistic setting where multiple draws are made for each series.  \cite{JeoEtAl2019} recommend some crude heuristics that can be used to form joint samples.  In Section~\ref{Subsec:Incoherent_samplePaths} we provide an alternative based on resampling forecast errors. This provides a sample from a base probabilistic forecast. A sample from the reconciled distribution can be obtained by premultiplying these draws by $\bm{S}\bm{G}$. Strategies for choosing $\bm{G}$ are discussed in Section~\ref{sec:OptRec}. \textcolor{red}{Check this cross-reference when we finish.}
 
-\subsection{Drawing base probabilistic forecasts}
+\subsection{Drawing base probabilistic forecasts}\label{sec:drawbase}
 
 The following method only requires that one-step ahead in-sample `forecasts' $\hat{y}_{i,t}$ can be computed for each series $i$.  These are not true forecasts since they are computed over the training data $t=1,\ldots,T$; for instance  $\hat{y}_{i,t}$ may be the fitted values of $E(y_{i,t}|y_{i,t-1})$ implied by some statistical model. Let the errors $e_{i,t} = y_{i,t} - \hat{y}_{i,t}$ be stacked in a $(n \times T)$ matrix $\bm{\mathcal{E}}:=\left\{e_{i,t}\right\}_{i=1,\dots,n,t=1,\dots,T}$.  When up to $H$ step ahead forecasts are required, we randomly select $H$ consecutive columns from $\bm{\mathcal{E}}$ to form $\bm{\mathcal{E}}^b$ and repeat for $b = 1,\dots,B$.  This preserves both serial correlation of errors as well as dependence across different series.
 
@@ -383,18 +383,23 @@ The same property does not hold for all scores. For example, the energy score is
 	\label{tab:prop}
 \end{table}
 
-\clearpage
 
 
-\clearpage
 \section{Simulations}\label{sec:simulations}
 
-The aim of the simulations that follow is to assess the performance of the  both analytical and non-parametric sample based reconciliation approaches discussed so far. The data generating process we consider corresponds to the 2-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. We consider a Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically we generate Gaussian errors jointly from a multivariate distribution, and non-Gaussian errors from a Gumbel copula model with beta margins. All details of the data generating process are presented in Appendix \ref{app:DGP}.
+\subsection{Data Generating Processes and Setup}
 
-For each series we generate 2002 observations from which the first 500 are ignored to avoid the impact of initial values. Using a training window of 500 observations, we fit univariate ARIMA and exponential smoothing (ETS) models to each series using the \verb|auto.arima()| and \verb|ets()| functions in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore} and generate incoherent base probabilistic forecasts assuming Gaussian errors, for $h = 1, 2$ and 3-steps ahead. \textcolor{red}{Ok this at least for the copula errors means that we have error mis-specification for the models. For example we could have used a bootstrap error rather than Gaussian. Something we may comment about below.}
+The aim of the simulations that follow is to assess the performance of the  both analytical and non-parametric sample based reconciliation approaches discussed so far. The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with beta margins. All details of the data generating process are presented in Appendix \ref{app:DGP}.  For each series we generate 2002 observations from which the first 500 are ignored to avoid the impact of initial values. To investigate the impact of model mispecification, both Gaussian and non-Gaussian probabilistic forecasts will be evaluated for each DGP.
 
-\textcolor{red}{We may want to push the following in the following section.} The incoherent base probabilistic forecasts are reconciled via the analytical and non-parametric sampling solutions, as described in Sections \ref{sec:AnalyticalSolution} and \ref{sec:SampleSolution} respectively, using alternative projection approaches as presented in Table 2. In the following section we also propose an approach for finding what we refer to as ``Optimal'' in the simulation results that follow.
+All forecasts are evaluated using a rolling window with a training sample of 500. This yields 1,000 probabilistic forecasts for evaluation. The predictive accuracy of the alternative methods is evaluated using the scoring rules presented in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores, i.e., the percentage improvement of a probabilistic forecast over a reference method. A positive (negative) value indicates a percentage gain (loss) in forecast accuracy over the reference method. 
 
+\subsection{Base Forecasts}
+
+We fit univariate ARIMA and exponential smoothing (ETS) models to each series using the \verb|auto.arima()| and \verb|ets()| functions in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore}.  Since the conclusions were similar for both modelling approaches, the results for ETS are omitted here but are available upon request.  For each series, (incoherent) point forecasts are obtained for $h = 1, 2$ and $3$-steps ahead.  We denote these as $\hat{\bm\mu}_{T+h}$. For $h=2$ and $h=3$ these are obtained using the recursive method \citep{FPP2018} assuming Gaussian errors\todo{is this what we do for Gaussian and non-Gaussian?}.  A Gaussian base probabilistic forecast is obtained as $N(\hat{\bm{\mu}_{T+h}},\hat{\bm{\Sigma}})$ with $\hat{\bm{\Sigma}}$ estimated using in-sample one-step ahead forecast errors and the shrinkage estimator of \citet{Schafer2005} (as presented in Table \ref{tab:ReconMethods}).  A sample from the non-Gaussian probabilistic forecast is obtained using the bootstrap method described in Section~\ref{sec:drawbase}.
+
+\subsection{Reconciliation}
+
+The incoherent base probabilistic forecasts are reconciled via the analytical and non-parametric sampling solutions.  For Gaussian probabilistic forecasts, the reconciled forecast will be of the form $N(\bm{S}\bm{G}\hat{\bm{\mu}},\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$, as described in Section \ref{sec:AnalyticalSolution}.  For non-Gaussian probabilistic forecasts all draws are premultiplied by $\bm{S}\bm{G}$ as described in\ref{sec:SampleSolution}.  A number of alternative projections were considered for reconciliation and are summarised in presented in Table \ref{tab:recomethods}. 
 \begin{table}[!t]
 	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix, so that ${\bm G}=(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{R}'_\bot=\bm{S}'\bm{W}^{-1}$. The rows present alternative choices of $\bm{W}$. $\hat{\bm{W}}^{\text{sam}}$ is the sample variance-covariance matrix estimated from one-step ahead in-sample forecast errors from the base incoherent forecasts. $\hat{\bm{W}}^{\text{wls}}$ is a diagonal matrix with elements from $\hat{\bm{W}}^{\text{sam}}$. $\hat{\bm{W}}^{\text{shr}}$ is a shrinkage estimator proposed by \citet{Schafer2005},  where $\tau = \frac{\sum_{i \neq j}\hat{\var}(\hat{w}_{ij})}{\sum_{i \neq j}{\hat{w}}^2_{ij}}$ and  $w_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{W}}^{\text{sam}}$. Relevant references are presented at the end of Section \ref{sec:PointForecasts}.} \label{tab:ReconMethods}
 	\centering
@@ -408,11 +413,12 @@ For each series we generate 2002 observations from which the first 500 are ignor
 		MinT(Shrink)    & $\tau\text{diag}(\hat{\bm{W}}^{\text{sam}}) + (1-\tau)\hat{\bm{W}}^{\text{sam}}$\\
 		\bottomrule
 	\end{tabular}
+\label{tab:recomethods}
 \end{table}
 
-\subsection{Optimal reconciliation of incoherent probabilistic forecasts}\label{sec:OptRec}
+\subsubsection{Score Optimal Reconciliation}\label{sec:OptRec}
 
-The aim is to find an optimal $\bm{G}$ for reconciling probabilistic hierarchical forecasts by minimising a proper multivariate scoring rule. The respective objective function can be written as,
+Apart from cases described in Section~\ref{sec:AnalyticalSolution} which are not feasible in practice, the $\bm{G}$ matrix that minimises expected score may depend on both the base forecast, true predictive and specific scoring rule used.  In the following section we also propose an approach to find a $\bm{G}$ by optimising the average score over a rolling window constructed within the training data.  The respective objective function can be written as,
 \begin{equation} \label{eq:Obj_func_1}
 \operatornamewithlimits{argmin}_{\bm{G}_h} \quad \E_{Q}[K(\tilde{\nu}_{\bm{G}_h}, \bm{y})],
 \end{equation}
@@ -422,14 +428,11 @@ To approximate the expectation in Equation~\eqref{eq:Obj_func_1} we break up the
 
 \begin{equation} \label{eq:Obj_func_apprx} \E_{Q}[K(\tilde{\nu}_{\bm{G}_h}, \bm{y})]\approx\frac{1}{J}\sum_{j=1}^{J}K(\tilde{\nu}_{\bm{G}_h},\bm{y}_{T-J+j+h}).\nonumber
 \end{equation}
-In the simulations that follow set $T=600$ and $J=100$. We implement the algorithm in the analytical solution setting (see Section \ref{sec:SimAnalysticalResults}) by minimising the Log Score and in the non-parametric sample based setting (see Section \ref{sec:SimSamplingResults}) by minimising the Energy Score.
+Where this approach is used in simulations, we set $J=100$ and use a slightly larger training window of $T=600$ for selecting $\bm{G}$ only. We implement the algorithm in the Gaussian setting (see Section \ref{sec:SimAnalysticalResults}) using log score and in the non-Gaussian setting (see Section \ref{sec:SimSamplingResults}) using energy score.  We also note that different ways of parameterising $\bm{G}_h$ were used in the numerical optimisation but all led to identical results.  This was discussed in detail in Section \ref{app:ReparaG} in Appendix.
 
-All reconciliation approaches are repeated by rolling the training window forward one observation at a time. This yields 1,000 probabilistic forecasts for evaluation. The predictive accuracy of the alternative methods is evaluated using the scoring rules presented in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores, i.e., the percentage improvement of a probabilistic forecast over a reference method. A positive (negative) value indicates a percentage gain (loss) in forecast accuracy over the reference method. In order to save space in what follows we only present the results from reconciling the ARIMA incoherent base forecasts. Results and conclusions are very similar for the ETS incoherent base forecasts. These are available upon request. \textcolor{red}{Puwasala to make sure that these are available.}
+\subsection{Results for Gaussian probabilistic forecasts}\label{sec:SimAnalysticalResults}
 
-\subsection{Reconciliation via the analytical solution}\label{sec:SimAnalysticalResults}
-
-We assume a Gaussian predictive density for the simulated hierarchical time series, i.e., $\hat{\bm{y}}\sim N(\hat{\bm{\mu}},\hat{\bm{\Sigma}})$. The analytical tractability of the normal distribution allows for evaluation using all scoring rules (including the log-score). $\hat{\bm{\mu}}$ is given by the mean of the incoherent base probabilistic forecasts. We estimate $\hat{\bm{\Sigma}}$ from the in-sample one-step ahead forecast errors using the shrinkage estimator of \citet{Schafer2005} (as the one presented in Table \ref{tab:ReconMethods}). Coherent probabilistic forecasts are then generated as $\tilde{\bm{y}}
-\sim N(\bm{S}\bm{G}\hat{\bm{\mu}},\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$ where ${\bm G}=(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{R}'_\bot=\bm{S}'\bm{W}^{-1}$ for the different choices of $\bm{W}$ as presented in Table \ref{tab:ReconMethods}.
+%We assume a Gaussian predictive density for the simulated hierarchical time series, i.e., $\hat{\bm{y}}\sim N(\hat{\bm{\mu}},\hat{\bm{\Sigma}})$. The analytical tractability of the normal distribution allows for evaluation using all scoring rules (including the log-score). $\hat{\bm{\mu}}$ is given by the mean of the incoherent base probabilistic forecasts. We estimate $\hat{\bm{\Sigma}}$ from the in-sample one-step ahead forecast errors using the shrinkage estimator of \citet{Schafer2005} (as the one presented in Table \ref{tab:ReconMethods}). Coherent probabilistic forecasts are then generated as $\tilde{\bm{y}}\sim N(\bm{S}\bm{G}\hat{\bm{\mu}},\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$ where ${\bm G}=(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{R}'_\bot=\bm{S}'\bm{W}^{-1}$ for the different choices of $\bm{W}$ as presented in Table \ref{tab:ReconMethods}.
 
 Table~\ref{tab:SimAnalyticalMulti} summarises the forecasting performance of incoherent, bottom-up, OLS, WLS and two MinT reconciliation methods using log score, energy score and variogram score. The top panel refers to the Gaussian DGP whereas the bottom panel refers to the non-Gaussian DGP. Recall that the log score is improper with respect to incoherent forecasts. Hence, we calculate the skill scores with reference to the bottom-up forecasts in all cases leaving blank the cells for log score of the incoherent forecasts. Further, all log scores are evaluated on the basis of bottom-level series only, as these differ from the log scores for the full hierarchy by a fixed constant. Please refer to Table \ref{tab:ScoringRulesProperties} for further explanations.
 
@@ -512,24 +515,24 @@ Tables~\ref{tab:SimAnalyticalUni} (and \ref{tab:SimAnalyticalUni_h2} and \ref{ta
 	}
 \end{table}
 
-\subsection{Reconciliation via non-parametric sampling} \label{sec:SimSamplingResults}
+\subsection{Results for non-Gaussian probabilistic forecast} \label{sec:SimSamplingResults}
 
 
-Bootstrap approach: Generate 2102 data points for each series. Ignoring first 500 observations to avoid the impact of initial values. Choose 600 observations for outer rolling window and follow the steps in the algorithm to generate reconciled probabilistic forecasts for  h = 1, 2 and 3 steps ahead forecast horizons.  Replicate the process for 1000 times by rolling the window one step at a time. This yields 1000 forecast distributions for evaluation for all forecast horizons.
+%Bootstrap approach: Generate 2102 data points for each series. Ignoring first 500 observations to avoid the impact of initial values. Choose 600 observations for outer rolling window and follow the steps in the algorithm to generate reconciled probabilistic forecasts for  h = 1, 2 and 3 steps ahead forecast horizons.  Replicate the process for 1000 times by rolling the window one step at a time. This yields 1000 forecast distributions for evaluation for all forecast horizons.
 
-\subsection{Simulation setup for non-parametric solution}
+%\subsection{Simulation setup for non-parametric solution}
 
-We now implement the non-parametric approach introduced in Section \ref{sec:SampleSolution}. Our main focus in this study is to compare different reconciliation methods to optimal reconciliation. We narrow down the study to find optimality with respect to energy score. Following equation (\ref{eq:Energy_score}) for samples from the probability distribution and for $\alpha = 1$, we can rewrite the objective function in (\ref{eq:Obj_func_apprx}) as,
+%We now implement the non-parametric approach introduced in Section \ref{sec:SampleSolution}. Our main focus in this study is to compare different reconciliation methods to optimal reconciliation. We narrow down the study to find optimality with respect to energy score. Following equation (\ref{eq:Energy_score}) for samples from the probability distribution and for $\alpha = 1$, we can rewrite the objective function in (\ref{eq:Obj_func_apprx}) as,
 
-\begin{equation}\label{eq:Obj_func_apprx_ES}
-\operatornamewithlimits{argmin}_{\bm{G}} \frac{1}{N}\sum_{j=1}^{N}\left\{\frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}^{b+1})||\right\}
-\end{equation}
+%\begin{equation}\label{eq:Obj_func_apprx_ES}
+%\operatornamewithlimits{argmin}_{\bm{G}} \frac{1}{N}\sum_{j=1}^{N}\left\{\frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}^{b+1})||\right\}
+%\end{equation}
 
-First we generate $2500$ data points for each series in the hierarchy using the same DGP discussed in Section \ref{sec:simulations}. Following the algorithm explained in Section \ref{sec:OptRec}, we choose $L=600$ observations for outer rolling window and $T=500$ observations for inner rolling window. We fit univariate ARIMA models using \verb|auto.arima()| function and generate $B=1000$ of $h=1$ to $3$ steps-ahead incoherent bootstrapped future paths following steps 2 and 3. We repeat these steps for $N=100$ times by moving the inner window one step at a time. Following step 6, we then estimate $\bm{G}_h^{Opt}$. We use numerical optimisation methods to attain the optimum. Next, we generate $\tilde{\bm{\Upsilon}}_{T+h}$ following step 7 and compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,2,3$ as described in step 8. We use $\bm{G}_h^{Opt}$ as well as other $\bm{G}$ matrices given in Table \ref{tab:ReconMethods} (in appendix) for reconciliation in step 8. Finally we repeat this whole process for $1000$ times by moving the outer rolling window one step-ahead at a time. Collect $1000$ reconciled future paths, $\tilde{\bm{\Upsilon}}_{T+h}$, from different reconciliation methods for $h=1,2,3$ and evaluate the forecasting performances.
+%First we generate $2500$ data points for each series in the hierarchy using the same DGP discussed in Section \ref{sec:simulations}. Following the algorithm explained in Section \ref{sec:OptRec}, we choose $L=600$ observations for outer rolling window and $T=500$ observations for inner rolling window. We fit univariate ARIMA models using \verb|auto.arima()| function and generate $B=1000$ of $h=1$ to $3$ steps-ahead incoherent bootstrapped future paths following steps 2 and 3. We repeat these steps for $N=100$ times by moving the inner window one step at a time. Following step 6, we then estimate $\bm{G}_h^{Opt}$. We use numerical optimisation methods to attain the optimum. Next, we generate $\tilde{\bm{\Upsilon}}_{T+h}$ following step 7 and compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,2,3$ as described in step 8. We use $\bm{G}_h^{Opt}$ as well as other $\bm{G}$ matrices given in Table \ref{tab:ReconMethods} (in appendix) for reconciliation in step 8. Finally we repeat this whole process for $1000$ times by moving the outer rolling window one step-ahead at a time. Collect $1000$ reconciled future paths, $\tilde{\bm{\Upsilon}}_{T+h}$, from different reconciliation methods for $h=1,2,3$ and evaluate the forecasting performances.
 
-We also note that different parameterisation methods were used for estimation $\bm{G}_h^{Opt}$. This was discussed in detail in Section \ref{app:ReparaG} in Appendix.
+%We also note that different parameterisation methods were used for estimation $\bm{G}_h^{Opt}$. This was discussed in detail in Section \ref{app:ReparaG} in Appendix.
 
-\subsubsection{Results and discussion}
+%\subsubsection{Results and discussion}
 
 We use energy score and variogram score to assess the predictive performance from different reconciliation methods. Results following from Non-Gaussian and Gaussian DGP are presented in left and right panels of Table \ref{table:Non-paraSimulation} respectively.
 
