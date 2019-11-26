@@ -33,7 +33,7 @@
 \def\E{\text{E}}
 \def\var{\text{Var}}
 
-\def\PQ{\begin{pmatrix}\bm{G}\\[-0.2cm]\bm{G}'_{\perp}\end{pmatrix}}
+\def\PQ{\begin{pmatrix}\bm{G}\\[-0.2cm]\bm{G}_{\perp}^-\end{pmatrix}}
 \def\bt{\begin{pmatrix}{\bm{b}}\\[-0.2cm]{\bm{a}}\end{pmatrix}}
 
 %\theoremstyle{theo}
@@ -192,7 +192,7 @@ We now turn our attention towards a novel definition of coherence in a probabili
 	\]
 \end{definition}
 
-To the best of our knowledge, the only other definition of coherent probabilistic forecasts is given by \citet{BenTaieb2017} who define coherent probabilistic forecasts in terms of convolutions. While these definitions do not contradict one another our definition has two advantages.  First it can more naturally be extended to problems with non-linear constraints with the coherent subspace $\mathfrak{s}$ replaced with a manifold.  Second, the geometric understanding of coherence facilitates a definition of probabilistic forecast reconciliation to which we now turn our attention.
+To the best of our knowledge, the only other definition of coherent probabilistic forecasts is given by \cite{Taieb2017} who define coherent probabilistic forecasts in terms of convolutions. While these definitions do not contradict one another our definition has two advantages.  First it can more naturally be extended to problems with non-linear constraints with the coherent subspace $\mathfrak{s}$ replaced with a manifold.  Second, the geometric understanding of coherence facilitates a definition of probabilistic forecast reconciliation to which we now turn our attention.
 
 \subsection{Probabilistic forecast reconciliation}
 
@@ -226,7 +226,7 @@ In this section we describe how a reconciled distribution can be derived analyti
 	\[
 	\tilde{f}_{\bm{b}}(\bm{b})=|\bm{G^*}|\int \hat{f}(\bm{G}^{-}{\bm b}+\bm{G}_\perp {\bm a})d\bm{a}\,,
 	\]
-	where $\hat{f}$ is the density of the incoherent base probabilistic forecast, $\bm{G^-}$ is an $n\times m$ pseudo inverse of $\bm{G}$ such that $\bm{G}\bm{G}^-=\bm{I}$, $\bm{G_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{G}$ such that $\bm{G}\bm{G}_\perp=\bm{0}$ and $\bm{G}'_\perp\bm{G}_\perp=\bm{I}$, $\bm{G^*}=\left(\bm{G}^-\,\vdots\,\bm{G}_\perp\right)$, and $\bm{b}$ and $\bm{a}$ are obtained via the change of variables
+	where $\hat{f}$ is the density of the incoherent base probabilistic forecast, $\bm{G^-}$ is an $n\times m$ generalised inverse of $\bm{G}$ such that $\bm{G}\bm{G}^-=\bm{I}$, $\bm{G_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{G}$ such that $\bm{G}\bm{G}_\perp=\bm{0}$, $\bm{G^*}=\left(\bm{G}^-\,\vdots\,\bm{G}_\perp\right)$, and $\bm{b}$ and $\bm{a}$ are obtained via the change of variables
 	\[
 	\bm{y}=\bm{G^*}\begin{pmatrix}\bm{b}\\\bm{a}\end{pmatrix}\,.
 	\]
@@ -243,7 +243,7 @@ In this section we describe how a reconciled distribution can be derived analyti
 	\]
 	where $\mathbb{1}\left\{.\right\}$ equals $1$ when the statement in braces is true and 0 otherwise and,
 	\[\bm{S^*}=\begin{pmatrix}\bm{S}^-\\\bm{S}'_\perp\end{pmatrix}\,,\]
-	and $\bm{S^-}$ is an $m\times n$ pseudo inverse of $\bm{S}$ such that $\bm{S}^-\bm{S}=\bm{I}$, $\bm{S_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{S}$ such that $\bm{S}'_\perp\bm{S}=\bm{0}$ and $\bm{S}'_\perp\bm{S}_\perp=\bm{I}$.
+	and $\bm{S^-}$ is an $m\times n$ generalised inverse of $\bm{S}$ such that $\bm{S}^-\bm{S}=\bm{I}$, $\bm{S_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{S}$ such that $\bm{S}'_\perp\bm{S}=\bm{0}$.
 \end{theo}
 
 \begin{proof}
@@ -260,7 +260,13 @@ Using Theorem~\ref{theo:bottomdens}, the reconciled density for the bottom-level
 \begin{equation}
 \tilde{f}_{\bm{b}}(\bm{b})=\int(2\pi)^{-\frac{n}{2}}\Big|\hat{\bm{\Sigma}}\Big|^{-\frac{1}{2}}|\bm{G^*}|\exp\{-\frac{1}{2}q\}d{\bm a}\nonumber\,,
 \end{equation}
-where $q=(\bm{G}^-{\bm{b}}+\bm{G}_{\perp}{\bm{a}}-\hat{\bm{\mu}})' \hat{\bm{\Sigma}}^{-1}(\bm{G}^-\bm{b}+\bm{G}_\perp\bm{a}-\hat{\bm{\mu}})$, can be rearranged as
+where $q=(\bm{G}^-{\bm{b}}+\bm{G}_{\perp}{\bm{a}}-\hat{\bm{\mu}})' \hat{\bm{\Sigma}}^{-1}(\bm{G}^-\bm{b}+\bm{G}_\perp\bm{a}-\hat{\bm{\mu}})$. Noting that 
+\[
+\bm{G}^{*-1}=\begin{pmatrix}
+\bm{G} \\\bm{G}_{\perp}^-
+\end{pmatrix}\,,
+\]
+where $\bm{G}_{\perp}^-$ is an $(n-m)\times n$ matrix such that $\bm{G}_{\perp}^-\bm{G}=\bm{I}$, $q$ can be rearranged as
 \begin{align*}
 	q& =
 	\left(\bm{G}^*\bt-\hat{\bm{\mu}}\right)' \hat{\bm{\Sigma}}^{-1}\left(\bm{G}^*\bt-\hat{\bm{\mu}}\right)\\
@@ -269,12 +275,6 @@ where $q=(\bm{G}^-{\bm{b}}+\bm{G}_{\perp}{\bm{a}}-\hat{\bm{\mu}})' \hat{\bm{\Sig
 	\left(\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\right)\\
     & =\left[\bt-\PQ\hat{\bm{\mu}}\right]' \left[\PQ\hat{\bm{\Sigma}}\PQ'\right]^{-1}\left[\bt-\PQ\hat{\bm{\mu}}\right],
 \end{align*}
-where
-\[
-\begin{pmatrix}
-\bm{G} \\\bm{G}_{\perp}
-\end{pmatrix}=\bm{G}^{*-1}.
-\]
 
 This can be recognised as a multivariate Gaussian density in $\bm{b}$ and $\bm{a}$.  The mean and covariance matrix for the margins of the first $m$ elements are $\bm{G}\hat{\bm{\mu}}$ and $\bm{G}\hat{\bm{\Sigma}}\bm{G}'$ respectively.  Marginalising out $\bm {a}$, the reconciled forecast for the bottom-level is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$.
 
@@ -312,9 +312,9 @@ In practice it is often the case that samples are drawn from a probabilistic for
 
 This result implies that reconciling each member of a sample drawn from an incoherent distribution provides a sample from the reconciled distribution.  Such a strategy has already been used by \cite{JeoEtAl2019}, without formal justification.  We now propose a general purpose algorithm for probabilistic forecast reconciliation that overcomes a number of shortcomings of \cite{JeoEtAl2019}.
 
-In the point forecasting setting it is common to generate forecasts from independent statistical models, allowing forecast reconciliation to be scaled up to large hierarchies.  Since a single point forecast is generated for each series there is no ambiguity as to how these should be stacked into a vector of base forecasts $\hat{\bm{y}}$.  This is no longer the case in the probabilistic setting where multiple draws are made for each series.  \cite{JeoEtAl2019} recommend some crude heuristics that can be used to form joint samples.  In Section~\ref{Subsec:Incoherent_samplePaths} we provide an alternative based on resampling forecast errors. This provides a sample from a base probabilistic forecast. A sample from the reconciled distribution can be obtained by premultiplying these draws by $\bm{S}\bm{G}$. Strategies for choosing $\bm{G}$ are discussed in Section~\ref{sec:OptRec}. \textcolor{red}{Check this cross-reference when we finish.}
+In the point forecasting setting it is common to generate forecasts from independent statistical models, allowing forecast reconciliation to be scaled up to large hierarchies.  Since a single point forecast is generated for each series there is no ambiguity as to how these should be stacked into a vector of base forecasts $\hat{\bm{y}}$.  This is no longer the case in the probabilistic setting where multiple draws are made for each series.  \cite{JeoEtAl2019} recommend some crude heuristics that can be used to form joint samples.  In Section~\ref{sec:drawbase} we provide an alternative based on resampling forecast errors. This provides a sample from a base probabilistic forecast. A sample from the reconciled distribution can be obtained by premultiplying these draws by $\bm{S}\bm{G}$. Strategies for choosing $\bm{G}$ are discussed in Section~\ref{sec:OptRec}.
 
-\subsection{Drawing base probabilistic forecasts}
+\subsection{Drawing base probabilistic forecasts}\label{sec:drawbase}
 
 The following method only requires that one-step ahead in-sample `forecasts' $\hat{y}_{i,t}$ can be computed for each series $i$.  These are not true forecasts since they are computed over the training data $t=1,\ldots,T$; for instance  $\hat{y}_{i,t}$ may be the fitted values of $E(y_{i,t}|y_{i,t-1})$ implied by some statistical model. Let the errors $e_{i,t} = y_{i,t} - \hat{y}_{i,t}$ be stacked in a $(n \times T)$ matrix $\bm{\mathcal{E}}:=\left\{e_{i,t}\right\}_{i=1,\dots,n,t=1,\dots,T}$.  When up to $H$ step ahead forecasts are required, we randomly select $H$ consecutive columns from $\bm{\mathcal{E}}$ to form $\bm{\mathcal{E}}^b$ and repeat for $b = 1,\dots,B$.  This preserves both serial correlation of errors as well as dependence across different series.
 
@@ -383,18 +383,23 @@ The same property does not hold for all scores. For example, the energy score is
 	\label{tab:prop}
 \end{table}
 
-\clearpage
 
 
-\clearpage
 \section{Simulations}\label{sec:simulations}
 
-The aim of the simulations that follow is to assess the performance of the  both analytical and non-parametric sample based reconciliation approaches discussed so far. The data generating process we consider corresponds to the 2-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. We consider a Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically we generate Gaussian errors jointly from a multivariate distribution, and non-Gaussian errors from a Gumbel copula model with beta margins. All details of the data generating process are presented in Appendix \ref{app:DGP}.
+\subsection{Data Generating Processes and Setup}
 
-For each series we generate 2002 observations from which the first 500 are ignored to avoid the impact of initial values. Using a training window of 500 observations, we fit univariate ARIMA and exponential smoothing (ETS) models to each series using the \verb|auto.arima()| and \verb|ets()| functions in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore} and generate incoherent base probabilistic forecasts assuming Gaussian errors, for $h = 1, 2$ and 3-steps ahead. \textcolor{red}{Ok this at least for the copula errors means that we have error mis-specification for the models. For example we could have used a bootstrap error rather than Gaussian. Something we may comment about below.}
+The aim of the simulations that follow is to assess the performance of the  both analytical and non-parametric sample based reconciliation approaches discussed so far. The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with beta margins. All details of the data generating process are presented in Appendix \ref{app:DGP}.  For each series we generate 2002 observations from which the first 500 are ignored to avoid the impact of initial values. To investigate the impact of model mispecification, both Gaussian and non-Gaussian probabilistic forecasts will be evaluated for each DGP.
 
-\textcolor{red}{We may want to push the following in the following section.} The incoherent base probabilistic forecasts are reconciled via the analytical and non-parametric sampling solutions, as described in Sections \ref{sec:AnalyticalSolution} and \ref{sec:SampleSolution} respectively, using alternative projection approaches as presented in Table 2. In the following section we also propose an approach for finding what we refer to as ``Optimal'' in the simulation results that follow.
+All forecasts are evaluated using a rolling window with a training sample of 500. This yields 1,000 probabilistic forecasts for evaluation. The predictive accuracy of the alternative methods is evaluated using the scoring rules presented in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores, i.e., the percentage improvement of a probabilistic forecast over a reference method. A positive (negative) value indicates a percentage gain (loss) in forecast accuracy over the reference method. 
 
+\subsection{Base Forecasts}
+
+We fit univariate ARIMA and exponential smoothing (ETS) models to each series using the \verb|auto.arima()| and \verb|ets()| functions in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore}.  Since the conclusions were similar for both modelling approaches, the results for ETS are omitted here but are available upon request.  For each series, (incoherent) point forecasts are obtained for $h = 1, 2$ and $3$-steps ahead.  We denote these as $\hat{\bm\mu}_{T+h}$. For $h=2$ and $h=3$ these are obtained using the recursive method \citep{FPP2018} assuming Gaussian errors\todo{is this what we do for Gaussian and non-Gaussian?}.  A Gaussian base probabilistic forecast is obtained as $N(\hat{\bm{\mu}_{T+h}},\hat{\bm{\Sigma}})$ with $\hat{\bm{\Sigma}}$ estimated using in-sample one-step ahead forecast errors and the shrinkage estimator of \citet{Schafer2005} (as presented in Table \ref{tab:ReconMethods}).  A sample from the non-Gaussian probabilistic forecast is obtained using the bootstrap method described in Section~\ref{sec:drawbase}.
+
+\subsection{Reconciliation}
+
+The incoherent base probabilistic forecasts are reconciled via the analytical and non-parametric sampling solutions.  For Gaussian probabilistic forecasts, the reconciled forecast will be of the form $N(\bm{S}\bm{G}\hat{\bm{\mu}},\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$, as described in Section~\ref{sec:AnalyticalSolution}.  For non-Gaussian probabilistic forecasts all draws are premultiplied by $\bm{S}\bm{G}$ as described in Section~\ref{sec:SampleSolution}.  A number of alternative projections were considered for reconciliation and are summarised in presented in Table \ref{tab:recomethods}. 
 \begin{table}[!t]
 	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix, so that ${\bm G}=(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{R}'_\bot=\bm{S}'\bm{W}^{-1}$. The rows present alternative choices of $\bm{W}$. $\hat{\bm{W}}^{\text{sam}}$ is the sample variance-covariance matrix estimated from one-step ahead in-sample forecast errors from the base incoherent forecasts. $\hat{\bm{W}}^{\text{wls}}$ is a diagonal matrix with elements from $\hat{\bm{W}}^{\text{sam}}$. $\hat{\bm{W}}^{\text{shr}}$ is a shrinkage estimator proposed by \citet{Schafer2005},  where $\tau = \frac{\sum_{i \neq j}\hat{\var}(\hat{w}_{ij})}{\sum_{i \neq j}{\hat{w}}^2_{ij}}$ and  $w_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{W}}^{\text{sam}}$. Relevant references are presented at the end of Section \ref{sec:PointForecasts}.} \label{tab:ReconMethods}
 	\centering
@@ -408,11 +413,12 @@ For each series we generate 2002 observations from which the first 500 are ignor
 		MinT(Shrink)    & $\tau\text{diag}(\hat{\bm{W}}^{\text{sam}}) + (1-\tau)\hat{\bm{W}}^{\text{sam}}$\\
 		\bottomrule
 	\end{tabular}
+\label{tab:recomethods}
 \end{table}
 
-\subsection{Optimal reconciliation of incoherent probabilistic forecasts}\label{sec:OptRec}
+\subsubsection{Score Optimal Reconciliation}\label{sec:OptRec}
 
-The aim is to find an optimal $\bm{G}$ for reconciling probabilistic hierarchical forecasts by minimising a proper multivariate scoring rule. The respective objective function can be written as,
+Apart from cases described in Section~\ref{sec:AnalyticalSolution} which are not feasible in practice, the $\bm{G}$ matrix that minimises expected score may depend on both the base forecast, true predictive and specific scoring rule used.  In the following section we also propose an approach to find a $\bm{G}$ by optimising the average score over a rolling window constructed within the training data.  The respective objective function can be written as,
 \begin{equation} \label{eq:Obj_func_1}
 \operatornamewithlimits{argmin}_{\bm{G}_h} \quad \E_{Q}[K(\tilde{\nu}_{\bm{G}_h}, \bm{y})],
 \end{equation}
@@ -422,14 +428,11 @@ To approximate the expectation in Equation~\eqref{eq:Obj_func_1} we break up the
 
 \begin{equation} \label{eq:Obj_func_apprx} \E_{Q}[K(\tilde{\nu}_{\bm{G}_h}, \bm{y})]\approx\frac{1}{J}\sum_{j=1}^{J}K(\tilde{\nu}_{\bm{G}_h},\bm{y}_{T-J+j+h}).\nonumber
 \end{equation}
-In the simulations that follow set $T=600$ and $J=100$. We implement the algorithm in the analytical solution setting (see Section \ref{sec:SimAnalysticalResults}) by minimising the Log Score and in the non-parametric sample based setting (see Section \ref{sec:SimSamplingResults}) by minimising the Energy Score.
+Where this approach is used in simulations, we set $J=100$ and use a slightly larger training window of $T=600$ for selecting $\bm{G}$ only. We implement the algorithm in the Gaussian setting (see Section \ref{sec:SimAnalysticalResults}) using log score and in the non-Gaussian setting (see Section \ref{sec:SimSamplingResults}) using energy score.  We also note that different ways of parameterising $\bm{G}_h$ were used in the numerical optimisation but all led to identical results.  This was discussed in detail in Section \ref{app:ReparaG} in Appendix.
 
-All reconciliation approaches are repeated by rolling the training window forward one observation at a time. This yields 1,000 probabilistic forecasts for evaluation. The predictive accuracy of the alternative methods is evaluated using the scoring rules presented in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores, i.e., the percentage improvement of a probabilistic forecast over a reference method. A positive (negative) value indicates a percentage gain (loss) in forecast accuracy over the reference method. In order to save space in what follows we only present the results from reconciling the ARIMA incoherent base forecasts. Results and conclusions are very similar for the ETS incoherent base forecasts. These are available upon request. \textcolor{red}{Puwasala to make sure that these are available.}
+\subsection{Results for Gaussian probabilistic forecasts}\label{sec:SimAnalysticalResults}
 
-\subsection{Reconciliation via the analytical solution}\label{sec:SimAnalysticalResults}
-
-We assume a Gaussian predictive density for the simulated hierarchical time series, i.e., $\hat{\bm{y}}\sim N(\hat{\bm{\mu}},\hat{\bm{\Sigma}})$. The analytical tractability of the normal distribution allows for evaluation using all scoring rules (including the log-score). $\hat{\bm{\mu}}$ is given by the mean of the incoherent base probabilistic forecasts. We estimate $\hat{\bm{\Sigma}}$ from the in-sample one-step ahead forecast errors using the shrinkage estimator of \citet{Schafer2005} (as the one presented in Table \ref{tab:ReconMethods}). Coherent probabilistic forecasts are then generated as $\tilde{\bm{y}}
-\sim N(\bm{S}\bm{G}\hat{\bm{\mu}},\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$ where ${\bm G}=(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{R}'_\bot=\bm{S}'\bm{W}^{-1}$ for the different choices of $\bm{W}$ as presented in Table \ref{tab:ReconMethods}.
+%We assume a Gaussian predictive density for the simulated hierarchical time series, i.e., $\hat{\bm{y}}\sim N(\hat{\bm{\mu}},\hat{\bm{\Sigma}})$. The analytical tractability of the normal distribution allows for evaluation using all scoring rules (including the log-score). $\hat{\bm{\mu}}$ is given by the mean of the incoherent base probabilistic forecasts. We estimate $\hat{\bm{\Sigma}}$ from the in-sample one-step ahead forecast errors using the shrinkage estimator of \citet{Schafer2005} (as the one presented in Table \ref{tab:ReconMethods}). Coherent probabilistic forecasts are then generated as $\tilde{\bm{y}}\sim N(\bm{S}\bm{G}\hat{\bm{\mu}},\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$ where ${\bm G}=(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{R}'_\bot=\bm{S}'\bm{W}^{-1}$ for the different choices of $\bm{W}$ as presented in Table \ref{tab:ReconMethods}.
 
 Table~\ref{tab:SimAnalyticalMulti} summarises the forecasting performance of incoherent, bottom-up, OLS, WLS and two MinT reconciliation methods using log score, energy score and variogram score. The top panel refers to the Gaussian DGP whereas the bottom panel refers to the non-Gaussian DGP. Recall that the log score is improper with respect to incoherent forecasts. Hence, we calculate the skill scores with reference to the bottom-up forecasts in all cases leaving blank the cells for log score of the incoherent forecasts. Further, all log scores are evaluated on the basis of bottom-level series only, as these differ from the log scores for the full hierarchy by a fixed constant. Please refer to Table \ref{tab:ScoringRulesProperties} for further explanations.
 
@@ -450,24 +453,25 @@ Tables~\ref{tab:SimAnalyticalUni} (and \ref{tab:SimAnalyticalUni_h2} and \ref{ta
 			\toprule
 			\multicolumn{10}{c}{Gaussian DGP}\\
 			\toprule
-			Incoherent base & & & & 10.00 & 9.04 & 5.90 & -21.57 & -40.58 & -57.11\\
+			Incoherent base & & & & 12.46 & 9.58 & 7.19 & 4.91 & 5.89 & 6.02\\
 			Bottom-up & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			OLS & 0.26 & 1.20 & 1.02 & 15.00 & 15.46 & 12.43 & 0.47 & -0.35 & -1.85\\
-			WLS & 1.05 & 2.70 & 3.87 & 18.00 & 18.99 & 15.92 & 1.61 & 1.69 & 1.55\\
-			MinT(Sample) & 1.29 & 2.64 & 4.62 & 19.35 & 20.65 & 17.82 & 2.10 & 2.92 & 3.93\\
-			MinT(Shrink) & \textbf{1.35} & \textbf{2.75} & \textbf{4.95} & \textbf{19.33} & \textbf{20.75} & \textbf{18.08} & \textbf{2.34} & \textbf{2.96} & \textbf{4.39}\\
+			OLS & 5.56 & -1.55 & -10.74 & 16.83 & 13.43 & 10.44 & 9.17 & 9.63 & 9.02\\
+			WLS & 6.66 & -2.79 & -15.79 & 19.06 & 15.34 & 11.88 & 11.52 & 12.24 & 11.62\\
+			MinT(Sample) & \textbf{7.73} & -2.59 & -17.07 & \textbf{21.55} & \textbf{17.36} & 13.60 & \textbf{15.74} & 15.75 & 15.51\\
+			MinT(Shrink) & 7.70 & -2.63 & -17.12 & 21.44 & 17.33 & 13.60 & 15.65 & \textbf{15.98} & \textbf{15.58}\\
+			Optimal & 5.31 & \textbf{2.86} &\textbf{ 4.28} & 8.08 & 13.75 & \textbf{15.10} & -14.12 & 3.60 & 6.57\\
 			%		\midrule
 			%		\textit{Bottom up} & $\mathbi{11.9}$ & $\mathbi{5.49}$ & $\mathbi{2.25}$ & $\mathbi{14.3}$ & $\mathbi{6.37}$ & $\mathbi{2.40}$ & $\mathbi{17.00}$ & $\mathbi{7.35}$ & $\mathbi{2.56}$\\
 			\toprule
 			\multicolumn{10}{c}{Non-Gaussian DGP}\\
 			\toprule
-			Incoherent base & & & & 8.47 & 8.94 & 9.20 & -2.79 & -2.09 & -3.62\\
+			Incoherent base & & & & 7.18 & 7.37 & 7.13 & -0.44 & -0.35 & -0.22\\
 			Bottom-up & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			OLS & 0.65 & 0.47 & 0.10 & 11.26 & 12.27 & 13.12 & 0.17 & 0.48 & -0.24\\
-			WLS & 0.93 & 1.34 & 0.89 & 12.72 & 14.22 & 15.20 & 0.00 & 0.41 & -0.42\\
-			MinT(Sample) & 4.40 & 4.30 & 3.42 & 15.02 & 16.94 & 17.88 & 0.59 & 1.02 & 0.64\\
-			MinT(Shrink) & \textbf{4.52} & \textbf{4.55} & \textbf{4.01} & \textbf{15.04} & \textbf{16.98} & \textbf{18.00} & \textbf{0.69} & \textbf{1.34} & \textbf{0.66}\\
-			
+			OLS & 12.11 & 7.48 & -1.61 & 9.73 & 10.28 & 10.18 & 0.50 & 0.52 & 0.87\\
+			WLS & 19.80 & 1.56 & -39.14 & 11.20 & 12.00 & 11.52 & 0.49 & 0.46 & 0.62\\
+			MinT(Sample) & \textbf{22.89} & 4.69 & -36.42 & \textbf{12.94} & 14.07 & \textbf{13.44} & \textbf{1.78} & 2.16 & 2.07\\
+			MinT(Shrink) & 22.67 & 4.43 & -36.76 & 12.92 & \textbf{14.13} & 13.39 & 1.63 & \textbf{2.18} & \textbf{2.20}\\
+			Optimal & 19.15 & \textbf{9.26} & -4.11 & -3.31 & 3.48 & 2.41 & -27.79 & -19.37 & -22.70\\
 			\bottomrule
 		\end{tabular}
 	}
@@ -489,11 +493,12 @@ Tables~\ref{tab:SimAnalyticalUni} (and \ref{tab:SimAnalyticalUni_h2} and \ref{ta
 			\multicolumn{15}{c}{Log Score (\%)}\\
 			\toprule
 			Incoherent Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			Bottom-up & -23.31 & -2.46 & -1.08 & 0.00 & 0.00 & 0.00 & 0.00 & -246.37 & -1.87 & -3.11 & 0.00 & 0.00 & 0.00 & 0.00\\
-			OLS & -3.92 & 3.71 & -0.42 & 1.29 & 2.39 & 0.24 & 0.12 & -84.90 & 0.08 & 2.57 & 1.07 & -0.55 & 2.25 & -0.21\\
-			WLS & -0.76 & 6.19 & -0.07 & 1.77 & 3.13 & \textbf{0.33} & 0.21 & \textbf{0.35} & -0.52 & 4.07 & 1.20 & -0.74 & 3.13 & -0.26\\
-			MinT(Sample) & 0.29 & \textbf{7.47} & 0.28 & 1.97 & \textbf{3.70} & 0.31 & 0.25 & -0.72 & \textbf{0.28} & \textbf{4.94} & 1.29 & -0.13 & 4.99 & \textbf{0.91}\\
-			MinT(Shrink) & \textbf{0.30} & 7.44 & \textbf{0.30} & \textbf{2.00} & 3.61 &\textbf{0.33} & \textbf{0.29} & -0.26 & 0.27 & 4.91 & \textbf{1.31} & -0.11 & \textbf{5.00} & 0.87\\
+			Bottom up & -29.59 & -2.99 & -4.24 & 0.00 & 0.00 & -5.94 & 8.11 & -263.36 & -0.72 & -3.54 & 0.00 & 0.00 & -0.81 & -12.22\\
+			OLS & 12.26 & 2.51 & 0.43 & 1.80 & 1.06 & -3.41 & 7.59 & 49.53 & 0.38 & 2.58 & -1.40 & 3.51 & 0.55 & -11.33\\
+			WLS & \textbf{16.10} & -3.73 & -14.04 & 2.34 & 1.27 & -3.08 & 0.45 & 75.34 & 4.86 & -269.27 & -1.38 & 3.36 & 0.91 & -5.38\\
+			MinT(Sample) & -0.07 & \textbf{4.80} & \textbf{0.54} & \textbf{3.86} & \textbf{2.55} & -2.34 & \textbf{8.20} & 0.24 & 0.44 & \textbf{5.18} & \textbf{0.61} & 3.73 & \textbf{2.46} & -10.21\\
+			MinT(Shrink) & -0.05 & \textbf{4.80} & \textbf{0.54} & 3.65 & 2.48 & -2.36 & \textbf{8.20} & 0.27 & \textbf{0.45} & \textbf{5.18} & -1.42 & \textbf{3.75} & 2.30 & -10.32\\
+			Optimal & 13.86 & 1.37 & -18.41 & -0.28 & -1.75 & -6.75 & 4.13 & \textbf{70.23} & -5.37 & -287.34 & -6.99 & -2.02 & -4.07 & -17.38\\
 			\hline
 			
 			\toprule
@@ -501,35 +506,35 @@ Tables~\ref{tab:SimAnalyticalUni} (and \ref{tab:SimAnalyticalUni_h2} and \ref{ta
 			\toprule
 			
 			Incoherent Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			Bottom-up & -103.83 & -9.87 & -3.73 & 0.16 & -0.04 & 0.10 & 0.12 & -541.40 & -4.60 & -8.99 & -0.10 & -0.12 & -0.02 & -0.08\\
-			OLS & -12.61 & 12.55 & -1.69 & 4.73 & 8.21 & 0.74 & 0.83 & -96.77 & 0.55 & 6.48 & 2.70 & -1.46 & 6.19 & -0.81\\
-			WLS & -2.09 & 20.26 & -0.38 & 6.35 & 10.75 & 1.07 & \textbf{1.23} & 0.01 & -1.02 & 9.95 & 2.92 & -1.90 & 8.50 & -0.96\\
-			MinT(Sample) & \textbf{1.08} & \textbf{23.92} & 0.67 & 7.03 & \textbf{12.46} & 1.02 & 0.95 & -1.16 & \textbf{0.92} & \textbf{11.90} & \textbf{3.40} & -0.11 & \textbf{13.22} & \textbf{2.37}\\
-			MinT(Shrink) & 0.91 & 23.74 & \textbf{0.84} & \textbf{7.13} & 12.21 & \textbf{1.18} & 1.19 & -1.16 & \textbf{0.92} & \textbf{11.90} & \textbf{3.40} & -0.11 & \textbf{13.22} & \textbf{2.37}\\
-			
+			Bottom up & -134.06 & -10.99 & -15.42 & -0.05 & -0.14 & -21.39 & 25.07 & -485.01 & -1.41 & -9.35 & -0.01 & 0.08 & -1.85 & -36.37\\
+			OLS & 35.17 & 8.45 & 1.17 & 6.49 & 3.07 & -11.45 & 23.77 & 74.22 & 1.30 & 6.77 & -3.85 & 9.21 & 1.82 & -33.37\\
+			WLS & \textbf{43.24} & -13.62 & -50.06 & 8.16 & 3.82 & -10.32 & 1.12 & 87.17 & \textbf{12.20} & -503.54 & -3.90 & 8.85 & 2.85 & -16.01\\
+			MinT(Sample) & -0.20 & \textbf{15.84} & \textbf{1.75} & \textbf{12.48} & \textbf{7.98} & -7.53 & \textbf{25.38} & 0.24 & 1.34 & 12.79 & \textbf{1.39} & 9.67 & \textbf{6.70} & -29.83\\
+			MinT(Shrink) & -0.19 & 15.69 & 1.59 & 12.06 & 7.76 & -7.61 & 25.35 & 0.26 & 1.52 & \textbf{12.88} & -3.82 & \textbf{9.84}& 6.38 & -30.00\\
+			Optimal & 37.22 & 3.37 & -74.40 & -2.85 & -8.50 & -27.27 & 11.28 & \textbf{85.14} & -16.83 & -599.74 & -21.16 & -7.42 & -13.08 & -55.62\\
 			\bottomrule
 		\end{tabular}
 	}
 \end{table}
 
-\subsection{Reconciliation via non-parametric sampling} \label{sec:SimSamplingResults}
+\subsection{Results for non-Gaussian probabilistic forecast} \label{sec:SimSamplingResults}
 
 
-Bootstrap approach: Generate 2102 data points for each series. Ignoring first 500 observations to avoid the impact of initial values. Choose 600 observations for outer rolling window and follow the steps in the algorithm to generate reconciled probabilistic forecasts for  h = 1, 2 and 3 steps ahead forecast horizons.  Replicate the process for 1000 times by rolling the window one step at a time. This yields 1000 forecast distributions for evaluation for all forecast horizons.
+%Bootstrap approach: Generate 2102 data points for each series. Ignoring first 500 observations to avoid the impact of initial values. Choose 600 observations for outer rolling window and follow the steps in the algorithm to generate reconciled probabilistic forecasts for  h = 1, 2 and 3 steps ahead forecast horizons.  Replicate the process for 1000 times by rolling the window one step at a time. This yields 1000 forecast distributions for evaluation for all forecast horizons.
 
-\subsection{Simulation setup for non-parametric solution}
+%\subsection{Simulation setup for non-parametric solution}
 
-We now implement the non-parametric approach introduced in Section \ref{sec:SampleSolution}. Our main focus in this study is to compare different reconciliation methods to optimal reconciliation. We narrow down the study to find optimality with respect to energy score. Following equation (\ref{eq:Energy_score}) for samples from the probability distribution and for $\alpha = 1$, we can rewrite the objective function in (\ref{eq:Obj_func_apprx}) as,
+%We now implement the non-parametric approach introduced in Section \ref{sec:SampleSolution}. Our main focus in this study is to compare different reconciliation methods to optimal reconciliation. We narrow down the study to find optimality with respect to energy score. Following equation (\ref{eq:Energy_score}) for samples from the probability distribution and for $\alpha = 1$, we can rewrite the objective function in (\ref{eq:Obj_func_apprx}) as,
 
-\begin{equation}\label{eq:Obj_func_apprx_ES}
-\operatornamewithlimits{argmin}_{\bm{G}} \frac{1}{N}\sum_{j=1}^{N}\left\{\frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}^{b+1})||\right\}
-\end{equation}
+%\begin{equation}\label{eq:Obj_func_apprx_ES}
+%\operatornamewithlimits{argmin}_{\bm{G}} \frac{1}{N}\sum_{j=1}^{N}\left\{\frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}^{b+1})||\right\}
+%\end{equation}
 
-First we generate $2500$ data points for each series in the hierarchy using the same DGP discussed in Section \ref{sec:simulations}. Following the algorithm explained in Section \ref{sec:OptRec}, we choose $L=600$ observations for outer rolling window and $T=500$ observations for inner rolling window. We fit univariate ARIMA models using \verb|auto.arima()| function and generate $B=1000$ of $h=1$ to $3$ steps-ahead incoherent bootstrapped future paths following steps 2 and 3. We repeat these steps for $N=100$ times by moving the inner window one step at a time. Following step 6, we then estimate $\bm{G}_h^{Opt}$. We use numerical optimisation methods to attain the optimum. Next, we generate $\tilde{\bm{\Upsilon}}_{T+h}$ following step 7 and compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,2,3$ as described in step 8. We use $\bm{G}_h^{Opt}$ as well as other $\bm{G}$ matrices given in Table \ref{tab:ReconMethods} (in appendix) for reconciliation in step 8. Finally we repeat this whole process for $1000$ times by moving the outer rolling window one step-ahead at a time. Collect $1000$ reconciled future paths, $\tilde{\bm{\Upsilon}}_{T+h}$, from different reconciliation methods for $h=1,2,3$ and evaluate the forecasting performances.
+%First we generate $2500$ data points for each series in the hierarchy using the same DGP discussed in Section \ref{sec:simulations}. Following the algorithm explained in Section \ref{sec:OptRec}, we choose $L=600$ observations for outer rolling window and $T=500$ observations for inner rolling window. We fit univariate ARIMA models using \verb|auto.arima()| function and generate $B=1000$ of $h=1$ to $3$ steps-ahead incoherent bootstrapped future paths following steps 2 and 3. We repeat these steps for $N=100$ times by moving the inner window one step at a time. Following step 6, we then estimate $\bm{G}_h^{Opt}$. We use numerical optimisation methods to attain the optimum. Next, we generate $\tilde{\bm{\Upsilon}}_{T+h}$ following step 7 and compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,2,3$ as described in step 8. We use $\bm{G}_h^{Opt}$ as well as other $\bm{G}$ matrices given in Table \ref{tab:ReconMethods} (in appendix) for reconciliation in step 8. Finally we repeat this whole process for $1000$ times by moving the outer rolling window one step-ahead at a time. Collect $1000$ reconciled future paths, $\tilde{\bm{\Upsilon}}_{T+h}$, from different reconciliation methods for $h=1,2,3$ and evaluate the forecasting performances.
 
-We also note that different parameterisation methods were used for estimation $\bm{G}_h^{Opt}$. This was discussed in detail in Section \ref{app:ReparaG} in Appendix.
+%We also note that different parameterisation methods were used for estimation $\bm{G}_h^{Opt}$. This was discussed in detail in Section \ref{app:ReparaG} in Appendix.
 
-\subsubsection{Results and discussion}
+%\subsubsection{Results and discussion}
 
 We use energy score and variogram score to assess the predictive performance from different reconciliation methods. Results following from Non-Gaussian and Gaussian DGP are presented in left and right panels of Table \ref{table:Non-paraSimulation} respectively.
 
@@ -657,10 +662,10 @@ f(\bm{b},\bm{u})=\tilde{f}_b(\bm{b})\mathbb{1}\left\{\bm{u}=0\right\}\,,
 \end{equation}
 such that the density $f(\bm{b},\bm{u})$ is a density for $n$-dimensional vector that is degenerate across the dimensions corresponding to $\bm{u}$.  Using the change of variables,
 \[
-\bm{y}=\left(\bm{S}\,\vdots\,\bm{S}_{\perp}\right)\begin{pmatrix}\bm{b}\\\bm{u}
-\end{pmatrix}\,.
+\bm{y}=\left(\bm{S}\,\vdots\,\bm{S}^-_{\perp}\right)\begin{pmatrix}\bm{b}\\\bm{u}
+\end{pmatrix}\,,
 \]
-and noting the inverse of $\left(\bm{S}\,\vdots\,\bm{S}_{\perp}\right)$ is given by
+where $\bm{S}^-_{\perp}$ is a generalised inverse such that $\bm{S}'_{\perp}\bm{S}^-_{\perp}=\bm{I}$ and noting the inverse of $\left(\bm{S}\,\vdots\,\bm{S}_{\perp}\right)$ is given by
 \[
 \bm{S}^*:=\begin{pmatrix}\bm{S}^{-}\\\bm{S}'_{\perp}\end{pmatrix}\,,
 \]
@@ -769,7 +774,7 @@ Non-Gaussian errors are generated from a Gumbel copula with beta margins. Using 
 C_\theta(e_1, e_2) = exp\{-[(-ln(e_1))^\theta + (-ln(e_2))^\theta]^{1/\theta}\}.
 \end{equation*}
 We generate random variates $\{e_{AA}, e_{AB}\}$ from $C_{\theta=10}(.)$ and $\{e_{BA}, e_{BB}\}$ from $C_{\theta=8}(.)$ for series $\{AA, AB\}$ and $\{BA, BB\}$ respectively. The ARIMA errors $\{\varepsilon_{AA}, \varepsilon_{AB}, \varepsilon_{BA}, \varepsilon_{BB}\}$ are generated as the quantiles from beta distributions with shape parameters $\alpha = 1$ and $\beta = 3$ that correspond to $\{e_{AA}, e_{AB}, e_{BA}, e_{BB}\}$.
-We then choose $\sigma^2_u = 10$ and $\sigma^2_v = 7$ such that they satisfy the inequalities explained abaove. \textcolor{red}{Tas to double check. Do the inequalities hold for nonlinear dependence. Do we need to drop the last statement?}
+We then choose $\sigma^2_u = 10$ and $\sigma^2_v = 7$ such that they satisfy the inequalities explained above. \textcolor{red}{Tas to double check. Do the inequalities hold for nonlinear dependence. Do we need to drop the last statement?}
 
 \clearpage
 \section{Simulation results from parametric solution for marginal forecast distributions for $h=2$ and $h=3$}\label{app:AnalysticalSolMargins}
@@ -787,20 +792,22 @@ We then choose $\sigma^2_u = 10$ and $\sigma^2_v = 7$ such that they satisfy the
 			\multicolumn{15}{c}{Log Score (\%)}\\
 			\toprule
 			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			Bottom up & 1.06 & -2.32 & -0.52 & -0.01 & -0.02 & 0.00 & 0.00 & -68.47 & -1.67 & -2.84 & 0.00 & 0.00 & -0.01 & 0.00\\	
-			OLS & \textbf{1.34} & 2.94 & -2.07 & 1.85 & 3.76 & -0.79 & 0.02 & -14.27 & -0.12 & 3.44 & 1.15 & -0.73 & 2.74 & -0.32\\
-			WLS & 0.21 & 5.14 & -1.09 & \textbf{2.23} & 5.35 & -0.45 & 0.22 & -0.15 & -1.09 & 5.55 & 1.24 & -1.00 & 3.96 & -0.38\\	
-			MinT(Sample) & -0.47 & \textbf{6.48} & 0.12 & 1.97 & 6.61 & -0.10 & 0.25 & -1.53 & \textbf{0.31} & \textbf{6.87} & 1.25 & -0.24 & 6.01 & 0.76\\
-			MinT(Shrink) & -0.35 & 6.41 & \textbf{0.14} & 2.08 & \textbf{6.72} & -0.09 & \textbf{0.33} & -1.16 & 0.29 & 6.83 & \textbf{1.30} & -0.18 & \textbf{6.12} & \textbf{0.80}\\		
+			Bottom up & \textbf{9.87} & -0.72 & -4.28 & 0.00 & 0.00 & -10.02 & \textbf{18.99} & -8.05 & -0.30 & -3.12 & 0.00 & 0.00 & -1.46 & -11.80\\
+			OLS & -22.52 & 1.31 & 0.50 & 1.81 & 0.25 & -6.72 & 18.12 & 30.16 & 0.20 & 3.28 & -1.53 & 4.33 & 0.18 & -10.70\\
+			WLS & -27.45 & -13.81 & 26.50 & 2.41 & 0.57 & -6.17 & 5.10 & 12.65 & \textbf{7.09} & -6.06 & -1.55 & 4.11 & 0.71 & -1.67\\
+			MinT(Sample) & -0.28 & 2.65 & 0.57 & \textbf{3.51} & \textbf{1.80} & -5.36 & 18.86 & -0.02 & 0.43 & \textbf{6.80}& \textbf{0.64} & 4.66 & \textbf{2.44} & -9.36\\
+			MinT(Shrink) & -0.29 & 2.60 & 0.56 & 3.37 & 1.72 & -5.34 & 18.90 & -0.06 & 0.42 & 6.79 & -1.50 & \textbf{4.67} & 2.26 & -9.46\\
+			Optimal & -12.70 & \textbf{5.42} & \textbf{26.71} & 2.86 & 0.52 & -6.42 & 17.11 & \textbf{34.04} & -2.98 & -7.45 & -6.28 & -0.19 & -2.31 & -14.48\\	
 			\toprule
 			\multicolumn{15}{c}{CRPS (\%)}\\
 			\toprule
 			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			Bottom up & -53.21 & -9.30 & -1.99 & -0.17 & 0.07 & -0.16 & 0.01 & -273.80 & -4.20 & -8.78 & -0.17 & 0.09 & 0.03 & -0.10\\
-			OLS & -4.84 & 12.67 & -6.63 & 6.24 & 11.75 & -2.88 & 0.35 & -44.06 & -0.18 & 8.72 & 2.95 & -1.85 & 7.61 & -1.19\\
-			WLS & -0.25 & 20.18 & -3.29 & 7.60 & 15.98 & -1.86 & 1.06 & -0.11 & -2.50 & 13.87 & 3.34 & -2.51 & 10.79 & -1.27\\
-			MinT(Sample) & 0.64 & \textbf{23.47} & 0.47 & 7.34 & 19.21 & -0.41 & 0.82 & -0.70 & \textbf{0.71} & \textbf{16.53} & \textbf{3.67} & -0.11 & \textbf{16.19} & \textbf{2.29}\\
-			MinT(Shrink) & \textbf{0.76} & 23.45 & \textbf{0.52} & \textbf{7.47} & \textbf{19.36} & -0.59 & \textbf{1.08} & -0.70 & \textbf{0.71} & \textbf{16.53} & \textbf{3.67} & -0.11 & \textbf{16.19} & \textbf{2.29}\\
+			Bottom up & -45.40 & -5.11 & -16.82 & 0.02 & -0.05 & -37.16 & 46.65 & -185.36 & -0.54 & -8.18 & 0.08 & -0.03 & -3.54 & -35.55\\
+			OLS & -14.62 & 6.88 & 1.64 & 7.06 & 0.78 & -23.24 & 45.12 & 61.90 & 0.64 & 8.48 & -4.32 & 11.30 & 1.10 & -31.86\\
+			WLS & -10.18 & -41.19 & 23.92 & 8.75 & 1.83 & -21.19 & 14.60 & 70.13 & \textbf{17.33} & -171.66 & -4.30 & 10.76 & 2.52 & -6.06\\
+			MinT(Sample) & -0.13 & \textbf{12.14} & 2.13 & 11.19 & \textbf{6.18} & -17.67 & 46.49 & 0.26 & 1.29 & 16.54 & \textbf{1.60} & 11.95 & \textbf{6.76} & -27.69\\
+			MinT(Shrink) & -0.08 & 12.03 & 2.05 & \textbf{11.62} & 5.74 & -17.91 & \textbf{46.64} & 0.32 & 1.44 & \textbf{16.71} & -4.15 & \textbf{12.14} & 6.54 & -27.79\\
+			Optimal & -10.80 & 10.78 & \textbf{22.61} & 7.57 & -0.96 & -25.69 & 41.91 & \textbf{71.52} & -8.89 & -184.63 & -18.29 & -1.88 & -7.13 & -44.68\\
 			\bottomrule
 		\end{tabular}
 	}
@@ -819,20 +826,22 @@ We then choose $\sigma^2_u = 10$ and $\sigma^2_v = 7$ such that they satisfy the
 			\multicolumn{15}{c}{Log Score (\%)}\\
 			\toprule
 			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 	0.00 & 0.00 & 0.00 & 0.00\\
-			Bottom up & \textbf{27.18} & -0.30 & 0.10 & -0.03 & -0.04 & 0.00 & 0.00 & 10.59 & -1.77 & -2.27 & 0.00 & 0.00 & -0.01 & 0.00\\
-			OLS & 7.73 & 0.45 & -6.60 & 1.99 & 4.43 & -2.22 & -1.28 & 19.51 & -0.32 & 4.27 & 1.18 & -0.76 & 3.25 & -0.35\\
-			WLS & 1.58 & 0.95 & -4.36 & \textbf{2.43} & 6.58 & -1.47 & -0.76 & -0.40 & -1.60 & 6.78 & \textbf{1.23} & -1.12 & 4.78 & -0.41\\
-			MinT(Sample) & -1.44 & \textbf{1.97} & -1.10 & 2.03 & 8.56 & -0.53 & -0.26 & -1.61 & \textbf{0.31} & \textbf{8.35} & 1.16 & -0.58 & 6.71 & 0.64\\
-			MinT(Shrink) & -0.99 & 1.82 & -0.91 & 2.25 & \textbf{8.82} & -0.54 & -0.08 & -1.35 & 0.25 & 8.28 & 1.22 & -0.47 & \textbf{6.92} & \textbf{0.76}\\
+			Bottom up & 34.32 & 1.21 & -3.97 & 0.00 & 0.00 & -14.82 & 29.16 & 56.40 & -0.15 & -2.89 & 0.00 & 0.00 & -1.73 & -11.81\\
+			OLS & -67.52 & -0.68 & 0.48 & 0.27 & -0.27 & -10.97 & 28.06 & -5.91 & 0.47 & 2.87 & -1.78 & 5.14 & 0.07 & -10.68\\
+			WLS & -85.70 & -26.29 & 50.39 & 0.68 & 0.12 & -10.26 & 10.40 & -129.42 & 10.02 & 57.99 & -1.71 & 4.84 & 0.75 & 1.18\\
+			MinT(Sample) & -0.40 & -1.26 & 0.45 & 2.29 & 1.61 & -9.34 & 28.94 & -0.09 & 0.65 & 5.79 & 0.75 & 5.58 & 2.48 & -9.97\\
+			MinT(Shrink) & -0.42 & -1.32 & 0.46 & 1.39 & 1.50 & -9.27 & 28.99 & -0.16 & 0.63 & 5.77 & -1.74 & 5.60 & 2.34 & -9.93\\
+			Optimal & -24.58 & 10.50 & 51.73 & 2.73 & 3.03 & -8.64 & 27.28 & -12.25 & -2.65 & 57.70 & -7.44 & 0.17 & -2.67 & -15.72\\
 			\toprule
 			\multicolumn{15}{c}{CRPS (\%)}\\
 			\toprule
 			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			Bottom up & -28.38 & -6.54 & 0.03 & 0.01 & -0.07 & \textbf{0.05} & \textbf{0.10} & -159.47 & -4.71 & -8.06 & -0.20 & -0.03 & -0.05 & -0.22\\
-			OLS & -1.20 & 11.05 & -18.30 & 6.34 & 11.76 & -7.12 & -4.18 & -22.75 & -0.71 & 10.48 & 3.22 & -2.13 & 8.85 & -1.13\\
-			WLS & \textbf{0.75} & 17.40 & -12.15 & 7.77 & 16.39 & -4.88 & -2.69 & -0.02 & -3.96 & 16.14 & \textbf{3.47} & -3.11 & 12.60 & -1.21\\
-			MinT(Sample) & 0.45 & 20.14 & -2.57 & 7.51 & 19.89 & -1.70 & -0.79 & -0.30 & \textbf{0.60} & \textbf{19.53} & 3.38 & -1.21 & \textbf{17.90} & \textbf{2.09}\\
-			MinT(Shrink) & 0.70 & \textbf{20.26} & -2.31 & \textbf{7.90} & \textbf{20.38} & -1.63 & -0.29 & -0.30 & \textbf{0.60} & \textbf{19.53} & 3.38 & -1.21 & \textbf{17.90} & \textbf{2.09}\\
+			Bottom up & -22.10 & -3.52 & -16.10 & -0.04 & -0.09 & -53.20 & 58.23 & -80.43 & -0.35 & -8.48 & -0.17 & -0.05 & -4.20 & -36.03\\
+			OLS & -47.20 & 4.67 & 2.04 & 2.52 & 0.48 & -36.36 & 56.33 & 44.08 & 1.46 & 7.70 & -4.75 & 13.40 & 0.90 & -31.65\\
+			WLS & -44.96 & -60.44 & 42.85 & 3.92 & 1.71 & -33.62 & 25.60 & 46.73 & 22.77 & -66.37 & -4.90 & 12.58 & 2.58 & -0.12\\
+			MinT(Sample) & 0.02 & 7.99 & 2.21 & 9.03 & 6.23 & -29.83 & 57.85 & 0.21 & 1.88 & 14.24 & 1.88 & 14.20 & 6.81 & -29.36\\
+			MinT(Shrink) & -0.03 & 7.89 & 2.34 & 6.61 & 6.05 & -29.59 & 57.94 & 0.15 & 1.75 & 14.18 & -4.92 & 14.34 & 6.61 & -29.31\\
+			Optimal & -30.12 & 13.11 & 42.74 & 4.33 & 5.29 & -34.52 & 54.09 & 54.69 & -8.71 & -75.04 & -22.55 & -0.69 & -8.13 & -50.60\\
 			\bottomrule
 		\end{tabular}
 	}
@@ -883,7 +892,6 @@ This structure for $\bm{G}_h$ will ensure $\bm{SG}_h$ is a projection matrix and
 	
 \end{table}
 
-<<<<<<< HEAD
 %\section{Application}
 %
 %\subsection{Results from ETS base forecasts}
@@ -908,7 +916,6 @@ This structure for $\bm{G}_h$ will ensure $\bm{SG}_h$ is a projection matrix and
 %%	\includegraphics[width= \textwidth]{Empirical-results/UniVScore_TopLevel_ETS.pdf}
 %	\caption{Skill score based on CRPS (with reference to the ETS base forecasts) for univariate probabilistic forecasts for the Total (top level) overnight trips are presented. Left panel shows the results from Gaussian approach and right panel shows the results from non-parametric approach. }\label{fig:EmpResults_TopLevel_ETS}
 %\end{figure}
-=======
 \clearpage
 \section{Application}
 
@@ -934,7 +941,6 @@ This structure for $\bm{G}_h$ will ensure $\bm{SG}_h$ is a projection matrix and
 %	\includegraphics[width= \textwidth]{Empirical-results/UniVScore_TopLevel_ETS.pdf}
 	\caption{Skill score based on CRPS (with reference to the ETS base forecasts) for univariate probabilistic forecasts for the Total (top level) overnight trips are presented. Left panel shows the results from Gaussian approach and right panel shows the results from non-parametric approach. }\label{fig:EmpResults_TopLevel_ETS}
 \end{figure}
->>>>>>> f876390ebab8b7ad96e001a1c5e6b69a9fc992e4
 
 \FloatBarrier
 
