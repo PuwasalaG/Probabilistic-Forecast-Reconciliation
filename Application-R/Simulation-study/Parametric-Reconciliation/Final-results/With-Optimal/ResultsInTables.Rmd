@@ -75,7 +75,7 @@ DF_MultiV_Bot_GausDGP <- read.csv("DF_MultiV_Bot_GaussianDGP.csv")[,-1]
 
 DF_MultiV_Bot_GausDGP %>% 
   group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
-  summarise(E.LS = mean(`Variogram.score`)) -> DF_MultiV_Bot_GausDGP
+  summarise(E.LS = mean(`Log.score`)) -> DF_MultiV_Bot_GausDGP
 
 #DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
 
@@ -193,7 +193,7 @@ DF_MultiV_Bot_NonGausDGP <- read.csv("DF_MultiV_Bot_NonGaussianDGP.csv")[,-1]
 
 DF_MultiV_Bot_NonGausDGP %>% 
   group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
-  summarise(E.LS = mean(`Variogram.score`)) -> DF_MultiV_Bot_NonGausDGP
+  summarise(E.LS = mean(`Log.score`)) -> DF_MultiV_Bot_NonGausDGP
 
 #DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
 
