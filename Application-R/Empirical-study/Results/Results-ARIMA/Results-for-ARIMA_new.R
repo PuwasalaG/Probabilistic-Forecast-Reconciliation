@@ -50,31 +50,130 @@ DF_MultScores_NonPara_AllTS %>%
   select(-E.VS, -F.method) %>% 
   rename(NonPara_E.ES = E.ES) -> DF_MultScores_NonPara_AllTS_ES
 
-DF_MultScores_AllTS <- left_join(DF_MultScores_Gauss_AllTS_ES, DF_MultScores_NonPara_AllTS_ES)
+# DF_MultScores_AllTS <- left_join(DF_MultScores_Gauss_AllTS_ES, DF_MultScores_NonPara_AllTS_ES)
+# 
+# DF_MultScores_AllTS %>% 
+#   rename("Parametric approach" = Gauss_E.ES, 
+#          "Non parametric approach" = NonPara_E.ES) %>% 
+#   gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>% 
+#   mutate(Approach = factor(Approach, levels = c("Parametric approach", "Non parametric approach")),
+#          R.method = recode(R.method, MinT.Shr = "MinT(Shrink)"),
+#          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
+#   rename(`Method`=`R.method`) %>% 
+#   ggplot(aes(x = Forecast.Horizon, y = Score, color = Method, shape = Method)) + 
+#   geom_point(size = 2) + 
+#   geom_line(aes(group = Method, color = Method)) +
+#   facet_wrap(~Approach) +
+#   theme(legend.position = "bottom") +
+#   ggthemes::scale_color_colorblind() +
+#   scale_shape_manual(values = c(0, 1, 2, 5, 6)) +
+#   scale_x_discrete(limits = c(1:12)) +
+#   ylab("Energy Score") +
+#   xlab("h") +
+#   theme(plot.title = element_text(size = 10, face = "italic")) +
+#   theme(axis.title.y = element_text(size = 10))
 
-DF_MultScores_AllTS %>% 
-  rename("Parametric approach" = Gauss_E.ES, 
-         "Non parametric approach" = NonPara_E.ES) %>% 
-  gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>% 
-  mutate(Approach = factor(Approach, levels = c("Parametric approach", "Non parametric approach")),
-         R.method = recode(R.method, MinT.Shr = "MinT(Shrink)"),
+### For ES ###
+
+DF_MultScores_Gauss_AllTS %>%
+  ungroup() %>% 
+  select(-E.VS) %>% 
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
   rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = Score, color = Method, shape = Method)) + 
+  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) + 
   geom_point(size = 2) + 
   geom_line(aes(group = Method, color = Method)) +
-  facet_wrap(~Approach) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   scale_shape_manual(values = c(0, 1, 2, 5, 6)) +
   scale_x_discrete(limits = c(1:12)) +
-  ylab("Energy Score") +
+  scale_y_continuous(limits = c(450, 560), breaks = c(450, 475, 500, 525, 550)) +
+  ylab("ES") +
   xlab("h") +
   theme(plot.title = element_text(size = 10, face = "italic")) +
-  theme(axis.title.y = element_text(size = 10))
+  theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_AllTS_ES
+
+DF_MultScores_NonPara_AllTS %>%
+  ungroup() %>% 
+  select(-E.VS) %>% 
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+         R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
+  rename(`Method`=`R.method`) %>% 
+  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) + 
+  geom_point(size = 2) + 
+  geom_line(aes(group = Method, color = Method)) +
+  theme(legend.position = "bottom") +
+  ggthemes::scale_color_colorblind() +
+  scale_shape_manual(values = c(0, 1, 2, 5, 6)) +
+  scale_x_discrete(limits = c(1:12)) +
+  scale_y_continuous(limits = c(450, 560), breaks = c(450, 475, 500, 525, 550)) +
+  ylab("ES") +
+  xlab("h") +
+  theme(plot.title = element_text(size = 10, face = "italic")) +
+  theme(axis.title.y = element_text(size = 10)) -> Plot_NonPara_AllTS_ES
+
+### For VS ###
+
+DF_MultScores_Gauss_AllTS %>%
+  ungroup() %>% 
+  select(-E.ES) %>% 
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+         R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
+  rename(`Method`=`R.method`) %>% 
+  ggplot(aes(x = Forecast.Horizon, y = E.VS/10^3, color = Method, shape = Method)) + 
+  geom_point(size = 2) + 
+  geom_line(aes(group = Method, color = Method)) +
+  theme(legend.position = "bottom") +
+  ggthemes::scale_color_colorblind() +
+  scale_shape_manual(values = c(0, 1, 2, 5, 6)) +
+  scale_x_discrete(limits = c(1:12)) +
+  scale_y_continuous(limits = c(20.5, 24.5), breaks = c(21, 22, 23, 24)) +
+  ylab( expression(paste("VS ", (x10^{3})))) +
+  xlab("h") +
+  theme(plot.title = element_text(size = 10, face = "italic")) +
+  theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_AllTS_VS
+
+DF_MultScores_NonPara_AllTS %>%
+  ungroup() %>% 
+  select(-E.ES) %>% 
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+         R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
+  rename(`Method`=`R.method`) %>% 
+  ggplot(aes(x = Forecast.Horizon, y = E.VS/10^3, color = Method, shape = Method)) + 
+  geom_point(size = 2) + 
+  geom_line(aes(group = Method, color = Method)) +
+  theme(legend.position = "bottom") +
+  ggthemes::scale_color_colorblind() +
+  scale_shape_manual(values = c(0, 1, 2, 5, 6)) +
+  scale_x_discrete(limits = c(1:12)) +
+  scale_y_continuous(limits = c(20.5, 24.5), breaks = c(21, 22, 23, 24)) +
+  ylab( expression(paste("VS ", (x10^{3})))) +
+  xlab("h") +
+  theme(plot.title = element_text(size = 10, face = "italic")) +
+  theme(axis.title.y = element_text(size = 10)) -> Plot_NonPara_AllTS_VS
 
 
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
 
+mylegend <- g_legend(Plot_NonPara_AllTS_VS)
+
+grid.arrange( arrangeGrob(Plot_Gauss_AllTS_ES + theme(legend.position="none"),
+                          Plot_Gauss_AllTS_VS + theme(legend.position="none"), 
+                          ncol = 1), 
+              ncol=1, heights=c(10, 0.5), top = "Parametric Approach") -> Plot_Gauss_AllTS
+
+grid.arrange( arrangeGrob(Plot_NonPara_AllTS_ES + theme(legend.position="none"),
+                          Plot_NonPara_AllTS_VS + theme(legend.position="none"), 
+                          ncol = 1), 
+              ncol=1, heights=c(10, 0.5), top = "Non Parametric Approach") -> Plot_NonPara_AllTS
+
+grid.arrange(arrangeGrob(Plot_Gauss_AllTS, Plot_NonPara_AllTS, ncol = 2),
+             ncol = 1, mylegend, heights = c(20,1))
 
 ###--Skill-scores with reference to Base-Gaussian - ARIMA--###
 
