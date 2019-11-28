@@ -140,7 +140,7 @@ The remainder of the paper is structured as follows. In Section~\ref{sec:PointFo
 
 \section{Hierarchical probabilistic forecasts}\label{sec:ProbForecasts}
 
-Before introducing coherence and reconciliation to the probabilistic setting, we first briefly refresh these concepts in the case of the point forecasts.  In doing so, we follow the geometric interpretation introduced by \cite{PanEtAl2019HF}, since this formulation provides a natural framework for generalisation to probabilistic forecasting.
+Before introducing coherence and reconciliation to the probabilistic setting, we first briefly refresh these concepts in the case of the point forecasts.  In doing so, we follow the geometric interpretation introduced by \cite{PanEtAl2019HF}, since this formulation provides a naturally generalises to probabilistic forecasting.
 
 
 \subsection{Point Forecasting}\label{sec:PointForecasts}
@@ -175,9 +175,7 @@ where $\bm{I}_4$ is the $4\times 4$ identity matrix.
 
 The connection between this characterisation and the coherent subspace is that the columns of $\bm{S}$ span $\mathfrak{s}$.  Below, the notation $s:\mathbb{R}^m\rightarrow\mathbb{R}^n$ is used when premultiplication by $\bm{S}$ is though of as a mapping.  Finally, while $\bm{S}$ is defined in terms of $m$ bottom-level series here, in general any $m$ series can be chosen with the $\bm{S}$ matrix redefined accordingly.  The columns of all appropriately defined $\bm{S}$ matrices span the same coherent subspace $\mathfrak{s}$.
 
-When forecasts of all $n$ series are produced, they may not adhere to constraints.
-
-In this case forecasts are called {\em incoherent base} forecasts and are denoted $\hat{\bm y}_{t+h}$, with the subscript $t+h$ implying a $h$-step ahead forecast at time $t$.  To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as {\em forecast reconciliation}.  At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm y}_{t+h}=\psi(\hat{\bm y}_{t+h})$, where $\tilde{\bm y}_{t+h}\in\mathfrak{s}$ is called the {\em reconciled} forecast.  The mapping $\psi$ may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ combines incoherent base forecasts of all series to produce new bottom-level forecasts, which are then aggregated via $s$.  When $g$ is a linear mapping this corresponds to pre-multiplying base forecasts by a matrix $\bm{S}\bm{G}$.
+When forecasts of all $n$ series are produced, they may not adhere to constraints.  In this case forecasts are called {\em incoherent base} forecasts and are denoted $\hat{\bm y}_{t+h}$, with the subscript $t+h$ implying a $h$-step ahead forecast at time $t$.  To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as {\em forecast reconciliation}.  At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm y}_{t+h}=\psi(\hat{\bm y}_{t+h})$, where $\tilde{\bm y}_{t+h}\in\mathfrak{s}$ is called the {\em reconciled} forecast.  The mapping $\psi$ may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ combines incoherent base forecasts of all series to produce new bottom-level forecasts, which are then aggregated via $s$.  When $g$ is a linear mapping this corresponds to pre-multiplying base forecasts by a matrix $\bm{S}\bm{G}$.
 
 \cite{PanEtAl2019HF} discuss how a number of important properties arise when $\bm{S}\bm{G}$ is a projection matrix.  In this case, ${\bm G}$ can be written as $(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$, where $\bm{R}_{\perp}$ is an $n\times m$ orthogonal complement to the $n\times(n-m)$ matrix $\bm{R}$, with $\bm{R}$ defining a direction of projection.  For instance, OLS reconciliation \citep{HynEtAl2011} projects along a direction perpendicular to $\bm{S}$, in which case $\bm{R}=\bm{S}_{\perp}$, $\bm{R}_{\perp}=\bm{S}$ and $\bm{G}=(\bm{S}'\bm{S})^{-1}\bm{S}'$.  Several other choices of $\bm{G}$ currently extant in the literature, including the bottom-up \citep{Dunn1976} WLS \citep[][]{Hyndman2016,AthEtAl2017} and MinT \citep{WicEtAl2019} methods, are also special cases where $\bm{S}\bm{G}$ is a projection. The are presented in Table \ref{tab:ReconMethods} and discussed in Section \ref{sec:simulations}.
 
@@ -192,7 +190,7 @@ We now turn our attention towards a novel definition of coherence in a probabili
 	\]
 \end{definition}
 
-To the best of our knowledge, the only other definition of coherent probabilistic forecasts is given by \cite{Taieb2017} who define coherent probabilistic forecasts in terms of convolutions. While these definitions do not contradict one another our definition has two advantages.  First it can more naturally be extended to problems with non-linear constraints with the coherent subspace $\mathfrak{s}$ replaced with a manifold.  Second, the geometric understanding of coherence facilitates a definition of probabilistic forecast reconciliation to which we now turn our attention.
+To the best of our knowledge, the only other definition of coherent probabilistic forecasts is given by \cite{Taieb2017} who define coherent probabilistic forecasts in terms of convolutions. While these definitions do not contradict one another our definition has two advantages.  First it can more naturally be extended to problems with non-linear constraints with the coherent subspace $\mathfrak{s}$ replaced with a manifold.  Second, it facilitates a definition of probabilistic forecast reconciliation to which we now turn our attention.
 
 \subsection{Probabilistic forecast reconciliation}
 
@@ -206,7 +204,7 @@ Let $(\mathbb{R}^n, \mathscr{F}_{\mathbb{R}^n}, \hat{\nu})$ be a probability tri
 	where $\psi^{-1}(\mathcal{A}):=\{{\bm{y}}\in \mathbb{R}^n:\psi({\bm{y}})\in \mathcal{A}\}$ is the pre-image of $\mathcal{A}$, that is the set of all points in $\mathbb{R}^n$ that $\psi(.)$ maps to a point in $\mathcal{A}$.
 \end{definition}
 
-This definition naturally extends forecast reconciliation to the probabilistic setting. In the point forecasting case, the reconciled forecast is obtained by passing an incoherent forecast through a transformation. Similarly, for probabilistic forecasts, to determine the probability assigned to a region of points by the reconciled forecast, we consider the probability assigned by the base forecasts to all points mapped to that region by a transformation.  Recall that the mapping $\psi$ can also be expressed as a composition of two transformations $s\circ g$. In this case, an $m$-dimensional reconciled probabilistic distribution $\nu$ can be obtained such that $\nu(\mathcal{B})= \hat{\nu}(g^{-1}(\mathcal{B}))$ for all $\mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}$ and a probabilistic forecast for the full hierarchy can then be obtained via Definition~\ref{def:cohprob}.  This construction will be used in Section~\ref{sec:AnalyticalSolution}.
+This definition naturally extends forecast reconciliation to the probabilistic setting. In the point forecasting case, the reconciled forecast is obtained by passing an incoherent forecast through a transformation. Similarly, for probabilistic forecasts, a set of points is mapped to another set of points by a transformation, with the same probabilities assigned to each set under the base and reconciled forecast respectively.  Recall that the mapping $\psi$ can also be expressed as a composition of two transformations $s\circ g$. In this case, an $m$-dimensional reconciled probabilistic distribution $\nu$ can be obtained such that $\nu(\mathcal{B})= \hat{\nu}(g^{-1}(\mathcal{B}))$ for all $\mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}$ and a probabilistic forecast for the full hierarchy can then be obtained via Definition~\ref{def:cohprob}.  This construction will be used in Section~\ref{sec:AnalyticalSolution}.
 
 Defintion~\ref{def:reconprob} can use any continuous mapping $\psi$, where continuity is required to ensure that open sets in $\mathbb{R}^n$ used to construct $\mathscr{F}_{\mathbb{R}^n}$ are mapped to open sets in $\mathfrak{s}$.  However, hereafter, we restrict our attention to $\psi$ as a linear mapping.  This is depicted in Figure~\ref{fig:probfr_sch} when $\psi$ is a projection.  This figure is only a schematic, since even the most trivial hierarchy is $3$-dimensional.  The arrow labelled $\bm{S}$ spans an $m$-dimensional coherent subspace $\mathfrak{s}$, while the arrow labelled $\bm{R}$ spans an $n-m$-dimensional direction of projection.  The mapping $g$ collapses all points in the blue shaded region $g^{-1}(\mathcal{B})$, to the black interval $\mathcal{B}$. Under $s$, $\mathcal{B}$ is mapped to $s(\mathcal{B})$ shown in red.  Under our definition of reconciliation, the same probability is assigned to the red region under the reconciled measure as is assigned to the blue region under the incoherent measure.
 
@@ -254,29 +252,31 @@ In this section we describe how a reconciled distribution can be derived analyti
 
 Let the incoherent base forecasts be Gaussian with mean $\hat{\bm{\mu}}$, covariance matrix $\hat{\bm{\Sigma}}$ and density,
 \begin{equation}
-f(\hat{\bm{y}})=(2\pi)^{-n/2}|\hat{\bm{\Sigma}}|^{-1/2}\exp\left\{-\frac{1}{2}\left[(\hat{\bm{y}}-\hat{\bm{\mu}})'\hat{\bm{\Sigma}}^{-1}(\hat{\bm{y}}-\hat{\bm{\mu}})\right]\right\}\nonumber.
+\hat{f}(\hat{y})=(2\pi)^{-n/2}|\hat{\bm{\Sigma}}|^{-1/2}\exp\left\{-\frac{1}{2}\left[({\bm{y}}-\hat{\bm{\mu}})'\hat{\bm{\Sigma}}^{-1}({\bm{y}}-\hat{\bm{\mu}})\right]\right\}\nonumber.
 \end{equation}
 Using Theorem~\ref{theo:bottomdens}, the reconciled density for the bottom-level series is given by,
 \begin{equation}
 \tilde{f}_{\bm{b}}(\bm{b})=\int(2\pi)^{-\frac{n}{2}}\Big|\hat{\bm{\Sigma}}\Big|^{-\frac{1}{2}}|\bm{G^*}|\exp\{-\frac{1}{2}q\}d{\bm a}\nonumber\,,
 \end{equation}
-where $q=(\bm{G}^-{\bm{b}}+\bm{G}_{\perp}{\bm{a}}-\hat{\bm{\mu}})' \hat{\bm{\Sigma}}^{-1}(\bm{G}^-\bm{b}+\bm{G}_\perp\bm{a}-\hat{\bm{\mu}})$. Noting that
-\[
-\bm{G}^{*-1}=\begin{pmatrix}
-\bm{G} \\\bm{G}_{\perp}^-
-\end{pmatrix}\,,
-\]
-where $\bm{G}_{\perp}^-$ is an $(n-m)\times n$ matrix such that $\bm{G}_{\perp}^-\bm{G}=\bm{I}$, $q$ can be rearranged as
+where
 \begin{align*}
 	q& =
 	\left(\bm{G}^*\bt-\hat{\bm{\mu}}\right)' \hat{\bm{\Sigma}}^{-1}\left(\bm{G}^*\bt-\hat{\bm{\mu}}\right)\\
 	& =
 	\left(\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\right)' \Big[\bm{G}^{*-1}\hat{\bm{\Sigma}}\left(\bm{G}^{*-1}\right)'\Big]^{-1}
-	\left(\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\right)\\
-    & =\left[\bt-\PQ\hat{\bm{\mu}}\right]' \left[\PQ\hat{\bm{\Sigma}}\PQ'\right]^{-1}\left[\bt-\PQ\hat{\bm{\mu}}\right],
+	\left(\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\right)\,.
 \end{align*}
-
-This can be recognised as a multivariate Gaussian density in $\bm{b}$ and $\bm{a}$.  The mean and covariance matrix for the margins of the first $m$ elements are $\bm{G}\hat{\bm{\mu}}$ and $\bm{G}\hat{\bm{\Sigma}}\bm{G}'$ respectively.  Marginalising out $\bm {a}$, the reconciled forecast for the bottom-level is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$.
+Noting that
+\[
+\bm{G}^{*-1}=\begin{pmatrix}
+\bm{G} \\\bm{G}_{\perp}^-
+\end{pmatrix}\,,
+\]
+where $\bm{G}_{\perp}^-$ is an $(n-m)\times n$ matrix such that $\bm{G}_{\perp}^-\bm{G}_{\perp}=\bm{I}$, $q$ can be rearranged as
+\[
+ \left[\bt-\PQ\hat{\bm{\mu}}\right]' \left[\PQ\hat{\bm{\Sigma}}\PQ'\right]^{-1}\left[\bt-\PQ\hat{\bm{\mu}}\right]\,.
+\]
+After the change of variables, the density can be recognised as a multivariate Gaussian in $\bm{b}$ and $\bm{a}$.  The mean and covariance matrix for the margins of the first $m$ elements are $\bm{G}\hat{\bm{\mu}}$ and $\bm{G}\hat{\bm{\Sigma}}\bm{G}'$ respectively.  Marginalising out $\bm {a}$, the reconciled forecast for the bottom-level is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$.
 
 \subsection{Elliptical distributions}
 
@@ -299,7 +299,7 @@ Although ${\bm S}{\bm G}_0$ is not a projection matrix in general, there are som
 
 In practice it is often the case that samples are drawn from a probabilistic forecast since an analytical expression is either unavailable, or relies on unrealistic parametric assumptions.  A useful result is the following
 \begin{theo}[Reconciled samples]
-	Suppose that $\left(\hat{\bm y}^{[1]},\ldots,\hat{\bm y}^{[L]}\right)$ is a sample drawn from an incoherent density $\hat{\nu}$.  Then $\left(\tilde{\bm y}^{[1]},\ldots,\tilde{\bm y}^{[L]}\right)$ where $\tilde{\bm y}^{[l]}:=\psi(\hat{\bm y}^{[l]})$ for all $l=1,\ldots,L$ is a sample drawn from the reconciled density $\tilde{\nu}$ as defined in Definition~\ref{def:reconprob}
+	Suppose that $\left(\hat{\bm y}^{[1]},\ldots,\hat{\bm y}^{[L]}\right)$ is a sample drawn from an incoherent probability measure $\hat{\nu}$.  Then $\left(\tilde{\bm y}^{[1]},\ldots,\tilde{\bm y}^{[L]}\right)$ where $\tilde{\bm y}^{[l]}:=\psi(\hat{\bm y}^{[l]})$ for all $l=1,\ldots,L$ is a sample drawn from the reconciled probability measure $\tilde{\nu}$ as defined in Definition~\ref{def:reconprob}
 \end{theo}
 \begin{proof}
 	For any $\mathcal{A}\in\mathscr{F}_{\mathfrak{s}}$
@@ -310,7 +310,7 @@ In practice it is often the case that samples are drawn from a probabilistic for
 \end{align}
 \end{proof}
 
-This result implies that reconciling each member of a sample drawn from an incoherent distribution provides a sample from the reconciled distribution.  Such a strategy has already been used by \cite{JeoEtAl2019}, without formal justification.  We now propose a general purpose algorithm for probabilistic forecast reconciliation that overcomes a number of shortcomings of \cite{JeoEtAl2019}.
+This result implies that reconciling each member of a sample drawn from an incoherent distribution provides a sample from the reconciled distribution.  Such a strategy has already been used by \cite{JeoEtAl2019}, without formal justification.  
 
 In the point forecasting setting it is common to generate forecasts from independent statistical models, allowing forecast reconciliation to be scaled up to large hierarchies.  Since a single point forecast is generated for each series there is no ambiguity as to how these should be stacked into a vector of base forecasts $\hat{\bm{y}}$.  This is no longer the case in the probabilistic setting where multiple draws are made for each series.  \cite{JeoEtAl2019} recommend some crude heuristics that can be used to form joint samples.  In Section~\ref{sec:drawbase} we provide an alternative based on resampling forecast errors. This provides a sample from a base probabilistic forecast. A sample from the reconciled distribution can be obtained by premultiplying these draws by $\bm{S}\bm{G}$. Strategies for choosing $\bm{G}$ are discussed in Section~\ref{sec:OptRec}.
 
@@ -324,7 +324,7 @@ As discussed previously, reconciling each draw from an incoherent distribution y
 
 \section{Evaluation of hierarchical probabilistic forecasts} \label{sec:evaluation}
 
-An important issue in all forecasting problems is evaluating forecast accuracy. In the probabilistic setting, it is common to evaluate forecasts using proper scoring rules \citep[see][and references therein]{Gneiting2007,Gneiting2014}. Throughout, we follow the convention of negatively-oriented scoring rules such that smaller values of the score indicate more accurate forecasts.  In general, a scoring rule $K()$, is {\em proper} if $\E_{Q}[K(Q,\bm{\omega})] \le \E_{Q}[K(P,{\bm\omega})]$ for all $P$. When this inequality is strict for all $P\neq Q$, the scoring rule is said to be {\em strictly proper}.
+An important issue in all forecasting problems is evaluating forecast accuracy. In the probabilistic setting, it is common to evaluate forecasts using proper scoring rules \citep[see][and references therein]{Gneiting2007,Gneiting2014}. Throughout, we follow the convention of negatively-oriented scoring rules such that smaller values of the score indicate more accurate forecasts.  In general, a scoring rule $K(.,.)$, is a function taking a probability measure as the first argument and a realisation as the second argument (although for ease of notation we will at times use the replace the probability measure with its associated density in the first argument). A scoring rule is {\em proper} if $\E_{Q}[K(Q,\bm{\omega})] \le \E_{Q}[K(P,{\bm\omega})]$ for all $P$, where $P$ is any member of some class of probability measures (densities), $Q$ is the true predictive and $\omega$ is a realisation. When this inequality is strict for all $P\neq Q$, the scoring rule is said to be {\em strictly proper}.
 
 Since hierarchical forecasting is by its very nature a multivariate problem (the linear constraints affect all variables), our focus is on multivariate scoring rules.  We consider the log score (LS), energy score (ES) and the variogram score (VS).  However, in our simulations we evaluate individual margins of interest using the univariate counterparts of the log score and energy score (where the latter is the continuous ranked probability score, CRPS).
 
@@ -334,19 +334,19 @@ The log score simply involves evaluating the negative log density at the value o
 \E_{P}
 ||{\bm{y}}-\bm{\omega}||^\alpha -\frac{1}{2}\E_{P}||\bm{y}-\bm{y}^*||^\alpha, \,\, \alpha \in (0,2]\,,
 \end{equation*}
-where $\bm {y}$ and $\bm{y^*}$ are independent copies drawn from the distribution $P$.  These expectations can be easily approximated via Monte Carlo with samples drawn from the probabilistic forecast.
+where $\bm {y}$ and $\bm{y^*}$ are independent copies drawn from the distribution $P$, and we follow common convention by setting $\alpha=0.5$.  These expectations can be easily approximated via Monte Carlo with samples drawn from the probabilistic forecast.
 
 The energy score has been criticised by \citet{Pinson2013a} for its low discriminative ability for incorrectly specified covariances.  The variogram score  \citep{SCHEUERER2015}, overcomes this issue and is defined as
 \begin{equation*}
 \text{VS}({P}, \bm{\omega}) = \displaystyle\sum_{i=1}^{n}\displaystyle\sum_{j=1}^{n}w_{ij}\left(|\omega_{i} - \omega_{j}|^p - E_{P} |{y}_{i}-{y}_{j}|^p\right)^2\,,
 \end{equation*}
-where $y_i$ and $y_j$ are the $i^{th}$ and $j^{th}$ elements of $\bm{y}\sim P$ and $p$ is usually set to $0.5$.
+where $y_i$ and $y_j$ are the $i^{th}$ and $j^{th}$ elements of $\bm{y}\sim P$ and we follow common convention by setting $p=0.5$.
 
 In the context of probabilistic forecast reconciliation there could be two motivations for using scoring rules. The first is to compare incoherent base probabilistic forecasts to their reconciled counterparts, to see whether reconciliation improves forecast accuracy. The second is to compare two reconciled probabilistic forecasts to one another, to evaluate which choice of $\bm{G}$ performs best in practice.
 
 \subsection{Scoring Rules for Hierarchical Time Series}
 
-When a expression for the density of an incoherent base forecast is available, Section~\ref{sec:ProbForecasts} describes how the density of a reconciled forecast can be recovered.  With both densities can be computed, the most straightforward scoring rule to use to compare them to one another is the log score, which is simply given by the log density evaluated at the realisation.  However, the following theorem shows that the log score is improper in the setting of comparing incoherent to coherent forecasts.
+When a expression for the density of an incoherent base forecast is available, Section~\ref{sec:AnalyticalSolution} describes how the density of a reconciled forecast can be recovered.  With both densities available, the log score is natural and straightforward scoring rule to use.  However, the following theorem shows that the log score is improper in the setting of comparing incoherent to coherent forecasts.
 
 \begin{theo}[Impropriety of log score]\label{theo:logS_improp}
 	When the true data generating process is coherent, then the log score is improper with respect to the class of incoherent measures.
@@ -389,17 +389,17 @@ The same property does not hold for all scores. For example, the energy score is
 
 \subsection{Data Generating Processes and Setup}
 
-The aim of the simulations that follow is to assess the performance of the  both analytical and non-parametric sample based reconciliation approaches discussed so far. The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with beta margins. All details of the data generating process are presented in Appendix \ref{app:DGP}.  For each series we generate 2002 observations from which the first 500 are ignored to avoid the impact of initial values. To investigate the impact of model mispecification, both Gaussian and non-Gaussian probabilistic forecasts will be evaluated for each DGP.
+The aim of the simulations that follow is to assess the performance of both the analytical and sample based reconciliation approaches using a number of different choices of $\bm{G}$. The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with Beta margins. Parameter values are chosen so that bottom level series have a lower signal-to-noise ratio that top level series with specific details provided in Appendix \ref{app:DGP}.  For each series we generate 2002 observations from which the first 500 are ignored to avoid the impact of initial values. To investigate the impact of model mispecification, both Gaussian and non-Gaussian probabilistic forecasts will be evaluated for each DGP.
 
 All forecasts are evaluated using a rolling window with a training sample of 500. This yields 1,000 probabilistic forecasts for evaluation. The predictive accuracy of the alternative methods is evaluated using the scoring rules presented in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores, i.e., the percentage improvement of a probabilistic forecast over a reference method. A positive (negative) value indicates a percentage gain (loss) in forecast accuracy over the reference method.
 
 \subsection{Base Forecasts}
 
-We fit univariate ARIMA and exponential smoothing (ETS) models to each series using the \verb|auto.arima()| and \verb|ets()| functions in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore}.  Since the conclusions were similar for both modelling approaches, the results for ETS are omitted here but are available upon request.  For each series, (incoherent) point forecasts are obtained for $h = 1, 2$ and $3$-steps ahead.  We denote these as $\hat{\bm\mu}_{T+h}$. For $h=2$ and $h=3$ these are obtained using the recursive method \citep{FPP2018} assuming Gaussian errors\todo{is this what we do for Gaussian and non-Gaussian?}.  A Gaussian base probabilistic forecast is obtained as $N(\hat{\bm{\mu}_{T+h}},\hat{\bm{\Sigma}})$ with $\hat{\bm{\Sigma}}$ estimated using in-sample one-step ahead forecast errors and the shrinkage estimator of \citet{Schafer2005} (as presented in Table \ref{tab:ReconMethods}).  A sample from the non-Gaussian probabilistic forecast is obtained using the bootstrap method described in Section~\ref{sec:drawbase}.
+We fit univariate ARIMA and exponential smoothing (ETS) models to each series using the \verb|auto.arima()| and \verb|ets()| functions in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore}.  Since the conclusions were similar for both modelling approaches, the results for ETS are omitted here but are available in an online supplement.  For each series, (incoherent) point forecasts are obtained for $h = 1, 2$ and $3$-steps ahead.  We denote these as $\hat{\bm\mu}_{T+h}$. For $h=2$ and $h=3$ these are obtained using the recursive method \citep{FPP2018}.  A Gaussian base probabilistic forecast is obtained as $N(\hat{\bm{\mu}}_{T+h},\hat{\bm{\Sigma}})$ with $\hat{\bm{\Sigma}}$ estimated using in-sample one-step ahead forecast errors and the shrinkage estimator of \citet{Schafer2005} (as presented in Table \ref{tab:ReconMethods}).  A sample from the non-Gaussian probabilistic forecast is obtained using the bootstrap method described in Section~\ref{sec:drawbase}.
 
 \subsection{Reconciliation}
 
-The incoherent base probabilistic forecasts are reconciled via the analytical and non-parametric sampling solutions.  For Gaussian probabilistic forecasts, the reconciled forecast will be of the form $N(\bm{S}\bm{G}\hat{\bm{\mu}},\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$, as described in Section~\ref{sec:AnalyticalSolution}.  For non-Gaussian probabilistic forecasts all draws are premultiplied by $\bm{S}\bm{G}$ as described in Section~\ref{sec:SampleSolution}.  A number of alternative projections were considered for reconciliation and are summarised in presented in Table \ref{tab:recomethods}.
+For Gaussian probabilistic forecasts, the reconciled forecast will be of the form $N(\bm{S}\bm{G}\hat{\bm{\mu}},\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$, as described in Section~\ref{sec:AnalyticalSolution}.  For non-Gaussian probabilistic forecasts all draws are premultiplied by $\bm{S}\bm{G}$ as described in Section~\ref{sec:SampleSolution}.  A number of alternative projections were considered for reconciliation and are summarised in Table \ref{tab:recomethods}.
 \begin{table}[!t]
 	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix, so that ${\bm G}=(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{R}'_\bot=\bm{S}'\bm{W}^{-1}$. The rows present alternative choices of $\bm{W}$. $\hat{\bm{W}}^{\text{sam}}$ is the sample variance-covariance matrix estimated from one-step ahead in-sample forecast errors from the base incoherent forecasts. $\hat{\bm{W}}^{\text{wls}}$ is a diagonal matrix with elements from $\hat{\bm{W}}^{\text{sam}}$. $\hat{\bm{W}}^{\text{shr}}$ is a shrinkage estimator proposed by \citet{Schafer2005},  where $\tau = \frac{\sum_{i \neq j}\hat{\var}(\hat{w}_{ij})}{\sum_{i \neq j}{\hat{w}}^2_{ij}}$ and  $w_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{W}}^{\text{sam}}$. Relevant references are presented at the end of Section \ref{sec:PointForecasts}.} \label{tab:ReconMethods}
 	\centering
@@ -418,17 +418,17 @@ The incoherent base probabilistic forecasts are reconciled via the analytical an
 
 \subsubsection{Score Optimal Reconciliation}\label{sec:OptRec}
 
-Apart from cases described in Section~\ref{sec:AnalyticalSolution} which are not feasible in practice, the $\bm{G}$ matrix that minimises expected score may depend on both the base forecast, true predictive and specific scoring rule used.  In the following section we also propose an approach to find a $\bm{G}$ by optimising the average score over a rolling window constructed within the training data.  The respective objective function can be written as,
+In general, the $\bm{G}$ matrix that minimises expected score may depend on both the base forecast, true predictive and specific scoring rule used.  In the following section we also propose an approach to find a $\bm{G}$ by optimising the average score over a rolling window constructed within the training data.  The respective objective function can be written as,
 \begin{equation} \label{eq:Obj_func_1}
-\operatornamewithlimits{argmin}_{\bm{G}_h} \quad \E_{Q}[K(\tilde{\nu}_{\bm{G}_h}, \bm{y})],
+\operatornamewithlimits{argmin}_{\bm{G}_h} \quad \E_{Q}[K(\tilde{\nu}_{\bm{G}_h}, \bm{y}_{T+h})],
 \end{equation}
-where $\tilde{\nu}_{\bm{G}_h}$ is the reconciled measure with respect to $\bm{G}_h$ (the subscript $h$ emphasises distinct matrices for different forecast horizons), $Q$ is the true predictive distribution, $\bm{y}\sim Q$ and $K(.,.)$ is a proper scoring rule as described in Section \ref{sec:evaluation}.
+where $\tilde{\nu}_{\bm{G}_h}$ is the measure reconciled with respect to $\bm{G}_h$ (the subscript $h$ emphasises distinct matrices for different forecast horizons), $Q$ is the true predictive distribution so that $\bm{y}_{T+h}\sim Q$ and $K(.,.)$ is a proper scoring rule as described in Section \ref{sec:evaluation}.
 
 To approximate the expectation in Equation~\eqref{eq:Obj_func_1} we break up the training sample into $J$ rolling windows each of length $T-J+1$.  For the $j^{th}$ rolling window we use $\bm{y}_{j},\ldots,\bm{y}_{T-J+j}$ to evaluate a $h$-step ahead base probabilistic forecast $\hat{\nu}$.  Reconciling with respect to $\bm{G}_h$ yields the distribution $\tilde{\nu}_{\bm{G}_h}$.  The expectation in Equation~\eqref{eq:Obj_func_1} can then be approximated by
 
-\begin{equation} \label{eq:Obj_func_apprx} \E_{Q}[K(\tilde{\nu}_{\bm{G}_h}, \bm{y})]\approx\frac{1}{J}\sum_{j=1}^{J}K(\tilde{\nu}_{\bm{G}_h},\bm{y}_{T-J+j+h}).\nonumber
+\begin{equation} \label{eq:Obj_func_apprx} \E_{Q}[K(\tilde{\nu}_{\bm{G}_h}, \bm{y}_{T+h})]\approx\frac{1}{J}\sum_{j=1}^{J}K(\tilde{\nu}_{\bm{G}_h},\bm{y}_{T-J+j+h}).\nonumber
 \end{equation}
-Where this approach is used in simulations, we set $J=100$ and use a slightly larger training window of $T=600$ for selecting $\bm{G}$ only. We implement the algorithm in the Gaussian setting (see Section \ref{sec:SimAnalysticalResults}) using log score and in the non-Gaussian setting (see Section \ref{sec:SimSamplingResults}) using energy score.  We also note that different ways of parameterising $\bm{G}_h$ were used in the numerical optimisation but all led to identical results.  This was discussed in detail in Section \ref{app:ReparaG} in Appendix.
+Where this approach is used in simulations, we set $J=100$ and use a slightly larger training window of $T=600$ for selecting $\bm{G}$ only. We implement the algorithm in the Gaussian setting (see Section \ref{sec:SimAnalysticalResults}) using log score and in the non-Gaussian setting (see Section \ref{sec:SimSamplingResults}) using energy score.  We also note that different ways of parameterising $\bm{G}_h$ were used in the numerical optimisation but all led to identical results.  This is discussed in detail in Section \ref{app:ReparaG} in Appendix.
 
 \subsection{Results for Gaussian probabilistic forecasts}\label{sec:SimAnalysticalResults}
 
