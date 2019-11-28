@@ -600,28 +600,36 @@ The process is repeated by rolling the training window forward one month at a ti
 
 \subsection{Evaluation, results and discussion}
 
-We evaluate the predictive accuracy using scoring rules. More specifically we use energy and variogram scores to assess the predictive accuracy of multivariate forecast distributions across the entire hierarchy as well as for the different disaggregation levels. CRPS is used to assess the predictive accuracy of univariate forecast distributions for each series in the hierarchy. We calculate average scores over the replications for each forecast horizon separately. In the results that follow we present skill scores for each of the coherent predictive distributions with reference to the incoherent distributions. A positive (negative) values in the skill score indicates a gain (loss) in forecast accuracy over the incoherent forecast distribution.
+We evaluate the predictive accuracy using scoring rules. More specifically we use energy and variogram scores to assess the predictive accuracy of multivariate forecast distributions across the entire hierarchy as well as for the different disaggregation levels. 
+
+CRPS is used to assess the predictive accuracy of univariate forecast distributions for each series in the hierarchy. 
+
+We calculate average scores over the rolling windows for each forecast horizon separately. 
+
+In the results that follow we present the raw scores 
+
+skill scores for each of the coherent predictive distributions with reference to the incoherent distributions. A positive (negative) values in the skill score indicates a gain (loss) in forecast accuracy over the incoherent forecast distribution.
 
 \begin{figure}
 	\centering
 	\small
-	\includegraphics[width= .95\textwidth]{Empirical-results/Results-ARIMA/Overall_Summary.pdf}
-	\caption{Skill scores based on energy score with reference to incoherent forecasts for multivariate predictive distribution across the entire hierarchy from different methods. A positive (negative) skill score indicates a gain (loss) in forecast accuracy over the incoherent forecast distribution. The left panel shows the results from the Gaussian approach where the right panel shows the results from the non-parametric approach.}\label{fig:EmpResults_AllTS}
+	\includegraphics[width= .95\textwidth]{Empirical-results/Results-ARIMA/Scores_Overall.pdf}
+	\caption{Energy and Variogram scores for multivariate predictive distributions across the entire hierarchy from different reconciliation methods. A lower score indicates a more accurate forecast. The left panel shows the results from the Gaussian approach where the right panel shows the results from the non-parametric approach.} \label{fig:EmpResults_AllTS}
 \end{figure}
 
 \begin{figure}
 	\centering
 	\small
-	\includegraphics[width= 0.8\textwidth, height= 0.85\textheight]{Empirical-results/Results-ARIMA/Levels_Summary.pdf}
+	\includegraphics[width= 0.8\textwidth, height= 0.85\textheight]{Empirical-results/Results-ARIMA/ES_SS_Levels.pdf}
 	\caption{Skill scores for multivariate probabilistic forecasts across different levels of the hierarchy. A positive (negative) skill score indicates a gain (loss) in forecast accuracy over the incoherent forecast distribution. Results from the Gaussian approach are presented in the left panel while results from the non-parametric approach are presented in the right panel.}\label{fig:EmpResults_Levels}
 \end{figure}
 
-%\begin{figure}
-%	\centering
-%	\small
-%	\includegraphics[width= \textwidth]{Empirical-results/UniVScore_TopLevel_ARIMA.pdf}
-%	\caption{Skill score based on CRPS (with reference to the incoherent forecasts) for univariate probabilistic forecasts for the Total (top level) overnight trips. A positive (negative) skill score indicates a gain (loss) in forecast accuracy over the incoherent forecast distribution. Left panel shows the results from the Gaussian approach and right panel shows the results from the non-parametric approach. }\label{fig:EmpResults_TopLevel}
-%\end{figure}
+\begin{figure}
+	\centering
+	\small
+	\includegraphics[width= 0.8\textwidth, height= 0.85\textheight]{Empirical-results/Results-ARIMA/ES_Levels.pdf}
+	\caption{Skill scores for multivariate probabilistic forecasts across different levels of the hierarchy. A positive (negative) skill score indicates a gain (loss) in forecast accuracy over the incoherent forecast distribution. Results from the Gaussian approach are presented in the left panel while results from the non-parametric approach are presented in the right panel.}\label{fig:EmpResults_Levels}
+\end{figure}
 
 Figure \ref{fig:EmpResults_AllTS} shows the skill scores with respect to the multivariate predictive distributions across the entire hierarchy from the different methods. Figure \ref{fig:EmpResults_Levels} shows the evaluation across each level. The top panels present the results from the Gaussian approach while the bottom panels present the results from the non-parametric approach. Both figures show that almost all reconciliation methods improve forecast accuracy irrespective of whether the parametric or non-parametric approaches are implemented. Furthermore, the bottom-up approach shows losses compared to the incoherent forecasts at all forecast horizons. This reflects the fact that bottom-level series are noisier and therefore more challenging to forecast. Finally and most importantly, MinT(Shrink) outperforms all probabilistic forecast reconciliation methods for both parametric and non-parametric approaches.
 
