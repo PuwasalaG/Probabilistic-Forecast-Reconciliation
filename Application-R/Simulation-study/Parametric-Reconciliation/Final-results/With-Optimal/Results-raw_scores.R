@@ -1,9 +1,9 @@
 ---
-title: "Parametric Reconciliation"
+  title: "Parametric Reconciliation"
 output: pdf_document
 ---
-
-```{r setup, include=FALSE}
+  
+  ```{r setup, include=FALSE}
 library(tidyverse)
 library(kableExtra)
 ```
@@ -115,12 +115,12 @@ SkillScore_full_hier %>%
   unite(temp, Forecast.Horizon, key) %>% 
   spread(key = temp, value = value) %>% 
   dplyr::select(R.method, `1_SS_E.LS`, `2_SS_E.LS`, `3_SS_E.LS`, 
-         `1_SS_E.ES`, `2_SS_E.ES`, `3_SS_E.ES`, 
-         `1_SS_E.VS`, `2_SS_E.VS`, `3_SS_E.VS`) %>% 
+                `1_SS_E.ES`, `2_SS_E.ES`, `3_SS_E.ES`, 
+                `1_SS_E.VS`, `2_SS_E.VS`, `3_SS_E.VS`) %>% 
   rename("1" = `1_SS_E.LS`, "2" = `2_SS_E.LS`, "3" = `3_SS_E.LS`, 
          "1" = `1_SS_E.ES`, "2" = `2_SS_E.ES`, "3" = `3_SS_E.ES`, 
          "1" = `1_SS_E.VS`, "2" = `2_SS_E.VS`, "3" = `3_SS_E.VS`)%>% 
-   kable(format = "latex") %>% kable_styling("striped") %>% 
+  kable(format = "latex") %>% kable_styling("striped") %>% 
   kableExtra::add_header_above(c(" " = 1, "Log Score(%)" = 3, "Energy Score(%)" = 3, "Variogram Score(%)" = 3))
 
 ```
@@ -232,12 +232,12 @@ SkillScore_full_hier %>%
   unite(temp, Forecast.Horizon, key) %>% 
   spread(key = temp, value = value) %>% 
   dplyr::select(R.method, `1_SS_E.LS`, `2_SS_E.LS`, `3_SS_E.LS`, 
-         `1_SS_E.ES`, `2_SS_E.ES`, `3_SS_E.ES`, 
-         `1_SS_E.VS`, `2_SS_E.VS`, `3_SS_E.VS`) %>% 
+                `1_SS_E.ES`, `2_SS_E.ES`, `3_SS_E.ES`, 
+                `1_SS_E.VS`, `2_SS_E.VS`, `3_SS_E.VS`) %>% 
   rename("1" = `1_SS_E.LS`, "2" = `2_SS_E.LS`, "3" = `3_SS_E.LS`, 
          "1" = `1_SS_E.ES`, "2" = `2_SS_E.ES`, "3" = `3_SS_E.ES`, 
          "1" = `1_SS_E.VS`, "2" = `2_SS_E.VS`, "3" = `3_SS_E.VS`)%>% 
-   kable(format = "latex") %>% kable_styling("striped") %>% 
+  kable(format = "latex") %>% kable_styling("striped") %>% 
   kableExtra::add_header_above(c(" " = 1, "Log Score(%)" = 3, "Energy Score(%)" = 3, "Variogram Score(%)" = 3))
 
 ```
@@ -297,7 +297,7 @@ DF_Mean_UnivScore_SS_GausDGP %>%
   dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.CRPS) %>% 
   spread(key = Series, value = SS_E.LS) %>% 
   dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.LS_GausDGP_h3
-  
+
 DF_Mean_UnivScore_SS_GausDGP %>% 
   filter(Forecast.Horizon == 1) %>% 
   dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.LS) %>% 
@@ -315,7 +315,7 @@ DF_Mean_UnivScore_SS_GausDGP %>%
   dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.LS) %>% 
   spread(key = Series, value = SS_E.CRPS) %>% 
   dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.CRPS_GausDGP_h3
-  
+
 
 
 ```
@@ -376,7 +376,7 @@ DF_Mean_UnivScore_SS_NonGausDGP %>%
   dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.CRPS) %>% 
   spread(key = Series, value = SS_E.LS) %>% 
   dplyr::select(R.method, Total, A, B, AA, AB, BA, BB) -> DF_Mean_UnivScore_SS.LS_NonGausDGP_h3
-  
+
 DF_Mean_UnivScore_SS_NonGausDGP %>% 
   filter(Forecast.Horizon == 1) %>% 
   dplyr::select(-E.CRPS, -E.LS, -Forecast.Horizon, -SS_E.LS) %>% 
@@ -407,7 +407,7 @@ left_join(DF_Mean_UnivScore_SS.LS_GausDGP_h1,
   kable(format = "latex") %>% kable_styling("striped") %>% 
   kableExtra::add_header_above(c(" " = 1, "Gaussian DGP" = 7, 
                                  "Non-Gaussian DGP" = 7))
-  
+
 left_join(DF_Mean_UnivScore_SS.CRPS_GausDGP_h1,
           DF_Mean_UnivScore_SS.CRPS_NonGausDGP_h1, by = "R.method") %>%
   as_tibble() %>% 
@@ -427,7 +427,7 @@ left_join(DF_Mean_UnivScore_SS.LS_GausDGP_h2,
   kable(format = "latex") %>% kable_styling("striped") %>% 
   kableExtra::add_header_above(c(" " = 1, "Gaussian DGP" = 7, 
                                  "Non-Gaussian DGP" = 7))
-  
+
 left_join(DF_Mean_UnivScore_SS.CRPS_GausDGP_h2,
           DF_Mean_UnivScore_SS.CRPS_NonGausDGP_h2, by = "R.method") %>%
   as_tibble() %>% 
@@ -446,7 +446,7 @@ left_join(DF_Mean_UnivScore_SS.LS_GausDGP_h3,
   kable(format = "latex") %>% kable_styling("striped") %>% 
   kableExtra::add_header_above(c(" " = 1, "Gaussian DGP" = 7, 
                                  "Non-Gaussian DGP" = 7))
-  
+
 left_join(DF_Mean_UnivScore_SS.CRPS_GausDGP_h3,
           DF_Mean_UnivScore_SS.CRPS_NonGausDGP_h3, by = "R.method") %>%
   as_tibble() %>% 
@@ -455,4 +455,3 @@ left_join(DF_Mean_UnivScore_SS.CRPS_GausDGP_h3,
                                  "Non-Gaussian DGP" = 7))
 
 ```
-

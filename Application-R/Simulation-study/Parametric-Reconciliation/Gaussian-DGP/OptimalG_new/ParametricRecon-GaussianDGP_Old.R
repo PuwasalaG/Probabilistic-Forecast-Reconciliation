@@ -423,7 +423,7 @@ for (j in 1:5)#1:250
     X_Bot_MinT.Sam[[h]] <- mvrnorm(n = B, mu = Recon_PointF_Bot_MinT.Sam[h,], 
                                    Sigma = Recon_Var.Cov_Bot_MinT.Sam)
     
-    X_Bot_Opt[[h]] <- mvrnorm(n = B, mu = Recon_PointF_Bot_MinT.Sam[h,], 
+    X_Bot_Opt[[h]] <- mvrnorm(n = B, mu = Recon_PointF_Bot_Opt[h,], 
                                    Sigma = Recon_Var.Cov_Bot_Opt[[h]])
     
     X_Bot_unrecon[[h]] <- mvrnorm(n = B, mu = Base_forecasts_eval[h, (n-m+1):n], 
