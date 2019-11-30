@@ -11,7 +11,7 @@
 *.ind
 *.fdb_latexmk
 *.fls
-*.synctex\.gz
+*.synctex.gz
 *.out
 *.csv
 

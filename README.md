@@ -3,18 +3,13 @@
 Stuff to do
 
 1. Intro to be rewritten by TAS
-2. Do all multistep point forecasts assume Gaussianity? PUWASALA TO ANSWER - ALL TO DISCUSS
-<<<<<<< HEAD
-3. Add results for score optimal G to Table 3 PUWASALA - COMPLETE
-4. Add results for score optimal G to Table 4 PUWASALA - COMPLETE
-=======
-3. Add results for score optimal G to Table 3 PUWASALA
-4. Add results for score optimal G to Table 4 PUWASALA
->>>>>>> 953daf6f26f95721c81620e5377af8a84c860b5d
-5. Some minor rewriting of section 6 still needed GEORGE AND TAS
+2. Do all multistep point forecasts assume Gaussianity? ANSWER IS NO.  THIS IS FINE.
+3. Add results for score optimal G to Table 3 PUWASALA - COMPLETE.
+4. Add results for score optimal G to Table 4 PUWASALA - COMPLETE.
+5. Some major rewriting of section 6 still needed GEORGE AND TAS
 6. Some minor rewriting of section 7 still needed GEORGE AND TAS
 7. Rewrite Conclusion TAS
-8. In appendix D inequalities need to be checked.  PUWASALA TO DO VIA SIMULATION (OR CONFIRM THAT SHE HAS CHECKED VIA SIMULATION)
+8. In appendix D inequalities need to be checked.  THIS IS FINE
 9. Discussion about what goes in Appendix and what goes in online supplement my preference A-D and G as appendices with E and F as online supplement. EVERYONE TO DISCUSS
 
  
