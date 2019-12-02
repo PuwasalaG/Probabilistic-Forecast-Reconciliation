@@ -13,26 +13,28 @@ library(ggpubr)
 
 DF_MultiV_Gauss_Total <- read.csv("../Gaussian_approach/DF_MultiV_Total.csv")
 
+DF_MultiV_Gauss_Total <- read.csv("C:/George/Supervision/Puwasala/Code/Application-R/Empirical-study/Results/Gaussian_approach/DF_MultiV_Total.csv")
 
-DF_MultiV_Gauss_Total %>% 
+DF_MultiV_Gauss_Total %>%
   dplyr::select(-"Replication") -> DF_MultScores_Gauss_AllTS
 
-DF_MultScores_Gauss_AllTS %>% 
-  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
-  summarise(E.ES = mean(`Energy.score`), 
-            E.VS = mean(`Variogram.score`)) %>% 
+DF_MultScores_Gauss_AllTS %>%
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>%
+  summarise(E.ES = mean(`Energy.score`),
+            E.VS = mean(`Variogram.score`)) %>%
   filter(F.method == "ARIMA") -> DF_MultScores_Gauss_AllTS
 
 DF_MultiV_NonPara_Total <- read.csv("../NonPara_approach/DF_MultiV_Total.csv")
 
+DF_MultiV_NonPara_Total <- read.csv("C:/George/Supervision/Puwasala/Code/Application-R/Empirical-study/Results/NonPara_approach/DF_MultiV_Total.csv")
 
-DF_MultiV_NonPara_Total %>% 
+DF_MultiV_NonPara_Total %>%
   dplyr::select(-"Replication") -> DF_MultScores_NonPara_AllTS
 
-DF_MultScores_NonPara_AllTS %>% 
-  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
-  summarise(E.ES = mean(`Energy.score`), 
-            E.VS = mean(`Variogram.score`)) %>% 
+DF_MultScores_NonPara_AllTS %>%
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>%
+  summarise(E.ES = mean(`Energy.score`),
+            E.VS = mean(`Variogram.score`)) %>%
   filter(F.method == "ARIMA") -> DF_MultScores_NonPara_AllTS
 
 
@@ -40,28 +42,28 @@ DF_MultScores_NonPara_AllTS %>%
 #### Ploting raw scores for ARIMA####
 
 
-DF_MultScores_Gauss_AllTS %>% 
-  ungroup() %>% 
-  select(-E.VS, -F.method) %>% 
+DF_MultScores_Gauss_AllTS %>%
+  ungroup() %>%
+  select(-E.VS, -F.method) %>%
   rename(Gauss_E.ES = E.ES) -> DF_MultScores_Gauss_AllTS_ES
 
-DF_MultScores_NonPara_AllTS %>% 
-  ungroup() %>% 
-  select(-E.VS, -F.method) %>% 
+DF_MultScores_NonPara_AllTS %>%
+  ungroup() %>%
+  select(-E.VS, -F.method) %>%
   rename(NonPara_E.ES = E.ES) -> DF_MultScores_NonPara_AllTS_ES
 
 # DF_MultScores_AllTS <- left_join(DF_MultScores_Gauss_AllTS_ES, DF_MultScores_NonPara_AllTS_ES)
-# 
-# DF_MultScores_AllTS %>% 
-#   rename("Parametric approach" = Gauss_E.ES, 
-#          "Non parametric approach" = NonPara_E.ES) %>% 
-#   gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>% 
+#
+# DF_MultScores_AllTS %>%
+#   rename("Parametric approach" = Gauss_E.ES,
+#          "Non parametric approach" = NonPara_E.ES) %>%
+#   gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>%
 #   mutate(Approach = factor(Approach, levels = c("Parametric approach", "Non parametric approach")),
 #          R.method = recode(R.method, MinT.Shr = "MinT(Shrink)"),
 #          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-#   rename(`Method`=`R.method`) %>% 
-#   ggplot(aes(x = Forecast.Horizon, y = Score, color = Method, shape = Method)) + 
-#   geom_point(size = 2) + 
+#   rename(`Method`=`R.method`) %>%
+#   ggplot(aes(x = Forecast.Horizon, y = Score, color = Method, shape = Method)) +
+#   geom_point(size = 2) +
 #   geom_line(aes(group = Method, color = Method)) +
 #   facet_wrap(~Approach) +
 #   theme(legend.position = "bottom") +
@@ -76,13 +78,13 @@ DF_MultScores_NonPara_AllTS %>%
 ### For ES ###
 
 DF_MultScores_Gauss_AllTS %>%
-  ungroup() %>% 
-  select(-E.VS) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.VS) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -95,13 +97,13 @@ DF_MultScores_Gauss_AllTS %>%
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_AllTS_ES
 
 DF_MultScores_NonPara_AllTS %>%
-  ungroup() %>% 
-  select(-E.VS) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.VS) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -116,13 +118,13 @@ DF_MultScores_NonPara_AllTS %>%
 ### For VS ###
 
 DF_MultScores_Gauss_AllTS %>%
-  ungroup() %>% 
-  select(-E.ES) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.ES) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.VS/10^3, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.VS/10^3, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -135,13 +137,13 @@ DF_MultScores_Gauss_AllTS %>%
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_AllTS_VS
 
 DF_MultScores_NonPara_AllTS %>%
-  ungroup() %>% 
-  select(-E.ES) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.ES) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.VS/10^3, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.VS/10^3, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -163,13 +165,13 @@ g_legend<-function(a.gplot){
 mylegend <- g_legend(Plot_NonPara_AllTS_VS)
 
 grid.arrange( arrangeGrob(Plot_Gauss_AllTS_ES + theme(legend.position="none"),
-                          Plot_Gauss_AllTS_VS + theme(legend.position="none"), 
-                          ncol = 1), 
+                          Plot_Gauss_AllTS_VS + theme(legend.position="none"),
+                          ncol = 1),
               ncol=1, heights=c(10, 0.5), top = "Parametric Approach") -> Plot_Gauss_AllTS
 
 grid.arrange( arrangeGrob(Plot_NonPara_AllTS_ES + theme(legend.position="none"),
-                          Plot_NonPara_AllTS_VS + theme(legend.position="none"), 
-                          ncol = 1), 
+                          Plot_NonPara_AllTS_VS + theme(legend.position="none"),
+                          ncol = 1),
               ncol=1, heights=c(10, 0.5), top = "Non Parametric Approach") -> Plot_NonPara_AllTS
 
 grid.arrange(arrangeGrob(Plot_Gauss_AllTS, Plot_NonPara_AllTS, ncol = 2),
@@ -184,13 +186,13 @@ g_legend<-function(a.gplot){
 mylegend <- g_legend(Plot_NonPara_AllTS_VS)
 
 grid.arrange( arrangeGrob(Plot_Gauss_AllTS_ES + theme(legend.position="none"),
-                          Plot_Gauss_AllTS_VS + theme(legend.position="none"), 
-                          ncol = 1), 
+                          Plot_Gauss_AllTS_VS + theme(legend.position="none"),
+                          ncol = 1),
               ncol=1, heights=c(10, 0.5), top = "Parametric Approach") -> Plot_Gauss_AllTS
 
 grid.arrange( arrangeGrob(Plot_NonPara_AllTS_ES + theme(legend.position="none"),
-                          Plot_NonPara_AllTS_VS + theme(legend.position="none"), 
-                          ncol = 1), 
+                          Plot_NonPara_AllTS_VS + theme(legend.position="none"),
+                          ncol = 1),
               ncol=1, heights=c(10, 0.5), top = "Non Parametric Approach") -> Plot_NonPara_AllTS
 
 grid.arrange(arrangeGrob(Plot_Gauss_AllTS, Plot_NonPara_AllTS, ncol = 2),
@@ -201,37 +203,37 @@ grid.arrange(arrangeGrob(Plot_Gauss_AllTS, Plot_NonPara_AllTS, ncol = 2),
 ###--Skill-scores - ARIMA--###
 
 
-DF_MultScores_Gauss_AllTS %>% 
+DF_MultScores_Gauss_AllTS %>%
   filter(`R.method`=="Base") %>%
   slice() %>%
   ungroup() %>%
-  dplyr::select(`E.ES`) %>% as_vector() -> Base_E.ES_Gauss_AllTS_ARIMA 
+  dplyr::select(`E.ES`) %>% as_vector() -> Base_E.ES_Gauss_AllTS_ARIMA
 
-DF_MultScores_Gauss_AllTS %>% 
+DF_MultScores_Gauss_AllTS %>%
   filter(`R.method`=="Base") %>%
   slice() %>%
   ungroup() %>%
-  dplyr::select(`E.VS`) %>% 
-  as_vector() -> Base_E.VS_Gauss_AllTS_ARIMA 
+  dplyr::select(`E.VS`) %>%
+  as_vector() -> Base_E.VS_Gauss_AllTS_ARIMA
 
-DF_MultScores_NonPara_AllTS %>% 
+DF_MultScores_NonPara_AllTS %>%
   filter(`R.method`=="Base") %>%
   slice() %>%
   ungroup() %>%
-  dplyr::select(`E.ES`) %>% as_vector() -> Base_E.ES_NonPara_AllTS_ARIMA 
+  dplyr::select(`E.ES`) %>% as_vector() -> Base_E.ES_NonPara_AllTS_ARIMA
 
-DF_MultScores_NonPara_AllTS %>% 
+DF_MultScores_NonPara_AllTS %>%
   filter(`R.method`=="Base") %>%
   slice() %>%
   ungroup() %>%
-  dplyr::select(`E.VS`) %>% 
-  as_vector() -> Base_E.VS_NonPara_AllTS_ARIMA 
+  dplyr::select(`E.VS`) %>%
+  as_vector() -> Base_E.VS_NonPara_AllTS_ARIMA
 
-DF_MultScores_Gauss_AllTS %>% 
+DF_MultScores_Gauss_AllTS %>%
   mutate(SS_E.ES = round((1-(`E.ES`/Base_E.ES_Gauss_AllTS_ARIMA))*100, digits = 4),
          SS_E.VS = round((1-(`E.VS`/Base_E.VS_Gauss_AllTS_ARIMA))*100, digits = 4)) -> DF_MultScore_SS_Gauss_AllTS
 
-DF_MultScores_NonPara_AllTS %>% 
+DF_MultScores_NonPara_AllTS %>%
   mutate(SS_E.ES = round((1-(`E.ES`/Base_E.ES_NonPara_AllTS_ARIMA))*100, digits = 4),
          SS_E.VS = round((1-(`E.VS`/Base_E.VS_NonPara_AllTS_ARIMA))*100, digits = 4)) -> DF_MultScore_SS_NonPara_AllTS
 
@@ -240,12 +242,12 @@ DF_MultScores_NonPara_AllTS %>%
 ### For ES ###
 
 DF_MultScore_SS_Gauss_AllTS %>%
-  ungroup() %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = SS_E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = SS_E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -258,13 +260,13 @@ DF_MultScore_SS_Gauss_AllTS %>%
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_AllTS_SS.ES
 
 DF_MultScore_SS_NonPara_AllTS %>%
-  ungroup() %>% 
-  select(-E.VS) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.VS) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = SS_E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = SS_E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -279,12 +281,12 @@ DF_MultScore_SS_NonPara_AllTS %>%
 ### For VS ###
 
 DF_MultScore_SS_Gauss_AllTS %>%
-  ungroup() %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = SS_E.VS, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = SS_E.VS, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -297,13 +299,13 @@ DF_MultScore_SS_Gauss_AllTS %>%
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_AllTS_SS.VS
 
 DF_MultScore_SS_NonPara_AllTS %>%
-  ungroup() %>% 
-  select(-E.ES) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.ES) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.VS/10^3, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.VS/10^3, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -324,13 +326,13 @@ g_legend<-function(a.gplot){
 mylegend <- g_legend(Plot_Gauss_AllTS_SS.ES)
 
 grid.arrange( arrangeGrob(Plot_Gauss_AllTS_SS.ES + theme(legend.position="none"),
-                          Plot_Gauss_AllTS_SS.VS + theme(legend.position="none"), 
-                          ncol = 2), 
+                          Plot_Gauss_AllTS_SS.VS + theme(legend.position="none"),
+                          ncol = 2),
               ncol=1, heights=c(10, 0.5), top = "Parametric Approach") -> Plot_Gauss_AllTS
 
 grid.arrange( arrangeGrob(Plot_NonPara_AllTS_ES + theme(legend.position="none"),
-                          Plot_NonPara_AllTS_VS + theme(legend.position="none"), 
-                          ncol = 1), 
+                          Plot_NonPara_AllTS_VS + theme(legend.position="none"),
+                          ncol = 1),
               ncol=1, heights=c(10, 0.5), top = "Non Parametric Approach") -> Plot_NonPara_AllTS
 
 grid.arrange(arrangeGrob(Plot_Gauss_AllTS, Plot_NonPara_AllTS, ncol = 2),
@@ -338,52 +340,52 @@ grid.arrange(arrangeGrob(Plot_Gauss_AllTS, Plot_NonPara_AllTS, ncol = 2),
 
 
 # ###--Skill-scores with reference to Base-Gaussian - ARIMA--###
-# 
-# 
-# DF_MultScores_Gauss_AllTS %>% 
+#
+#
+# DF_MultScores_Gauss_AllTS %>%
 #   filter(`R.method`=="Base") %>%
 #   slice() %>%
 #   ungroup() %>%
-#   dplyr::select(`E.ES`) %>% as_vector() -> Base_E.ES_Gauss_AllTS_ARIMA 
-# 
-# DF_MultScores_Gauss_AllTS %>% 
+#   dplyr::select(`E.ES`) %>% as_vector() -> Base_E.ES_Gauss_AllTS_ARIMA
+#
+# DF_MultScores_Gauss_AllTS %>%
 #   filter(`R.method`=="Base") %>%
 #   slice() %>%
 #   ungroup() %>%
-#   dplyr::select(`E.VS`) %>% 
-#   as_vector() -> Base_E.VS_Gauss_AllTS_ARIMA 
-# 
-# 
-# DF_MultScores_Gauss_AllTS %>% 
+#   dplyr::select(`E.VS`) %>%
+#   as_vector() -> Base_E.VS_Gauss_AllTS_ARIMA
+#
+#
+# DF_MultScores_Gauss_AllTS %>%
 #   mutate(SS_E.ES = round((1-(`E.ES`/Base_E.ES_Gauss_AllTS_ARIMA))*100, digits = 4),
 #          SS_E.VS = round((1-(`E.VS`/Base_E.VS_Gauss_AllTS_ARIMA))*100, digits = 4)) -> DF_MultScore_SS_Gauss_AllTS
-# 
-# DF_MultScores_NonPara_AllTS %>% 
+#
+# DF_MultScores_NonPara_AllTS %>%
 #   mutate(SS_E.ES = round((1-(`E.ES`/Base_E.ES_Gauss_AllTS_ARIMA))*100, digits = 4),
 #          SS_E.VS = round((1-(`E.VS`/Base_E.VS_Gauss_AllTS_ARIMA))*100, digits = 4)) -> DF_MultScore_SS_NonPara_AllTS
-# 
-# 
-# 
-# DF_MultScore_SS_Gauss_AllTS %>%  
-#   ungroup() %>% 
+#
+#
+#
+# DF_MultScore_SS_Gauss_AllTS %>%
+#   ungroup() %>%
 #   dplyr::select(-`E.ES`, -`E.VS`, -`SS_E.VS`, -`F.method`) %>%
-#   spread(key = `Forecast.Horizon`, value = `SS_E.ES`) %>% 
-#   ungroup() %>% 
+#   spread(key = `Forecast.Horizon`, value = `SS_E.ES`) %>%
+#   ungroup() %>%
 #   mutate(`R.method` = recode(`R.method`, `MinT.Shr` = "MinT(Shrink)"))-> SS_E.ES_Gauss_AllTS
-# 
-# DF_MultScore_SS_NonPara_AllTS %>%  
-#   ungroup() %>% 
+#
+# DF_MultScore_SS_NonPara_AllTS %>%
+#   ungroup() %>%
 #   dplyr::select(-`E.ES`, -`E.VS`, -`SS_E.VS`, -`F.method`) %>%
-#   spread(key = `Forecast.Horizon`, value = `SS_E.ES`) %>% 
-#   ungroup() %>% 
+#   spread(key = `Forecast.Horizon`, value = `SS_E.ES`) %>%
+#   ungroup() %>%
 #   mutate(`R.method` = recode(`R.method`, `MinT.Shr` = "MinT(Shrink)"))-> SS_E.ES_NonPara_AllTS
 
-# DF_MultScore_SS_Gauss_AllTS_ARIMA %>% 
-#   ungroup() %>% 
+# DF_MultScore_SS_Gauss_AllTS_ARIMA %>%
+#   ungroup() %>%
 #   dplyr::select(-`E.ES`, -`E.VS`, -`SS_E.ES`, -`F.method`) %>%
-#   filter(`R.method` != "Base") %>% 
-#   spread(key = `Forecast.Horizon`, value = `SS_E.VS`) %>% 
-#   ungroup() %>% 
+#   filter(`R.method` != "Base") %>%
+#   spread(key = `Forecast.Horizon`, value = `SS_E.VS`) %>%
+#   ungroup() %>%
 #   mutate(`R.method` = recode(`R.method`, `MinT.Shr` = "MinT(Shrink)")) -> SS_E.VS_Gauss_AllTS_ARIMA
 
 # View(SS_E.ES_Gauss_AllTS_ARIMA)
@@ -392,32 +394,32 @@ grid.arrange(arrangeGrob(Plot_Gauss_AllTS, Plot_NonPara_AllTS, ncol = 2),
 
 ### Plot type - 3
 
-SS_E.ES_Gauss_AllTS %>% 
-  filter(R.method %in% c("Base", "Bottom up", "MinT(Shrink)")) %>% 
+SS_E.ES_Gauss_AllTS %>%
+  filter(R.method %in% c("Base", "Bottom up", "MinT(Shrink)")) %>%
   gather(-R.method, key = h, value = Gauss_ES.SS) -> SS_E.ES_Gauss_AllTS_1
 
-SS_E.ES_NonPara_AllTS %>% 
-  filter(R.method %in% c("Base", "Bottom up", "MinT(Shrink)")) %>% 
+SS_E.ES_NonPara_AllTS %>%
+  filter(R.method %in% c("Base", "Bottom up", "MinT(Shrink)")) %>%
   gather(-R.method, key = h, value = NonPara_ES.SS) -> SS_E.ES_NonPara_AllTS_1
 
 SS_E.ES_AllTS <- left_join(SS_E.ES_Gauss_AllTS_1, SS_E.ES_NonPara_AllTS_1)
 
-SS_E.ES_AllTS %>% 
-  rename("Parametric approach" = Gauss_ES.SS, 
-         "Non parametric approach" = NonPara_ES.SS) %>% 
-  gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>% 
-  filter(Approach != "Parametric approach" | R.method != "Base") %>% 
+SS_E.ES_AllTS %>%
+  rename("Parametric approach" = Gauss_ES.SS,
+         "Non parametric approach" = NonPara_ES.SS) %>%
+  gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>%
+  filter(Approach != "Parametric approach" | R.method != "Base") %>%
   mutate(Approach = factor(Approach, levels = c("Parametric approach", "Non parametric approach")),
          R.method = recode(R.method, MinT.Shr = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("Base", "Bottom up", "MinT(Shrink)"))) %>%
-  rename(`Method`=`R.method`) %>% 
+  rename(`Method`=`R.method`) %>%
   ggplot(aes(x = h, y = Score, group = interaction(Approach, Method))) +
   geom_point(size = 2, aes(color = Method)) +
   geom_line(aes(linetype = Approach)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
   ylab("Skill score (ES) %")
-  
+
 
 ###--Skill scores for different levels--###
 
@@ -427,39 +429,39 @@ SS_E.ES_AllTS %>%
 
 DF_UniV_Gauss_ARIMA <- read.csv("../Gaussian_approach/DF_UniV_ARIMA.csv")[,-1]
 
-DF_UniV_Gauss_ARIMA %>% 
-  dplyr::select(Series, `R.method`, `Forecast.Horizon`, CRPS) %>% 
-  group_by(Series, `R.method`, `Forecast.Horizon`) %>% 
+DF_UniV_Gauss_ARIMA %>%
+  dplyr::select(Series, `R.method`, `Forecast.Horizon`, CRPS) %>%
+  group_by(Series, `R.method`, `Forecast.Horizon`) %>%
   summarise(E.CRPS = mean(CRPS)) -> DF_UnivScores_Gauss_AllTS
 
-DF_UnivScores_Gauss_AllTS %>% 
-  ungroup() %>% 
-  filter(Series == "Total") %>% 
+DF_UnivScores_Gauss_AllTS %>%
+  ungroup() %>%
+  filter(Series == "Total") %>%
   mutate(R.method = recode(R.method, "MinT Shrink" = "MinT(Shrink)")) -> DF_UnivScores_Gauss_Top.level
 
 DF_UniV_NonPara <- read.csv("../NonPara_approach/DF_UniV_ARIMA.csv")[,-1]
 
-DF_UniV_NonPara %>% 
-  dplyr::select(Series, `R.method`, `Forecast.Horizon`, CRPS) %>% 
-  group_by(Series, `R.method`, `Forecast.Horizon`) %>% 
+DF_UniV_NonPara %>%
+  dplyr::select(Series, `R.method`, `Forecast.Horizon`, CRPS) %>%
+  group_by(Series, `R.method`, `Forecast.Horizon`) %>%
   summarise(E.CRPS = mean(CRPS)) -> DF_UnivScores_NonPara_AllTS
 
-DF_UnivScores_NonPara_AllTS %>% 
-  ungroup() %>% 
-  filter(Series == "Total") %>% 
+DF_UnivScores_NonPara_AllTS %>%
+  ungroup() %>%
+  filter(Series == "Total") %>%
   mutate(R.method = recode(R.method, "MinT Shrink" = "MinT(Shrink)")) -> DF_UnivScores_NonPara_Top.level
 
 
 #### Raw Score plots ###
 
-# DF_UniVS_Top.level <- left_join(DF_UnivScores_Gauss_Top.level, 
+# DF_UniVS_Top.level <- left_join(DF_UnivScores_Gauss_Top.level,
 #                                 DF_UnivScores_NonPara_Top.level)
 
-DF_UnivScores_Gauss_Top.level %>% 
+DF_UnivScores_Gauss_Top.level %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.CRPS, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.CRPS, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -472,11 +474,11 @@ DF_UnivScores_Gauss_Top.level %>%
   theme(plot.title = element_text(size = 10, face = "italic")) +
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_Top.level_CRPS
 
-DF_UnivScores_NonPara_Top.level %>% 
+DF_UnivScores_NonPara_Top.level %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.CRPS, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.CRPS, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -491,41 +493,41 @@ DF_UnivScores_NonPara_Top.level %>%
 
 #### Skill Score plots ###
 
-DF_UnivScores_Gauss_AllTS %>% 
+DF_UnivScores_Gauss_AllTS %>%
   filter(Series=="Total", `R.method`=="Base") %>%
   slice() %>%
   ungroup() %>%
-  dplyr::select(`E.CRPS`) %>% 
-  as_vector() -> Base_E.CRPS_Total_Gauss_ARIMA 
+  dplyr::select(`E.CRPS`) %>%
+  as_vector() -> Base_E.CRPS_Total_Gauss_ARIMA
 
 
-DF_UnivScores_Gauss_AllTS %>% 
-  filter(Series == "Total") %>% 
-  mutate(SS_E.CRPS = round((1-(`E.CRPS`/Base_E.CRPS_Total_Gauss_ARIMA))*100, 
+DF_UnivScores_Gauss_AllTS %>%
+  filter(Series == "Total") %>%
+  mutate(SS_E.CRPS = round((1-(`E.CRPS`/Base_E.CRPS_Total_Gauss_ARIMA))*100,
                            digits = 4)) -> DF_UnivScore_SS_Gauss_Top.series
 
-DF_UnivScores_NonPara_AllTS %>% 
-  filter(Series == "Total") %>% 
-  mutate(SS_E.CRPS = round((1-(`E.CRPS`/Base_E.CRPS_Total_Gauss_ARIMA))*100, 
+DF_UnivScores_NonPara_AllTS %>%
+  filter(Series == "Total") %>%
+  mutate(SS_E.CRPS = round((1-(`E.CRPS`/Base_E.CRPS_Total_Gauss_ARIMA))*100,
                            digits = 4)) -> DF_UnivScore_SS_NonPara_Top.series
 
-DF_UnivScore_SS_Gauss_Top.series %>% 
-  ungroup() %>% 
-  select(-Series, -E.CRPS) %>% 
+DF_UnivScore_SS_Gauss_Top.series %>%
+  ungroup() %>%
+  select(-Series, -E.CRPS) %>%
   mutate(R.method = recode(R.method, "MinT Shrink" = "MinT(Shrink)")) -> DF_UnivScore_SS_Gauss_Top.series
 
-DF_UnivScore_SS_NonPara_Top.series %>% 
-  ungroup() %>% 
+DF_UnivScore_SS_NonPara_Top.series %>%
+  ungroup() %>%
   select(-Series, -E.CRPS) %>%
   mutate(R.method = recode(R.method, "MinT Shrink" = "MinT(Shrink)")) -> DF_UnivScore_SS_NonPara_Top.series
 
 
-DF_UnivScore_SS_Gauss_Top.series %>% 
-  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>% 
+DF_UnivScore_SS_Gauss_Top.series %>%
+  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = SS_E.CRPS, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = SS_E.CRPS, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   geom_hline(yintercept = 0, color = "grey") +
   theme(legend.position = "bottom") +
@@ -539,11 +541,11 @@ DF_UnivScore_SS_Gauss_Top.series %>%
   theme(plot.title = element_text(size = 10, face = "italic")) +
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_Top.level_CRPS.SS
 
-DF_UnivScore_SS_NonPara_Top.series %>% 
+DF_UnivScore_SS_NonPara_Top.series %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = SS_E.CRPS, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = SS_E.CRPS, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   geom_hline(yintercept = 0, color = "grey") +
   theme(legend.position = "bottom") +
@@ -558,19 +560,19 @@ DF_UnivScore_SS_NonPara_Top.series %>%
   theme(axis.title.y = element_text(size = 10)) -> Plot_NonPara_Top.level_CRPS.SS
 
 
-# SS_UnivS_Top.level <- left_join(DF_UnivScore_SS_Gauss_Top.series, 
+# SS_UnivS_Top.level <- left_join(DF_UnivScore_SS_Gauss_Top.series,
 #                                 DF_UnivScore_SS_NonPara_Top.series)
-# 
-# 
-# 
-# SS_UnivS_Top.level %>% 
-#   rename("Parametric approach" = Gauss_SS_E.CRPS, 
-#          "Non parametric approach" = NonPara_SS_E.CRPS) %>% 
-#   gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>% 
-#   filter(Approach != "Parametric approach" | R.method != "Base") %>% 
+#
+#
+#
+# SS_UnivS_Top.level %>%
+#   rename("Parametric approach" = Gauss_SS_E.CRPS,
+#          "Non parametric approach" = NonPara_SS_E.CRPS) %>%
+#   gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>%
+#   filter(Approach != "Parametric approach" | R.method != "Base") %>%
 #   mutate(Approach = factor(Approach, levels = c("Parametric approach", "Non parametric approach")),
 #          R.method = factor(`R.method`, levels = c("Base", "Bottom up", "MinT(Shrink)"))) %>%
-#   rename(`Method`=`R.method`) %>% 
+#   rename(`Method`=`R.method`) %>%
 #   ggplot(aes(x = Forecast.Horizon, y = Score, group = interaction(Approach, Method))) +
 #   geom_point(size = 2, aes(color = Method)) +
 #   geom_line(aes(linetype = Approach)) +
@@ -592,41 +594,41 @@ DF_UnivScore_SS_NonPara_Top.series %>%
 DF_MultiV_Gauss_States <- read.csv("../Gaussian_approach/DF_MultiV_States.csv")
 
 
-DF_MultiV_Gauss_States %>% 
+DF_MultiV_Gauss_States %>%
   dplyr::select(-"Replication") -> DF_MultScores_Gauss_States
 
-DF_MultScores_Gauss_States %>% 
-  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
-  summarise(E.ES = mean(`Energy.score`), 
-            E.VS = mean(`Variogram.score`)) %>% 
+DF_MultScores_Gauss_States %>%
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>%
+  summarise(E.ES = mean(`Energy.score`),
+            E.VS = mean(`Variogram.score`)) %>%
   filter(F.method == "ARIMA") -> DF_MultScores_Gauss_States
 
 
 DF_MultiV_NonPara_States <- read.csv("../NonPara_approach/DF_MultiV_States.csv")
 
 
-DF_MultiV_NonPara_States %>% 
+DF_MultiV_NonPara_States %>%
   dplyr::select(-"Replication") -> DF_MultScores_NonPara_States
 
-DF_MultScores_NonPara_States %>% 
-  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
-  summarise(E.ES = mean(`Energy.score`), 
-            E.VS = mean(`Variogram.score`)) %>% 
+DF_MultScores_NonPara_States %>%
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>%
+  summarise(E.ES = mean(`Energy.score`),
+            E.VS = mean(`Variogram.score`)) %>%
   filter(F.method == "ARIMA") -> DF_MultScores_NonPara_States
 
 #### Raw Score plots ###
 
-# DF_UniVS_Top.level <- left_join(DF_UnivScores_Gauss_Top.level, 
+# DF_UniVS_Top.level <- left_join(DF_UnivScores_Gauss_Top.level,
 #                                 DF_UnivScores_NonPara_Top.level)
 
 DF_MultScores_Gauss_States %>%
-  ungroup() %>% 
-  select(-E.VS) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.VS) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -640,13 +642,13 @@ DF_MultScores_Gauss_States %>%
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_States_ES
 
 DF_MultScores_Gauss_States %>%
-  ungroup() %>% 
-  select(-E.ES) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.ES) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.VS, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.VS, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -660,13 +662,13 @@ DF_MultScores_Gauss_States %>%
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_States_VS
 
 DF_MultScores_NonPara_States %>%
-  ungroup() %>% 
-  select(-E.VS) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.VS) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -684,49 +686,49 @@ DF_MultScores_NonPara_States %>%
 #### Skill Score plots ###
 
 
-DF_MultScores_Gauss_States %>% 
+DF_MultScores_Gauss_States %>%
   filter(`R.method`=="Base") %>%
   slice() %>%
   ungroup() %>%
   dplyr::select(`E.ES`) %>% as_vector() -> Base_E.ES_Gauss_States
 
-DF_MultScores_Gauss_States %>% 
+DF_MultScores_Gauss_States %>%
   filter(`R.method`=="Base") %>%
   slice() %>%
   ungroup() %>%
-  dplyr::select(`E.VS`) %>% 
-  as_vector() -> Base_E.VS_Gauss_States 
+  dplyr::select(`E.VS`) %>%
+  as_vector() -> Base_E.VS_Gauss_States
 
 
-DF_MultScores_Gauss_States %>% 
+DF_MultScores_Gauss_States %>%
   mutate(SS_E.ES = round((1-(`E.ES`/Base_E.ES_Gauss_States))*100, digits = 4),
          SS_E.VS = round((1-(`E.VS`/Base_E.VS_Gauss_States))*100, digits = 4)) -> DF_MultScore_SS_Gauss_States
 
-DF_MultScores_NonPara_States %>% 
+DF_MultScores_NonPara_States %>%
   mutate(SS_E.ES = round((1-(`E.ES`/Base_E.ES_Gauss_States))*100, digits = 4),
          SS_E.VS = round((1-(`E.VS`/Base_E.VS_Gauss_States))*100, digits = 4)) -> DF_MultScore_SS_NonPara_States
 
 
-DF_MultScore_SS_Gauss_States %>% 
-  ungroup() %>% 
-  select(R.method, Forecast.Horizon, SS_E.ES, SS_E.VS) %>% 
+DF_MultScore_SS_Gauss_States %>%
+  ungroup() %>%
+  select(R.method, Forecast.Horizon, SS_E.ES, SS_E.VS) %>%
   rename(Gauss_SS_E.ES = SS_E.ES,
-         Gauss_SS_E.VS = SS_E.VS) %>% 
+         Gauss_SS_E.VS = SS_E.VS) %>%
   mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)")) -> DF_MultScore_SS_subset_Gauss_States
 
-DF_MultScore_SS_NonPara_States %>% 
-  ungroup() %>% 
-  select(R.method, Forecast.Horizon, SS_E.ES) %>% 
-  rename(NonPara_SS_E.ES = SS_E.ES) %>% 
+DF_MultScore_SS_NonPara_States %>%
+  ungroup() %>%
+  select(R.method, Forecast.Horizon, SS_E.ES) %>%
+  rename(NonPara_SS_E.ES = SS_E.ES) %>%
   mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)")) -> DF_MultScore_SS_subset_NonPara_States
 
 
-DF_MultScore_SS_subset_Gauss_States %>% 
-  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>% 
+DF_MultScore_SS_subset_Gauss_States %>%
+  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = Gauss_SS_E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = Gauss_SS_E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   geom_hline(yintercept = 0, color = "grey") +
   theme(legend.position = "bottom") +
@@ -740,12 +742,12 @@ DF_MultScore_SS_subset_Gauss_States %>%
   theme(plot.title = element_text(size = 10, face = "italic")) +
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_States_ES.SS
 
-DF_MultScore_SS_subset_Gauss_States %>% 
-  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>% 
+DF_MultScore_SS_subset_Gauss_States %>%
+  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = Gauss_SS_E.VS, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = Gauss_SS_E.VS, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   geom_hline(yintercept = 0, color = "grey") +
   theme(legend.position = "bottom") +
@@ -760,12 +762,12 @@ DF_MultScore_SS_subset_Gauss_States %>%
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_States_VS.SS
 
 
-DF_MultScore_SS_subset_NonPara_States %>% 
-  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base")) %>% 
+DF_MultScore_SS_subset_NonPara_States %>%
+  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base")) %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = NonPara_SS_E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = NonPara_SS_E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   geom_hline(yintercept = 0, color = "grey") +
   theme(legend.position = "bottom") +
@@ -782,17 +784,17 @@ DF_MultScore_SS_subset_NonPara_States %>%
 
 
 
-# SS_MultiV_States <- left_join(DF_MultScore_SS_subset_Gauss_States, 
+# SS_MultiV_States <- left_join(DF_MultScore_SS_subset_Gauss_States,
 #                               DF_MultScore_SS_subset_NonPara_States)
 
-# SS_MultiV_States %>% 
-#   rename("Parametric approach" = Gauss_SS_E.ES, 
-#          "Non parametric approach" = NonPara_SS_E.ES) %>% 
-#   gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>% 
-#   filter(Approach != "Parametric approach" | R.method != "Base") %>% 
+# SS_MultiV_States %>%
+#   rename("Parametric approach" = Gauss_SS_E.ES,
+#          "Non parametric approach" = NonPara_SS_E.ES) %>%
+#   gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>%
+#   filter(Approach != "Parametric approach" | R.method != "Base") %>%
 #   mutate(Approach = factor(Approach, levels = c("Parametric approach", "Non parametric approach")),
 #          R.method = factor(`R.method`, levels = c("Base", "Bottom up", "MinT(Shrink)"))) %>%
-#   rename(`Method`=`R.method`) %>% 
+#   rename(`Method`=`R.method`) %>%
 #   ggplot(aes(x = Forecast.Horizon, y = Score, group = interaction(Approach, Method))) +
 #   geom_point(size = 2, aes(color = Method)) +
 #   geom_line(aes(linetype = Approach)) +
@@ -813,41 +815,41 @@ DF_MultScore_SS_subset_NonPara_States %>%
 DF_MultiV_Gauss_Zones <- read.csv("../Gaussian_approach/DF_MultiV_Zones.csv")
 
 
-DF_MultiV_Gauss_Zones %>% 
+DF_MultiV_Gauss_Zones %>%
   dplyr::select(-"Replication") -> DF_MultScores_Gauss_Zones
 
-DF_MultScores_Gauss_Zones %>% 
-  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
-  summarise(E.ES = mean(`Energy.score`), 
-            E.VS = mean(`Variogram.score`)) %>% 
+DF_MultScores_Gauss_Zones %>%
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>%
+  summarise(E.ES = mean(`Energy.score`),
+            E.VS = mean(`Variogram.score`)) %>%
   filter(F.method == "ARIMA") -> DF_MultScores_Gauss_Zones
 
 
 DF_MultiV_NonPara_Zones <- read.csv("../NonPara_approach/DF_MultiV_Zones.csv")
 
 
-DF_MultiV_NonPara_Zones %>% 
+DF_MultiV_NonPara_Zones %>%
   dplyr::select(-"Replication") -> DF_MultScores_NonPara_Zones
 
-DF_MultScores_NonPara_Zones %>% 
-  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
-  summarise(E.ES = mean(`Energy.score`), 
-            E.VS = mean(`Variogram.score`)) %>% 
+DF_MultScores_NonPara_Zones %>%
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>%
+  summarise(E.ES = mean(`Energy.score`),
+            E.VS = mean(`Variogram.score`)) %>%
   filter(F.method == "ARIMA") -> DF_MultScores_NonPara_Zones
 
 #### Raw Score plots ###
 
-# DF_UniVS_Top.level <- left_join(DF_UnivScores_Gauss_Top.level, 
+# DF_UniVS_Top.level <- left_join(DF_UnivScores_Gauss_Top.level,
 #                                 DF_UnivScores_NonPara_Top.level)
 
 DF_MultScores_Gauss_Zones %>%
-  ungroup() %>% 
-  select(-E.VS) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.VS) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -861,13 +863,13 @@ DF_MultScores_Gauss_Zones %>%
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_Zones_ES
 
 DF_MultScores_Gauss_Zones %>%
-  ungroup() %>% 
-  select(-E.ES) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.ES) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.VS, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.VS, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -881,13 +883,13 @@ DF_MultScores_Gauss_Zones %>%
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_Zones_VS
 
 DF_MultScores_NonPara_Zones %>%
-  ungroup() %>% 
-  select(-E.VS) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.VS) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -903,49 +905,49 @@ DF_MultScores_NonPara_Zones %>%
 #### Skill Score plots ###
 
 
-DF_MultScores_Gauss_Zones %>% 
+DF_MultScores_Gauss_Zones %>%
   filter(`R.method`=="Base") %>%
   slice() %>%
   ungroup() %>%
   dplyr::select(`E.ES`) %>% as_vector() -> Base_E.ES_Gauss_Zones
 
-DF_MultScores_Gauss_Zones %>% 
+DF_MultScores_Gauss_Zones %>%
   filter(`R.method`=="Base") %>%
   slice() %>%
   ungroup() %>%
-  dplyr::select(`E.VS`) %>% 
-  as_vector() -> Base_E.VS_Gauss_Zones 
+  dplyr::select(`E.VS`) %>%
+  as_vector() -> Base_E.VS_Gauss_Zones
 
 
-DF_MultScores_Gauss_Zones %>% 
+DF_MultScores_Gauss_Zones %>%
   mutate(SS_E.ES = round((1-(`E.ES`/Base_E.ES_Gauss_Zones))*100, digits = 4),
          SS_E.VS = round((1-(`E.VS`/Base_E.VS_Gauss_Zones))*100, digits = 4)) -> DF_MultScore_SS_Gauss_Zones
 
-DF_MultScores_NonPara_Zones %>% 
+DF_MultScores_NonPara_Zones %>%
   mutate(SS_E.ES = round((1-(`E.ES`/Base_E.ES_Gauss_Zones))*100, digits = 4),
          SS_E.VS = round((1-(`E.VS`/Base_E.VS_Gauss_Zones))*100, digits = 4)) -> DF_MultScore_SS_NonPara_Zones
 
 
-DF_MultScore_SS_Gauss_Zones %>% 
-  ungroup() %>% 
-  select(R.method, Forecast.Horizon, SS_E.ES, SS_E.VS) %>% 
+DF_MultScore_SS_Gauss_Zones %>%
+  ungroup() %>%
+  select(R.method, Forecast.Horizon, SS_E.ES, SS_E.VS) %>%
   rename(Gauss_SS_E.ES = SS_E.ES,
-         Gauss_SS_E.VS = SS_E.VS) %>% 
+         Gauss_SS_E.VS = SS_E.VS) %>%
   mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)")) -> DF_MultScore_SS_subset_Gauss_Zones
 
-DF_MultScore_SS_NonPara_Zones %>% 
-  ungroup() %>% 
-  select(R.method, Forecast.Horizon, SS_E.ES) %>% 
-  rename(NonPara_SS_E.ES = SS_E.ES) %>% 
+DF_MultScore_SS_NonPara_Zones %>%
+  ungroup() %>%
+  select(R.method, Forecast.Horizon, SS_E.ES) %>%
+  rename(NonPara_SS_E.ES = SS_E.ES) %>%
   mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)")) -> DF_MultScore_SS_subset_NonPara_Zones
 
 
-DF_MultScore_SS_subset_Gauss_Zones %>% 
-  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>% 
+DF_MultScore_SS_subset_Gauss_Zones %>%
+  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = Gauss_SS_E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = Gauss_SS_E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   geom_hline(yintercept = 0, color = "grey") +
   theme(legend.position = "bottom") +
@@ -959,12 +961,12 @@ DF_MultScore_SS_subset_Gauss_Zones %>%
   theme(plot.title = element_text(size = 10, face = "italic")) +
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_Zones_ES.SS
 
-DF_MultScore_SS_subset_Gauss_Zones %>% 
-  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>% 
+DF_MultScore_SS_subset_Gauss_Zones %>%
+  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = Gauss_SS_E.VS, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = Gauss_SS_E.VS, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   geom_hline(yintercept = 0, color = "grey") +
   theme(legend.position = "bottom") +
@@ -978,12 +980,12 @@ DF_MultScore_SS_subset_Gauss_Zones %>%
   theme(plot.title = element_text(size = 10, face = "italic")) +
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_Zones_VS.SS
 
-DF_MultScore_SS_subset_NonPara_Zones %>% 
-  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base")) %>% 
+DF_MultScore_SS_subset_NonPara_Zones %>%
+  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base")) %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = NonPara_SS_E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = NonPara_SS_E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   geom_hline(yintercept = 0, color = "grey") +
   theme(legend.position = "bottom") +
@@ -1000,17 +1002,17 @@ DF_MultScore_SS_subset_NonPara_Zones %>%
 
 
 
-# SS_MultiV_Zones <- left_join(DF_MultScore_SS_subset_Gauss_Zones, 
+# SS_MultiV_Zones <- left_join(DF_MultScore_SS_subset_Gauss_Zones,
 #                               DF_MultScore_SS_subset_NonPara_Zones)
 
-# SS_MultiV_Zones %>% 
-#   rename("Parametric approach" = Gauss_SS_E.ES, 
-#          "Non parametric approach" = NonPara_SS_E.ES) %>% 
-#   gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>% 
-#   filter(Approach != "Parametric approach" | R.method != "Base") %>% 
+# SS_MultiV_Zones %>%
+#   rename("Parametric approach" = Gauss_SS_E.ES,
+#          "Non parametric approach" = NonPara_SS_E.ES) %>%
+#   gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>%
+#   filter(Approach != "Parametric approach" | R.method != "Base") %>%
 #   mutate(Approach = factor(Approach, levels = c("Parametric approach", "Non parametric approach")),
 #          R.method = factor(`R.method`, levels = c("Base", "Bottom up", "MinT(Shrink)"))) %>%
-#   rename(`Method`=`R.method`) %>% 
+#   rename(`Method`=`R.method`) %>%
 #   ggplot(aes(x = Forecast.Horizon, y = Score, group = interaction(Approach, Method))) +
 #   geom_point(size = 2, aes(color = Method)) +
 #   geom_line(aes(linetype = Approach)) +
@@ -1032,41 +1034,41 @@ DF_MultScore_SS_subset_NonPara_Zones %>%
 DF_MultiV_Gauss_Regions <- read.csv("../Gaussian_approach/DF_MultiV_Regions.csv")
 
 
-DF_MultiV_Gauss_Regions %>% 
+DF_MultiV_Gauss_Regions %>%
   dplyr::select(-"Replication") -> DF_MultScores_Gauss_Regions
 
-DF_MultScores_Gauss_Regions %>% 
-  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
-  summarise(E.ES = mean(`Energy.score`), 
-            E.VS = mean(`Variogram.score`)) %>% 
+DF_MultScores_Gauss_Regions %>%
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>%
+  summarise(E.ES = mean(`Energy.score`),
+            E.VS = mean(`Variogram.score`)) %>%
   filter(F.method == "ARIMA") -> DF_MultScores_Gauss_Regions
 
 
 DF_MultiV_NonPara_Regions <- read.csv("../NonPara_approach/DF_MultiV_Regions.csv")
 
 
-DF_MultiV_NonPara_Regions %>% 
+DF_MultiV_NonPara_Regions %>%
   dplyr::select(-"Replication") -> DF_MultScores_NonPara_Regions
 
-DF_MultScores_NonPara_Regions %>% 
-  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
-  summarise(E.ES = mean(`Energy.score`), 
-            E.VS = mean(`Variogram.score`)) %>% 
+DF_MultScores_NonPara_Regions %>%
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>%
+  summarise(E.ES = mean(`Energy.score`),
+            E.VS = mean(`Variogram.score`)) %>%
   filter(F.method == "ARIMA") -> DF_MultScores_NonPara_Regions
 
 #### Raw Score plots ###
 
-# DF_UniVS_Top.level <- left_join(DF_UnivScores_Gauss_Top.level, 
+# DF_UniVS_Top.level <- left_join(DF_UnivScores_Gauss_Top.level,
 #                                 DF_UnivScores_NonPara_Top.level)
 
 DF_MultScores_Gauss_Regions %>%
-  ungroup() %>% 
-  select(-E.VS) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.VS) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -1080,13 +1082,13 @@ DF_MultScores_Gauss_Regions %>%
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_Regions_ES
 
 DF_MultScores_Gauss_Regions %>%
-  ungroup() %>% 
-  select(-E.ES) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.ES) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.VS, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.VS, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -1100,13 +1102,13 @@ DF_MultScores_Gauss_Regions %>%
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_Regions_VS
 
 DF_MultScores_NonPara_Regions %>%
-  ungroup() %>% 
-  select(-E.VS) %>% 
-  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"), 
+  ungroup() %>%
+  select(-E.VS) %>%
+  mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)"),
          R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   theme(legend.position = "bottom") +
   ggthemes::scale_color_colorblind() +
@@ -1122,49 +1124,49 @@ DF_MultScores_NonPara_Regions %>%
 #### Skill Score plots ###
 
 
-DF_MultScores_Gauss_Regions %>% 
+DF_MultScores_Gauss_Regions %>%
   filter(`R.method`=="Base") %>%
   slice() %>%
   ungroup() %>%
   dplyr::select(`E.ES`) %>% as_vector() -> Base_E.ES_Gauss_Regions
 
-DF_MultScores_Gauss_Regions %>% 
+DF_MultScores_Gauss_Regions %>%
   filter(`R.method`=="Base") %>%
   slice() %>%
   ungroup() %>%
-  dplyr::select(`E.VS`) %>% 
-  as_vector() -> Base_E.VS_Gauss_Regions 
+  dplyr::select(`E.VS`) %>%
+  as_vector() -> Base_E.VS_Gauss_Regions
 
 
-DF_MultScores_Gauss_Regions %>% 
+DF_MultScores_Gauss_Regions %>%
   mutate(SS_E.ES = round((1-(`E.ES`/Base_E.ES_Gauss_Regions))*100, digits = 4),
          SS_E.VS = round((1-(`E.VS`/Base_E.VS_Gauss_Regions))*100, digits = 4)) -> DF_MultScore_SS_Gauss_Regions
 
-DF_MultScores_NonPara_Regions %>% 
+DF_MultScores_NonPara_Regions %>%
   mutate(SS_E.ES = round((1-(`E.ES`/Base_E.ES_Gauss_Regions))*100, digits = 4),
          SS_E.VS = round((1-(`E.VS`/Base_E.VS_Gauss_Regions))*100, digits = 4)) -> DF_MultScore_SS_NonPara_Regions
 
 
-DF_MultScore_SS_Gauss_Regions %>% 
-  ungroup() %>% 
-  select(R.method, Forecast.Horizon, SS_E.ES, SS_E.VS) %>% 
-  rename(Gauss_SS_E.ES = SS_E.ES, 
-         Gauss_SS_E.VS = SS_E.VS) %>% 
+DF_MultScore_SS_Gauss_Regions %>%
+  ungroup() %>%
+  select(R.method, Forecast.Horizon, SS_E.ES, SS_E.VS) %>%
+  rename(Gauss_SS_E.ES = SS_E.ES,
+         Gauss_SS_E.VS = SS_E.VS) %>%
   mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)")) -> DF_MultScore_SS_subset_Gauss_Regions
 
-DF_MultScore_SS_NonPara_Regions %>% 
-  ungroup() %>% 
-  select(R.method, Forecast.Horizon, SS_E.ES) %>% 
-  rename(NonPara_SS_E.ES = SS_E.ES) %>% 
+DF_MultScore_SS_NonPara_Regions %>%
+  ungroup() %>%
+  select(R.method, Forecast.Horizon, SS_E.ES) %>%
+  rename(NonPara_SS_E.ES = SS_E.ES) %>%
   mutate(R.method = recode(R.method, "MinT.Shr" = "MinT(Shrink)")) -> DF_MultScore_SS_subset_NonPara_Regions
 
 
-DF_MultScore_SS_subset_Gauss_Regions %>% 
-  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>% 
+DF_MultScore_SS_subset_Gauss_Regions %>%
+  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = Gauss_SS_E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = Gauss_SS_E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   geom_hline(yintercept = 0, color = "grey") +
   theme(legend.position = "bottom") +
@@ -1178,12 +1180,12 @@ DF_MultScore_SS_subset_Gauss_Regions %>%
   theme(plot.title = element_text(size = 10, face = "italic")) +
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_Regions_ES.SS
 
-DF_MultScore_SS_subset_Gauss_Regions %>% 
-  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>% 
+DF_MultScore_SS_subset_Gauss_Regions %>%
+  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up")) %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = Gauss_SS_E.VS, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = Gauss_SS_E.VS, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   geom_hline(yintercept = 0, color = "grey") +
   theme(legend.position = "bottom") +
@@ -1197,12 +1199,12 @@ DF_MultScore_SS_subset_Gauss_Regions %>%
   theme(plot.title = element_text(size = 10, face = "italic")) +
   theme(axis.title.y = element_text(size = 10)) -> Plot_Gauss_Regions_VS.SS
 
-DF_MultScore_SS_subset_NonPara_Regions %>% 
-  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base")) %>% 
+DF_MultScore_SS_subset_NonPara_Regions %>%
+  filter(R.method %in% c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base")) %>%
   mutate(R.method = factor(`R.method`, levels = c("MinT(Shrink)", "WLS", "OLS", "Bottom up", "Base"))) %>%
-  rename(`Method`=`R.method`) %>% 
-  ggplot(aes(x = Forecast.Horizon, y = NonPara_SS_E.ES, color = Method, shape = Method)) + 
-  geom_point(size = 2) + 
+  rename(`Method`=`R.method`) %>%
+  ggplot(aes(x = Forecast.Horizon, y = NonPara_SS_E.ES, color = Method, shape = Method)) +
+  geom_point(size = 2) +
   geom_line(aes(group = Method, color = Method)) +
   geom_hline(yintercept = 0, color = "grey") +
   theme(legend.position = "bottom") +
@@ -1219,17 +1221,17 @@ DF_MultScore_SS_subset_NonPara_Regions %>%
 
 
 
-# SS_MultiV_Regions <- left_join(DF_MultScore_SS_subset_Gauss_Regions, 
+# SS_MultiV_Regions <- left_join(DF_MultScore_SS_subset_Gauss_Regions,
 #                               DF_MultScore_SS_subset_NonPara_Regions)
 
-# SS_MultiV_Regions %>% 
-#   rename("Parametric approach" = Gauss_SS_E.ES, 
-#          "Non parametric approach" = NonPara_SS_E.ES) %>% 
-#   gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>% 
-#   filter(Approach != "Parametric approach" | R.method != "Base") %>% 
+# SS_MultiV_Regions %>%
+#   rename("Parametric approach" = Gauss_SS_E.ES,
+#          "Non parametric approach" = NonPara_SS_E.ES) %>%
+#   gather(`Parametric approach`, `Non parametric approach`, key = Approach, value = Score) %>%
+#   filter(Approach != "Parametric approach" | R.method != "Base") %>%
 #   mutate(Approach = factor(Approach, levels = c("Parametric approach", "Non parametric approach")),
 #          R.method = factor(`R.method`, levels = c("Base", "Bottom up", "MinT(Shrink)"))) %>%
-#   rename(`Method`=`R.method`) %>% 
+#   rename(`Method`=`R.method`) %>%
 #   ggplot(aes(x = Forecast.Horizon, y = Score, group = interaction(Approach, Method))) +
 #   geom_point(size = 2, aes(color = Method)) +
 #   geom_line(aes(linetype = Approach)) +
@@ -1253,24 +1255,24 @@ g_legend<-function(a.gplot){
 mylegend <- g_legend(Plot_Gauss_States_ES)
 
 grid.arrange( arrangeGrob(Plot_Gauss_Top.level_CRPS + theme(legend.position="none"),
-                          Plot_Gauss_States_ES + theme(legend.position="none"), 
-                          Plot_Gauss_Zones_ES + theme(legend.position="none"), 
-                          Plot_Gauss_Regions_ES + theme(legend.position="none"), 
-                          ncol = 1), 
+                          Plot_Gauss_States_ES + theme(legend.position="none"),
+                          Plot_Gauss_Zones_ES + theme(legend.position="none"),
+                          Plot_Gauss_Regions_ES + theme(legend.position="none"),
+                          ncol = 1),
               ncol=1, heights=c(10, 0.5), top = "Energy Score") -> Plot_Gauss_levels_ES
 blank <- grid.rect(gp=gpar(col="white"))
 grid.arrange( arrangeGrob(blank,
-                          Plot_Gauss_States_VS + theme(legend.position="none"), 
-                          Plot_Gauss_Zones_VS + theme(legend.position="none"), 
-                          Plot_Gauss_Regions_VS + theme(legend.position="none"), 
-                          ncol = 1), 
+                          Plot_Gauss_States_VS + theme(legend.position="none"),
+                          Plot_Gauss_Zones_VS + theme(legend.position="none"),
+                          Plot_Gauss_Regions_VS + theme(legend.position="none"),
+                          ncol = 1),
               ncol=1, heights=c(10, 0.5), top = "Variogram Score") -> Plot_Gauss_levels_VS
 
 # grid.arrange( arrangeGrob(Plot_NonPara_Top.level_CRPS + theme(legend.position="none"),
-#                           Plot_NonPara_States_ES + theme(legend.position="none"), 
-#                           Plot_NonPara_Zones_ES + theme(legend.position="none"), 
-#                           Plot_NonPara_Regions_ES + theme(legend.position="none"), 
-#                           ncol = 1), 
+#                           Plot_NonPara_States_ES + theme(legend.position="none"),
+#                           Plot_NonPara_Zones_ES + theme(legend.position="none"),
+#                           Plot_NonPara_Regions_ES + theme(legend.position="none"),
+#                           ncol = 1),
 #               ncol=1, heights=c(10, 0.5), top = "Non Parametric Approach") -> Plot_NonPara_levels_ES
 
 grid.arrange(arrangeGrob(Plot_Gauss_levels_ES, Plot_Gauss_levels_VS, ncol = 2),
@@ -1281,24 +1283,24 @@ grid.arrange(arrangeGrob(Plot_Gauss_levels_ES, Plot_Gauss_levels_VS, ncol = 2),
 mylegend <- g_legend(Plot_Gauss_States_ES.SS)
 
 grid.arrange( arrangeGrob(Plot_Gauss_Top.level_CRPS.SS + theme(legend.position="none"),
-                          Plot_Gauss_States_ES.SS + theme(legend.position="none"), 
-                          Plot_Gauss_Zones_ES.SS + theme(legend.position="none"), 
-                          Plot_Gauss_Regions_ES.SS + theme(legend.position="none"), 
-                          ncol = 1), 
+                          Plot_Gauss_States_ES.SS + theme(legend.position="none"),
+                          Plot_Gauss_Zones_ES.SS + theme(legend.position="none"),
+                          Plot_Gauss_Regions_ES.SS + theme(legend.position="none"),
+                          ncol = 1),
               ncol=1, heights=c(10, 0.5), top = "Energy Score (%)") -> Plot_Gauss_levels_ES.SS
 
 grid.arrange( arrangeGrob(blank,
-                          Plot_Gauss_States_VS.SS + theme(legend.position="none"), 
-                          Plot_Gauss_Zones_VS.SS + theme(legend.position="none"), 
-                          Plot_Gauss_Regions_VS.SS + theme(legend.position="none"), 
-                          ncol = 1), 
+                          Plot_Gauss_States_VS.SS + theme(legend.position="none"),
+                          Plot_Gauss_Zones_VS.SS + theme(legend.position="none"),
+                          Plot_Gauss_Regions_VS.SS + theme(legend.position="none"),
+                          ncol = 1),
               ncol=1, heights=c(10, 0.5), top = "Variogram Score (%)") -> Plot_Gauss_levels_VS.SS
 
 # grid.arrange( arrangeGrob(Plot_NonPara_Top.level_CRPS.SS + theme(legend.position="none"),
-#                           Plot_NonPara_States_ES.SS + theme(legend.position="none"), 
-#                           Plot_NonPara_Zones_ES.SS + theme(legend.position="none"), 
-#                           Plot_NonPara_Regions_ES.SS + theme(legend.position="none"), 
-#                           ncol = 1), 
+#                           Plot_NonPara_States_ES.SS + theme(legend.position="none"),
+#                           Plot_NonPara_Zones_ES.SS + theme(legend.position="none"),
+#                           Plot_NonPara_Regions_ES.SS + theme(legend.position="none"),
+#                           ncol = 1),
 #               ncol=1, heights=c(10, 0.5), top = "Non Parametric Approach") -> Plot_NonPara_levels_ES.SS
 
 grid.arrange(arrangeGrob(Plot_Gauss_levels_ES.SS, Plot_Gauss_levels_VS.SS, ncol = 2),
