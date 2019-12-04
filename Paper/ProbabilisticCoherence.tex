@@ -588,11 +588,18 @@ Figure \ref{fig:Scores_Overall} shows energy and variogram scores across the ent
 \begin{figure}
 	\centering
 	\small
-    \includegraphics[width=.95\textwidth]{Empirical-results/Results-ARIMA/Scores_Overall.pdf}
+    \includegraphics[width=.95\textwidth]{Empirical-results/Results-ARIMA/RawScore_Overall.pdf}
 	\caption{Energy and variogram scores for multivariate predictive distributions across the entire hierarchy. A lower (higher) score indicates a more (less) accurate forecast. Results from the analytic approach assuming Gaussian incoherent base forecasts are presented on the left while results from the non-parametric approach are presented on the right.} \label{fig:Scores_Overall}
 \end{figure}
 
-As shown in Figure \ref{fig:Scores_Overall}, applying MinT(Shrink) for reconciliation of incoherent base forecasts generates the most accurate forecasts in all cases. As expected accuracy for all forecasts deteriorates as the forecast horizon increases. The skill scores presented in Figure \ref{} for the analytic solution show improvements upon the incoherent Gaussian base forecasts across the hierarchy as a whole. The improvements are between XX\% and XX\% for the energy score and XX\% and XX\% for the variogram score. Note that in all cases the bottom-up forecasts are always inferior to the incoherent base forecasts. This comes to no surprise reflecting upon the fact that the bottom-level series are the noisiest and most challenging to forecast and information is lost when levels above are not considered as with a reconciliation approach.
+As shown in Figure \ref{fig:Scores_Overall}, applying MinT(Shrink) for reconciliation of incoherent base forecasts generates the most accurate forecasts in all cases. As expected accuracy for all forecasts deteriorates as the forecast horizon increases. The skill scores presented in Figure \ref{fig:SkillScores_Overall} for the analytic solution show improvements upon the incoherent Gaussian base forecasts across the hierarchy as a whole. The improvements start at 2.5\% for $h=1$ and increase to above 5\% for $h\ge 9$ for the energy score and are consistently above 5\% for the variogram score. Note that in all cases the bottom-up forecasts are always inferior to the incoherent base forecasts. This comes to no surprise reflecting upon the fact that the bottom-level series are the noisiest and most challenging to forecast and information is lost when levels above are not considered as with a reconciliation approach.
+
+\begin{figure}
+	\centering
+	\small
+    \includegraphics[width=.95\textwidth]{Empirical-results/Results-ARIMA/SkillScore_Overall.pdf}
+	\caption{Skill scores (\%) relative to incoherent base forecasts, across the entire Australian tourism hierarchy based on energy score (on the left) and variogram score (on the right). A higher (lower) score indicates a gain (loss) in forecast accuracy relative to the incoherent base forecasts. The results are for the analytic solution assuming Gaussian incoherent base forecasts.} \label{fig:SkillScores_Overall}
+\end{figure}
 
 Figure \ref{fig:ES-SS-Levels} shows skill scores (\%) for the Gaussian analytic approach, relative to the incoherent base forecasts across each level of the Australia tourism hierarchy (please see Figure \ref{fig:ES-Levels} in Appendix \ref{app:AustralianData} for the raw scores). The top-panel presents the results for the aggregate level based on the CRPS, the univariate equivalent to the Energy score. For the levels below skill scores based on both the energy and variogram scores are presented.
 
@@ -601,8 +608,8 @@ Based on both scoring rules MinT(Shrink) improves upon the incoherent base forec
 \begin{figure}
 	\centering
 	\small
-	\includegraphics[width= 0.8\textwidth, height= 0.85\textheight]{Empirical-results/Results-ARIMA/ES_SS_Levels.pdf}
-	\caption{Skills scores (\%) relative to incoherent base forecasts, for the CRPS for the top-level and energy and variogram scores for the levels below for the Australia tourism hierarchy. A higher (lower) score indicates a gain (loss) in forecast accuracy relative to the incoherent base forecasts. All results are for the analytic solution assuming Gaussian incoherent base forecasts.} \label{fig:ES-SS-Levels}
+	\includegraphics[width= 0.85\textwidth, height= 0.85\textheight]{Empirical-results/Results-ARIMA/SkillScore_Gauss_Levels.pdf}
+	\caption{Skill scores (\%) relative to incoherent base forecasts, for the CRPS for the top-level and energy and variogram scores for the levels below for the Australia tourism hierarchy. A higher (lower) score indicates a gain (loss) in forecast accuracy relative to the incoherent base forecasts. All results are for the analytic solution assuming Gaussian incoherent base forecasts.} \label{fig:ES-SS-Levels}
 \end{figure}
 
 
@@ -1010,7 +1017,7 @@ $^*$ We consider the Australian Capital Territory as a part of New South Wales a
 \begin{figure}
 	\centering
 	\small
-	\includegraphics[width= 0.8\textwidth, height= 0.85\textheight]{Empirical-results/Results-ARIMA/ES_Levels.pdf}
+	\includegraphics[width= 0.85\textwidth, height= 0.85\textheight]{Empirical-results/Results-ARIMA/RawScore_Gauss_Levels.pdf}
 	\caption{Forecast accuracy results across the different levels of the Australia tourism hierarchy. CRPS results are presented for the top-level and energy and variogram scores for the levels below. A lower (higher) score indicates a more (less) accurate forecast. All results are for the analytic solution assuming Gaussian incoherent base forecasts.} \label{fig:ES-Levels}
 \end{figure}
 
