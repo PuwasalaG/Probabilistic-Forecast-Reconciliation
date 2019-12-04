@@ -1,0 +1,404 @@
+---
+title: "Raw Scores - Summary"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(kableExtra)
+```
+
+1. \textbf{Without Optimal method -} Choosing a rolling window of 500 observations we generate reconciled forecast distributions for h=1,2,3 and only BU, OLS, WLS, and MinT methods were used for reconciliation.
+
+2. \textbf{With Optimal G - Setup 1:} Here I choose an outer rolling window of 603 observations. Inside this, we choose an inner rolling window of 500 observations from which I produce incoherent prob. forecasts. Then roll the inner rolling window, 1 step ahead for 100 times and get 100 of such incoherent prob forecasts which are then used to learn optimal G. Finally we use this Optimal G along with other G matrices to reconcile the incoherent forecasts obtained by moving the inner rolling window another 1-step ahead. So in this setup, we will lose the first 100 observations in the evaluation.
+
+3. \textbf{With Optimal G - Setup 2:} Here we choose an outer rolling window of 500 observations. Fit models and obtain reconciled prob forecasts using different G matrices including optimal G. The Optimal G matrix is learned using an inner rolling window of 398 observations and moving this window for 100 times within the outer rolling window. Here we do not lose any observations in evaluations. Therefore the scores from BU, OLS, WLS, and MinT are similar to those from 1.
+
+# Without Optimal Method
+
+```{r echo=FALSE}
+
+##########################
+   ### Gaussian DGP ###
+##########################
+
+###--Full Hierarchy--###
+
+
+DF_MultiV_Full_GausDGP_W.o_Optim <- read.csv("Without-Optimal/DF_MultiV_Full_GaussianDGP.csv")[,-1]
+
+
+DF_MultiV_Full_GausDGP_W.o_Optim %>% 
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
+  summarise(E.ES = round(mean(`Energy.score`), digits = 3), 
+            E.VS = round(mean(`Variogram.score`), digits = 3)) -> DF_MultiV_Full_GausDGP_W.o_Optim
+
+#DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
+
+DF_MultiV_Full_GausDGP_W.o_Optim %>% 
+  dplyr::filter(`F.method`=="ARIMA" | `R.method`=="Bottom up") -> DF_MultScores_AllTS_GausDGP_W.o_Optim
+
+
+###--Bottom level of the Hierarchy--###
+
+
+
+DF_MultiV_Bot_GausDGP_W.o_Optim <- read.csv("Without-Optimal/DF_MultiV_Bot_GaussianDGP.csv")[,-1]
+
+
+DF_MultiV_Bot_GausDGP_W.o_Optim %>% 
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
+  summarise(E.LS = round(mean(`Log.score`), digits = 3)) -> DF_MultiV_Bot_GausDGP_W.o_Optim
+
+#DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
+
+DF_MultiV_Bot_GausDGP_W.o_Optim %>% 
+  dplyr::filter(`F.method`=="ARIMA" | `R.method`=="Base") -> DF_MultScores_BotTS_GausDGP_W.o_Optim
+
+DF_MultScores_BotTS_GausDGP_W.o_Optim %>% 
+  ungroup() %>% 
+  pull(E.LS) -> E.LS_GausDGP_W.o_Optim
+
+DF_MultScores_AllTS_GausDGP_W.o_Optim %>% 
+  ungroup() %>% 
+  add_column(E.LS = E.LS_GausDGP_W.o_Optim) -> RawScore_GausDGP_W.o_Optim
+
+
+##########################
+### Non-Gaussian DGP ###
+##########################
+
+###--Full Hierarchy--###
+
+
+DF_MultiV_Full_NonGaussDGP_W.o_Optim <- read.csv("Without-Optimal/DF_MultiV_Full_NonGaussianDGP.csv")[,-1]
+
+
+DF_MultiV_Full_NonGaussDGP_W.o_Optim %>% 
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
+  summarise(E.ES = round(mean(`Energy.score`), digits = 3), 
+            E.VS = round(mean(`Variogram.score`), digits = 3)) -> DF_MultiV_Full_NonGaussDGP_W.o_Optim
+
+#DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
+
+DF_MultiV_Full_NonGaussDGP_W.o_Optim %>% 
+  dplyr::filter(`F.method`=="ARIMA" | `R.method`=="Bottom up") -> DF_MultScores_AllTS_NonGaussDGP_W.o_Optim
+
+
+###--Bottom level of the Hierarchy--###
+
+
+
+DF_MultiV_Bot_NonGaussDGP_W.o_Optim <- read.csv("Without-Optimal/DF_MultiV_Bot_NonGaussianDGP.csv")[,-1]
+
+
+DF_MultiV_Bot_NonGaussDGP_W.o_Optim %>% 
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
+  summarise(E.LS = round(mean(`Log.score`), digits = 3)) -> DF_MultiV_Bot_NonGaussDGP_W.o_Optim
+
+#DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
+
+DF_MultiV_Bot_NonGaussDGP_W.o_Optim %>% 
+  dplyr::filter(`F.method`=="ARIMA" | `R.method`=="Base") -> DF_MultScores_BotTS_NonGaussDGP_W.o_Optim
+
+DF_MultScores_BotTS_NonGaussDGP_W.o_Optim %>% 
+  ungroup() %>% 
+  pull(E.LS) -> E.LS_NonGaussDGP_W.o_Optim
+
+DF_MultScores_AllTS_NonGaussDGP_W.o_Optim %>% 
+  ungroup() %>% 
+  add_column(E.LS = E.LS_NonGaussDGP_W.o_Optim) -> RawScore_NonGaussDGP_W.o_Optim
+
+
+RawScore_GausDGP_W.o_Optim %>% 
+  dplyr::select(-F.method) %>% 
+  gather(key = key, value = value, E.ES, E.VS, E.LS) %>% 
+  unite(temp, Forecast.Horizon, key) %>% 
+  spread(key = temp, value = value) %>% 
+  dplyr::select(R.method, `1_E.LS`, `2_E.LS`, `3_E.LS`, 
+         `1_E.ES`, `2_E.ES`, `3_E.ES`, 
+         `1_E.VS`, `2_E.VS`, `3_E.VS`) %>% 
+  rename("1" = `1_E.LS`, "2" = `2_E.LS`, "3" = `3_E.LS`, 
+         "1" = `1_E.ES`, "2" = `2_E.ES`, "3" = `3_E.ES`, 
+         "1" = `1_E.VS`, "2" = `2_E.VS`, "3" = `3_E.VS`)%>% 
+   kable(format = "latex") %>% kable_styling("striped") %>% 
+  kableExtra::add_header_above(c(" " = 1, "Log Score" = 3, "Energy Score" = 3, "Variogram Score" = 3)) %>% 
+  kableExtra::add_header_above(c("Gaussian DGP" = 10))
+
+RawScore_NonGaussDGP_W.o_Optim %>% 
+  dplyr::select(-F.method) %>% 
+  gather(key = key, value = value, E.ES, E.VS, E.LS) %>% 
+  unite(temp, Forecast.Horizon, key) %>% 
+  spread(key = temp, value = value) %>% 
+  dplyr::select(R.method, `1_E.LS`, `2_E.LS`, `3_E.LS`, 
+         `1_E.ES`, `2_E.ES`, `3_E.ES`, 
+         `1_E.VS`, `2_E.VS`, `3_E.VS`) %>% 
+  rename("1" = `1_E.LS`, "2" = `2_E.LS`, "3" = `3_E.LS`, 
+         "1" = `1_E.ES`, "2" = `2_E.ES`, "3" = `3_E.ES`, 
+         "1" = `1_E.VS`, "2" = `2_E.VS`, "3" = `3_E.VS`)%>% 
+   kable(format = "latex") %>% kable_styling("striped") %>% 
+  kableExtra::add_header_above(c(" " = 1, "Log Score" = 3, "Energy Score" = 3, "Variogram Score" = 3)) %>% 
+  kableExtra::add_header_above(c("Non-Gaussian DGP" = 10))
+```
+
+# With Optimal G - Setup 1
+
+
+
+```{r echo=FALSE}
+
+##########################
+### Gaussian DGP ###
+##########################
+
+###--Full Hierarchy--###
+
+
+DF_MultiV_Full_GausDGP_Optim_M1 <- read.csv("OptimalG_M1/DF_MultiV_Full_GaussianDGP.csv")[,-1]
+
+
+DF_MultiV_Full_GausDGP_Optim_M1 %>% 
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
+  summarise(E.ES = round(mean(`Energy.score`), digits = 3), 
+            E.VS = round(mean(`Variogram.score`), digits = 3)) -> DF_MultiV_Full_GausDGP_Optim_M1
+
+#DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
+
+DF_MultiV_Full_GausDGP_Optim_M1 %>% 
+  dplyr::filter(`F.method`=="ARIMA" | `R.method`=="Bottom up") -> DF_MultScores_AllTS_GausDGP_Optim_M1
+
+
+###--Bottom level of the Hierarchy--###
+
+
+
+DF_MultiV_Bot_GausDGP_Optim_M1 <- read.csv("OptimalG_M1/DF_MultiV_Bot_GaussianDGP.csv")[,-1]
+
+
+DF_MultiV_Bot_GausDGP_Optim_M1 %>% 
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
+  summarise(E.LS = round(mean(`Log.score`), digits = 3)) -> DF_MultiV_Bot_GausDGP_Optim_M1
+
+#DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
+
+DF_MultiV_Bot_GausDGP_Optim_M1 %>% 
+  dplyr::filter(`F.method`=="ARIMA" | `R.method`=="Base") -> DF_MultScores_BotTS_GausDGP_Optim_M1
+
+DF_MultScores_BotTS_GausDGP_Optim_M1 %>% 
+  ungroup() %>% 
+  pull(E.LS) -> E.LS_GausDGP_Optim_M1
+
+DF_MultScores_AllTS_GausDGP_Optim_M1 %>% 
+  ungroup() %>% 
+  add_column(E.LS = E.LS_GausDGP_Optim_M1) -> RawScore_GausDGP_Optim_M1
+
+
+##########################
+### Non-Gaussian DGP ###
+##########################
+
+###--Full Hierarchy--###
+
+
+DF_MultiV_Full_NonGaussDGP_Optim_M1 <- read.csv("OptimalG_M1/DF_MultiV_Full_NonGaussianDGP.csv")[,-1]
+
+
+DF_MultiV_Full_NonGaussDGP_Optim_M1 %>% 
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
+  summarise(E.ES = round(mean(`Energy.score`), digits = 3), 
+            E.VS = round(mean(`Variogram.score`), digits = 3)) -> DF_MultiV_Full_NonGaussDGP_Optim_M1
+
+#DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
+
+DF_MultiV_Full_NonGaussDGP_Optim_M1 %>% 
+  dplyr::filter(`F.method`=="ARIMA" | `R.method`=="Bottom up") -> DF_MultScores_AllTS_NonGaussDGP_Optim_M1
+
+
+###--Bottom level of the Hierarchy--###
+
+
+
+DF_MultiV_Bot_NonGaussDGP_Optim_M1 <- read.csv("OptimalG_M1/DF_MultiV_Bot_NonGaussianDGP.csv")[,-1]
+
+
+DF_MultiV_Bot_NonGaussDGP_Optim_M1 %>% 
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
+  summarise(E.LS = round(mean(`Log.score`), digits = 3)) -> DF_MultiV_Bot_NonGaussDGP_Optim_M1
+
+#DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
+
+DF_MultiV_Bot_NonGaussDGP_Optim_M1 %>% 
+  dplyr::filter(`F.method`=="ARIMA" | `R.method`=="Base") -> DF_MultScores_BotTS_NonGaussDGP_Optim_M1
+
+DF_MultScores_BotTS_NonGaussDGP_Optim_M1 %>% 
+  ungroup() %>% 
+  pull(E.LS) -> E.LS_NonGaussDGP_Optim_M1
+
+DF_MultScores_AllTS_NonGaussDGP_Optim_M1 %>% 
+  ungroup() %>% 
+  add_column(E.LS = E.LS_NonGaussDGP_Optim_M1) -> RawScore_NonGaussDGP_Optim_M1
+
+
+RawScore_GausDGP_Optim_M1 %>% 
+  dplyr::select(-F.method) %>% 
+  gather(key = key, value = value, E.ES, E.VS, E.LS) %>% 
+  unite(temp, Forecast.Horizon, key) %>% 
+  spread(key = temp, value = value) %>% 
+  dplyr::select(R.method, `1_E.LS`, `2_E.LS`, `3_E.LS`, 
+                `1_E.ES`, `2_E.ES`, `3_E.ES`, 
+                `1_E.VS`, `2_E.VS`, `3_E.VS`) %>% 
+  rename("1" = `1_E.LS`, "2" = `2_E.LS`, "3" = `3_E.LS`, 
+         "1" = `1_E.ES`, "2" = `2_E.ES`, "3" = `3_E.ES`, 
+         "1" = `1_E.VS`, "2" = `2_E.VS`, "3" = `3_E.VS`)%>% 
+  kable(format = "latex") %>% kable_styling("striped") %>% 
+  kableExtra::add_header_above(c(" " = 1, "Log Score" = 3, "Energy Score" = 3, "Variogram Score" = 3)) %>% 
+  kableExtra::add_header_above(c("Gaussian DGP" = 10))
+
+RawScore_NonGaussDGP_Optim_M1 %>% 
+  dplyr::select(-F.method) %>% 
+  gather(key = key, value = value, E.ES, E.VS, E.LS) %>% 
+  unite(temp, Forecast.Horizon, key) %>% 
+  spread(key = temp, value = value) %>% 
+  dplyr::select(R.method, `1_E.LS`, `2_E.LS`, `3_E.LS`, 
+                `1_E.ES`, `2_E.ES`, `3_E.ES`, 
+                `1_E.VS`, `2_E.VS`, `3_E.VS`) %>% 
+  rename("1" = `1_E.LS`, "2" = `2_E.LS`, "3" = `3_E.LS`, 
+         "1" = `1_E.ES`, "2" = `2_E.ES`, "3" = `3_E.ES`, 
+         "1" = `1_E.VS`, "2" = `2_E.VS`, "3" = `3_E.VS`)%>% 
+  kable(format = "latex") %>% kable_styling("striped") %>% 
+  kableExtra::add_header_above(c(" " = 1, "Log Score" = 3, "Energy Score" = 3, "Variogram Score" = 3)) %>% 
+  kableExtra::add_header_above(c("Non-Gaussian DGP" = 10))
+
+```
+
+
+# With Optimal G - Setup 2
+
+In this set up we take a rolling window of 500 observations and the G is learned using a inner rolling window of 398 obervarions. We are not loosing any data points here. Therefore the scores from reconcilition methods except Optimal method are identical to the scores in `Without Optimal G`. 
+
+```{r echo=FALSE}
+
+##########################
+### Gaussian DGP ###
+##########################
+
+###--Full Hierarchy--###
+
+
+DF_MultiV_Full_GausDGP_Optim_M2 <- read.csv("OptimalG_M2/DF_MultiV_Full_GaussianDGP.csv")[,-1]
+
+
+DF_MultiV_Full_GausDGP_Optim_M2 %>% 
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
+  summarise(E.ES = round(mean(`Energy.score`), digits = 3), 
+            E.VS = round(mean(`Variogram.score`), digits = 3)) -> DF_MultiV_Full_GausDGP_Optim_M2
+
+#DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
+
+DF_MultiV_Full_GausDGP_Optim_M2 %>% 
+  dplyr::filter(`F.method`=="ARIMA" | `R.method`=="Bottom up") -> DF_MultScores_AllTS_GausDGP_Optim_M2
+
+
+###--Bottom level of the Hierarchy--###
+
+
+
+DF_MultiV_Bot_GausDGP_Optim_M2 <- read.csv("OptimalG_M2/DF_MultiV_Bot_GaussianDGP.csv")[,-1]
+
+
+DF_MultiV_Bot_GausDGP_Optim_M2 %>% 
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
+  summarise(E.LS = round(mean(`Log.score`), digits = 3)) -> DF_MultiV_Bot_GausDGP_Optim_M2
+
+#DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
+
+DF_MultiV_Bot_GausDGP_Optim_M2 %>% 
+  dplyr::filter(`F.method`=="ARIMA" | `R.method`=="Base") -> DF_MultScores_BotTS_GausDGP_Optim_M2
+
+DF_MultScores_BotTS_GausDGP_Optim_M2 %>% 
+  ungroup() %>% 
+  pull(E.LS) -> E.LS_GausDGP_Optim_M2
+
+DF_MultScores_AllTS_GausDGP_Optim_M2 %>% 
+  ungroup() %>% 
+  add_column(E.LS = E.LS_GausDGP_Optim_M2) -> RawScore_GausDGP_Optim_M2
+
+
+##########################
+### Non-Gaussian DGP ###
+##########################
+
+###--Full Hierarchy--###
+
+
+DF_MultiV_Full_NonGaussDGP_Optim_M2 <- read.csv("OptimalG_M2/DF_MultiV_Full_NonGaussianDGP.csv")[,-1]
+
+
+DF_MultiV_Full_NonGaussDGP_Optim_M2 %>% 
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
+  summarise(E.ES = round(mean(`Energy.score`), digits = 3), 
+            E.VS = round(mean(`Variogram.score`), digits = 3)) -> DF_MultiV_Full_NonGaussDGP_Optim_M2
+
+#DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
+
+DF_MultiV_Full_NonGaussDGP_Optim_M2 %>% 
+  dplyr::filter(`F.method`=="ARIMA" | `R.method`=="Bottom up") -> DF_MultScores_AllTS_NonGaussDGP_Optim_M2
+
+
+###--Bottom level of the Hierarchy--###
+
+
+
+DF_MultiV_Bot_NonGaussDGP_Optim_M2 <- read.csv("OptimalG_M2/DF_MultiV_Bot_NonGaussianDGP.csv")[,-1]
+
+
+DF_MultiV_Bot_NonGaussDGP_Optim_M2 %>% 
+  group_by(`F.method`, `R.method`, `Forecast.Horizon`) %>% 
+  summarise(E.LS = round(mean(`Log.score`), digits = 3)) -> DF_MultiV_Bot_NonGaussDGP_Optim_M2
+
+#DF_MultScores %>% dplyr::filter(`R.method` != "Base") -> DF_MultScore_Recon
+
+DF_MultiV_Bot_NonGaussDGP_Optim_M2 %>% 
+  dplyr::filter(`F.method`=="ARIMA" | `R.method`=="Base") -> DF_MultScores_BotTS_NonGaussDGP_Optim_M2
+
+DF_MultScores_BotTS_NonGaussDGP_Optim_M2 %>% 
+  ungroup() %>% 
+  pull(E.LS) -> E.LS_NonGaussDGP_Optim_M2
+
+DF_MultScores_AllTS_NonGaussDGP_Optim_M2 %>% 
+  ungroup() %>% 
+  add_column(E.LS = E.LS_NonGaussDGP_Optim_M2) -> RawScore_NonGaussDGP_Optim_M2
+
+
+RawScore_GausDGP_Optim_M2 %>% 
+  dplyr::select(-F.method) %>% 
+  gather(key = key, value = value, E.ES, E.VS, E.LS) %>% 
+  unite(temp, Forecast.Horizon, key) %>% 
+  spread(key = temp, value = value) %>% 
+  dplyr::select(R.method, `1_E.LS`, `2_E.LS`, `3_E.LS`, 
+                `1_E.ES`, `2_E.ES`, `3_E.ES`, 
+                `1_E.VS`, `2_E.VS`, `3_E.VS`) %>% 
+  rename("1" = `1_E.LS`, "2" = `2_E.LS`, "3" = `3_E.LS`, 
+         "1" = `1_E.ES`, "2" = `2_E.ES`, "3" = `3_E.ES`, 
+         "1" = `1_E.VS`, "2" = `2_E.VS`, "3" = `3_E.VS`)%>% 
+  kable(format = "latex") %>% kable_styling("striped") %>% 
+  kableExtra::add_header_above(c(" " = 1, "Log Score" = 3, "Energy Score" = 3, "Variogram Score" = 3)) %>% 
+  kableExtra::add_header_above(c("Gaussian DGP" = 10))
+
+RawScore_NonGaussDGP_Optim_M2 %>% 
+  dplyr::select(-F.method) %>% 
+  gather(key = key, value = value, E.ES, E.VS, E.LS) %>% 
+  unite(temp, Forecast.Horizon, key) %>% 
+  spread(key = temp, value = value) %>% 
+  dplyr::select(R.method, `1_E.LS`, `2_E.LS`, `3_E.LS`, 
+                `1_E.ES`, `2_E.ES`, `3_E.ES`, 
+                `1_E.VS`, `2_E.VS`, `3_E.VS`) %>% 
+  rename("1" = `1_E.LS`, "2" = `2_E.LS`, "3" = `3_E.LS`, 
+         "1" = `1_E.ES`, "2" = `2_E.ES`, "3" = `3_E.ES`, 
+         "1" = `1_E.VS`, "2" = `2_E.VS`, "3" = `3_E.VS`)%>% 
+  kable(format = "latex") %>% kable_styling("striped") %>% 
+  kableExtra::add_header_above(c(" " = 1, "Log Score" = 3, "Energy Score" = 3, "Variogram Score" = 3)) %>% 
+  kableExtra::add_header_above(c("Non-Gaussian DGP" = 10))
+
+```
+
