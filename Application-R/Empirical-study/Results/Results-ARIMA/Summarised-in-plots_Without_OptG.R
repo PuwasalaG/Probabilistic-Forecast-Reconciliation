@@ -1451,3 +1451,25 @@ grid.arrange( arrangeGrob(blank,
 grid.arrange(arrangeGrob(Plot_NonPara_levels_ES.SS, Plot_NonPara_levels_VS.SS, ncol = 2),
              ncol = 1, mylegend, heights = c(30,1))
 
+
+
+
+
+##################################################
+    ##--Selecting the best performing Zones--##
+##################################################
+
+DF_UnivScores_NonPara_AllTS %>% 
+  filter(Forecast.Horizon == 1) %>% 
+  select(-Forecast.Horizon) %>% 
+  spread(key = R.method, value = E.CRPS) -> DF_UniV_NonPara_Means
+
+DF_UniV_NonPara_Means %>% 
+  filter(Series %in% c("AA", "AB", "AC", "AD", "AE", "AF", "BA", 
+                       "BB", "BC", "BD", "BE", "CA", "CB", "CC", "CD", "DA", 
+                       "DB", "DC", "DD", "EA", "EB", "EC", "FA", "FB", "FC", 
+                       "GA", "GB")) -> Univ_SS_States_NonPara
+
+Univ_SS_States_NonPara %>% 
+  summarise(SS_MinT = 100*(Base - `MinT Shrink`)/Base,
+            SS_OLS = 100*(Base - OLS)/Base) -> Univ_SS_States_NonPara

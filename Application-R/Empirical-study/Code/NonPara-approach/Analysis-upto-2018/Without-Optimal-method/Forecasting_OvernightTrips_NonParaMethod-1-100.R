@@ -124,6 +124,64 @@ DF_UniV <- tibble("Series" = character(),
                   "CRPS" = numeric(),
                   "Replication" = integer())
 
+# Lists to save future paths
+Unrecon_FP_ETS_h1 <- list()
+Unrecon_FP_ETS_h2 <- list()
+Unrecon_FP_ETS_h3 <- list()
+Unrecon_FP_ETS_h4 <- list()
+Unrecon_FP_ETS_h5 <- list()
+Unrecon_FP_ETS_h6 <- list()
+
+Unrecon_FP_ARIMA_h1 <- list()
+Unrecon_FP_ARIMA_h2 <- list()
+Unrecon_FP_ARIMA_h3 <- list()
+Unrecon_FP_ARIMA_h4 <- list()
+Unrecon_FP_ARIMA_h5 <- list()
+Unrecon_FP_ARIMA_h6 <- list()
+
+Recon_OLS_FP_ETS_h1 <- list()
+Recon_OLS_FP_ETS_h2 <- list()
+Recon_OLS_FP_ETS_h3 <- list()
+Recon_OLS_FP_ETS_h4 <- list()
+Recon_OLS_FP_ETS_h5 <- list()
+Recon_OLS_FP_ETS_h6 <- list()
+
+Recon_OLS_FP_ARIMA_h1 <- list()
+Recon_OLS_FP_ARIMA_h2 <- list()
+Recon_OLS_FP_ARIMA_h3 <- list()
+Recon_OLS_FP_ARIMA_h4 <- list()
+Recon_OLS_FP_ARIMA_h5 <- list()
+Recon_OLS_FP_ARIMA_h6 <- list()
+
+Recon_WLS_FP_ETS_h1 <- list()
+Recon_WLS_FP_ETS_h2 <- list()
+Recon_WLS_FP_ETS_h3 <- list()
+Recon_WLS_FP_ETS_h4 <- list()
+Recon_WLS_FP_ETS_h5 <- list()
+Recon_WLS_FP_ETS_h6 <- list()
+
+Recon_WLS_FP_ARIMA_h1 <- list()
+Recon_WLS_FP_ARIMA_h2 <- list()
+Recon_WLS_FP_ARIMA_h3 <- list()
+Recon_WLS_FP_ARIMA_h4 <- list()
+Recon_WLS_FP_ARIMA_h5 <- list()
+Recon_WLS_FP_ARIMA_h6 <- list()
+
+Recon_MinT_FP_ETS_h1 <- list()
+Recon_MinT_FP_ETS_h2 <- list()
+Recon_MinT_FP_ETS_h3 <- list()
+Recon_MinT_FP_ETS_h4 <- list()
+Recon_MinT_FP_ETS_h5 <- list()
+Recon_MinT_FP_ETS_h6 <- list()
+
+Recon_MinT_FP_ARIMA_h1 <- list()
+Recon_MinT_FP_ARIMA_h2 <- list()
+Recon_MinT_FP_ARIMA_h3 <- list()
+Recon_MinT_FP_ARIMA_h4 <- list()
+Recon_MinT_FP_ARIMA_h5 <- list()
+Recon_MinT_FP_ARIMA_h6 <- list()
+
+
 Start <- Sys.time()
 
 for (j in 1:100) {#p
