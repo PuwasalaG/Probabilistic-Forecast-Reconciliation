@@ -10,7 +10,7 @@ require(tsibble)
 set.seed(1989) #Set seed
 
 init<- 500 #Number of initial values to be removed
-N <- 2102 # Sample size
+N <- 2000 # Sample size
 m <- 4 # Number of bottom level
 
 #Randomly generating errors from a Gaussian distribution 
@@ -19,7 +19,7 @@ Bottom_pop_cov<-matrix(c(5,3.1,0.6,0.4,3.1,4,0.9,1.4,0.6,
                          0.9,2,1.8,0.4,1.4,1.8,3), nrow = m, 
                        ncol = m)  #Covariance matrix
 
-E <- mvrnorm(n = N, mu = rep(0, m), Sigma = Bottom_pop_cov) #Generate MVN disturbances
+E <- mvrnorm(n = N+5, mu = rep(0, m), Sigma = Bottom_pop_cov) #Generate MVN disturbances
 
 #Generating the bottom level series. Each series were generated from 
 #ARMA(p,d,q) model where the parameters were randomly selected from the
@@ -80,11 +80,6 @@ Tot=A+B
 wide<-tibble(Time=1:(N-init),Tot,A,B,AA,AB,BA,BB)
 write.csv(wide, "../Data/Bottom_Level_Gaussian_Simulated.csv",row.names = F)
 
-# Put into a tsibble (for export to rds)
-pivot_longer(wide,-Time,names_to = 'Var')%>%
-  as_tsibble(key = Var,index = Time)->Data
-
-saveRDS(Data,"../Data/Bottom_Level_Gaussian_Simulated.rds")
 
 
 

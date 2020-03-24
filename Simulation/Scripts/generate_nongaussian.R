@@ -9,7 +9,7 @@ require(tsibble)
 set.seed(1989)
 
 init<- 500 #Number of initial values to be removed
-N <- 2102 #Number of observations (inc init to be removed)
+N <- 2000 #Number of observations (inc init to be removed)
 m <- 4 #Number of bottom level
 
 
@@ -89,9 +89,4 @@ wide<-tibble(Time=1:(N-init),Tot,A,B,AA,AB,BA,BB)
 
 write.csv(wide, "../Data/Bottom_Level_nonGaussian_Simulated.csv",row.names = F)
 
-# Put into a tsibble (for export to rds)
-pivot_longer(wide,-Time,names_to = 'Var')%>%
-  as_tsibble(key = Var,index = Time)->Data
-
-saveRDS(Data,"../Data/Bottom_Level_nonGaussian_Simulated.rds")
 
