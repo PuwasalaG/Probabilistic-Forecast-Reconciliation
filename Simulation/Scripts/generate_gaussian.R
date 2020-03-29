@@ -9,9 +9,15 @@ require(tsibble)
 
 set.seed(1989) #Set seed
 
-init<- 500 #Number of initial values to be removed
-N <- 2000 # Sample size
 m <- 4 # Number of bottom level
+
+init<- 500 #Number of initial values to be removed
+train<-500 # Size of training sample
+H <- 3 #Maximum forecast horizon
+L <- 4 #Pre-sample
+R <- 1000 #Number of reps
+
+N <- train+R+init+H+L-1 # Sample size
 
 #Randomly generating errors from a Gaussian distribution 
 

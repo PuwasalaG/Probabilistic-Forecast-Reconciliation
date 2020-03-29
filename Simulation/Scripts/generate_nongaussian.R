@@ -8,9 +8,15 @@ require(tsibble)
 
 set.seed(1989)
 
+m <- 4 # Number of bottom level
+
 init<- 500 #Number of initial values to be removed
-N <- 2000 #Number of observations (inc init to be removed)
-m <- 4 #Number of bottom level
+train<-500 # Size of training sample
+H <- 3 #Maximum forecast horizon
+L <- 4 #Pre-sample
+R <- 1000 #Number of reps
+
+N <- train+R+init+H+L-1 # Sample size
 
 
 #Randomly generating errors from a Gumbel copula with Beta margins
