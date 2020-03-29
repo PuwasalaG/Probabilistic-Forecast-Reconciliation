@@ -1,4 +1,11 @@
-#Simulation Study
+# Simulation Study
 
-- The directory *Scripts* includes R scripts.
-- The directory *Data* includes simulated data.
+- The directory *Base_Forecasts* includes a script for producing base forecasts (including files for doing so on a cluster using SLURM).
+
+- The directory *Base_Results* stores the output for base forecasts as .rds files.  These are very large so are not stored on github.
+
+- The directory *Data* includes simulated data as .csv files.
+
+- The directory *Generate_Data* includes R scripts that generate DGPs.
+
+
