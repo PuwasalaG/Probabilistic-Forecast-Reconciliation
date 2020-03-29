@@ -1,0 +1,17 @@
+dist,trend,innovations,model
+gaussian,stationary,bootstrap,arima
+gaussian,stationary,bootstrap,ets
+gaussian,stationary,gaussian,arima
+gaussian,stationary,gaussian,ets
+gaussian,nonstationary,bootstrap,arima
+gaussian,nonstationary,bootstrap,ets
+gaussian,nonstationary,gaussian,arima
+gaussian,nonstationary,gaussian,ets
+nongaussian,stationary,bootstrap,arima
+nongaussian,stationary,bootstrap,ets
+nongaussian,stationary,gaussian,arima
+nongaussian,stationary,gaussian,ets
+nongaussian,nonstationary,bootstrap,arima
+nongaussian,nonstationary,bootstrap,ets
+nongaussian,nonstationary,gaussian,arima
+nongaussian,nonstationary,gaussian,ets
