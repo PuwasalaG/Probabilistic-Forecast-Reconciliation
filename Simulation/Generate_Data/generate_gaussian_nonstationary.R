@@ -1,12 +1,13 @@
 # This code generates bottom level time series for the 
-# simulation study from a non-Gaussian DGP
+# simulation study from a Gaussian DGP
 
 require(MASS)
-require(copula)
 require(tidyr)
 require(tsibble)
 
-set.seed(1989)
+
+
+set.seed(1989) #Set seed
 
 m <- 4 # Number of bottom level
 
@@ -18,21 +19,13 @@ R <- 1000 #Number of reps
 
 N <- train+R+init+H+L-1 # Sample size
 
+#Randomly generating errors from a Gaussian distribution 
 
-#Randomly generating errors from a Gumbel copula with Beta margins
+Bottom_pop_cov<-matrix(c(5,3.1,0.6,0.4,3.1,4,0.9,1.4,0.6,
+                         0.9,2,1.8,0.4,1.4,1.8,3), nrow = m, 
+                       ncol = m)  #Covariance matrix
 
-Gumbel.copula1 <- gumbelCopula(param = 10)
-Gumbel.copula2 <- gumbelCopula(param = 8)
-
-Z1 <- rCopula(N, Gumbel.copula1)
-Z2 <- rCopula(N, Gumbel.copula2)
-
-E <- matrix(NA, N, m)
-E[,1] <- qbeta(Z1[,1], shape1 = 1, shape2 = 3)
-E[,2] <- qbeta(Z1[,2], shape1 = 1, shape2 = 3)
-
-E[,3] <- qbeta(Z2[,1], shape1 = 1, shape2 = 3)
-E[,4] <- qbeta(Z2[,2], shape1 = 1, shape2 = 3)
+E <- mvrnorm(n = N+5, mu = rep(0, m), Sigma = Bottom_pop_cov) #Generate MVN disturbances
 
 #Generating the bottom level series. Each series were generated from 
 #ARMA(p,d,q) model where the parameters were randomly selected from the
@@ -55,7 +48,7 @@ for (i in 1:m)
   }
   
   if (order_q[i]==0) {
-    MA_coef<-0
+    MA_coef <- 0
   } else {
     MA_coef <- runif(n=order_q[i], min = 0.3, max = 0.7)
   }
@@ -71,28 +64,28 @@ for (i in 1:m)
 
 Bottom_level <- Bottom_level[-(1:init),] 
 
-#Generate noise to add to series to ensure bottom levels are noisier than top levels
-
-Vt<-rnorm(n = N-init, mean = 0, sd = sqrt(10))
-Wt<-rnorm(n = N-init, mean = 0, sd = sqrt(7))
+Ut <- rnorm(n = N-init, mean = 0, sd = sqrt(28)) #u_t
+Vt <- rnorm(n = N-init, mean = 0, sd = sqrt(22)) #v_t
 
 
-AA<-Bottom_level[,1]+Vt-0.5*Wt
-AB<-Bottom_level[,2]-Vt-0.5*Wt
-BA<-Bottom_level[,3]+Vt+0.5*Wt
-BB<-Bottom_level[,4]-Vt+0.5*Wt
+AA <- Bottom_level[,1]+Ut-0.5*Vt
+AB <- Bottom_level[,2]-Ut-0.5*Vt
+BA <- Bottom_level[,3]+Ut+0.5*Vt
+BB <- Bottom_level[,4]-Ut+0.5*Vt
 
 #Find aggregates
-
 
 A=AA+AB
 B=BA+BB
 
 Tot=A+B
 
-#Put into a wide format (for export to csv)
-wide<-tibble(Time=1:(N-init),Tot,A,B,AA,AB,BA,BB)
 
-write.csv(wide, "../Data/Bottom_Level_nonGaussian_Simulated.csv",row.names = F)
+#Put into a wide format (for export to csv)
+
+wide<-tibble(Time=1:(N-init),Tot,A,B,AA,AB,BA,BB)
+write.csv(wide, "../Data/gaussian_nonstationary.csv",row.names = F)
+
+
 
 
