@@ -29,8 +29,8 @@ data<-read_csv(paste0('../Data/',distj,'_',trendj,'.csv'))
 H<-3 # Maximum Forecast Horizon
 N<-500 # Size of window
 L<-4 # Lags to leave at beginning of window
-B<-1 # Number of sample paths for probabilistic forecasts
-R<-10 # Number of replications
+B<-1000 # Number of sample paths for probabilistic forecasts
+R<-1000 # Number of replications
 
 
 #Make data windows
