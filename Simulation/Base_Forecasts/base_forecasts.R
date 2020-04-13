@@ -77,7 +77,7 @@ forecast_window <- function(data_w){
             
   f<-forecast(m,h=H)
   
-  #Find Cov
+  #Find Residuals
   m%>%residuals%>%
     select(-.model)%>%
     pivot_wider(id_cols = Time,
@@ -86,6 +86,7 @@ forecast_window <- function(data_w){
     select(-Time)%>%
     as.matrix()->E
   
+  #Find Sigma (sample and shrink)
   Sigma_sam<-t(E)%*%E/(nrow(E)-1)
   Sigma_shr<-shrink.estim(E)
   
