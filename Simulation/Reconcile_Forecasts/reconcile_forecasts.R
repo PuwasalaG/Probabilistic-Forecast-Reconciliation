@@ -10,7 +10,7 @@ rm(list=ls())
 
 
 #Read Simulation Table
-simtable<-read_csv('SimulationTable.csv')
+simtable<-read_csv('../Base_Forecasts/SimulationTable.csv')
 
 ### Extract flags from simulation scenario
 
