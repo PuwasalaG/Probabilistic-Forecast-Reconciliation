@@ -46,6 +46,7 @@ distj<-simj$dist #Is DGP Gaussian or nonGaussian
 trendj<-simj$trend #Is DGP stationary or nonStationary
 innovationsj<-simj$innovations # Are innovations Gaussian or bootstrapped
 modelj<-simj$model #Is model ARIMA or ETS
+depj<-simj$dep #Are innovations drawn independently or jointly?
 
 #Read in data
 data<-read_csv(paste0('../Data/',distj,'_',trendj,'.csv'))
@@ -90,10 +91,19 @@ forecast_window <- function(data_w){
   Sigma_sam<-t(E)%*%E/(nrow(E)-1)
   Sigma_shr<-shrink.estim(E)
   
-  if(innovationsj=='bootstrap'){
-    p<-generate(m,bootstrap=T,times=B,h=H)
-  }else{
-    p<-generate(m,bootstrap=F,times=B,h=H)
+  if(depj=='independent'){
+    if(innovationsj=='bootstrap'){
+      p<-generate(m,bootstrap=T,times=B,h=H)
+    }else{
+      p<-generate(m,bootstrap=F,times=B,h=H)
+    }
+  }
+  else{
+    if(innovationsj=='bootstrap'){
+      #Code to go here for joint
+    }else{
+      #Code to go here for joint
+    }
   }
   
   
@@ -130,29 +140,34 @@ saveRDS(paths,paste0('../Base_Results/',
                    distj,'_',
                    trendj,'_',
                    modelj,'_',
-                   innovationsj,'_paths.rds'))
+                   innovationsj,
+                   depj,'_paths.rds'))
 
 saveRDS(mable,paste0('../Base_Results/',
                      distj,'_',
                      trendj,'_',
                      modelj,'_',
-                     innovationsj,'_mable.rds'))
+                     innovationsj,
+                     depj,'_mable.rds'))
 
 saveRDS(forecast,paste0('../Base_Results/',
                      distj,'_',
                      trendj,'_',
                      modelj,'_',
-                     innovationsj,'_forecast.rds'))
+                     innovationsj,
+                     depj,'_forecast.rds'))
 
 saveRDS(all$Sigma_sam,paste0('../Base_Results/',
                         distj,'_',
                         trendj,'_',
                         modelj,'_',
-                        innovationsj,'_Sigma_sam.rds'))
+                        innovationsj,
+                        depj,'_Sigma_sam.rds'))
 
 saveRDS(all$Sigma_shr,paste0('../Base_Results/',
                         distj,'_',
                         trendj,'_',
                         modelj,'_',
-                        innovationsj,'_Sigma_shr.rds'))
+                        innovationsj,
+                        depj,'_Sigma_shr.rds'))
 

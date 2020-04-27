@@ -2,7 +2,7 @@
 #SBATCH --job-name=AP_BaseFC
 #SBATCH --output=array_%A_%a.out
 #SBATCH --error=array_%A_%a.err
-#SBATCH --array=1-16
+#SBATCH --array=1-32
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
 #SBATCH --export=NONE
