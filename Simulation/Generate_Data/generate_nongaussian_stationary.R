@@ -92,8 +92,8 @@ Bottom_level <- Bottom_level[-(1:init),]
 #Generate noise to add to series to ensure bottom levels are noisier than top levels
 #These are skew t
 
-Vt<-rst(n = N-init, xi = 0, omega = 1,alpha=1.5,nu=4)
-Wt<-rst(n = N-init, xi = 0, omega = 3,alpha=2,nu=8)
+Vt<-rst(n = N-init, xi = 0, omega = 0.6,alpha=1.5,nu=4)
+Wt<-rst(n = N-init, xi = 0, omega = 0.9,alpha=2,nu=8)
 
 ##Inequality Check
 
