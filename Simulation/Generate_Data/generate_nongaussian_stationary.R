@@ -1,6 +1,6 @@
 # This code generates bottom level time series for the 
 # simulation study from a non-Gaussian DGP
-
+require(portes)
 require(MASS)
 require(copula)
 require(tidyr)
@@ -45,21 +45,38 @@ order_q <- sample(c(1,2), size = m, replace = TRUE)
 
 Bottom_level <- matrix(0, nrow = N,  ncol = m)
 
+AR_coef_store<-matrix(0,m,2)
+MA_coef_store<-matrix(0,m,2)
+
+statinv<-1 #flag for stationarity and invertibility
+
+
 for (i in 1:m)
 {
   
   if (order_p[i]==0) {
     AR_coef <- 0
   } else {
-    AR_coef <- runif(n=order_p[i], min = 0.3, max = 0.5)
+    while(!is.null(statinv)){
+      AR_coef <- runif(n=order_p[i], min = 0.3, max = 0.5)
+      statinv<-tryCatch(InvertQ(AR_coef)) #This will produce a warning if AR non-stationary
+    }
+    statinv<-1
   }
+  
+  
+  AR_coef_store[i,1:length(AR_coef)]<-AR_coef #Keep AR coefficients
   
   if (order_q[i]==0) {
-    MA_coef<-0
+    MA_coef <- 0
   } else {
-    MA_coef <- runif(n=order_q[i], min = 0.3, max = 0.7)
+    while(!is.null(statinv)){
+      MA_coef <- runif(n=order_q[i], min = 0.3, max = 0.7)
+      statinv<-tryCatch(InvertQ(MA_coef)) #This will produce a warning if MA non-stationary-invertible
+    }
+    statinv<-1
   }
-  
+  MA_coef_store[i,1:length(MA_coef)]<-MA_coef #Keep MA coefficients
   
   Bottom_level[,i] <- arima.sim(list(order=c(order_p[i],order_d[i],order_q[i]),
                                      ar=AR_coef, ma=MA_coef), n = (N+5), 
@@ -94,5 +111,7 @@ Tot=A+B
 wide<-tibble(Time=1:(N-init),Tot,A,B,AA,AB,BA,BB)
 
 write.csv(wide, "../Data/nongaussian_stationary.csv",row.names = F)
+
+save(AR_coef_store,MA_coef_store,order_d,file = 'model_coefficients_ns.RData')
 
 
