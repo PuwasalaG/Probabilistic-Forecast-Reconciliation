@@ -84,6 +84,22 @@ Bottom_level <- Bottom_level[-(1:init),]
 Ut <- rnorm(n = N-init, mean = 0, sd = sqrt(28)) #u_t
 Vt <- rnorm(n = N-init, mean = 0, sd = sqrt(22)) #v_t
 
+##Inequality Check
+
+VTot<-sum(Bottom_pop_cov)
+VA<-sum(Bottom_pop_cov[1:2,1:2])+22
+VB<-sum(Bottom_pop_cov[3:4,3:4])+22
+VAA<-Bottom_pop_cov[1,1]+22/4+28
+VAB<-Bottom_pop_cov[2,2]+22/4+28
+VBA<-Bottom_pop_cov[3,3]+22/4+28
+VBB<-Bottom_pop_cov[4,4]+22/4+28
+
+if(VTot>VA){print('VTot larger than VA')}
+if(VTot>VB){print('VTot larger than VB')}
+if(VA>VAA){print('VA larger than VA')}
+if(VA>VAB){print('VA larger than VAB')}
+if(VB>VBA){print('VB larger than VBA')}
+if(VB>VBB){print('VB larger than VBB')}
 
 AA <- Bottom_level[,1]+Ut-0.5*Vt
 AB <- Bottom_level[,2]-Ut-0.5*Vt

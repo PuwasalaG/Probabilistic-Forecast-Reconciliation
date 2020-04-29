@@ -1,6 +1,7 @@
 # This code generates bottom level time series for the 
 # simulation study from a non-Gaussian DGP
 require(portes)
+require(sn)
 require(MASS)
 require(copula)
 require(tidyr)
@@ -89,10 +90,27 @@ for (i in 1:m)
 Bottom_level <- Bottom_level[-(1:init),] 
 
 #Generate noise to add to series to ensure bottom levels are noisier than top levels
+#These are skew t
 
-Vt<-rnorm(n = N-init, mean = 0, sd = sqrt(10))
-Wt<-rnorm(n = N-init, mean = 0, sd = sqrt(7))
+Vt<-rst(n = N-init, xi = 0, omega = 1,alpha=1.5,nu=4)
+Wt<-rst(n = N-init, xi = 0, omega = 3,alpha=2,nu=8)
 
+##Inequality Check
+
+VTot<-var(E[-(1:init),1] + E[-(1:init),2] + E[-(1:init),3] + E[-(1:init),4])
+VA<-var(E[-(1:init),1] + E[-(1:init),2] - Vt)
+VB<-var(E[-(1:init),3] + E[-(1:init),4] + Vt)
+VAA<-var(E[-(1:init),1] + Wt - 0.5 * Vt)
+VAB<-var(E[-(1:init),2] - Wt - 0.5 * Vt)
+VBA<-var(E[-(1:init),3] + Wt + 0.5 * Vt)
+VBB<-var(E[-(1:init),4] - Wt + 0.5 * Vt)
+
+if(VTot>VA){print('VTot larger than VA')}
+if(VTot>VB){print('VTot larger than VB')}
+if(VA>VAA){print('VA larger than VA')}
+if(VA>VAB){print('VA larger than VAB')}
+if(VB>VBA){print('VB larger than VBA')}
+if(VB>VBB){print('VB larger than VBB')}
 
 AA<-Bottom_level[,1]+Vt-0.5*Wt
 AB<-Bottom_level[,2]-Vt-0.5*Wt
