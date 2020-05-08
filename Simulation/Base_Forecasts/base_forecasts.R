@@ -1,5 +1,6 @@
-#This script fits base models.
-
+#This script selects and fits base models for each window. 
+#The forecast mean, forecast standard deviation, two estimates of the covariance matrix and residuals are retained.
+library(magrittr)
 library(tidyverse)
 library(slider)
 library(furrr)
@@ -44,18 +45,14 @@ scen<-1 #If running within R uncomment this.  This will only run first scenario
 simj<-simtable[scen,] #Extract row of table
 distj<-simj$dist #Is DGP Gaussian or nonGaussian
 trendj<-simj$trend #Is DGP stationary or nonStationary
-innovationsj<-simj$innovations # Are innovations Gaussian or bootstrapped
 modelj<-simj$model #Is model ARIMA or ETS
-depj<-simj$dep #Are innovations drawn independently or jointly?
 
 #Read in data
 data<-read_csv(paste0('../Data/',distj,'_',trendj,'.csv'))
 
 #Sample sizes
-H<-1 # Maximum Forecast Horizon
 N<-500 # Size of window
 L<-4 # Lags to leave at beginning of window
-B<-1000 # Number of sample paths for probabilistic forecasts
 W<-1000 # Number of windows
 
 
@@ -76,98 +73,41 @@ forecast_window <- function(data_w){
     m<-model(d,.model=ETS(value))
   }
             
-  f<-forecast(m,h=H)
+  forecast(m,h=1)%>%
+    arrange(match(Var,c("Tot","A","B","AA","AB","BA","BB")))->f
+  fc_mean<-map_dbl(f$.distribution,use_series,mean)
+  fc_sd<-map_dbl(f$.distribution,use_series,sd)
   
   #Find Residuals
-  m%>%residuals%>%
+  residuals(m)%>%
     select(-.model)%>%
+    arrange(match(Var,c("Tot","A","B","AA","AB","BA","BB")))%>%
     pivot_wider(id_cols = Time,
                 names_from = Var,
                 values_from = .resid)%>%
     select(-Time)%>%
-    as.matrix()->E
+    as.matrix()%>%t()->E
+  rownames(E)<-NULL
   
   #Find Sigma (sample and shrink)
-  Sigma_sam<-t(E)%*%E/(nrow(E)-1)
-  Sigma_shr<-shrink.estim(E)
-  
-  if(depj=='independent'){
-    if(innovationsj=='bootstrap'){
-      p<-generate(m,bootstrap=T,times=B,h=H)
-    }else{
-      p<-generate(m,bootstrap=F,times=B,h=H)
-    }
-  }
-  else{
-    if(innovationsj=='bootstrap'){
-      #Code to go here for joint
-    }else{
-      #Code to go here for joint
-    }
-  }
-  
+  Sigma_sam<-E%*%t(E)/(ncol(E)-1)
+  Sigma_shr<-shrink.estim(t(E))
   
   
   return(list(mable=m%>%add_column(.window=window),
-              forecast=f%>%add_column(.window=window),
-              paths=p%>%add_column(.window=window),
-              Sigma_sam=Sigma_sam,
-              Sigma_shr=Sigma_shr))
+              fc_mean=fc_mean,
+              fc_sd=fc_sd,
+              fc_Sigma_sam=Sigma_sam,
+              fc_Sigma_shr=Sigma_shr,
+              resid=E))
 }
-
 #Get all results
-all<-map(data_windows[1:W],forecast_window)%>%
-  purrr::transpose() #Transpose to change access order in list
-
-#Isolate paths and combine to single df
-paths<-all$paths%>%
-  map_dfr(function(x){return(as_tibble(x))})
-
-#Isolate mable and combine to single df
-
-mable<-all$mable%>%
-  map_dfr(function(x){return(as_tibble(x))})
-
-#Isolate mable and combine to single df
-
-forecast<-all$forecast%>%
-  map_dfr(function(x){return(as_tibble(x))})
-
+all<-map(data_windows[1:W],forecast_window)
 
 
 #Save output
-saveRDS(paths,paste0('../Base_Results/',
+saveRDS(all,paste0('../Base_Results/',
                    distj,'_',
                    trendj,'_',
-                   modelj,'_',
-                   innovationsj,
-                   depj,'_paths.rds'))
-
-saveRDS(mable,paste0('../Base_Results/',
-                     distj,'_',
-                     trendj,'_',
-                     modelj,'_',
-                     innovationsj,
-                     depj,'_mable.rds'))
-
-saveRDS(forecast,paste0('../Base_Results/',
-                     distj,'_',
-                     trendj,'_',
-                     modelj,'_',
-                     innovationsj,
-                     depj,'_forecast.rds'))
-
-saveRDS(all$Sigma_sam,paste0('../Base_Results/',
-                        distj,'_',
-                        trendj,'_',
-                        modelj,'_',
-                        innovationsj,
-                        depj,'_Sigma_sam.rds'))
-
-saveRDS(all$Sigma_shr,paste0('../Base_Results/',
-                        distj,'_',
-                        trendj,'_',
-                        modelj,'_',
-                        innovationsj,
-                        depj,'_Sigma_shr.rds'))
+                   modelj,'_base.rds'))
 
