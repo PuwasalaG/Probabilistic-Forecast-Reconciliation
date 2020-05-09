@@ -10,4 +10,4 @@ The filename is made up of five parts
 - Whether the base forecasts are dependent or independent.
 - Whether the base forecasts are Gaussian or bootstrap innovations.
 
-Each file is an rds file containing a single R object.
+Each file is an rds file containing a single R object.  These contain details of the SGA for training optimal weights.
