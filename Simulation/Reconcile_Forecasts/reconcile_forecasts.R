@@ -127,7 +127,7 @@ for (eval in 1:outW){
   
   
   #Train reconciliation weights using SGA 
-  opt<-scoreopt(all_y,all_prob,S,trace = F)
+  opt<-scoreopt(all_y,all_prob,S,trace = T)
   
   #Store
   all[[eval]]<-opt
