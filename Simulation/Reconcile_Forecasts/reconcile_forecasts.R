@@ -39,6 +39,9 @@ data<-read_csv(paste0('../Data/',distj,'_',trendj,'.csv'))
 #Read in base forecast
 fc<-readRDS(paste0('../Base_Results/',distj,'_',trendj,'_',modelj,'_base.rds'))
 
+fc_nomable<-map(fc,function(x){x[-1]}) #Delete mable
+
+
 #Set up S matrix
 S<-matrix(c(1,1,1,1,
             1,1,0,0,
@@ -120,7 +123,7 @@ for (eval in 1:outW){
   }
   
   
-  all_prob<-map(fc[eval:(eval+inW-1)],make_genfunc)
+  all_prob<-map(fc_nomable[eval:(eval+inW-1)],make_genfunc)
   
   
   #Train reconciliation weights using SGA 
