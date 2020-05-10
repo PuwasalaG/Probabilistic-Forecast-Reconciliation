@@ -57,6 +57,8 @@ all<-as.list(rep(NA,outW))
 
 #Loop over evaluation periods
 for (eval in 1:outW){
+  print('eval')
+  print(eval)
   #Select correct realised values
   obs_i<-function(i){
     data%>%
