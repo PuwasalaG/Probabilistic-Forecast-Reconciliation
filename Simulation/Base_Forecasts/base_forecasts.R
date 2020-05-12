@@ -18,7 +18,7 @@ rm(list=ls())
 shrink.estim <- function(res)
 {
   n<-nrow(res)
-  covm <- crossprod(res)/nrow(res)
+  covm <- cov(t(res))
   tar <- diag(diag(covm))
   corm <- stats::cov2cor(covm)
   xs <- scale(res, center = FALSE, scale = sqrt(diag(covm)))
@@ -90,7 +90,7 @@ forecast_window <- function(data_w){
   rownames(E)<-NULL
   
   #Find Sigma (sample and shrink)
-  Sigma_sam<-E%*%t(E)/(ncol(E)-1)
+  Sigma_sam<-cov(t(E))
   Sigma_shr<-shrink.estim(t(E))
   
   
