@@ -62,8 +62,6 @@ evaluate_scenario<-function(scen){
   
   #Read in base forecast
   fc<-readRDS(paste0('../Base_Results/',distj,'_',trendj,'_',modelj,'_base.rds'))
-  fc_nomable<-map(fc,function(x){x[-1]}) #Delete mable
-  rm(fc)
   #Read in optimal
   optreco<-readRDS(paste0('../Reconciled_Results/',
                        distj,'_',
@@ -93,7 +91,7 @@ evaluate_scenario<-function(scen){
     
     #Base forecasts
     
-    fc_i<-fc_nomable[[inW+i]]
+    fc_i<-fc[[inW+i]]
     
 
 
@@ -175,7 +173,7 @@ evaluate_scenario<-function(scen){
   return(res_final)
 }
 
-all_results<-map_dfr(17:20,evaluate_scenario)
+all_results<-map_dfr(25:28,evaluate_scenario)
 
 
 saveRDS(all_results,'all_results.rds')
@@ -188,7 +186,7 @@ all_results%>%
   facet_grid(rows = vars(BaseMethod),col= vars(BaseModel))
 
 all_results%>%
-  group_by(Method,BaseDependence,BaseDistribution)%>%
+  group_by(Method,BaseDependence,BaseDistribution,BaseModel)%>%
   summarise(meanScore=mean(EnergyScore),medianScore=median(EnergyScore))->summary_results
 
 summary_results%>%

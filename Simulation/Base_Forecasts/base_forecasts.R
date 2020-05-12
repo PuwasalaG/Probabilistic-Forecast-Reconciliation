@@ -104,10 +104,18 @@ forecast_window <- function(data_w){
 #Get all results
 all<-map(data_windows[1:W],forecast_window)
 
+all_nomable<-map(all,function(x){x[-1]}) #Delete mable
+all_mable<-map(all,function(x){x[1]}) #Extract mable
+  
 
 #Save output
-saveRDS(all,paste0('../Base_Results/',
+saveRDS(all_nomable,paste0('../Base_Results/',
                    distj,'_',
                    trendj,'_',
                    modelj,'_base.rds'))
 
+#Save output
+saveRDS(all_mable,paste0('../Base_Results/',
+                           distj,'_',
+                           trendj,'_',
+                           modelj,'_mable.rds'))
