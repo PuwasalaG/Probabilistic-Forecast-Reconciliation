@@ -1,6 +1,7 @@
 #Evaluate reconciled forecasts
 
 library(tidyverse)
+library(mvtnorm)
 
 #Clear workspace
 rm(list=ls())
@@ -74,6 +75,8 @@ evaluate_scenario<-function(scen){
   Base<-rep(NA,evalN)
   BottomUp<-rep(NA,evalN)
   OLS<-rep(NA,evalN)
+  WLS<-rep(NA,evalN)
+  JPP<-rep(NA,evalN)
   MinTShr<-rep(NA,evalN)
   MinTSam<-rep(NA,evalN)
   ScoreOpt<-rep(NA,evalN)
@@ -135,10 +138,20 @@ evaluate_scenario<-function(scen){
     BottomUp[i]<-energy_score(y,SG_bu%*%x,SG_bu%*%xs)
     #OLS
     OLS[i]<-energy_score(y,SG_ols%*%x,SG_ols%*%xs)
+    #WLS (structural)
+    SW_wls<-diag(rowSums(S))%*%S
+    SG_wls<-S%*%solve(t(SW_wls)%*%S,t(SW_wls))
+    WLS[i]<-energy_score(y,SG_wls%*%x,SG_wls%*%xs)
+    
+    #JPP
+    JPP[i]<-energy_score(y,SG_wls%*%t(apply(x,1,sort)),SG_wls%*%t(apply(xs,1,sort)))
+    
     #MinT (shr)
     SW_MinTShr<-fc_i$fc_Sigma_shr%*%S
     SG_MinTShr<-S%*%solve(t(SW_MinTShr)%*%S,t(SW_MinTShr))
     MinTShr[i]<-energy_score(y,SG_MinTShr%*%x,SG_MinTShr%*%xs)
+    
+    
     
     #MinT (sam)
     SW_MinTSam<-fc_i$fc_Sigma_sam%*%S
@@ -152,7 +165,7 @@ evaluate_scenario<-function(scen){
     
   }
     
-  res<-tibble(EvaluationPeriod=1:evalN,Base,BottomUp,OLS,MinTSam,MinTShr,ScoreOpt)  
+  res<-tibble(EvaluationPeriod=1:evalN,Base,BottomUp,JPP,OLS,WLS,MinTSam,MinTShr,ScoreOpt)  
   res_long<-pivot_longer(res,-EvaluationPeriod,names_to = 'Method',values_to = 'EnergyScore')
   res_long%>%add_column(DGPDistribution=distj,
                         DGPStationary=trendj,
@@ -162,4 +175,26 @@ evaluate_scenario<-function(scen){
   return(res_final)
 }
 
-all_results<-map_dfr(17:19,evaluate_scenario)
+all_results<-map_dfr(17:20,evaluate_scenario)
+
+
+saveRDS(all_results,'all_results.rds')
+write_csv(all_results,'all_results.csv')
+
+all_results%>%
+  mutate(BaseMethod=paste(BaseDependence,BaseDistribution))%>%
+  ggplot(aes(x=Method, y=EnergyScore))+
+  geom_boxplot()+
+  facet_grid(rows = vars(BaseMethod),col= vars(BaseModel))
+
+all_results%>%
+  group_by(Method,BaseDependence,BaseDistribution)%>%
+  summarise(meanScore=mean(EnergyScore),medianScore=median(EnergyScore))->summary_results
+
+summary_results%>%
+  select(-medianScore)%>%
+  pivot_wider(names_from = Method,values_from = meanScore)
+
+summary_results%>%
+  select(-meanScore)%>%
+  pivot_wider(names_from = Method,values_from = medianScore)
