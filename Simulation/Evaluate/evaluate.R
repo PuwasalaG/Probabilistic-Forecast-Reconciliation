@@ -173,7 +173,7 @@ evaluate_scenario<-function(scen){
   return(res_final)
 }
 
-all_results<-map_dfr(25:28,evaluate_scenario)
+all_results<-map_dfr(7:8,evaluate_scenario)
 
 
 saveRDS(all_results,'all_results.rds')
@@ -195,4 +195,4 @@ summary_results%>%
 
 summary_results%>%
   select(-meanScore)%>%
-  pivot_wider(names_from = Method,values_from = medianScore)
+  pivot_wider(names_from = Method,values_from = medianScore)%>%View
