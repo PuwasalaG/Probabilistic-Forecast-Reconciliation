@@ -383,12 +383,43 @@ The same property does not hold for all scores. For example, the energy score is
 
 \section{Score Optimal Reconciliation}
 
-\begin{itemize}
-\item Many interesting scores stochastic (inc. kernel and varigram)
-\item Train reconciliation weights to maximise total score
-\item Use stochastic gradient descent
-\item Details of Adam
-\end{itemize}
+We now propose an algorithm for finding reconciliation weights by optimising the total energy score.  We consider linear reconciliation of the form $\psi({\bm{\hat{y}}})={\bm{S}}\left(\bm{d}+\bm{G}{\bm{\hat{y}}}\right)$ since Theorem~\ref{theo:OptRecProj} suggests that projections in general are not guaranteed to recover the true predictive distribution even in the elliptical case.  This allows for more flexibility than a projection which implies the constraints $\bm{d}=\bm{0}$ and $\bm{G}\bm{S}=\bm{I}$. Letting $\gamma:=\left(\bm{d},vec(\bm{G})\right)$, the objective is to minimise the total energy score given by.   
+\begin{equation}
+\mathcal{E}\left(\bm{\gamma}\right)=\sum\limits_{t=1}^{T-1} \textit{ES}(\tilde{f}^{\bm{d},\bm{G}}_{t+1|t},\bm{y}_{t+1})\,,
+\label{eq:tes}
+\end{equation} 
+where $\tilde{f}^{\bm{d},\bm{G}}_{t+1|t}$ is probabilistic forecast for $\bm{y}_{t+1}$ made at time $t$ and reconciled with respect to $\bm{d}$ and $\bm{G}$.
+
+One of the challenges to optimising this objective function is that there is, in general, no closed form expression for the energy score.  However, since it can be easily approximated by Monte Carlo as
+\begin{equation*}
+\hat{\mathcal{E}}\left(\bm{\gamma}\right)=\sum\limits_{t=1}^{T-1}\left[\frac{1}{Q}\left(\sum\limits_{q=1}^{Q}||\bm{y}_{t+1}-\tilde{\bm{y}}^{[q]}_{t+1|t}||-\frac{1}{2}||\tilde{\bm{y}}_{t+1|t}-\tilde{\bm{y}}^{*[q]}_{t+1|t}||\right)\right]\,,
+\end{equation*} 
+where $\tilde{\bm{y}}^{[q]}_{t+1|t}=\bm{S}\left(\bm{d}+\bm{G}{\hat{\bm{y}}}^{[q]}_{t+1|t}\right)$, $\tilde{\bm{y}}^{*[q]}_{t+1|t}=\bm{S}\left(\bm{d}+\bm{G}{\hat{\bm{y}}}^{*[q]}_{t+1|t}\right)$ and ${\hat{\bm{y}}}^{[q]}_{t+1|t},{\hat{\bm{y}}}^{*[q]}_{t+1|t}\sim \hat{f}_{t+1|t}$ for $q=1,\ldots,Q$.  The allows the objective function to be optimised by Stochastic Gradient Descent (SGD). The SGD technique has become increasingly popular in machine learning and statistics over the past decade having been applied to training neural networks \citep{bottou2010} and Variational Bayes \citep{kingma2013}.  The gradient $\partial\hat{\mathcal{E}}/\partial{\gamma}$ is computed using the automatic differentiation library of the Stan project\citep{carpenter2015}.  The learning rates used for SGD are those of the Adam method \citep[][see]{kingma2014}.  The tuning parameters are set as $\eta=0.001$, $\beta_1=0.9$, $beta_2=0.999$ and $\epsilon=1\times 10^{-8}$, which are the values recommended by \cite{kingma2014} and used in popular software packages such as Keras.  Convergence is achieved when the change in all gradients is less than 10\% of the step size $\eta$.  The full procedure is described in Algorithm~\ref{alg:scoreopt}.
+
+\begin{algorithm}
+	\caption{SGD with Adam for score optimal reconciliation (one-step ahead forecasts).  The initial value of $\bm{\gamma}$ is given by OLS.  Steps 9-14 are the standard steps for SGD with Adam.  In step 14, division is element-wise.}\label{alg:scoreopt}.
+	\begin{algorithmic}[1]
+		\Procedure{ScoreOpt}{$\hat{f}_{2|1},\ldots,\hat{f}_{T|T-1|1}$, $\bm{y}_1,\ldots,\bm{y}_T$, $\beta_1$,$\beta_2$,$\epsilon$,$\eta$}.
+		\For{t=1:T-1}
+		  \State Find base forecasts $\hat{f}_{t+1|t}$ using $t-S,t-S+1,\ldots t$ as training data.		
+		\EndFor
+		\State Initialise $\bm{m}_0=\bm{0}, \bm{v}_0=\bm{0}$ and $\bm{\gamma}=\left(\bm{0},vec\left((\bm{S}'\bm{S})^{-1}\bm{S}'\right)\right)$ 
+		\For{j = 1,2,3,\ldots up to convergence}
+		\State Draw ${\hat{\bm{y}}}^{[q]}_{t+1|t},{\hat{\bm{y}}}^{*[q]}_{t+1|t}\sim \hat{f}_{t+1|t}$ for $q=1,\ldots,Q$, $t=1,\ldots T-1$.
+		\State Compute $\tilde{\bm{y}}^{[q]}_{t+1|t}$ and $\tilde{\bm{y}}^{*[q]}_{t+1|t}$ for $q=1,\ldots,Q$, $t=1,\ldots T-1$ using $\bm{\gamma}_{j-1}$.
+		\State $\bm{g}_j \gets \left.\partial\hat{\mathcal{E}}/\partial{\bm{\gamma}}\right|_{\bm{\gamma}_{j-1}}$ \Comment{Compute gradient}
+		\State $\bm{m}_j\gets\beta_1\bm{m}_{j-1}+(1-\beta_1)\bm{g}_j$ \Comment{Moving average of gradient}
+		\State $\bm{v}_j\gets\beta_2\bm{v}_{j-1}+(1-\beta_2)\bm{g}^2_j$ \Comment{Moving average of squared gradient}
+		\State $\hat{\bm{m}}_j\gets \bm{m}_j/(1-\beta_1^j)$ \Comment{Bias correct}
+		\State $\hat{\bm{v}}_j\gets \bm{v}_j/(1-\beta_2^j)$ \Comment{Bias correct}
+		\State $\bm{\gamma}_j\gets\bm{\gamma}_{j-1}+\eta\frac{\hat{\bm{m}}_j}{(\hat{\bm{v}}_j+\epsilon)}$ \Comment{Update weights}
+		\EndFor
+		\State Set the reconciled forecast as $\tilde{f}^{\bm{d}_{opt},\bm{G}_{opt}}_{T+1|T}$ 
+		\EndProcedure
+	\end{algorithmic}
+\end{algorithm}
+
+While Algorithm~\ref{alg:scoreopt} is not the first instance of calibrating parameters by optimising scoring rules \citep[see][for an example]{gneiting2005}, to the best of our knowledge it is the first instance of doing so with the method of SGD and the first application to forecast reconciliation.  We also note that the method is highly general.  It can be applied to a variety of multivariate scoring rules including the Variogram score \citep{SCHEUERER2015} and kernel-based scores \cite{Gneiting2007}.  It is applicable to multistep ahead forecasting if $\hat{f}_{t+1|t}$ are replaced by $\hat{f}_{t+h|t}$.  Finally, the total score in Equation~\ref{eq:tes} can be replaced with a weighted sum with weights that decay for scores computed further in the past.
 
 \section{Simulations}\label{sec:simulations}
 
