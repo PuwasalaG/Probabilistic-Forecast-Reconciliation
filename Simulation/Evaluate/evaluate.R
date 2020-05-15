@@ -173,8 +173,8 @@ evaluate_scenario<-function(scen){
     MinTSam[i]<-energy_score(y,SG_MinTSam%*%x,SG_MinTSam%*%xs)
     
     #ScoreOpt
-    xopt<-S%*%(optreco[[i]]$a+optreco[[i]]$G%*%x)
-    xsopt<-S%*%(optreco[[i]]$a+optreco[[i]]$G%*%xs)
+    xopt<-S%*%(optreco[[i]]$d+optreco[[i]]$G%*%x)
+    xsopt<-S%*%(optreco[[i]]$d+optreco[[i]]$G%*%xs)
     ScoreOpt[i]<-energy_score(y,xopt,xsopt)
     
   }
