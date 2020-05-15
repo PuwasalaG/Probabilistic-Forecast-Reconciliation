@@ -41,8 +41,7 @@ energy_score<-function(y,x,xs){
   
   term1<-apply(dif1,2,function(v){sqrt(sum(v^2))})%>%sum
   term2<-apply(dif2,2,function(v){sqrt(sum(v^2))})%>%sum
-  
-  return(((0.5*term1)-term2)/ncol(x))
+  return(((-0.5*term1)+term2)/ncol(x))
   
 }
 
