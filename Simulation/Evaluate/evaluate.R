@@ -2,7 +2,7 @@
 
 library(tidyverse)
 library(mvtnorm)
-
+library(Matrix)
 #Clear workspace
 rm(list=ls())
 
@@ -77,6 +77,7 @@ evaluate_scenario<-function(scen){
   JPP<-rep(NA,evalN)
   MinTShr<-rep(NA,evalN)
   MinTSam<-rep(NA,evalN)
+  BTTH<-rep(NA,evalN)
   ScoreOpt<-rep(NA,evalN)
   
   for (i in 1:evalN){
@@ -149,8 +150,24 @@ evaluate_scenario<-function(scen){
     SG_MinTShr<-S%*%solve(t(SW_MinTShr)%*%S,t(SW_MinTShr))
     MinTShr[i]<-energy_score(y,SG_MinTShr%*%x,SG_MinTShr%*%xs)
     
-    
-    
+    #BTTH
+    #Find order
+    o<-apply(fc_i$resid[4:7,],1,order) #Find order stats
+    oi<-apply(o,2,invPerm) #Find inverse permutation
+    rb<-t(apply(x[4:7,1:ncol(fc_i$resid)],1,sort)) #Rank sample (504  only)
+    rbs<-t(apply(xs[4:7,1:ncol(fc_i$resid)],1,sort)) #Rank copy (504  only)
+    #Permute
+    cb<-matrix(NA,nrow(rb),ncol(rb))
+    cbs<-matrix(NA,nrow(rbs),ncol(rbs))
+    for (j in 1:4){
+      cb[j,]<-(rb[j,oi[,j]])
+      cbs[j,]<-(rbs[j,oi[,j]])
+    }
+    mean_adj<-SG_MinTShr%*%fc_i$fc_mean-fc_i$fc_mean
+    x_btth<-(S%*%cb)+matrix(mean_adj,7,ncol(cb))
+    xs_btth<-(S%*%cbs)+matrix(mean_adj,7,ncol(cbs))
+    BTTH[i]<-energy_score(y,x_btth,xs_btth)
+      
     #MinT (sam)
     SW_MinTSam<-fc_i$fc_Sigma_sam%*%S
     SG_MinTSam<-S%*%solve(t(SW_MinTSam)%*%S,t(SW_MinTSam))
@@ -163,7 +180,7 @@ evaluate_scenario<-function(scen){
     
   }
     
-  res<-tibble(EvaluationPeriod=1:evalN,Base,BottomUp,JPP,OLS,WLS,MinTSam,MinTShr,ScoreOpt)  
+  res<-tibble(EvaluationPeriod=1:evalN,Base,BottomUp,JPP,BTTH,OLS,WLS,MinTSam,MinTShr,ScoreOpt)  
   res_long<-pivot_longer(res,-EvaluationPeriod,names_to = 'Method',values_to = 'EnergyScore')
   res_long%>%add_column(DGPDistribution=distj,
                         DGPStationary=trendj,
@@ -173,7 +190,7 @@ evaluate_scenario<-function(scen){
   return(res_final)
 }
 
-all_results<-map_dfr(7:8,evaluate_scenario)
+all_results<-map_dfr(17:20,evaluate_scenario)
 
 
 saveRDS(all_results,'all_results.rds')
