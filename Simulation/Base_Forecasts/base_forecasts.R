@@ -18,7 +18,7 @@ rm(list=ls())
 shrink.estim <- function(res)
 {
   n<-nrow(res)
-  covm <- cov(t(res))
+  covm <- cov(res)
   tar <- diag(diag(covm))
   corm <- stats::cov2cor(covm)
   xs <- scale(res, center = FALSE, scale = sqrt(diag(covm)))
