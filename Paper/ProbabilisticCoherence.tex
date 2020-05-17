@@ -10,6 +10,7 @@
 \usepackage{mathrsfs, float, booktabs,todonotes,amsthm}
 \usepackage[bb=boondox]{mathalfa}
 \usepackage{tikz}
+\usepackage{enumitem}
 \usetikzlibrary{arrows,positioning,shapes,fit,calc}
 \usepackage{amsfonts}
 \usepackage[section]{placeins}
@@ -455,6 +456,8 @@ While Algorithm~\ref{alg:scoreopt} is not the first instance of calibrating para
 
 \section{Simulations}\label{sec:simulations}
 
+The aim of the simulations that follow is to demonstrate probabilistic forecast reconciliation including the algorithm discussed in Section~\ref{sec:scoreoptSGD}.  A number of different data generating processes, models and approaches to obtain base forecasts are considered. 
+
 \begin{itemize}
 	\item describe all DGPS stationary/non-stationary gaussian/nongaussian and models ARIMA/ETS
 	
@@ -465,34 +468,43 @@ While Algorithm~\ref{alg:scoreopt} is not the first instance of calibrating para
 	\item Completely rewrite results
 \end{itemize}
 
-\subsection{Data Generating Processes and Setup}
+\subsection{Data Generating Processes}\label{sec:dgp}
 
-The aim of the simulations that follow is to assess the performance of both the analytical and sample based reconciliation approaches using a number of different choices of $\bm{G}$. The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with Beta margins. Parameter values are chosen so that bottom level series have a lower signal-to-noise ratio that top level series with specific details provided in Appendix \ref{app:DGP}.  For each series we generate 2002 observations from which the first 500 are ignored to avoid the impact of initial values. To investigate the impact of model mispecification, both Gaussian and non-Gaussian probabilistic forecasts will be evaluated for each DGP.
+The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. The orders $p$, and $d$ are randomly selected from $\{1,2\}$ for each bottom level series. Both a non-stationary case where $d$ is randomly chosen for each bottom level $\{0,1\}$ and a stationary case where $d$ is set to zero for all bottom level series.  The parameters for the AR and MA components are randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively where in the case of the stationary series these are only accepted if they belong to the stationary and invertible region.
 
-All forecasts are evaluated using a rolling window with a training sample of 500. This yields 1,000 probabilistic forecasts for evaluation. The predictive accuracy of the alternative methods is evaluated using the scoring rules presented in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores, i.e., the percentage improvement of a probabilistic forecast over a reference method. A positive (negative) value indicates a percentage gain (loss) in forecast accuracy over the reference method.
+We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with $\textrm{Beta}(1,3)$ margins. After simulating from the ARIMA models, additional noise is added to ensure bottom level series have a lower signal-to-noise ratio that top level series with specific details provided in Appendix \ref{app:DGP}.  This yields a total of four data generating processes (DGPs) for each combination of stationary/non-stationary and Gaussian/non-Gaussian.  For each series we generate 2000 observations from which the first 500 are ignored to avoid the impact of initial values. 
 
-\subsection{Base Forecasts}
+%All forecasts are evaluated using a rolling window with a training sample of 500. This yields 1,000 probabilistic forecasts for evaluation. The predictive accuracy of the alternative methods is evaluated using the scoring rules presented in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores, i.e., the percentage improvement of a probabilistic forecast over a reference method. A positive (negative) value indicates a percentage gain (loss) in forecast accuracy over the reference method.
 
-We fit univariate ARIMA and exponential smoothing (ETS) models to each series using the \verb|auto.arima()| and \verb|ets()| functions in the \verb|forecast| package \citep{Rforecast} in R \citep{Rcore}.  Since the conclusions were similar for both modelling approaches, the results for ETS are omitted here but are available in an online supplement.  For each series, (incoherent) point forecasts are obtained for $h = 1, 2$ and $3$-steps ahead.  We denote these as $\hat{\bm\mu}_{T+h}$. For $h=2$ and $h=3$ these are obtained using the recursive method \citep{FPP2018}.  A Gaussian base probabilistic forecast is obtained as $N(\hat{\bm{\mu}}_{T+h},\hat{\bm{\Sigma}})$ with $\hat{\bm{\Sigma}}$ estimated using in-sample one-step ahead forecast errors and the shrinkage estimator of \citet{Schafer2005} (as presented in Table \ref{tab:ReconMethods}).  A sample from the non-Gaussian probabilistic forecast is obtained using the bootstrap method described in Section~\ref{sec:drawbase}.
+\subsection{Modelling and Base Forecasts}
+
+We fit univariate ARIMA and exponential smoothing (ETS) models to each series using the \verb|auto.arima()| and \verb|ets()| functions in the \verb|fable| package \citep{Rfable} in R \citep{Rcore}.  Note that the order of the ARIMA models is not set to the true order but is chosen using the algorithm of \cite{hynkan2007}, allowing for the possibility of misspecification.  Indeed, an advantage of forecast reconciliation is the ability to down-weight the forecasts of series within the hierarchy that come from misspecified models.  For each series and model, base probabilistic forecasts are constructed in four different ways.  Letting $\hat{\bm y}_{t+h|h}L=\hat{y}_{1,t+h|h},\ldots,\hat{y}_{n,t+h|h}$ where $\hat{y}_{i,t+h|h}$ is the point forecast for series $i$ and $e_{i,t}$ be residuals stacked in a $(n \times T)$ matrix $\bm{E}:=\left\{e_{i,t}\right\}_{i=1,\dots,n,t=1,\dots,T}$, these are:
+
+\begin{enumerate}[label=(\alph*)]
+	\item The base probabilistic forecast is made up of independent Gaussian distributions with the forecast mean and variance of variable $i$ given by $\hat{y}_{i,t+h|h}$ and $\hat{\sigma}^2_{i,t+h|h}$,
+	\item The base probabilistic forecast is multivariate Gaussian distributions with the forecast mean $\hat{\bm{y}}_{t+h|h}$ and variance covariance matrix $\hat{\bm\Sigma}$, where $\hat{\bm\Sigma}$ is the variance covariance matrix of residuals,
+	\item A draw from the base probabilistic forecast is made independently for each variable as $\hat{y}_{i,t+h|h}+e_{i,s}$ where $s$ is drawn randomly (with replacement) from $1,2,\ldots, T$, and
+	\item A draw from the joint probabilistic is made as $\hat{\bm y}_{t+h|h}+\bm{e}_{s}$ where $\bm{e}_{s}$ is the $s^{th}$ column of $\bm{E}$, where $s$ is drawn randomly (with replacement) from $1,2,\ldots, T$.
+\end{enumerate}
+
+We restrict our attention to the case of $h=1$ although these methods can be generalised to larger $h$ using the recursive method \citep{FPP2018}.  For multi-step ahead forecasts, methods (c) and (d) should sample in blocks to preserve serial dependence in the residuals.
 
 \subsection{Reconciliation}
 
-For Gaussian probabilistic forecasts, the reconciled forecast will be of the form $N(\bm{S}\bm{G}\hat{\bm{\mu}},\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$, as described in Section~\ref{sec:AnalyticalSolution}.  For non-Gaussian probabilistic forecasts all draws are premultiplied by $\bm{S}\bm{G}$ as described in Section~\ref{sec:SampleSolution}.  A number of alternative projections were considered for reconciliation and are summarised in Table \ref{tab:recomethods}.
+For each DGP, model and method for obtaining base forecasts, reconciled probabilistic forecasts are obtained using each of the following techniques.
 
+\begin{itemize}
+	\item \textbf{Base:} The base forecasts with no reconciliation.
+	\item \textbf{JPP:} The best method of \cite{JeoEtAl2019}.  This is equivalent to reconcile quantiles.  A sample is drawn from the base forecast, these are ranked, one variable at a time (so that the smallest value drawn from each variable are put together, etc.).  These are then pre-multipled by $\bm{S}\left(\bm{S}'\bm{W}\bm{S}\right)^{-1}\bm{S}'\bm{W}$ where $\bm{W}$ is a diagonal matrix with elements ($1/4^2$,$1/2^2$,$1/2^2$,$1$,$1$,$1$,$1$).  These are the squared reciprocals of the number of bottom level series used to form an aggregate.
+	\item \textbf{BTTH} The method of \cite{Taieb2017}.  This is a method whereby draws from the probabilistic forecasts of the bottom level series are permuted so that they have the same empirical copula as the residuals.  These are then aggregated to form a sample from the distribution of all series.  The mean is adjusted to be equivalent to the mean that would be obtained using the MinT shrink method \cite{WicEtAl2019} described in Table~\ref{tab:recomethods}. 
+	\item \textbf{BottomUp:} Reconciliation via premultiplication by $\bm{S}\bm{G}$ where $\bm{G}=\left(\bm{0}_{m\times(n-m)},\bm{I}_{m\times m}\right)$ 
+	\item \textbf{OLS:} Reconciliation via premultiplication by $\bm{S}\left(\bm{S}'\bm{S}\right)^{-1}\bm{S}'$,
+	\item \textbf{WLS:} Reconciliation via premultiplication by the same matrix used in \cite{JeoEtAl2019} but without any reordering of the draws,
+	\item \textbf{MinT:} Reconciliation via premultiplication by the same matrix used in \cite{WicEtAl2019} but applied to probabilistic rather than point forecasting,
+	\item \textbf{ScoreOpt:} The algorithm described in Section~\ref{sec:scoreoptSGD}.
+\end{itemize}
 
-\subsubsection{Score Optimal Reconciliation}\label{sec:OptRec}
-
-In general, the $\bm{G}$ matrix that minimises expected score may depend on both the base forecast, true predictive and specific scoring rule used.  In the following section we also propose an approach to find a $\bm{G}$ by optimising the average score over a rolling window constructed within the training data.  The respective objective function can be written as,
-\begin{equation} \label{eq:Obj_func_1}
-\operatornamewithlimits{argmin}_{\bm{G}_h} \quad \E_{Q}[K(\tilde{\nu}_{\bm{G}_h}, \bm{y}_{T+h})],
-\end{equation}
-where $\tilde{\nu}_{\bm{G}_h}$ is the measure reconciled with respect to $\bm{G}_h$ (the subscript $h$ emphasises distinct matrices for different forecast horizons), $Q$ is the true predictive distribution so that $\bm{y}_{T+h}\sim Q$ and $K(.,.)$ is a proper scoring rule as described in Section \ref{sec:evaluation}.
-
-To approximate the expectation in Equation~\eqref{eq:Obj_func_1} we break up the training sample into $J$ rolling windows each of length $T-J+1$.  For the $j^{th}$ rolling window we use $\bm{y}_{j},\ldots,\bm{y}_{T-J+j}$ to evaluate a $h$-step ahead base probabilistic forecast $\hat{\nu}$.  Reconciling with respect to $\bm{G}_h$ yields the distribution $\tilde{\nu}_{\bm{G}_h}$.  The expectation in Equation~\eqref{eq:Obj_func_1} can then be approximated by
-
-\begin{equation} \label{eq:Obj_func_apprx} \E_{Q}[K(\tilde{\nu}_{\bm{G}_h}, \bm{y}_{T+h})]\approx\frac{1}{J}\sum_{j=1}^{J}K(\tilde{\nu}_{\bm{G}_h},\bm{y}_{T-J+j+h}).\nonumber
-\end{equation}
-Where this approach is used in simulations, we set $J=100$ and use a slightly larger training window of $T=600$ for selecting $\bm{G}$ only. We implement the algorithm in the Gaussian setting (see Section \ref{sec:SimAnalysticalResults}) using log score and in the non-Gaussian setting (see Section \ref{sec:SimSamplingResults}) using energy score.  We also note that different ways of parameterising $\bm{G}_h$ were used in the numerical optimisation but all led to identical results.  This is discussed in detail in Section \ref{app:ReparaG} in Appendix.
+Note JPP and BTTH are two methods previously existing in the literature. The methods BottomUp, OLS, WLS and MinT have been used extensively in the point forecasting literature but their application to probabilistic forecasting for general base forecasts is novel.
 
 \subsection{Results for Gaussian probabilistic forecasts}\label{sec:SimAnalysticalResults}
 
@@ -786,14 +798,14 @@ Since this holds for any possible realisation, it will also hold after taking ex
 \clearpage
 \section{Data generating process} \label{app:DGP}
 
-The hierarchy considered in the simulations is the 2-level structure shown in Figure \ref{fig:twoL-hier}. Data are first generated for the bottom-level series from
+To ensure that bottom level series are noisier than top level series (a feature often observed empirically), noise is added to the bottom level series in the following manner
 \begin{align*}
 y_{AA,t} &= w_{AA,t} + u_t - 0.5v_t,\\
 y_{AB,t} &= w_{AB,t} - u_t - 0.5v_t,\\
 y_{BA,t} &= w_{BA,t} + u_t + 0.5v_t,\\
 y_{BB,t} &= w_{BB,t} - u_t + 0.5v_t,
 \end{align*}
-where $w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}$ are ARIMA$(p,d,q)$ processes with error terms \linebreak $\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}$. $(p,q)$ and $(d)$ take integer values from $\{1,2\}$ and $\{0,1\}$ respectively with equal probability and the parameters for the AR and MA components are randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively. $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathcal{N}(0,\sigma^2_v)$. Aggregating the bottom-level series gives the series for the aggregated levels, such that,
+where $w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}$ generated from ARIMA processes as described in Section\ref{sec:dgp} with innovations $\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}$. Aggregating the bottom-level series gives the following for the aggregated levels,
 \begin{align*}
 y_{A,t} &= w_{AA,t} + w_{AB,t} - v_t,\\
 y_{B,t} &= w_{BA,t} + w_{BB,t} + v_t,\\
@@ -801,9 +813,7 @@ y_{Tot,t} &= w_{AA,t} + w_{AB,t} + w_{BA,t} + w_{BB,t}.
 \end{align*}
 
 
-\subsubsection*{Gaussian errors}
-
-The errors driving the bottom-level ARIMA processes are jointly generated from a Normal distribution. More specifically, $\{\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}\} \overset{iid}{\sim} \mathcal{N}(\bm{0}, \bm{\Sigma})~\forall t$. A commonly observed feature of hierarchical time series in practice, is that upper-level aggregated series are relatively less noisy than their corresponding lower-level components. This is due to the smoothing effect of aggregation, eliminating some random variation. Similarly to \cite{WicEtAl2019}, setting
+For the Gaussian DGP, $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathcal{N}(0,\sigma^2_v)$ and the errors driving the bottom-level ARIMA processes are jointly generated from a Normal distribution while . More specifically, $\{\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}\} \overset{iid}{\sim} \mathcal{N}(\bm{0}, \bm{\Sigma})~\forall t$.  We follow \cite{WicEtAl2019} and set
 \begin{equation*}\label{eq:SigmaGaussian}
 \bm{\Sigma} =
 \begin{pmatrix}
@@ -812,7 +822,7 @@ The errors driving the bottom-level ARIMA processes are jointly generated from a
 0.6 & 0.9 & 2.0 & 1.8 \\
 0.4 & 1.4 & 1.8 & 3.0 \\
 \end{pmatrix}
-\end{equation*} and $\sigma^2_u=28$ and $\sigma^2_v=22$ ensures that the following inequalities are satisfied,
+\end{equation*} and $\sigma^2_u=28$ and $\sigma^2_v=22$. This ensures that the following inequalities are satisfied,
 \begin{align*}
 \var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
 \le \var(\varepsilon_{AA,t}+\varepsilon_{AB,t}-v_t)
@@ -828,15 +838,7 @@ The errors driving the bottom-level ARIMA processes are jointly generated from a
 \le \var(\varepsilon_{BB,t}-u_t+0.5v_t).\\
 \end{align*}
 
-
-\subsubsection*{Non-Gaussian errors}
-
-Non-Gaussian errors are generated from a Gumbel copula with beta margins. Using a copula model helps impose a non-linear dependence structure among the series. A two dimensional Gumbel copula is given by,
-\begin{equation*}
-C_\theta(e_1, e_2) = exp\{-[(-ln(e_1))^\theta + (-ln(e_2))^\theta]^{1/\theta}\}.
-\end{equation*}
-We generate random variates $\{e_{AA}, e_{AB}\}$ from $C_{\theta=10}(.)$ and $\{e_{BA}, e_{BB}\}$ from $C_{\theta=8}(.)$ for series $\{AA, AB\}$ and $\{BA, BB\}$ respectively. The ARIMA errors $\{\varepsilon_{AA}, \varepsilon_{AB}, \varepsilon_{BA}, \varepsilon_{BB}\}$ are generated as the quantiles from beta distributions with shape parameters $\alpha = 1$ and $\beta = 3$ that correspond to $\{e_{AA}, e_{AB}, e_{BA}, e_{BB}\}$.
-We then choose $\sigma^2_u = 10$ and $\sigma^2_v = 7$ such that they satisfy the inequalities explained above. \textcolor{red}{Tas to double check. Do the inequalities hold for nonlinear dependence. Do we need to drop the last statement?}
+For the non-Gaussian case, errors are generated from a Gumbel copula with Beta margins as described in Section~\ref{sec:dgp}. Rather than add Gaussian noise, we simulate $u_t$ and $v_t$ from skew t distributions using the package \cite.  The scale, skew and degrees of freedom parameters are chosen as 0.5,1.5 and 4 and 0.9,2 and 8 for $u_t$ and $v_t$ respectively.  Monte Carlo simulations show that these values satisfy the inequalities described above.
 
 \clearpage
 \section{Simulation results from parametric solution for marginal forecast distributions for $h=2$ and $h=3$}\label{app:AnalysticalSolMargins}
