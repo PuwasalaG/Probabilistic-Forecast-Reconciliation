@@ -355,15 +355,15 @@ This result implies that reconciling each member of a sample drawn from an incoh
 
 An important issue in all forecasting problems is evaluating forecast accuracy. In the probabilistic setting, it is common to evaluate forecasts using proper scoring rules \citep[see][and references therein]{Gneiting2007,Gneiting2014}. Throughout, we follow the convention of negatively-oriented scoring rules such that smaller values of the score indicate more accurate forecasts.  In general, a scoring rule $K(.,.)$, is a function taking a probability measure as the first argument and a realisation as the second argument (although for ease of notation we will at times replace the probability measure with its associated density in the first argument). A scoring rule is {\em proper} if $\E_{Q}[K(Q,\bm{\omega})] \le \E_{Q}[K(P,{\bm\omega})]$ for all $P$, where $P$ is any member of some class of probability measures (densities), $Q$ is the true predictive and $\omega$ is a realisation. When this inequality is strict for all $P\neq Q$, the scoring rule is said to be {\em strictly proper}.
 
-Since hierarchical forecasting is by its very nature a multivariate problem (the linear constraints affect all variables), our focus is on multivariate scoring rules.  We consider the log score (LS), energy score (ES) which are multivariate generalisations of the log score and Cumulative Rank Probability Score respectively.
+Since hierarchical forecasting is by its very nature a multivariate problem (the linear constraints affect all variables), our focus is on multivariate scoring rules.  Arguably the simplest and most common multivariate scoring rule is the log score. The log score simply involves evaluating the negative log density at the value of the realisation, $\text{LS}(P,\bm\omega)=-\log f(\bm\omega)$, where $f$ is the density associated with a distribution $P$.  The log score is more commonly used when a parametric form for the density is available, however  this density can also be approximated from a sample of values drawn from the probabilistic forecast \citep[see][]{Jordan2017}.
 
-The log score simply involves evaluating the negative log density at the value of the realisation, $\text{LS}(P,\bm\omega)=-\log f(\bm\omega)$, where $f$ is the density associated with a distribution $P$.  The log score is more commonly used when a parametric form for the density is available, however  this density can also be approximated from a sample of values drawn from the probabilistic forecast \citep[see][]{Jordan2017}.  The energy score is most commonly calculated using the following representation
-\begin{equation*}\label{eq:Energy_score}
+Alternatively there are a number of other multivariate scoring rules that are difficult to compute using the probabilistic forecast density alone, but can be approximated using a sample drawn from that density.  An example is the energy score (ES) \citep[see][for details]{szekely2003,Gneiting2007} which is multivariate generalisation of the popular Cumulative Rank Probability Score (CRPS).  The energy score is given by
+\begin{equation}\label{eq:Energy_score}
 \text{ES}(P,\bm{\omega}) =
 \E_{P}
 ||{\bm{y}}-\bm{\omega}||^\alpha -\frac{1}{2}\E_{P}||\bm{y}-\bm{y}^*||^\alpha, \,\, \alpha \in (0,2]\,,
-\end{equation*}
-where $\bm {y}$ and $\bm{y^*}$ are independent copies drawn from the distribution $P$, and we follow common convention by setting $\alpha=0.5$.  These expectations can be easily approximated via Monte Carlo with samples drawn from the probabilistic forecast.
+\end{equation}
+where $\bm {y}$ and $\bm{y^*}$ are independent copies drawn from the distribution $P$, and we follow common convention by setting $\alpha=0.5$.  While the expectations in Equation~\ref{eq:Energy_score} may have no closed form, they can be easily approximated via Monte Carlo using a sample drawn from the probabilistic forecast.  Other scores with similar behaviour are kernel-based scores \citep{dawid2007,Gneiting2007} and the variogram score \citep{SCHEUERER2015}.
 
 %The energy score has been criticised by \citet{Pinson2013a} for its low discriminative ability for incorrectly specified covariances.  The variogram score  \citep{SCHEUERER2015}, overcomes this issue and is defined as
 %\begin{equation*}
@@ -371,9 +371,9 @@ where $\bm {y}$ and $\bm{y^*}$ are independent copies drawn from the distributio
 %\end{equation*}
 %where $y_i$ and $y_j$ are the $i^{th}$ and $j^{th}$ elements of $\bm{y}\sim P$ and we follow common convention by setting $p=0.5$.
 
-In the context of probabilistic forecast reconciliation there could be two motivations for using scoring rules. The first is to compare incoherent base probabilistic forecasts to their reconciled counterparts, to see whether reconciliation improves forecast accuracy. The second is to compare two reconciled probabilistic forecasts to one another, to evaluate which choice of $\bm{G}$ performs best in practice.
+%In the context of probabilistic forecast reconciliation there could be two motivations for using scoring rules. The first is to compare incoherent base probabilistic forecasts to their reconciled counterparts, to see whether reconciliation improves forecast accuracy. The second is to compare two reconciled probabilistic forecasts to one another, to evaluate which choice of $\bm{G}$ performs best in practice.
 
-\subsection{Scoring Rules for Hierarchical Time Series}
+\subsection{The Log Score for Hierarchical Time Series}
 
 When a expression for the density of an incoherent base forecast is available, Section~\ref{sec:AnalyticalSolution} describes how the density of a reconciled forecast can be recovered.  With both densities available, the log score is natural and straightforward scoring rule to use.  However, the following theorem shows that the log score is improper in the setting of comparing incoherent to coherent forecasts.
 
@@ -387,16 +387,16 @@ When a expression for the density of an incoherent base forecast is available, S
 
 As a result of Theorem~\ref{theo:logS_improp} we recommend avoiding the log score when comparing reconciled and unreconciled probabilistic forecasts.
 
-If a probabilistic forecast is available for any $m$ series, then a probabilistic forecast for the full hierarchy can be derived.  Definition~\ref{def:cohprob} provides an example using the bottom-level series. This suggests that it may be adequate to merely compare two coherent forecasts to one another using the bottom-level series only. We now discuss how this depends on the specific scoring rule used.
+If a probabilistic forecast is available for any $m$ series, then a probabilistic forecast for the full hierarchy can be derived.  Definition~\ref{def:cohprob} provides an example using the bottom-level series. This suggests that it may be adequate to merely compare two coherent forecasts to one another using the bottom-level series only. This is true for the log score.
 
 Consider a coherent probabilistic forecast with density $\tilde{f}_{\bm{y}}$ for the full hierarchy and $\tilde{f}_{\bm{b}}$ for the bottom-level series. By Theorem~\ref{theo:fulldens}, $\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{y})\mathbb{1}{\bm{y}\in\mathfrak{s}}$.  Any realisation $\bm{y}^*$ will lie on the coherent subspace and can be written as $\bm{S}\bm{b}^*$.  The expression for the log score is therefore
 \begin{align}
 \text{LS}(\tilde{f}_{\bm y},\bm{y}^*)&=-\log\left(|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{S}\bm{b}^*)\right)\nonumber\\
 &=-\log|\bm{S}^*|-\log \tilde{f}_{\bm{b}}(\bm{b}^*).\nonumber
 \end{align}
-For coherent densities, the log score for the full hierarchy differs from the log score for the bottom-level series only by $-\log|\bm{S}^*|$. This term is independent from the choices of ${\bm G}$. As such, rankings of different reconciliation methods using the log score for the full hierarchy will not change if only the bottom-level series is used.
+For coherent densities, the log score for the full hierarchy differs from the log score for the bottom-level series only by $-\log|\bm{S}^*|$. This term is independent from the choice of ${\bm G}$. As such, rankings of different reconciliation methods using the log score for the full hierarchy will not change if only the bottom-level series is used.
 
-The same property does not hold for all scores. For example, the energy score is invariant under orthogonal transformations \citep{Szekely2013,Gneiting2007} but not under linear transformations in general. Therefore it is possible for one method to outperform another when energy score is calculated using the full hierarchy, but for these ranking to reverse if only bottom-level series are considered.  We therefore recommend computing the energy score using the full hierarchy.  The properties of multivariate scoring rules in the context of evaluating reconciled probabilistic forecasts are summarised in Table~\ref{tab:prop}.
+The same property does not hold for all scores. For example, the energy score is invariant under orthogonal transformations \citep{Szekely2013} but not under linear transformations in general. Therefore it is possible for one method to outperform another when energy score is calculated using the full hierarchy, but for these ranking to reverse if only bottom-level series are considered.  We therefore recommend computing the energy score using the full hierarchy.  The properties of multivariate scoring rules in the context of evaluating reconciled probabilistic forecasts are summarised in Table~\ref{tab:prop}.
 
 \begin{table}
 	\caption{Properties of scoring rules for reconciled probabilistic forecasts.}\label{tab:ScoringRulesProperties}
@@ -414,7 +414,7 @@ The same property does not hold for all scores. For example, the energy score is
 
 \section{Score Optimal Reconciliation}\label{sec:scoreoptSGD}
 
-We now propose an algorithm for finding reconciliation weights by optimising the total energy score.  We consider linear reconciliation of the form $\tilde{\bm{y}}=\psi_{\bm{\gamma}}({\bm{\hat{y}}})={\bm{S}}\left(\bm{d}+\bm{G}{\bm{\hat{y}}}\right)$, where ${\bm\gamma}:=\left(\bm{d},vec(\bm{G})\right)$. This allows for more flexibility than a projection, which implies the constraints $\bm{d}=\bm{0}$ and $\bm{G}\bm{S}=\bm{I}$.  This added flexibility is motivated by Theorem~\ref{theo:OptRec} which shows that projections in general are not guaranteed to recover the true predictive distribution even in the elliptical case. When making a $h$-step ahead forecast at time $T$ the objective used to determine an optimal value of $\bm{\gamma}$ is the total energy score based on in-sample information given by:
+We now propose an algorithm for finding reconciliation weights by optimising the total score.  We will consider the special case of the energy score, however the algorithm can be generalised to any score that is computed by sample from the probabilistic forecast, including the variogram and kernel score.  We consider linear reconciliation of the form $\tilde{\bm{y}}=\psi_{\bm{\gamma}}({\bm{\hat{y}}})={\bm{S}}\left(\bm{d}+\bm{G}{\bm{\hat{y}}}\right)$, where ${\bm\gamma}:=\left(\bm{d},vec(\bm{G})\right)$. This allows for more flexibility than a projection, which implies the constraints $\bm{d}=\bm{0}$ and $\bm{G}\bm{S}=\bm{I}$.  This added flexibility is motivated by Theorem~\ref{theo:OptRec} which shows that projections in general are not guaranteed to recover the true predictive distribution even in the elliptical case. When making a $h$-step ahead forecast at time $T$ the objective used to determine an optimal value of $\bm{\gamma}$ is the total energy score based on in-sample information given by:
 \begin{equation}
 \mathcal{E}\left(\bm{\gamma}\right)=\sum\limits_{t=1}^{T-h} \textit{ES}(\tilde{f}^{\bm{\gamma}}_{t+h|t},\bm{y}_{t+1})\,,
 \label{eq:tes}
@@ -451,7 +451,7 @@ where $\tilde{\bm{y}}^{[q]}_{t+h|t}=\bm{S}\left(\bm{d}+\bm{G}{\hat{\bm{y}}}^{[q]
 	\end{algorithmic}
 \end{algorithm}
 
-While Algorithm~\ref{alg:scoreopt} is not the first instance of calibrating parameters by optimising scoring rules \citep[see][for an example]{gneiting2005}, to the best of our knowledge it is the first instance of doing so using SGD and the first application to forecast reconciliation.  We also note that the method is highly general.  It can be applied to a variety of multivariate scoring rules including the Variogram score \citep{SCHEUERER2015} and kernel-based scores \cite{Gneiting2007}.  It is amenable to parallel computing architectures, the loop beginning at line 2 of the pseudocode of Algorithm~\ref{alg:scoreopt} as can the computation of the gradient.  Finally, the total score in Equation~\ref{eq:tes} can be replaced with a weighted sum where appropriate, for instance weights that decay for scores computed further in the past will favour choices of $\bm{\gamma}$ that produced better forecasting performance for more recent forecast windows.
+While Algorithm~\ref{alg:scoreopt} is not the first instance of calibrating parameters by optimising scoring rules \citep[see][for an example]{gneiting2005}, to the best of our knowledge it is the first instance of doing so using SGD and the first application to forecast reconciliation.  It is amenable to parallel computing architectures, the loop beginning at line 2 of the pseudocode of Algorithm~\ref{alg:scoreopt} can be done in parallel as can the computation of the gradient.  Finally, the total score in Equation~\ref{eq:tes} can be replaced with a weighted sum where appropriate, for instance weights that decay for scores computed further in the past will favour choices of $\bm{\gamma}$ that produced better forecasting performance for more recent forecast windows.
 
 \section{Simulations}\label{sec:simulations}
 
