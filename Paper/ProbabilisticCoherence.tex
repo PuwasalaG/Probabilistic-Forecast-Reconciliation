@@ -174,14 +174,30 @@ where $\bm{I}_4$ is the $4\times 4$ identity matrix.
 
 The connection between this characterisation and the coherent subspace is that the columns of $\bm{S}$ span $\mathfrak{s}$.  Below, the notation $s:\mathbb{R}^m\rightarrow\mathbb{R}^n$ is used when premultiplication by $\bm{S}$ is though of as a mapping.  Finally, while $\bm{S}$ is defined in terms of $m$ bottom-level series here, in general any $m$ series can be chosen with the $\bm{S}$ matrix redefined accordingly.  The columns of all appropriately defined $\bm{S}$ matrices span the same coherent subspace $\mathfrak{s}$.
 
-When forecasts of all $n$ series are produced, they may not adhere to constraints.  In this case forecasts are called {\em incoherent base} forecasts and are denoted $\hat{\bm y}_{t+h}$, with the subscript $t+h$ implying a $h$-step ahead forecast at time $t$.  To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as {\em forecast reconciliation}.  At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm y}_{t+h}=\psi(\hat{\bm y}_{t+h})$, where $\tilde{\bm y}_{t+h}\in\mathfrak{s}$ is called the {\em reconciled} forecast.  The mapping $\psi$ may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ combines incoherent base forecasts of all series to produce new bottom-level forecasts, which are then aggregated via $s$.  When $g$ is a linear mapping this corresponds to pre-multiplying base forecasts by a matrix $\bm{S}\bm{G}$.  Many existing point forecasting approaches including the bottom-up \citep{Dunn1976}, OLS \citep{HynEtAl2011}, WLS \citep[][]{Hyndman2016,AthEtAl2017} and MinT \citep{WicEtAl2019} methods, are special cases where $\bm{S}\bm{G}$ is a projection matrix. These are summarised in Table \ref{tab:ReconMethods}.
+When forecasts of all $n$ series are produced, they may not adhere to constraints.  In this case forecasts are called {\em incoherent base} forecasts and are denoted $\hat{\bm y}_{t+h}$, with the subscript $t+h$ implying a $h$-step ahead forecast at time $t$.  To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as {\em forecast reconciliation}.  At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm y}_{t+h}=\psi(\hat{\bm y}_{t+h})$, where $\tilde{\bm y}_{t+h}\in\mathfrak{s}$ is called the {\em reconciled} forecast.  The mapping $\psi$ may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ combines incoherent base forecasts of all series to produce new bottom-level forecasts, which are then aggregated via $s$.  Many existing point forecasting approaches including the bottom-up \citep{Dunn1976}, OLS \citep{HynEtAl2011}, WLS \citep[][]{Hyndman2016,AthEtAl2017} and MinT \citep{WicEtAl2019} methods, are special cases where $g$ involves premultiplication by a matrix $\bm{G}$ and where $\bm{S}\bm{G}$ is a projection matrix. These are summarised in Table \ref{tab:ReconMethods}.
+
+\begin{table}[!t]
+	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix. Here $\bm{W}$ some diagonal matrix, $\bm{\hat\Sigma}_{sam}$ is a sample estimate of the one-step ahead forecast error covariance matrix and $\bm{\hat\Sigma}_{shr}$ is a shrinkage estimator proposed by \citet{Schafer2005}, given by $\tau \textrm{diag}(\bm{\hat\Sigma}_{sam})+(1-\tau)\bm{\hat\Sigma}_{sam}$  where $\tau = \frac{\sum_{i \neq j}\hat{\var}(\hat{\sigma}_{ij})}{\sum_{i \neq j}{\hat{\sigma}}^2_{ij}}$ and  $\sigma_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{\Sigma}}^{\text{sam}}$.} \label{tab:ReconMethods}
+	\centering
+	\begin{tabular}{l@{\hskip 0.4in}l}
+		\toprule
+		\textbf{Reconciliation method} & \textbf{$\bm{G}$} \\
+		\midrule
+		OLS             & $(\bm{S}'\bm{S})^{-1}\bm{S}'$ \\
+		WLS             & $(\bm{S}'\bm{W}\bm{S})^{-1}\bm{S}'\bm{W}$ \\
+		MinT(Sample)    & $(\bm{S}'\bm{\hat\Sigma}_{sam}^{-1}\bm{S})^{-1}\bm{S}' \bm{\hat\Sigma}_{sam}^{-1}$  \\
+		MinT(Shrink)    & $(\bm{S}'\bm{\hat\Sigma}_{shr}^{-1}\bm{S})^{-1}\bm{S}' \bm{\hat\Sigma}_{shr}^{-1}$  \\
+		\bottomrule
+	\end{tabular}
+	\label{tab:recomethods}
+\end{table}
 
 \subsection{Coherent probabilistic forecasts}
 
 We now turn our attention towards a novel definition of coherence in a probabilistic setting.  First let $(\mathbb{R}^m, \mathscr{F}_{\mathbb{R}^m}, \nu)$ be a probability triple, where $\mathscr{F}_{\mathbb{R}^m}$ is the usual Borel $\sigma$-algebra on $\mathbb{R}^m$. This triple can be thought of as a probabilistic forecast for the bottom-level series.  A $\sigma$-algebra $\mathscr{F}_{\mathfrak{s}}$ can then be constructed as the collection of sets $s(\mathcal{B})$ for all $\mathcal{B}\in \mathscr{F}_{\mathbb{R}^m}$, where $s(\mathcal{B})$ denotes the image of $\mathcal{B}$ under the mapping $s$.
 
 \begin{definition}[Coherent Probabilistic Forecasts]\label{def:cohprob}
-	Given the triple, $(\mathbb{R}^m, \mathscr{F}_{\mathbb{R}^m}, \nu)$, a coherent probability triple $(\mathfrak{s}, \mathscr{F}_{\mathfrak{s}}, \breve{\nu})$, is given by $\mathfrak{s}$, the sigma algebra $\mathscr{F}_{\mathfrak{s}}$ and a measure $\breve{\nu}$, such that
+	Given the triple, $(\mathbb{R}^m, \mathscr{F}_{\mathbb{R}^m}, \nu)$, a coherent probability triple $(\mathfrak{s}, \mathscr{F}_{\mathfrak{s}}, \breve{\nu})$, is given by $\mathfrak{s}$, the $\sigma$-algebra $\mathscr{F}_{\mathfrak{s}}$ and a measure $\breve{\nu}$, such that
 	\[
 	\breve{\nu}(s(\mathcal{B})) = \nu(\mathcal{B}) \quad \forall \mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}.
 	\]
@@ -201,7 +217,7 @@ Let $(\mathbb{R}^n, \mathscr{F}_{\mathbb{R}^n}, \hat{\nu})$ be a probability tri
 	where $\psi^{-1}(\mathcal{A}):=\{{\bm{y}}\in \mathbb{R}^n:\psi({\bm{y}})\in \mathcal{A}\}$ is the pre-image of $\mathcal{A}$, that is the set of all points in $\mathbb{R}^n$ that $\psi(.)$ maps to a point in $\mathcal{A}$.
 \end{definition}
 
-This definition naturally extends forecast reconciliation to the probabilistic setting. In the point forecasting case, the reconciled forecast is obtained by passing an incoherent forecast through a transformation. Similarly, for probabilistic forecasts, a set of points is mapped to another set of points by a transformation, with the same probabilities assigned to each set under the base and reconciled measure respectively.  Recall that the mapping $\psi$ can also be expressed as a composition of two transformations $s\circ g$. In this case, an $m$-dimensional reconciled probabilistic distribution $\nu$ can be obtained such that $\nu(\mathcal{B})= \hat{\nu}(g^{-1}(\mathcal{B}))$ for all $\mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}$ and a probabilistic forecast for the full hierarchy can then be obtained via Definition~\ref{def:cohprob}.  This construction will be used in Section~\ref{sec:AnalyticalSolution}.
+This definition naturally extends forecast reconciliation to the probabilistic setting. In the point forecasting case, the reconciled forecast is obtained by passing an incoherent forecast through a transformation. Similarly, for probabilistic forecasts, sets of points is mapped to sets of points by a transformation. The same probabilities are assigned to these sets under the base and reconciled measures respectively.  Recall that the mapping $\psi$ can also be expressed as a composition of two transformations $s\circ g$. In this case, an $m$-dimensional reconciled probabilistic distribution $\nu$ can be obtained such that $\nu(\mathcal{B})= \hat{\nu}(g^{-1}(\mathcal{B}))$ for all $\mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}$ and a probabilistic forecast for the full hierarchy can then be obtained via Definition~\ref{def:cohprob}.  This construction will be used in Section~\ref{sec:AnalyticalSolution}.
 
 Definition~\ref{def:reconprob} can use any continuous mapping $\psi$, where continuity is required to ensure that open sets in $\mathbb{R}^n$ used to construct $\mathscr{F}_{\mathbb{R}^n}$ are mapped to open sets in $\mathfrak{s}$.  However, hereafter, we restrict our attention to $\psi$ as a linear mapping.  This is depicted in Figure~\ref{fig:probfr_sch} when $\psi$ is a projection.  This figure is only a schematic, since even the most trivial hierarchy is $3$-dimensional.  The arrow labelled $\bm{S}$ spans an $m$-dimensional coherent subspace $\mathfrak{s}$, while the arrow labelled $\bm{R}$ spans an $n-m$-dimensional direction of projection.  The mapping $g$ collapses all points in the blue shaded region $g^{-1}(\mathcal{B})$, to the black interval $\mathcal{B}$. Under $s$, $\mathcal{B}$ is mapped to $s(\mathcal{B})$ shown in red.  Under our definition of reconciliation, the same probability is assigned to the red region under the reconciled measure as is assigned to the blue region under the incoherent measure.
 
@@ -210,11 +226,13 @@ Definition~\ref{def:reconprob} can use any continuous mapping $\psi$, where cont
 	\caption{Summary of probabilistic forecast reconciliation. The probability that $\bm{y}_{t+h}$ lies in the red line segment under the reconciled probabilistic forecast is defined to be equal to the probability that $\bm{y}_{t+h}$ lies in the shaded blue area under the unreconciled probabilistic forecast. Note that since the smallest possible hierarchy involves three dimensions, this figure is only a schematic.}\label{fig:probfr_sch}
 \end{figure}
 
-\section{Densities and simulation from Reconciled Distribution} \label{sec:AnalyticalSolution}
+\section{Construction of Reconciled Distribution} \label{sec:AnalyticalSolution}
 
-\subsection{Analytical derivation of reconciled densities}
+In this section we derive theoretical results on how distributions on $\mathbb{R}^n$ can be reconciled to a distribution on $\mathfrak{s}$.  In section~\ref{sec:andens} we show how this can be achieved analytically by a change of coordinates and marginalisation when the density is available.  In section~\ref{sec:elliptical} we explore this result further in the specific case of elliptical distributions. In section~\ref{sec:SampleSolution} we consider reconciliation in the case where the density may be unavailable but it is possible to draw a sample from the base probabilistic forecast distribution.  Throughout we restrict our attention to linear reconciliation. 
 
-In this section we describe how a density of a reconciled distribution can be derived analytically, from an incoherent (or base) probabilistic forecast.  We restrict our attention to linear $s$ and $g$, and show that reconciliation involves changes of coordinates and marginalisation.
+\subsection{Analytical derivation of reconciled densities}\label{sec:andens}
+
+The following theorem shows how a reconciled density can be derived from any base probabilistic forecast on $\mathbb{R}^n$.
 
 \begin{theo}[Reconciled density of bottom-level]\label{theo:bottomdens}
 	Consider the case where reconciliation is carried out using a composition of linear mappings $s\circ g$ where $g$ combines information from all levels of the base forecast into a new density for the bottom-level.  The density of the bottom-level series under the reconciled distribution is
@@ -275,13 +293,27 @@ where $\bm{G}_{\perp}^-$ is an $(n-m)\times n$ matrix such that $\bm{G}_{\perp}^
 \]
 After the change of variables, the density can be recognised as a multivariate Gaussian in $\bm{b}$ and $\bm{a}$.  The mean and covariance matrix for the margins of the first $m$ elements are $\bm{G}\hat{\bm{\mu}}$ and $\bm{G}\hat{\bm{\Sigma}}\bm{G}'$ respectively.  Marginalising out $\bm {a}$, the reconciled forecast for the bottom-level is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$.
 
-\subsection{Elliptical distributions}
 
-We now describe how the true predictive distribution can be recovered for elliptical distributions via linear reconciliation and a translation.  Let the base probabilistic forecast be from the elliptical class with location parameter $\hat{\bm{\mu}}$ and scale matrix $\hat{\bm{\Sigma}}$. The objective is to obtain a mean vector and covariance matrix for the reconciled distribution that are equal to those from the true DGP which we denote as $\bm{\mu}$ and $\bm{\Sigma}$ respectively.
+\subsection{Elliptical distributions}\label{sec:elliptical}
 
-If reconciliation is carried out by pre-multiplying by an arbitrary matrix $\bm{S}\bm{G}$ then the location and scale parameters of the reconciled distribution are $\bm{S}\bm{G}\hat{\bm{\mu}}$ and $\bm{S}\bm{G}\hat{\bm{\Sigma}}{\bm{G}}'\bm{S}'$ respectively.  If ${\bm\Omega}$ is the true scale matrix for the bottom-level series then the correct scale matrix can be recovered by setting ${\bm G}_0={\bm{\Omega}}^{1/2}\hat{\bm \Sigma}^{-1/2}$ where $\hat{\bm \Sigma}^{1/2}$ is any matrix such that $\hat{\bm \Sigma}=\hat{\bm \Sigma}^{1/2}(\hat{\bm \Sigma}^{1/2})'$, for example a Cholesky factor. To ensure conformability of matrix multiplication, ${\bm{\Omega}}^{1/2}$ must be a $m\times n$ matrix so can be set to the Cholesky factor of ${\bm{\Omega}}$ augmented with an additional $n-m$ columns of zeros.
+More generally, consider linear reconciliation of the form $\psi(\hat{\bm{y}})=\bm{S}(\bm{d}+\bm{G}\hat{\bm{y}})$.  For an elliptical base probabilistic forecast, with location $\hat{\bm\mu}$ and scale $\hat{\bm\Sigma}$, the reconciled probabilistic forecast will also be elliptical with location $\tilde{\bm{\mu}}=\bm{S}(\bm{d}+\bm{G}\hat{\bm{\mu}})$ and scale   $\tilde{\bm{\Sigma}}=\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'$.  This is a consequence of the fact that elliptical distributions are closed under linear transformations and marginalisation. While the base and reconciled distribution may be of a different form they will both belong to the elliptical family.  This leads to the following result
 
-We note that in general ${\bm S}{\bm G}_0$ is not a projection matrix.  As a consequence, even if the base forecasts are unbiased (i.e. $\hat{\bm{\mu}}=\bm{\mu}$) the reconciled forecasts will not be since ${\bm S}{\bm G}_{0}\hat{\bm{\mu}}\neq\bm{\mu}$.  To recover the correct mean, reconciliation should also include translation by ${\bm d}_{0}={\bm\mu}-{\bm S}{\bm G}_{0}\hat{\bm{\mu}}$.
+\begin{theo}\label{theo:OptRec}
+	Assume the true predictive distribution is elliptical with location ${\bm\mu}$ and scale ${\bm\Sigma}$.  Then for an elliptical base probabilistic forecast with arbitrary location $\hat{\bm\mu}$ and scale $\hat{\bm\Sigma}$, there exists $\bm{d}_{opt}$ and $\bm{G}_{opt}$ such that the true predictive distribution is recovered by reconciliation. 
+\end{theo}
+\begin{proof}
+	First consider finding a $\bm{G}_{opt}$ for which the following holds, 
+	\begin{equation*}
+	\bm{\Sigma}=\bm{S}\bm{G}_{opt}\Sigma\bm{G}'_{opt}\bm{S}'\,.
+	\end{equation*}
+	This can be solved as $\bm{G}_{opt}={\bm{\Omega}}_0^{1/2}\hat{\bm \Sigma}^{-1/2}$, where $\hat{\bm \Sigma}^{1/2}$ is any matrix such that $\hat{\bm \Sigma}=\hat{\bm \Sigma}^{1/2}(\hat{\bm \Sigma}^{1/2})'$ (for example a Cholesky factor), ${\bm{\Omega}}_0^{1/2}({\bm{\Omega}}_0^{1/2})'={\bm\Omega}$ and ${\bm\Omega}$ is the true scale matrix for the bottom-level series. To ensure conformability of matrix multiplication, ${\bm{\Omega}}^{1/2}$ must be a $m\times n$ matrix so can be set to the Cholesky factor of ${\bm{\Omega}}$ augmented with an additional $n-m$ columns of zeros. To reconcile the location solve the following for $\bm{d}_{opt}$
+	\begin{equation*}
+	\bm{\mu}=\bm{S}(\bm{d}_{opt}+\bm{G}_{opt}\hat{\bm{\mu}})\,
+	\end{equation*}
+	which is given by $\bm{d}_{opt}=\bm{\beta}-\bm{G}_{opt}\hat{\bm\mu}$, where $\bm{\beta}$ is defined so that $\bm{\mu}=\bm{S}\bm{\beta}$. 
+\end{proof}
+
+While the above theorem is not feasible in practice (exploiting the result requires knowledge of $\bm{\mu}$ and $\bm{\Sigma}$), it does nonetheless have important consequences for the algorithm that we introduce in Section~\ref{sec:scoreoptSGD}. In particular, note that ${\bm S}{\bm G}_{opt}$ is not a projection matrix in general.  This implies that in the probabilistic forecasting setting, it is advised to include a translation $\bm{d}$ in the reconciliation procedure.  This holds even if the base forecasts are unbiased (i.e. $\hat{\bm{\mu}}=\bm{\mu}$) since in general ${\bm S}{\bm G}_{opt}\hat{\bm{\mu}}\neq\bm{\mu}$.  
 
 Although ${\bm S}{\bm G}_0$ is not a projection matrix in general, there are some conditions under which it will be.  These are described by the following theorem.
 \begin{theo}[Optimal Projection for Reconciliation]\label{theo:OptRecProj}
@@ -380,9 +412,9 @@ The same property does not hold for all scores. For example, the energy score is
 	\label{tab:prop}
 \end{table}
 
-\section{Score Optimal Reconciliation}
+\section{Score Optimal Reconciliation}\label{sec:scoreoptSGD}
 
-We now propose an algorithm for finding reconciliation weights by optimising the total energy score.  We consider linear reconciliation of the form $\tilde{\bm{y}}=\psi_{\bm{\gamma}}({\bm{\hat{y}}})={\bm{S}}\left(\bm{d}+\bm{G}{\bm{\hat{y}}}\right)$, where ${\bm\gamma}:=\left(\bm{d},vec(\bm{G})\right)$. This allows for more flexibility than a projection, which implies the constraints $\bm{d}=\bm{0}$ and $\bm{G}\bm{S}=\bm{I}$.  This added flexibility is motivated by Theorem~\ref{theo:OptRecProj} which shows that projections in general are not guaranteed to recover the true predictive distribution even in the elliptical case. When making a $h$-step ahead forecast at time $T$ the objective used to determine an optimal value of $\bm{\gamma}$ is the total energy score based on in-sample information given by:
+We now propose an algorithm for finding reconciliation weights by optimising the total energy score.  We consider linear reconciliation of the form $\tilde{\bm{y}}=\psi_{\bm{\gamma}}({\bm{\hat{y}}})={\bm{S}}\left(\bm{d}+\bm{G}{\bm{\hat{y}}}\right)$, where ${\bm\gamma}:=\left(\bm{d},vec(\bm{G})\right)$. This allows for more flexibility than a projection, which implies the constraints $\bm{d}=\bm{0}$ and $\bm{G}\bm{S}=\bm{I}$.  This added flexibility is motivated by Theorem~\ref{theo:OptRec} which shows that projections in general are not guaranteed to recover the true predictive distribution even in the elliptical case. When making a $h$-step ahead forecast at time $T$ the objective used to determine an optimal value of $\bm{\gamma}$ is the total energy score based on in-sample information given by:
 \begin{equation}
 \mathcal{E}\left(\bm{\gamma}\right)=\sum\limits_{t=1}^{T-h} \textit{ES}(\tilde{f}^{\bm{\gamma}}_{t+h|t},\bm{y}_{t+1})\,,
 \label{eq:tes}
@@ -446,22 +478,7 @@ We fit univariate ARIMA and exponential smoothing (ETS) models to each series us
 \subsection{Reconciliation}
 
 For Gaussian probabilistic forecasts, the reconciled forecast will be of the form $N(\bm{S}\bm{G}\hat{\bm{\mu}},\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$, as described in Section~\ref{sec:AnalyticalSolution}.  For non-Gaussian probabilistic forecasts all draws are premultiplied by $\bm{S}\bm{G}$ as described in Section~\ref{sec:SampleSolution}.  A number of alternative projections were considered for reconciliation and are summarised in Table \ref{tab:recomethods}.
-\begin{table}[!t]
-	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix, with ${\bm G}=(\bm{S}'\bm{W}^{-1}\bm{S})^{-1}\bm{S}'\bm{W}^{-1}$.  %so that ${\bm G}=(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{R}'_\bot=\bm{S}'\bm{W}^{-1}$. 
-	The rows present alternative choices of $\bm{W}$. $\hat{\bm{W}}^{\text{sam}}$ is the sample variance-covariance matrix estimated from one-step ahead in-sample forecast errors from the base incoherent forecasts. $\hat{\bm{W}}^{\text{wls}}$ is a diagonal matrix with elements from $\hat{\bm{W}}^{\text{sam}}$. $\hat{\bm{W}}^{\text{shr}}$ is a shrinkage estimator proposed by \citet{Schafer2005},  where $\tau = \frac{\sum_{i \neq j}\hat{\var}(\hat{w}_{ij})}{\sum_{i \neq j}{\hat{w}}^2_{ij}}$ and  $w_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{W}}^{\text{sam}}$. Relevant references are presented at the end of Section \ref{sec:PointForecasts}.} \label{tab:ReconMethods}
-	\centering
-	\begin{tabular}{l@{\hskip 0.4in}l}
-		\toprule
-		\textbf{Reconciliation method} & \textbf{$\bm{W}$} \\
-		\midrule
-		OLS             & $\bm{I}$ \\
-		WLS             & $\text{diag}(\hat{\bm{W}}^{\text{sam}})$ \\
-		MinT(Sample)    & $\hat{\bm{W}}^{\text{sam}}$ \\
-		MinT(Shrink)    & $\tau\text{diag}(\hat{\bm{W}}^{\text{sam}}) + (1-\tau)\hat{\bm{W}}^{\text{sam}}$\\
-		\bottomrule
-	\end{tabular}
-\label{tab:recomethods}
-\end{table}
+
 
 \subsubsection{Score Optimal Reconciliation}\label{sec:OptRec}
 
