@@ -189,7 +189,7 @@ evaluate_scenario<-function(scen){
   return(res_final)
 }
 
-all_results<-map_dfr(17:20,evaluate_scenario)
+all_results<-map_dfr(25:32,evaluate_scenario)
 
 
 saveRDS(all_results,'all_results.rds')

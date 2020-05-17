@@ -28,7 +28,7 @@ depj<-simj$dep #Are innovations drawn independently or jointly?
 #Sample sizes
 N<-500 # Size of base training window
 L<-4 # Lags to leave at beginning of window
-inW<-500 # Size of inner windows (for training reco weights)
+inW<-200 # Size of inner windows (for training reco weights)
 outW<-500 # Size of outer window (for evaluation)
 Q<-200 #Number of iterates to approximate energy score
 m<-7 #Number of series
