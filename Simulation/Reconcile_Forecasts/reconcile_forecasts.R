@@ -14,7 +14,7 @@ simtable<-read_csv('SimulationTable.csv')
 
 ### Extract flags from simulation scenario
 
-#scen<-1 #If running within R uncomment this.  This will only run first scenario
+#scen<-5 #If running within R uncomment this.  This will only run first scenario
 scen<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this
 
 
@@ -28,9 +28,9 @@ depj<-simj$dep #Are innovations drawn independently or jointly?
 #Sample sizes
 N<-500 # Size of base training window
 L<-4 # Lags to leave at beginning of window
-inW<-200 # Size of inner windows (for training reco weights)
+inW<-500 # Size of inner windows (for training reco weights)
 outW<-500 # Size of outer window (for evaluation)
-Q<-200 #Number of iterates to approximate energy score
+Q<-500 #Number of iterates to approximate energy score
 m<-7 #Number of series
 
 #Read in data
@@ -128,7 +128,16 @@ for (eval in 1:outW){
   
   
   #Train reconciliation weights using SGA 
-  opt<-scoreopt(all_y,all_prob,S,trace = T)
+  
+  if (scen<=24){
+    tt<-system.time(opt<-scoreopt(all_y,all_prob,S,trace = T,control = list(maxIter=1000)))
+    print(tt)
+  }
+  if(scen>24){
+    tt<-system.time(opt<-scoreopt(all_y,all_prob,S,trace = T,control = list(eta=0.0001,tol=0.000001,maxIter=1000)))
+    print(tt)
+  }
+  
   
   #Store
   all[[eval]]<-opt
