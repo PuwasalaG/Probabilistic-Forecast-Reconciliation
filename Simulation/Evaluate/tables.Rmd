@@ -11,9 +11,10 @@ knitr::opts_chunk$set(echo = FALSE,fig.pos = 'H',fig.height = 6.5)
 library(tidyverse)
 library(tsutils)
 library(kableExtra)
-res<-read_csv('all_results.csv')
+res_all<-read_csv('all_results.csv')
 
-res%>%
+res_all%>%
+  #filter(!(Method%in%c('OLS','MinTSam')))%>%
   mutate(DGP=paste(DGPDistribution,DGPStationary,sep = '_'))%>%
   mutate(BaseMethod=paste(BaseDependence,BaseDistribution,sep = '_'))%>%
   select(EvaluationPeriod,Method,EnergyScore,DGP,BaseMethod,BaseModel)->matrix
@@ -25,7 +26,17 @@ res<-read_csv('meanScore.csv')
 
 ```
 
-In all cases four methods are used to generate base forecasts.  Either base forecasts are drawn from an independent distribution or non-independent distribution (all DGPs actually have dependence).  Also base forecasts are Gaussian or use bootstrapping (the DGPs may be Gaussian or non-Gaussian)
+In all cases four methods are used to generate base forecasts.  Either base forecasts are drawn from an independent distribution or dependent distribution (all DGPs actually have dependence).  Also base forecasts are Gaussian or use bootstrapping (the DGPs may be Gaussian or non-Gaussian).  The following reconciliation methods are considered
+
+- Base: Not a reconciliation method, just the base forecasts.
+- BottomUp: Bottom up
+- BTTH: Ben Taieb, Taylor Hyndman (2020).  This is like bottom up but reorders a sample from probabilistic forecast to match the empirical copula.  Also the mean is adjusted to be the same as that from MinT reconciliation.
+- JPP: Jeon Panagiotelis Petropoulos (2019).  This reorders a sample from the probabilistic forecast to be perfectly dependent, i.e. it reconciles quantiles.  Reconciliation is done by WLS (structural)
+- MinTSam: MinT with the usual sample covariance estimator
+- MinTShr: MinT with shrinkage covariance estimator
+- OLS: OLS reconciliation
+- ScoreOpt: Score Optimisation by stochastic gradient descent.
+- WLS: Weighted least squares using structural scaling.
 
 #Gaussian and Stationary DGP
 
@@ -64,7 +75,7 @@ par(mfrow=c(2,2))
         filter(BaseModel==model)%>%
         filter(DGP==paste(dgpd,dgps,sep='_'))%>%
         filter(BaseMethod==b)%>%
-        select(-DGP,-BaseMethod)%>%
+        select(-DGP,-BaseMethod, -BaseModel)%>%
         pivot_wider(names_from = Method, values_from = EnergyScore)%>%
         select(-EvaluationPeriod)->dat
       datm<-as.matrix(dat)
@@ -112,7 +123,7 @@ par(mfrow=c(2,2))
         filter(BaseModel==model)%>%
         filter(DGP==paste(dgpd,dgps,sep='_'))%>%
         filter(BaseMethod==b)%>%
-        select(-DGP,-BaseMethod)%>%
+        select(-DGP,-BaseMethod,-BaseModel)%>%
         pivot_wider(names_from = Method, values_from = EnergyScore)%>%
         select(-EvaluationPeriod)->dat
       datm<-as.matrix(dat)
@@ -165,7 +176,7 @@ par(mfrow=c(2,2))
         filter(BaseModel==model)%>%
         filter(DGP==paste(dgpd,dgps,sep='_'))%>%
         filter(BaseMethod==b)%>%
-        select(-DGP,-BaseMethod)%>%
+        select(-DGP,-BaseMethod,BaseModel)%>%
         pivot_wider(names_from = Method, values_from = EnergyScore)%>%
         select(-EvaluationPeriod)->dat
       datm<-as.matrix(dat)
@@ -213,7 +224,7 @@ par(mfrow=c(2,2))
         filter(BaseModel==model)%>%
         filter(DGP==paste(dgpd,dgps,sep='_'))%>%
         filter(BaseMethod==b)%>%
-        select(-DGP,-BaseMethod)%>%
+        select(-DGP,-BaseMethod,BaseModel)%>%
         pivot_wider(names_from = Method, values_from = EnergyScore)%>%
         select(-EvaluationPeriod)->dat
       datm<-as.matrix(dat)
@@ -266,7 +277,7 @@ par(mfrow=c(2,2))
         filter(BaseModel==model)%>%
         filter(DGP==paste(dgpd,dgps,sep='_'))%>%
         filter(BaseMethod==b)%>%
-        select(-DGP,-BaseMethod)%>%
+        select(-DGP,-BaseMethod,BaseModel)%>%
         pivot_wider(names_from = Method, values_from = EnergyScore)%>%
         select(-EvaluationPeriod)->dat
       datm<-as.matrix(dat)
@@ -314,7 +325,7 @@ par(mfrow=c(2,2))
         filter(BaseModel==model)%>%
         filter(DGP==paste(dgpd,dgps,sep='_'))%>%
         filter(BaseMethod==b)%>%
-        select(-DGP,-BaseMethod)%>%
+        select(-DGP,-BaseMethod,BaseModel)%>%
         pivot_wider(names_from = Method, values_from = EnergyScore)%>%
         select(-EvaluationPeriod)->dat
       datm<-as.matrix(dat)
@@ -367,7 +378,7 @@ par(mfrow=c(2,2))
         filter(BaseModel==model)%>%
         filter(DGP==paste(dgpd,dgps,sep='_'))%>%
         filter(BaseMethod==b)%>%
-        select(-DGP,-BaseMethod)%>%
+        select(-DGP,-BaseMethod,BaseModel)%>%
         pivot_wider(names_from = Method, values_from = EnergyScore)%>%
         select(-EvaluationPeriod)->dat
       datm<-as.matrix(dat)
@@ -415,7 +426,7 @@ par(mfrow=c(2,2))
         filter(BaseModel==model)%>%
         filter(DGP==paste(dgpd,dgps,sep='_'))%>%
         filter(BaseMethod==b)%>%
-        select(-DGP,-BaseMethod)%>%
+        select(-DGP,-BaseMethod,BaseModel)%>%
         pivot_wider(names_from = Method, values_from = EnergyScore)%>%
         select(-EvaluationPeriod)->dat
       datm<-as.matrix(dat)

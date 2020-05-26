@@ -215,16 +215,26 @@ all_results%>%
           DGPDistribution,
           BaseModel,
           BaseDependence,
-          BaseDistribution)->summary_results
+          BaseDistribution)->summary_mean
 #  mutate_if(is.numeric, list(dif = ~ (. - Base)/Base))%>%
 #  select(c(1:6,17:23))->
 
-write_csv(summary_results,'meanScore.csv')
+write_csv(summary_mean,'meanScore.csv')
 
-# summary_results%>%
-#   select(-medianScore)%>%
-#   pivot_wider(names_from = Method,values_from = meanScore)->mean_sum
-# 
-# summary_results%>%
-#   select(-meanScore)%>%
-#   pivot_wider(names_from = Method,values_from = medianScore)->med_sum
+
+all_results%>%
+  group_by(Method,BaseDependence,BaseDistribution,BaseModel,DGPDistribution,DGPStationary)%>%
+  summarise(meanScore=mean(EnergyScore),medianScore=median(EnergyScore))%>%
+  pivot_wider(id_cols = c('DGPStationary',
+                          'DGPDistribution',
+                          'BaseModel','BaseDependence',
+                          'BaseDistribution'),
+              names_from = Method,values_from = medianScore)%>%
+  arrange(desc(DGPStationary),
+          DGPDistribution,
+          BaseModel,
+          BaseDependence,
+          BaseDistribution)->summary_median
+
+write_csv(summary_median,'medianScore.csv')
+
