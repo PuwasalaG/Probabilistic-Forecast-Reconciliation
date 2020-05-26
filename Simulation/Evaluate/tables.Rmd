@@ -1,0 +1,432 @@
+---
+title: "Summary of Results"
+output: pdf_document
+header-includes:
+  - \usepackage{float}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,fig.pos = 'H',fig.height = 6.5)
+library(tidyverse)
+library(tsutils)
+library(kableExtra)
+res<-read_csv('all_results.csv')
+
+res%>%
+  mutate(DGP=paste(DGPDistribution,DGPStationary,sep = '_'))%>%
+  mutate(BaseMethod=paste(BaseDependence,BaseDistribution,sep = '_'))%>%
+  select(EvaluationPeriod,Method,EnergyScore,DGP,BaseMethod,BaseModel)->matrix
+
+
+BaseMs<-unique(matrix$BaseMethod)
+
+res<-read_csv('meanScore.csv')
+
+```
+
+In all cases four methods are used to generate base forecasts.  Either base forecasts are drawn from an independent distribution or non-independent distribution (all DGPs actually have dependence).  Also base forecasts are Gaussian or use bootstrapping (the DGPs may be Gaussian or non-Gaussian)
+
+#Gaussian and Stationary DGP
+
+The DGP has Gaussian residuals and all series are forced to be stationary.
+
+## ARIMA model
+
+```{r}
+model<-'arima'
+dgps<-'stationary'
+dgpd<-'gaussian'
+```
+
+Recall that the true DGP is ARIMA
+
+```{r}
+res%>%
+  filter(DGPStationary==dgps,
+         DGPDistribution==dgpd,
+         BaseModel==model)%>%
+  select(-DGPStationary,
+         -DGPDistribution,
+         -BaseModel)%>%
+  kable(digits = 4)%>%
+  kable_styling(font_size = 5)
+
+```
+
+Summary of Nemenyi tests is below
+
+
+```{r,fig.cap=paste('Results for',model,'modelling with a',dgpd,dgps,'DGP',sep=' ')}
+par(mfrow=c(2,2))
+    for (b in BaseMs){
+      matrix%>%
+        filter(BaseModel==model)%>%
+        filter(DGP==paste(dgpd,dgps,sep='_'))%>%
+        filter(BaseMethod==b)%>%
+        select(-DGP,-BaseMethod)%>%
+        pivot_wider(names_from = Method, values_from = EnergyScore)%>%
+        select(-EvaluationPeriod)->dat
+      datm<-as.matrix(dat)
+      if(nrow(dat)!=0){
+        nemenyi(datm,plottype = 'matrix',main=b)->nn
+      }else{
+        plot(0,0,'n',main=b)
+      }
+        
+      
+    }
+```
+
+\clearpage
+
+## ETS model
+
+```{r}
+model<-'ets'
+```
+
+Recall that the true DGP is ARIMA so there is model misspecification here.
+
+
+
+```{r}
+res%>%
+  filter(DGPStationary==dgps,
+         DGPDistribution==dgpd,
+         BaseModel==model)%>%
+  select(-DGPStationary,
+         -DGPDistribution,
+         -BaseModel)%>%
+  kable(digits = 4)%>%
+  kable_styling(font_size = 5)
+
+```
+
+Summary of Nemenyi test below
+
+```{r,fig.cap=paste('Results for',model,'modelling with a',dgpd,dgps,'DGP',sep=' ')}
+par(mfrow=c(2,2))
+    for (b in BaseMs){
+      matrix%>%
+        filter(BaseModel==model)%>%
+        filter(DGP==paste(dgpd,dgps,sep='_'))%>%
+        filter(BaseMethod==b)%>%
+        select(-DGP,-BaseMethod)%>%
+        pivot_wider(names_from = Method, values_from = EnergyScore)%>%
+        select(-EvaluationPeriod)->dat
+      datm<-as.matrix(dat)
+      if(nrow(dat)!=0){
+        nemenyi(datm,plottype = 'matrix',main=b)->nn
+      }else{
+        plot(0,0,'n',main=b)
+      }
+        
+      
+    }
+```
+
+\clearpage
+
+#Non Gaussian and Stationary DGP
+
+The DGP has non-Gaussian residuals and all series are forced to be stationary.
+
+## ARIMA model
+
+```{r}
+model<-'arima'
+dgps<-'stationary'
+dgpd<-'nongaussian'
+```
+
+Recall that the true DGP is ARIMA
+
+```{r}
+res%>%
+  filter(DGPStationary==dgps,
+         DGPDistribution==dgpd,
+         BaseModel==model)%>%
+  select(-DGPStationary,
+         -DGPDistribution,
+         -BaseModel)%>%
+  kable(digits = 4)%>%
+  kable_styling(font_size = 5)
+
+```
+
+Summary of Nemenyi tests is below
+
+
+```{r,fig.cap=paste('Results for',model,'modelling with a',dgpd,dgps,'DGP',sep=' ')}
+par(mfrow=c(2,2))
+    for (b in BaseMs){
+      matrix%>%
+        filter(BaseModel==model)%>%
+        filter(DGP==paste(dgpd,dgps,sep='_'))%>%
+        filter(BaseMethod==b)%>%
+        select(-DGP,-BaseMethod)%>%
+        pivot_wider(names_from = Method, values_from = EnergyScore)%>%
+        select(-EvaluationPeriod)->dat
+      datm<-as.matrix(dat)
+      if(nrow(dat)!=0){
+        nemenyi(datm,plottype = 'matrix',main=b)->nn
+      }else{
+        plot(0,0,'n',main=b)
+      }
+        
+      
+    }
+```
+
+\clearpage
+
+## ETS model
+
+```{r}
+model<-'ets'
+```
+
+Recall that the true DGP is ARIMA so there is model misspecification here.
+
+
+
+```{r}
+res%>%
+  filter(DGPStationary==dgps,
+         DGPDistribution==dgpd,
+         BaseModel==model)%>%
+  select(-DGPStationary,
+         -DGPDistribution,
+         -BaseModel)%>%
+  kable(digits = 4)%>%
+  kable_styling(font_size = 5)
+
+```
+
+Summary of Nemenyi test below
+
+```{r,fig.cap=paste('Results for',model,'modelling with a',dgpd,dgps,'DGP',sep=' ')}
+par(mfrow=c(2,2))
+    for (b in BaseMs){
+      matrix%>%
+        filter(BaseModel==model)%>%
+        filter(DGP==paste(dgpd,dgps,sep='_'))%>%
+        filter(BaseMethod==b)%>%
+        select(-DGP,-BaseMethod)%>%
+        pivot_wider(names_from = Method, values_from = EnergyScore)%>%
+        select(-EvaluationPeriod)->dat
+      datm<-as.matrix(dat)
+      if(nrow(dat)!=0){
+        nemenyi(datm,plottype = 'matrix',main=b)->nn
+      }else{
+        plot(0,0,'n',main=b)
+      }
+        
+      
+    }
+```
+
+\clearpage
+
+#Gaussian and non-Stationary DGP
+
+The DGP has Gaussian residuals and some series are non stationary.
+
+## ARIMA model
+
+```{r}
+model<-'arima'
+dgps<-'nonstationary'
+dgpd<-'gaussian'
+```
+
+Recall that the true DGP is ARIMA
+
+```{r}
+res%>%
+  filter(DGPStationary==dgps,
+         DGPDistribution==dgpd,
+         BaseModel==model)%>%
+  select(-DGPStationary,
+         -DGPDistribution,
+         -BaseModel)%>%
+  kable(digits = 4)%>%
+  kable_styling(font_size = 5)
+
+```
+
+Summary of Nemenyi tests is below
+
+
+```{r,fig.cap=paste('Results for',model,'modelling with a',dgpd,dgps,'DGP',sep=' ')}
+par(mfrow=c(2,2))
+    for (b in BaseMs){
+      matrix%>%
+        filter(BaseModel==model)%>%
+        filter(DGP==paste(dgpd,dgps,sep='_'))%>%
+        filter(BaseMethod==b)%>%
+        select(-DGP,-BaseMethod)%>%
+        pivot_wider(names_from = Method, values_from = EnergyScore)%>%
+        select(-EvaluationPeriod)->dat
+      datm<-as.matrix(dat)
+      if(nrow(dat)!=0){
+        nemenyi(datm,plottype = 'matrix',main=b)->nn
+      }else{
+        plot(0,0,'n',main=b)
+      }
+        
+      
+    }
+```
+
+\clearpage
+
+## ETS model
+
+```{r}
+model<-'ets'
+```
+
+Recall that the true DGP is ARIMA so there is model misspecification here.
+
+
+
+```{r}
+res%>%
+  filter(DGPStationary==dgps,
+         DGPDistribution==dgpd,
+         BaseModel==model)%>%
+  select(-DGPStationary,
+         -DGPDistribution,
+         -BaseModel)%>%
+  kable(digits = 4)%>%
+  kable_styling(font_size = 5)
+
+```
+
+Summary of Nemenyi test below
+
+```{r,fig.cap=paste('Results for',model,'modelling with a',dgpd,dgps,'DGP',sep=' ')}
+par(mfrow=c(2,2))
+    for (b in BaseMs){
+      matrix%>%
+        filter(BaseModel==model)%>%
+        filter(DGP==paste(dgpd,dgps,sep='_'))%>%
+        filter(BaseMethod==b)%>%
+        select(-DGP,-BaseMethod)%>%
+        pivot_wider(names_from = Method, values_from = EnergyScore)%>%
+        select(-EvaluationPeriod)->dat
+      datm<-as.matrix(dat)
+      if(nrow(dat)!=0){
+        nemenyi(datm,plottype = 'matrix',main=b)->nn
+      }else{
+        plot(0,0,'n',main=b)
+      }
+        
+      
+    }
+```
+
+\clearpage
+
+#Non Gaussian and non Stationary DGP
+
+The DGP has non-Gaussian residuals and some series are non-stationary.
+
+## ARIMA model
+
+```{r}
+model<-'arima'
+dgps<-'nonstationary'
+dgpd<-'nongaussian'
+```
+
+Recall that the true DGP is ARIMA
+
+```{r}
+res%>%
+  filter(DGPStationary==dgps,
+         DGPDistribution==dgpd,
+         BaseModel==model)%>%
+  select(-DGPStationary,
+         -DGPDistribution,
+         -BaseModel)%>%
+  kable(digits = 4)%>%
+  kable_styling(font_size = 5)
+
+```
+
+Summary of Nemenyi tests is below
+
+
+```{r,fig.cap=paste('Results for',model,'modelling with a',dgpd,dgps,'DGP',sep=' ')}
+par(mfrow=c(2,2))
+    for (b in BaseMs){
+      matrix%>%
+        filter(BaseModel==model)%>%
+        filter(DGP==paste(dgpd,dgps,sep='_'))%>%
+        filter(BaseMethod==b)%>%
+        select(-DGP,-BaseMethod)%>%
+        pivot_wider(names_from = Method, values_from = EnergyScore)%>%
+        select(-EvaluationPeriod)->dat
+      datm<-as.matrix(dat)
+      if(nrow(dat)!=0){
+        nemenyi(datm,plottype = 'matrix',main=b)->nn
+      }else{
+        plot(0,0,'n',main=b)
+      }
+        
+      
+    }
+```
+
+\clearpage
+
+## ETS model
+
+```{r}
+model<-'ets'
+```
+
+Recall that the true DGP is ARIMA so there is model misspecification here.
+
+
+
+```{r}
+res%>%
+  filter(DGPStationary==dgps,
+         DGPDistribution==dgpd,
+         BaseModel==model)%>%
+  select(-DGPStationary,
+         -DGPDistribution,
+         -BaseModel)%>%
+  kable(digits = 4)%>%
+  kable_styling(font_size = 5)
+
+```
+
+Summary of Nemenyi test below
+
+```{r,fig.cap=paste('Results for',model,'modelling with a',dgpd,dgps,'DGP',sep=' ')}
+par(mfrow=c(2,2))
+    for (b in BaseMs){
+      matrix%>%
+        filter(BaseModel==model)%>%
+        filter(DGP==paste(dgpd,dgps,sep='_'))%>%
+        filter(BaseMethod==b)%>%
+        select(-DGP,-BaseMethod)%>%
+        pivot_wider(names_from = Method, values_from = EnergyScore)%>%
+        select(-EvaluationPeriod)->dat
+      datm<-as.matrix(dat)
+      if(nrow(dat)!=0){
+        nemenyi(datm,plottype = 'matrix',main=b)->nn
+      }else{
+        plot(0,0,'n',main=b)
+      }
+        
+      
+    }
+```
+
+\clearpage

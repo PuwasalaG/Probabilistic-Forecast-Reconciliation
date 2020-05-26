@@ -189,7 +189,9 @@ evaluate_scenario<-function(scen){
   return(res_final)
 }
 
-all_results<-map_dfr(25:32,evaluate_scenario)
+complete<-c(1:3,5:7,9:11,13:15,17:19,21:23,25:27,29:30)
+
+all_results<-map_dfr(complete,evaluate_scenario)
 
 
 saveRDS(all_results,'all_results.rds')
@@ -202,13 +204,27 @@ all_results%>%
   facet_grid(rows = vars(BaseMethod),col= vars(BaseModel))
 
 all_results%>%
-  group_by(Method,BaseDependence,BaseDistribution,BaseModel)%>%
-  summarise(meanScore=mean(EnergyScore),medianScore=median(EnergyScore))->summary_results
+  group_by(Method,BaseDependence,BaseDistribution,BaseModel,DGPDistribution,DGPStationary)%>%
+  summarise(meanScore=mean(EnergyScore),medianScore=median(EnergyScore))%>%
+  pivot_wider(id_cols = c('DGPStationary',
+                          'DGPDistribution',
+                          'BaseModel','BaseDependence',
+                          'BaseDistribution'),
+              names_from = Method,values_from = meanScore)%>%
+  arrange(desc(DGPStationary),
+          DGPDistribution,
+          BaseModel,
+          BaseDependence,
+          BaseDistribution)->summary_results
+#  mutate_if(is.numeric, list(dif = ~ (. - Base)/Base))%>%
+#  select(c(1:6,17:23))->
 
-summary_results%>%
-  select(-medianScore)%>%
-  pivot_wider(names_from = Method,values_from = meanScore)
+write_csv(summary_results,'meanScore.csv')
 
-summary_results%>%
-  select(-meanScore)%>%
-  pivot_wider(names_from = Method,values_from = medianScore)%>%View
+# summary_results%>%
+#   select(-medianScore)%>%
+#   pivot_wider(names_from = Method,values_from = meanScore)->mean_sum
+# 
+# summary_results%>%
+#   select(-meanScore)%>%
+#   pivot_wider(names_from = Method,values_from = medianScore)->med_sum
