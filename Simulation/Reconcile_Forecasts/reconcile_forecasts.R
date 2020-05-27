@@ -17,7 +17,6 @@ simtable<-read_csv('SimulationTable.csv')
 #scen<-5 #If running within R uncomment this.  This will only run first scenario
 scen<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this
 
-
 simj<-simtable[scen,] #Extract row of table
 distj<-simj$dist #Is DGP Gaussian or nonGaussian
 trendj<-simj$trend #Is DGP stationary or nonStationary
@@ -130,11 +129,11 @@ for (eval in 1:outW){
   #Train reconciliation weights using SGA 
   
   if (scen<=24){
-    tt<-system.time(opt<-scoreopt(all_y,all_prob,S,trace = T,control = list(maxIter=1000)))
+    tt<-system.time(opt<-scoreopt(all_y,all_prob,S,trace = T,control = list(maxIter=600)))
     print(tt)
   }
   if(scen>24){
-    tt<-system.time(opt<-scoreopt(all_y,all_prob,S,trace = T,control = list(eta=0.0001,tol=0.000001,maxIter=1000)))
+    tt<-system.time(opt<-scoreopt(all_y,all_prob,S,trace = T,control = list(eta=0.0001,tol=0.000001,maxIter=600)))
     print(tt)
   }
   
