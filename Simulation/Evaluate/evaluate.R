@@ -14,8 +14,8 @@ simtable<-read_csv('../Reconcile_Forecasts/SimulationTable.csv')
 
 
 evalN<-500 #Number of evaluation periods
-Q<-2000 #Number of draws to estimate energy score
-inW<-500#inner window for training reco weights
+Q<-10000 #Number of draws to estimate energy score
+inW<-250#inner window for training reco weights
 L<-4 #Lags to leave at beginning
 N<-500 #Training sample size for 
 m<-7 #Number of series
@@ -197,11 +197,11 @@ all_results<-map_dfr(complete,evaluate_scenario)
 saveRDS(all_results,'all_results.rds')
 write_csv(all_results,'all_results.csv')
 
-all_results%>%
-  mutate(BaseMethod=paste(BaseDependence,BaseDistribution))%>%
-  ggplot(aes(x=Method, y=EnergyScore))+
-  geom_boxplot()+
-  facet_grid(rows = vars(BaseMethod),col= vars(BaseModel))
+# all_results%>%
+#   mutate(BaseMethod=paste(BaseDependence,BaseDistribution))%>%
+#   ggplot(aes(x=Method, y=EnergyScore))+
+#   geom_boxplot()+
+#   facet_grid(rows = vars(BaseMethod),col= vars(BaseModel))
 
 all_results%>%
   group_by(Method,BaseDependence,BaseDistribution,BaseModel,DGPDistribution,DGPStationary)%>%
