@@ -134,7 +134,20 @@ for (eval in 1:outW){
     print(tt)
   }
   if(scen>24){
-    tt<-system.time(opt<-scoreopt(all_y,all_prob,S,trace = T,control = list(eta=0.0001,tol=0.000001,maxIter=1000)))
+    tt<-system.time(
+      try(opt<-scoreopt(all_y,
+                    all_prob,
+                    S,
+                    trace = T,
+                    control = list(eta=0.0001,tol=0.000001,maxIter=1000))))->err
+      if(class(err)=='try-error'){
+        opt<-list(d=rep(0,4),
+                  G=solve(t(S)%*%S,t(S)),
+                  val=0,
+                  G_vec_store=G,
+                  val_store=0)
+      }
+      
     print(tt)
   }
   
