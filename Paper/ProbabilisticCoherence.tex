@@ -790,15 +790,15 @@ y_{AB,t} &= w_{AB,t} - u_t - 0.5v_t,\\
 y_{BA,t} &= w_{BA,t} + u_t + 0.5v_t,\\
 y_{BB,t} &= w_{BB,t} - u_t + 0.5v_t,
 \end{align*}
-where $w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}$ generated from ARIMA processes as described in Section\ref{sec:dgp} with innovations $\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}$. Aggregating the bottom-level series gives the following for the aggregated levels,
-\begin{align*}
-y_{A,t} &= w_{AA,t} + w_{AB,t} - v_t,\\
-y_{B,t} &= w_{BA,t} + w_{BB,t} + v_t,\\
-y_{Tot,t} &= w_{AA,t} + w_{AB,t} + w_{BA,t} + w_{BB,t}.
-\end{align*}
+where $w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}$ are generated from ARIMA processes as described in Section~\ref{sec:dgp} with innovations $\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}$. %Aggregating the bottom-level series gives the following for the aggregated levels,
+%\begin{align*}
+%y_{A,t} &= w_{AA,t} + w_{AB,t} - v_t,\\
+%y_{B,t} &= w_{BA,t} + w_{BB,t} + v_t,\\
+%y_{Tot,t} &= w_{AA,t} + w_{AB,t} + w_{BA,t} + w_{BB,t}.
+%\end{align*}
 
 
-For the Gaussian DGP, $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathcal{N}(0,\sigma^2_v)$ and the errors driving the bottom-level ARIMA processes are jointly generated from a Normal distribution while . More specifically, $\{\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}\} \overset{iid}{\sim} \mathcal{N}(\bm{0}, \bm{\Sigma})~\forall t$.  We follow \cite{WicEtAl2019} and set
+For the Gaussian DGP, $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathcal{N}(0,\sigma^2_v)$ and  $\{\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}\} \overset{iid}{\sim} \mathcal{N}(\bm{0}, \bm{\Sigma})~\forall t$.  We follow \cite{WicEtAl2019} and set
 \begin{equation*}\label{eq:SigmaGaussian}
 \bm{\Sigma} =
 \begin{pmatrix}
@@ -823,7 +823,7 @@ For the Gaussian DGP, $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathca
 \le \var(\varepsilon_{BB,t}-u_t+0.5v_t).\\
 \end{align*}
 
-For the non-Gaussian case, errors are generated from a Gumbel copula with Beta margins as described in Section~\ref{sec:dgp}. Rather than add Gaussian noise, we simulate $u_t$ and $v_t$ from skew t distributions using the package \cite.  The scale, skew and degrees of freedom parameters are chosen as 0.5,1.5 and 4 and 0.9,2 and 8 for $u_t$ and $v_t$ respectively.  Monte Carlo simulations show that these values satisfy the inequalities described above.
+For the non-Gaussian case, errors are generated from a Gumbel copula with Beta margins as described in Section~\ref{sec:dgp}. Rather than add Gaussian noise, we simulate $u_t$ and $v_t$ from skew t distributions using the \texttt{sn} package \citep{snpackage}.  The scale, skew and degrees of freedom parameters are chosen as 0.5,1.5 and 4 and 0.9,2 and 8 for $u_t$ and $v_t$ respectively.  Monte Carlo simulations show that these values satisfy the inequalities described above.
 
 \clearpage
 \section{Simulation results from parametric solution for marginal forecast distributions for $h=2$ and $h=3$}\label{app:AnalysticalSolMargins}
