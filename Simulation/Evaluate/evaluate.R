@@ -137,7 +137,7 @@ evaluate_scenario<-function(scen){
     #OLS
     OLS[i]<-energy_score(y,SG_ols%*%x,SG_ols%*%xs)
     #WLS (structural)
-    SW_wls<-diag(rowSums(S))%*%S
+    SW_wls<-solve(diag(rowSums(S)),S)
     SG_wls<-S%*%solve(t(SW_wls)%*%S,t(SW_wls))
     WLS[i]<-energy_score(y,SG_wls%*%x,SG_wls%*%xs)
     
@@ -145,7 +145,7 @@ evaluate_scenario<-function(scen){
     JPP[i]<-energy_score(y,SG_wls%*%t(apply(x,1,sort)),SG_wls%*%t(apply(xs,1,sort)))
     
     #MinT (shr)
-    SW_MinTShr<-fc_i$fc_Sigma_shr%*%S
+    SW_MinTShr<-solve(fc_i$fc_Sigma_shr,S)
     SG_MinTShr<-S%*%solve(t(SW_MinTShr)%*%S,t(SW_MinTShr))
     MinTShr[i]<-energy_score(y,SG_MinTShr%*%x,SG_MinTShr%*%xs)
     
@@ -168,7 +168,7 @@ evaluate_scenario<-function(scen){
     BTTH[i]<-energy_score(y,x_btth,xs_btth)
       
     #MinT (sam)
-    SW_MinTSam<-fc_i$fc_Sigma_sam%*%S
+    SW_MinTSam<-solve(fc_i$fc_Sigma_sam,S)
     SG_MinTSam<-S%*%solve(t(SW_MinTSam)%*%S,t(SW_MinTSam))
     MinTSam[i]<-energy_score(y,SG_MinTSam%*%x,SG_MinTSam%*%xs)
     

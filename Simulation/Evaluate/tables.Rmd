@@ -14,7 +14,7 @@ library(kableExtra)
 res_all<-read_csv('all_results.csv')
 
 res_all%>%
-  #filter(!(Method%in%c('OLS','MinTSam')))%>%
+  filter(!(Method%in%c('WLS','MinTSam')))%>%
   mutate(DGP=paste(DGPDistribution,DGPStationary,sep = '_'))%>%
   mutate(BaseMethod=paste(BaseDependence,BaseDistribution,sep = '_'))%>%
   select(EvaluationPeriod,Method,EnergyScore,DGP,BaseMethod,BaseModel)->matrix
@@ -22,7 +22,8 @@ res_all%>%
 
 BaseMs<-unique(matrix$BaseMethod)
 
-res<-read_csv('meanScore.csv')
+res<-read_csv('meanScore.csv')%>%
+  select(-WLS,-MinTSam)
 
 ```
 
