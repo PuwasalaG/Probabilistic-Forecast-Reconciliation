@@ -125,11 +125,14 @@ for (eval in 1:outW){
   
   all_prob<-map(fc[eval:(eval+inW-1)],make_genfunc)
   
+  #Set match TRUE if bootstrapping
+  
+  match<-(innovationsj=='bootstrap')
   
   #Train reconciliation weights using SGA 
   
   if (scen<=24){
-    tt<-system.time(opt<-scoreopt(all_y,all_prob,S,trace = T,control = list(maxIter=600)))
+    tt<-system.time(opt<-scoreopt(all_y,all_prob,S,trace = T,control = list(maxIter=600),match=match))
     print(tt)
   }
   if(scen>24){
@@ -138,7 +141,8 @@ for (eval in 1:outW){
                     all_prob,
                     S,
                     trace = T,
-                    control = list(eta=0.0001,tol=0.000001,maxIter=600))))->err
+                    control = list(eta=0.0001,tol=0.000001,maxIter=600),
+                    match=match)))->err
       if(class(err)=='try-error'){
         opt<-list(d=rep(0,4),
                   G=solve(t(S)%*%S,t(S)),
