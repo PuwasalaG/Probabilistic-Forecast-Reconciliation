@@ -45,6 +45,22 @@ energy_score<-function(y,x,xs){
   
 }
 
+#Energy score
+variogram_score<-function(y,x,xs){
+  term1<-0
+  for (i in 1:(length(y)-1)){
+    for (j in (i+1):length(y)){
+      term2<-0
+      for (q in 1:ncol(x)){
+        term2<-term2+abs(x[i,q]-xs[j,q])
+      }
+      term2<-term2/ncol(x)
+      term1<-term1+(abs(y[i]-y[j])-term2)^2
+    
+    }
+  }
+  return(term1)
+}
 
 
 #Function to evaluate one scenario
@@ -78,6 +94,16 @@ evaluate_scenario<-function(scen){
   MinTSam<-rep(NA,evalN)
   BTTH<-rep(NA,evalN)
   ScoreOpt<-rep(NA,evalN)
+  
+  Basev<-rep(NA,evalN)
+  BottomUpv<-rep(NA,evalN)
+  OLSv<-rep(NA,evalN)
+  WLSv<-rep(NA,evalN)
+  JPPv<-rep(NA,evalN)
+  MinTShrv<-rep(NA,evalN)
+  MinTSamv<-rep(NA,evalN)
+  BTTHv<-rep(NA,evalN)
+  ScoreOptv<-rep(NA,evalN)
   
   for (i in 1:evalN){
     
@@ -132,22 +158,31 @@ evaluate_scenario<-function(scen){
     
     #Base forecast
     Base[i]<-energy_score(y,x,xs)
+    Basev[i]<-variogram_score(y,x,xs)
     #Bottom up
     BottomUp[i]<-energy_score(y,SG_bu%*%x,SG_bu%*%xs)
+    BottomUpv[i]<-variogram_score(y,SG_bu%*%x,SG_bu%*%xs)
+    
     #OLS
     OLS[i]<-energy_score(y,SG_ols%*%x,SG_ols%*%xs)
+    OLSv[i]<-variogram_score(y,SG_ols%*%x,SG_ols%*%xs)
+    
+    
     #WLS (structural)
     SW_wls<-solve(diag(rowSums(S)),S)
     SG_wls<-S%*%solve(t(SW_wls)%*%S,t(SW_wls))
     WLS[i]<-energy_score(y,SG_wls%*%x,SG_wls%*%xs)
+    WLSv[i]<-variogram_score(y,SG_wls%*%x,SG_wls%*%xs)
     
     #JPP
     JPP[i]<-energy_score(y,SG_wls%*%t(apply(x,1,sort)),SG_wls%*%t(apply(xs,1,sort)))
+    JPPv[i]<-variogram_score(y,SG_wls%*%t(apply(x,1,sort)),SG_wls%*%t(apply(xs,1,sort)))
     
     #MinT (shr)
     SW_MinTShr<-solve(fc_i$fc_Sigma_shr,S)
     SG_MinTShr<-S%*%solve(t(SW_MinTShr)%*%S,t(SW_MinTShr))
     MinTShr[i]<-energy_score(y,SG_MinTShr%*%x,SG_MinTShr%*%xs)
+    MinTShrv[i]<-variogram_score(y,SG_MinTShr%*%x,SG_MinTShr%*%xs)
     
     #BTTH
     #Find order
@@ -166,22 +201,32 @@ evaluate_scenario<-function(scen){
     x_btth<-(S%*%cb)+matrix(mean_adj,7,ncol(cb))
     xs_btth<-(S%*%cbs)+matrix(mean_adj,7,ncol(cbs))
     BTTH[i]<-energy_score(y,x_btth,xs_btth)
+    BTTHv[i]<-variogram_score(y,x_btth,xs_btth)
       
     #MinT (sam)
     SW_MinTSam<-solve(fc_i$fc_Sigma_sam,S)
     SG_MinTSam<-S%*%solve(t(SW_MinTSam)%*%S,t(SW_MinTSam))
     MinTSam[i]<-energy_score(y,SG_MinTSam%*%x,SG_MinTSam%*%xs)
+    MinTSamv[i]<-variogram_score(y,SG_MinTSam%*%x,SG_MinTSam%*%xs)
     
     #ScoreOpt
     xopt<-S%*%(optreco[[i]]$d+optreco[[i]]$G%*%x)
     xsopt<-S%*%(optreco[[i]]$d+optreco[[i]]$G%*%xs)
     ScoreOpt[i]<-energy_score(y,xopt,xsopt)
-    
+    ScoreOptv[i]<-variogram_score(y,xopt,xsopt)
   }
     
   res<-tibble(EvaluationPeriod=1:evalN,Base,BottomUp,JPP,BTTH,OLS,WLS,MinTSam,MinTShr,ScoreOpt)  
-  res_long<-pivot_longer(res,-EvaluationPeriod,names_to = 'Method',values_to = 'EnergyScore')
-  res_long%>%add_column(DGPDistribution=distj,
+  res_long_energy<-pivot_longer(res,-EvaluationPeriod,names_to = 'Method',values_to = 'Score')%>%
+    add_column(ScoreEval='Energy')
+  resv<-tibble(EvaluationPeriod=1:evalN,Basev,BottomUpv,JPPv,BTTHv,OLSv,WLSv,MinTSamv,MinTShrv,ScoreOptv)  
+  res_long_variogram<-pivot_longer(resv,-EvaluationPeriod,names_to = 'Method',values_to = 'Score')%>%
+    add_column(ScoreEval='Variogram')%>%
+    mutate(Method=gsub('.{1}$','',Method))
+  
+  rbind(res_long_energy,
+        res_long_variogram)%>%
+    add_column(DGPDistribution=distj,
                         DGPStationary=trendj,
                         BaseModel=modelj,
                         BaseDependence=depj,
@@ -203,8 +248,9 @@ write_csv(all_results,'all_results.csv')
 #   facet_grid(rows = vars(BaseMethod),col= vars(BaseModel))
 
 all_results%>%
+  filter(ScoreEval=='Energy')%>%
   group_by(Method,BaseDependence,BaseDistribution,BaseModel,DGPDistribution,DGPStationary)%>%
-  summarise(meanScore=mean(EnergyScore),medianScore=median(EnergyScore))%>%
+  summarise(meanScore=mean(Score),medianScore=median(Score))%>%
   pivot_wider(id_cols = c('DGPStationary',
                           'DGPDistribution',
                           'BaseModel','BaseDependence',
@@ -222,8 +268,9 @@ write_csv(summary_mean,'meanScore.csv')
 
 
 all_results%>%
+  filter(ScoreEval=='Energy')%>%
   group_by(Method,BaseDependence,BaseDistribution,BaseModel,DGPDistribution,DGPStationary)%>%
-  summarise(meanScore=mean(EnergyScore),medianScore=median(EnergyScore))%>%
+  summarise(meanScore=mean(Score),medianScore=median(Score))%>%
   pivot_wider(id_cols = c('DGPStationary',
                           'DGPDistribution',
                           'BaseModel','BaseDependence',
