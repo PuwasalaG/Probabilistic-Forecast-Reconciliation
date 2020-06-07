@@ -13,8 +13,8 @@ simtable<-read_csv('SimulationTable.csv')
 
 ### Extract flags from simulation scenario
 
-scen<-36 #If running within R uncomment this.  This will only run first scenario
-#scen<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this
+#scen<-4 #If running within R uncomment this.  This will only run first scenario
+scen<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this
 
 simj<-simtable[scen,] #Extract row of table
 scorej<-simj$score #Is variogram or energy score used
@@ -29,7 +29,7 @@ N<-500 # Size of base training window
 L<-4 # Lags to leave at beginning of window
 inW<-250 # Size of inner windows (not used here but kept to make consistent with other code)
 outW<-500 # Size of outer window (for evaluation)
-Q<-200 #Number of iterates to approximate energy score
+Q<-100 #Number of iterates to approximate energy score
 m<-7 #Number of series
 
 #Read in data
@@ -76,7 +76,7 @@ for (eval in 1:outW){
       opt<-inscoreopt(y,
                       yhat,
                       S,
-                      control = list(maxIter=600,tol=1E-12),
+                      control = list(maxIter=500,tol=1E-12),
                       basedep = depj,
                       basedist = innovationsj,
                       Q=Q,
