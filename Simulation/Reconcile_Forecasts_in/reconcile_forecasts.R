@@ -13,8 +13,8 @@ simtable<-read_csv('SimulationTable.csv')
 
 ### Extract flags from simulation scenario
 
-#scen<-4 #If running within R uncomment this.  This will only run first scenario
-scen<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this
+scen<-31 #If running within R uncomment this.  This will only run first scenario
+#scen<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this
 
 simj<-simtable[scen,] #Extract row of table
 scorej<-simj$score #Is variogram or energy score used
@@ -73,16 +73,27 @@ for (eval in 1:outW){
   #Train reconciliation weights using SGA 
   
   tt<-system.time(
-      opt<-inscoreopt(y,
-                      yhat,
-                      S,
-                      control = list(maxIter=500,tol=1E-12),
-                      basedep = depj,
-                      basedist = innovationsj,
-                      Q=Q,
-                      score=list(score=scorej,alpha=1),
-                      trace = T))
+    try(opt<-inscoreopt(y,
+                        yhat,
+                        S,
+                        control = list(maxIter=500,tol=1E-12),
+                        basedep = depj,
+                        basedist = innovationsj,
+                        Q=Q,
+                        score=list(score=scorej,alpha=1),
+                        trace = T))->err)
+  if(class(err)=='try-error'){
+    opt<-list(d=rep(0,4),
+              G=solve(t(S)%*%S,t(S)),
+              val=0,
+              G_vec_store=solve(t(S)%*%S,t(S)),
+              val_store=0)
+  }
+  
   print(tt)
+
+  
+  
   #Store
   all[[eval]]<-opt
 
@@ -91,6 +102,7 @@ for (eval in 1:outW){
 
 #Save output
 saveRDS(all,paste0('../Reconciled_Results_in/',
+                   scorej,'_',
                    distj,'_',
                    trendj,'_',
                    modelj,'_',
