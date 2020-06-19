@@ -3,8 +3,10 @@ title: "Results Summary"
 author: "Anastasios Panagiotelis"
 date: "19 June 2020"
 output: pdf_document
+header-includes:
+  - \usepackage{float}
 params: 
-  args: my_arg
+  args: simj
 ---
 
 ```{r setup, include=FALSE}
@@ -16,17 +18,15 @@ res_all<-read_csv('../Evaluate/all_results.csv')
 
 res_all%>%
   filter(ScoreEval=='Energy')%>%
-  filter(!(Method%in%c('WLS','MinTSam')))%>%
   mutate(DGP=paste(DGPDistribution,DGPStationary,sep = '_'))%>%
   mutate(BaseMethod=paste(BaseDependence,BaseDistribution,sep = '_'))%>%
   select(EvaluationPeriod,Method,Score,DGP,BaseMethod,BaseModel)->res_energy
 
-# res_all%>%
-#   filter(ScoreEval=='Variogram')%>%
-#   filter(!(Method%in%c('WLS','MinTSam')))%>%
-#   mutate(DGP=paste(DGPDistribution,DGPStationary,sep = '_'))%>%
-#   mutate(BaseMethod=paste(BaseDependence,BaseDistribution,sep = '_'))%>%
-#   select(EvaluationPeriod,Method,Score,DGP,BaseMethod,BaseModel)->res_variogram
+res_all%>%
+  filter(ScoreEval=='Variogram')%>%
+  mutate(DGP=paste(DGPDistribution,DGPStationary,sep = '_'))%>%
+  mutate(BaseMethod=paste(BaseDependence,BaseDistribution,sep = '_'))%>%
+  select(EvaluationPeriod,Method,Score,DGP,BaseMethod,BaseModel)->res_variogram
 
 BaseMs<-unique(res_energy$BaseMethod)
 
@@ -48,11 +48,88 @@ Four methods are used to generate base forecasts.  Either base forecasts are dra
 - ScoreOptVIn: Variogram score Optimisation by stochastic gradient descent but with predicted values (in-sample) used instead of rolling window forecasts.
 - WLS: Weighted least squares using structural scaling.
 
-```{r}
-read_csv('../Base_Forecasts/SimulationTable.csv')
-simj<-simtable[scen,] #Extract row of table
+```{r, echo=FALSE,message=F}
+# simtable<-read_csv('../Base_Forecasts/SimulationTable.csv')
+# simj<-simtable[scen,] #Extract row of table
   distj<-simj$dist #Is DGP Gaussian or nonGaussian
   trendj<-simj$trend #Is DGP stationary or nonStationary
   modelj<-simj$model #Is model ARIMA or ETS
+```
+
+
+```{r,message=F}
+
+res_energy%>%
+  filter(BaseModel==modelj)%>%
+  filter(DGP==paste(distj,trendj,sep='_'))%>%
+  select(-BaseModel,-DGP)%>%
+  group_by(Method, BaseMethod)%>%
+  summarise(Score=mean(Score))%>%
+  pivot_wider(id_cols = Method,names_from=BaseMethod, values_from = Score)%>%
+  kable(digits = 4,caption = paste('Mean score for',modelj,'modelling with a',distj,trendj,'DGP',sep=' '))%>%
+  kable_styling(font_size = 5)
+  
 
 ```
+
+```{r,fig.cap=paste('Nemenyi matrix for',modelj,'modelling with a',distj,trendj,'DGP',sep=' ')}
+par(mfrow=c(2,2))
+    for (b in BaseMs){
+      res_energy%>%
+        filter(BaseModel==modelj)%>%
+        filter(DGP==paste(distj,trendj,sep='_'))%>%
+        filter(BaseMethod==b)%>%
+        select(-DGP,-BaseMethod, -BaseModel)%>%
+        pivot_wider(names_from = Method, values_from = Score)%>%
+        select(-EvaluationPeriod)->dat
+      datm<-as.matrix(dat)
+      if(nrow(dat)!=0){
+        nemenyi(datm,plottype = 'matrix',main=b)->nn
+      }else{
+        plot(0,0,'n',main=b)
+      }
+
+
+    }
+```
+
+\clearpage
+
+
+```{r,message=F}
+
+res_variogram%>%
+  filter(BaseModel==modelj)%>%
+  filter(DGP==paste(distj,trendj,sep='_'))%>%
+  select(-BaseModel,-DGP)%>%
+  group_by(Method, BaseMethod)%>%
+  summarise(Score=mean(Score))%>%
+  ungroup()%>%
+  pivot_wider(id_cols = Method,names_from=BaseMethod, values_from = Score)%>%
+  kable(digits = 4,caption = paste('Mean score for',modelj,'modelling with a',distj,trendj,'DGP',sep=' '))%>%
+  kable_styling(font_size = 5)
+  
+
+```
+
+```{r,fig.cap=paste('Nemenyi matrix for',modelj,'modelling with a',distj,trendj,'DGP',sep=' ')}
+par(mfrow=c(2,2))
+    for (b in BaseMs){
+      res_variogram%>%
+        filter(BaseModel==modelj)%>%
+        filter(DGP==paste(distj,trendj,sep='_'))%>%
+        filter(BaseMethod==b)%>%
+        select(-DGP,-BaseMethod, -BaseModel)%>%
+        pivot_wider(names_from = Method, values_from = Score)%>%
+        select(-EvaluationPeriod)->dat
+      datm<-as.matrix(dat)
+      if(nrow(dat)!=0){
+        nemenyi(datm,plottype = 'matrix',main=b)->nn
+      }else{
+        plot(0,0,'n',main=b)
+      }
+
+
+    }
+```
+
