@@ -1,0 +1,58 @@
+---
+title: "Results Summary"
+author: "Anastasios Panagiotelis"
+date: "19 June 2020"
+output: pdf_document
+params: 
+  args: my_arg
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,fig.pos = 'H',fig.height = 6.5)
+library(tidyverse)
+library(tsutils)
+library(kableExtra)
+res_all<-read_csv('../Evaluate/all_results.csv')
+
+res_all%>%
+  filter(ScoreEval=='Energy')%>%
+  filter(!(Method%in%c('WLS','MinTSam')))%>%
+  mutate(DGP=paste(DGPDistribution,DGPStationary,sep = '_'))%>%
+  mutate(BaseMethod=paste(BaseDependence,BaseDistribution,sep = '_'))%>%
+  select(EvaluationPeriod,Method,Score,DGP,BaseMethod,BaseModel)->res_energy
+
+# res_all%>%
+#   filter(ScoreEval=='Variogram')%>%
+#   filter(!(Method%in%c('WLS','MinTSam')))%>%
+#   mutate(DGP=paste(DGPDistribution,DGPStationary,sep = '_'))%>%
+#   mutate(BaseMethod=paste(BaseDependence,BaseDistribution,sep = '_'))%>%
+#   select(EvaluationPeriod,Method,Score,DGP,BaseMethod,BaseModel)->res_variogram
+
+BaseMs<-unique(res_energy$BaseMethod)
+
+
+```
+
+Four methods are used to generate base forecasts.  Either base forecasts are drawn from an independent distribution or dependent distribution (all DGPs actually have dependence).  Also base forecasts are Gaussian or use bootstrapping (the DGPs may be Gaussian or non-Gaussian).  The following reconciliation methods are considered
+
+- Base: Not a reconciliation method, just the base forecasts.
+- BottomUp: Bottom up
+- BTTH: Ben Taieb, Taylor Hyndman (2020).  This is like bottom up but reorders a sample from probabilistic forecast to match the empirical copula.  Also the mean is adjusted to be the same as that from MinT reconciliation.
+- JPP: Jeon Panagiotelis Petropoulos (2019).  This reorders a sample from the probabilistic forecast to be perfectly dependent, i.e. it reconciles quantiles.  Reconciliation is done by WLS (structural)
+- MinTSam: MinT with the usual sample covariance estimator
+- MinTShr: MinT with shrinkage covariance estimator
+- OLS: OLS reconciliation
+- ScoreOptE: Energy score Optimisation by stochastic gradient descent.
+- ScoreOptEIn: Energy score Optimisation by stochastic gradient descent but with predicted values (in-sample) used instead of rolling window forecasts.
+- ScoreOptV: Variogram score Optimisation by stochastic gradient descent.
+- ScoreOptVIn: Variogram score Optimisation by stochastic gradient descent but with predicted values (in-sample) used instead of rolling window forecasts.
+- WLS: Weighted least squares using structural scaling.
+
+```{r}
+read_csv('../Base_Forecasts/SimulationTable.csv')
+simj<-simtable[scen,] #Extract row of table
+  distj<-simj$dist #Is DGP Gaussian or nonGaussian
+  trendj<-simj$trend #Is DGP stationary or nonStationary
+  modelj<-simj$model #Is model ARIMA or ETS
+
+```

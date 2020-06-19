@@ -28,7 +28,7 @@ res<-read_csv('meanScore.csv')%>%
 
 ```
 
-In all cases four methods are used to generate base forecasts.  Either base forecasts are drawn from an independent distribution or dependent distribution (all DGPs actually have dependence).  Also base forecasts are Gaussian or use bootstrapping (the DGPs may be Gaussian or non-Gaussian).  The following reconciliation methods are considered
+Four methods are used to generate base forecasts.  Either base forecasts are drawn from an independent distribution or dependent distribution (all DGPs actually have dependence).  Also base forecasts are Gaussian or use bootstrapping (the DGPs may be Gaussian or non-Gaussian).  The following reconciliation methods are considered
 
 - Base: Not a reconciliation method, just the base forecasts.
 - BottomUp: Bottom up

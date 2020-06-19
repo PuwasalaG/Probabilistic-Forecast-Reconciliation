@@ -6,9 +6,10 @@ library(Matrix)
 #Clear workspace
 rm(list=ls())
 
+insample<-T #A flag that determines whether to use results based on in-sample predictions
 
 #Read Simulation Table
-simtable<-read_csv('../Reconcile_Forecasts/SimulationTable.csv')
+simtable<-read_csv('../Reconcile_Forecasts_in/SimulationTable.csv')
 
 
 
@@ -65,7 +66,9 @@ variogram_score<-function(y,x,xs){
 
 #Function to evaluate one scenario
 evaluate_scenario<-function(scen){
+  
   simj<-simtable[scen,] #Extract row of table
+  scorej<-simj$score #Is energy or variogram score optimised
   distj<-simj$dist #Is DGP Gaussian or nonGaussian
   trendj<-simj$trend #Is DGP stationary or nonStationary
   modelj<-simj$model #Is model ARIMA or ETS
@@ -78,12 +81,37 @@ evaluate_scenario<-function(scen){
   #Read in base forecast
   fc<-readRDS(paste0('../Base_Results/',distj,'_',trendj,'_',modelj,'_base.rds'))
   #Read in optimal
-  optreco<-readRDS(paste0('../Reconciled_Results/',
+
+  
+  optreco_energy<-readRDS(paste0('../Reconciled_Results/',
+                       'energy','_',
                        distj,'_',
                        trendj,'_',
                        modelj,'_',
                        depj,'_',
                        innovationsj,'_optreco.rds'))
+  optreco_energy_in<-readRDS(paste0('../Reconciled_Results_in/',
+                          'energy','_',
+                          distj,'_',
+                          trendj,'_',
+                          modelj,'_',
+                          depj,'_',
+                          innovationsj,'_optreco.rds'))
+  optreco_variogram<-readRDS(paste0('../Reconciled_Results/',
+                                 'variogram','_',
+                                 distj,'_',
+                                 trendj,'_',
+                                 modelj,'_',
+                                 depj,'_',
+                                 innovationsj,'_optreco.rds'))
+  optreco_variogram_in<-readRDS(paste0('../Reconciled_Results_in/',
+                                    'variogram','_',
+                                    distj,'_',
+                                    trendj,'_',
+                                    modelj,'_',
+                                    depj,'_',
+                                    innovationsj,'_optreco.rds'))
+  
   
   Base<-rep(NA,evalN)
   BottomUp<-rep(NA,evalN)
@@ -93,7 +121,10 @@ evaluate_scenario<-function(scen){
   MinTShr<-rep(NA,evalN)
   MinTSam<-rep(NA,evalN)
   BTTH<-rep(NA,evalN)
-  ScoreOpt<-rep(NA,evalN)
+  ScoreOptE<-rep(NA,evalN)
+  ScoreOptEIn<-rep(NA,evalN)
+  ScoreOptV<-rep(NA,evalN)
+  ScoreOptVIn<-rep(NA,evalN)
   
   Basev<-rep(NA,evalN)
   BottomUpv<-rep(NA,evalN)
@@ -103,8 +134,10 @@ evaluate_scenario<-function(scen){
   MinTShrv<-rep(NA,evalN)
   MinTSamv<-rep(NA,evalN)
   BTTHv<-rep(NA,evalN)
-  ScoreOptv<-rep(NA,evalN)
-  
+  ScoreOptEv<-rep(NA,evalN)
+  ScoreOptEInv<-rep(NA,evalN)
+  ScoreOptVv<-rep(NA,evalN)
+  ScoreOptVInv<-rep(NA,evalN)
   for (i in 1:evalN){
     
     #Get realisation
@@ -209,17 +242,36 @@ evaluate_scenario<-function(scen){
     MinTSam[i]<-energy_score(y,SG_MinTSam%*%x,SG_MinTSam%*%xs)
     MinTSamv[i]<-variogram_score(y,SG_MinTSam%*%x,SG_MinTSam%*%xs)
     
-    #ScoreOpt
-    xopt<-S%*%(optreco[[i]]$d+optreco[[i]]$G%*%x)
-    xsopt<-S%*%(optreco[[i]]$d+optreco[[i]]$G%*%xs)
-    ScoreOpt[i]<-energy_score(y,xopt,xsopt)
-    ScoreOptv[i]<-variogram_score(y,xopt,xsopt)
+    #ScoreOpt (Energy)
+    xopt<-S%*%(optreco_energy[[i]]$d+optreco_energy[[i]]$G%*%x)
+    xsopt<-S%*%(optreco_energy[[i]]$d+optreco_energy[[i]]$G%*%xs)
+    ScoreOptE[i]<-energy_score(y,xopt,xsopt)
+    ScoreOptEv[i]<-variogram_score(y,xopt,xsopt)
+    
+    #ScoreOptIn (Energy)
+    xopt<-S%*%(optreco_energy_in[[i]]$d+optreco_energy_in[[i]]$G%*%x)
+    xsopt<-S%*%(optreco_energy_in[[i]]$d+optreco_energy_in[[i]]$G%*%xs)
+    ScoreOptEIn[i]<-energy_score(y,xopt,xsopt)
+    ScoreOptEInv[i]<-variogram_score(y,xopt,xsopt)
+    
+    #ScoreOpt (variogram)
+    xopt<-S%*%(optreco_variogram[[i]]$d+optreco_variogram[[i]]$G%*%x)
+    xsopt<-S%*%(optreco_variogram[[i]]$d+optreco_variogram[[i]]$G%*%xs)
+    ScoreOptV[i]<-energy_score(y,xopt,xsopt)
+    ScoreOptVv[i]<-variogram_score(y,xopt,xsopt)
+    
+    #ScoreOptIn (variogram)
+    xopt<-S%*%(optreco_variogram_in[[i]]$d+optreco_variogram_in[[i]]$G%*%x)
+    xsopt<-S%*%(optreco_variogram_in[[i]]$d+optreco_variogram_in[[i]]$G%*%xs)
+    ScoreOptVIn[i]<-energy_score(y,xopt,xsopt)
+    ScoreOptVInv[i]<-variogram_score(y,xopt,xsopt)
+    
   }
     
-  res<-tibble(EvaluationPeriod=1:evalN,Base,BottomUp,JPP,BTTH,OLS,WLS,MinTSam,MinTShr,ScoreOpt)  
+  res<-tibble(EvaluationPeriod=1:evalN,Base,BottomUp,JPP,BTTH,OLS,WLS,MinTSam,MinTShr,ScoreOptE,ScoreOptEIn,ScoreOptV,ScoreOptVIn)  
   res_long_energy<-pivot_longer(res,-EvaluationPeriod,names_to = 'Method',values_to = 'Score')%>%
     add_column(ScoreEval='Energy')
-  resv<-tibble(EvaluationPeriod=1:evalN,Basev,BottomUpv,JPPv,BTTHv,OLSv,WLSv,MinTSamv,MinTShrv,ScoreOptv)  
+  resv<-tibble(EvaluationPeriod=1:evalN,Basev,BottomUpv,JPPv,BTTHv,OLSv,WLSv,MinTSamv,MinTShrv,ScoreOptEv,ScoreOptEInv,ScoreOptVv,ScoreOptVInv)  
   res_long_variogram<-pivot_longer(resv,-EvaluationPeriod,names_to = 'Method',values_to = 'Score')%>%
     add_column(ScoreEval='Variogram')%>%
     mutate(Method=gsub('.{1}$','',Method))
@@ -235,11 +287,12 @@ evaluate_scenario<-function(scen){
 }
 
 
-all_results<-map_dfr(1:32,evaluate_scenario)
-
+all_results<-map_dfr(1:7,evaluate_scenario)
 
 saveRDS(all_results,'all_results.rds')
 write_csv(all_results,'all_results.csv')
+
+
 
 # all_results%>%
 #   mutate(BaseMethod=paste(BaseDependence,BaseDistribution))%>%
@@ -267,6 +320,8 @@ all_results%>%
 write_csv(summary_mean,'meanScore.csv')
 
 
+
+
 all_results%>%
   filter(ScoreEval=='Energy')%>%
   group_by(Method,BaseDependence,BaseDistribution,BaseModel,DGPDistribution,DGPStationary)%>%
@@ -283,4 +338,3 @@ all_results%>%
           BaseDistribution)->summary_median
 
 write_csv(summary_median,'medianScore.csv')
-
