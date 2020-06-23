@@ -15,7 +15,7 @@ simtable<-read_csv('../Reconcile_Forecasts_in/SimulationTable.csv')
 
 
 evalN<-500 #Number of evaluation periods
-Q<-10000 #Number of draws to estimate energy score
+Q<-2000 #Number of draws to estimate energy score
 inW<-250#inner window for training reco weights
 L<-4 #Lags to leave at beginning
 N<-500 #Training sample size for 
@@ -46,7 +46,7 @@ energy_score<-function(y,x,xs){
   
 }
 
-#Energy score
+#Variogram score
 variogram_score<-function(y,x,xs){
   term1<-0
   for (i in 1:(length(y)-1)){
@@ -97,20 +97,20 @@ evaluate_scenario<-function(scen){
                           modelj,'_',
                           depj,'_',
                           innovationsj,'_optreco.rds'))
-  optreco_variogram<-readRDS(paste0('../Reconciled_Results/',
-                                 'variogram','_',
-                                 distj,'_',
-                                 trendj,'_',
-                                 modelj,'_',
-                                 depj,'_',
-                                 innovationsj,'_optreco.rds'))
-  optreco_variogram_in<-readRDS(paste0('../Reconciled_Results_in/',
-                                    'variogram','_',
-                                    distj,'_',
-                                    trendj,'_',
-                                    modelj,'_',
-                                    depj,'_',
-                                    innovationsj,'_optreco.rds'))
+  # optreco_variogram<-readRDS(paste0('../Reconciled_Results/',
+  #                                'variogram','_',
+  #                                distj,'_',
+  #                                trendj,'_',
+  #                                modelj,'_',
+  #                                depj,'_',
+  #                                innovationsj,'_optreco.rds'))
+  # optreco_variogram_in<-readRDS(paste0('../Reconciled_Results_in/',
+  #                                   'variogram','_',
+  #                                   distj,'_',
+  #                                   trendj,'_',
+  #                                   modelj,'_',
+  #                                   depj,'_',
+  #                                   innovationsj,'_optreco.rds'))
   
   
   Base<-rep(NA,evalN)
@@ -255,16 +255,16 @@ evaluate_scenario<-function(scen){
     ScoreOptEInv[i]<-variogram_score(y,xopt,xsopt)
     
     #ScoreOpt (variogram)
-    xopt<-S%*%(optreco_variogram[[i]]$d+optreco_variogram[[i]]$G%*%x)
-    xsopt<-S%*%(optreco_variogram[[i]]$d+optreco_variogram[[i]]$G%*%xs)
-    ScoreOptV[i]<-energy_score(y,xopt,xsopt)
-    ScoreOptVv[i]<-variogram_score(y,xopt,xsopt)
+    # xopt<-S%*%(optreco_variogram[[i]]$d+optreco_variogram[[i]]$G%*%x)
+    # xsopt<-S%*%(optreco_variogram[[i]]$d+optreco_variogram[[i]]$G%*%xs)
+    # ScoreOptV[i]<-energy_score(y,xopt,xsopt)
+    # ScoreOptVv[i]<-variogram_score(y,xopt,xsopt)
     
     #ScoreOptIn (variogram)
-    xopt<-S%*%(optreco_variogram_in[[i]]$d+optreco_variogram_in[[i]]$G%*%x)
-    xsopt<-S%*%(optreco_variogram_in[[i]]$d+optreco_variogram_in[[i]]$G%*%xs)
-    ScoreOptVIn[i]<-energy_score(y,xopt,xsopt)
-    ScoreOptVInv[i]<-variogram_score(y,xopt,xsopt)
+    # xopt<-S%*%(optreco_variogram_in[[i]]$d+optreco_variogram_in[[i]]$G%*%x)
+    # xsopt<-S%*%(optreco_variogram_in[[i]]$d+optreco_variogram_in[[i]]$G%*%xs)
+    # ScoreOptVIn[i]<-energy_score(y,xopt,xsopt)
+    # ScoreOptVInv[i]<-variogram_score(y,xopt,xsopt)
     
   }
     
@@ -287,7 +287,7 @@ evaluate_scenario<-function(scen){
 }
 
 
-all_results<-map_dfr(1:7,evaluate_scenario)
+all_results<-map_dfr(1:28,evaluate_scenario)
 
 saveRDS(all_results,'all_results.rds')
 write_csv(all_results,'all_results.csv')

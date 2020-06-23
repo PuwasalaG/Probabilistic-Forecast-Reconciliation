@@ -66,13 +66,13 @@ res_energy%>%
   group_by(Method, BaseMethod)%>%
   summarise(Score=mean(Score))%>%
   pivot_wider(id_cols = Method,names_from=BaseMethod, values_from = Score)%>%
-  kable(digits = 4,caption = paste('Mean score for',modelj,'modelling with a',distj,trendj,'DGP',sep=' '))%>%
+  kable(digits = 4,caption = paste('Mean energy score for',modelj,'modelling with a',distj,trendj,'DGP',sep=' '))%>%
   kable_styling(font_size = 5)
   
 
 ```
 
-```{r,fig.cap=paste('Nemenyi matrix for',modelj,'modelling with a',distj,trendj,'DGP',sep=' ')}
+```{r,fig.cap=paste('Nemenyi matrix for',modelj,'modelling with a',distj,trendj,'DGP using energy score',sep=' ')}
 par(mfrow=c(2,2))
     for (b in BaseMs){
       res_energy%>%
@@ -82,7 +82,7 @@ par(mfrow=c(2,2))
         select(-DGP,-BaseMethod, -BaseModel)%>%
         pivot_wider(names_from = Method, values_from = Score)%>%
         select(-EvaluationPeriod)->dat
-      datm<-as.matrix(dat)
+      datm<-as.matrix(dat[,1:10]) #remove 1:10 once variogram ready
       if(nrow(dat)!=0){
         nemenyi(datm,plottype = 'matrix',main=b)->nn
       }else{
@@ -106,13 +106,13 @@ res_variogram%>%
   summarise(Score=mean(Score))%>%
   ungroup()%>%
   pivot_wider(id_cols = Method,names_from=BaseMethod, values_from = Score)%>%
-  kable(digits = 4,caption = paste('Mean score for',modelj,'modelling with a',distj,trendj,'DGP',sep=' '))%>%
+  kable(digits = 4,caption = paste('Mean variogram score for',modelj,'modelling with a',distj,trendj,'DGP',sep=' '))%>%
   kable_styling(font_size = 5)
   
 
 ```
 
-```{r,fig.cap=paste('Nemenyi matrix for',modelj,'modelling with a',distj,trendj,'DGP',sep=' ')}
+```{r,fig.cap=paste('Nemenyi matrix for',modelj,'modelling with a',distj,trendj,'DGP using variogram score',sep=' ')}
 par(mfrow=c(2,2))
     for (b in BaseMs){
       res_variogram%>%
@@ -122,7 +122,7 @@ par(mfrow=c(2,2))
         select(-DGP,-BaseMethod, -BaseModel)%>%
         pivot_wider(names_from = Method, values_from = Score)%>%
         select(-EvaluationPeriod)->dat
-      datm<-as.matrix(dat)
+      datm<-as.matrix(dat[,1:10])
       if(nrow(dat)!=0){
         nemenyi(datm,plottype = 'matrix',main=b)->nn
       }else{
