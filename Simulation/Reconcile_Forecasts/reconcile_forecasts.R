@@ -14,7 +14,7 @@ simtable<-read_csv('SimulationTable.csv')
 
 ### Extract flags from simulation scenario
 
-#scen<-5 #If running within R uncomment this.  This will only run first scenario
+#scen<- 36 #If running within R uncomment this.  This will only run first scenario
 scen<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this
 
 simj<-simtable[scen,] #Extract row of table
