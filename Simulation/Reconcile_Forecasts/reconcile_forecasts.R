@@ -132,28 +132,23 @@ for (eval in 1:outW){
   
   #Train reconciliation weights using SGA 
   
-  if (scen<=24){
-    tt<-system.time(opt<-scoreopt(all_y,all_prob,S,score = list(),trace = T,control = list(maxIter=600),match=match))
-    print(tt)
+  tt<-system.time(
+    try(opt<-scoreopt(all_y,
+                      all_prob,
+                      S,
+                      score = list(score=scorej,alpha=1),
+                      trace = T,
+                      control = list(maxIter=600, tol=1E-12),
+                      match=match))->err)
+  if(class(err)=='try-error'){
+    opt<-list(d=rep(0,4),
+              G=solve(t(S)%*%S,t(S)),
+              val=0,
+              G_vec_store=solve(t(S)%*%S,t(S)),
+              val_store=0)
   }
-  if(scen>24){
-    tt<-system.time(
-      try(opt<-scoreopt(all_y,
-                    all_prob,
-                    S,
-                    trace = T,
-                    control = list(eta=0.0001,tol=0.000001,maxIter=600),
-                    match=match)))->err
-      if(class(err)=='try-error'){
-        opt<-list(d=rep(0,4),
-                  G=solve(t(S)%*%S,t(S)),
-                  val=0,
-                  G_vec_store=G,
-                  val_store=0)
-      }
-      
-    print(tt)
-  }
+  
+  print(tt)
   
   
   #Store
