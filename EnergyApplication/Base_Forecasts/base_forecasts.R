@@ -2,12 +2,14 @@
 #The forecast mean, forecast standard deviation, two estimates of the covariance matrix and residuals are retained.
 library(magrittr)
 library(tidyverse)
-library(furrr)
 library(tsibble)
 library(fable)
 
 #Clear workspace
 rm(list=ls())
+
+#j<- 36 #If running within R uncomment this.  This will only run one window
+j<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this should go from 1 to J-L-N+1
 
 
 #Function for Shaefer Strimmer Shrinkage
@@ -118,16 +120,16 @@ forecast_j<-function(j){
 
 
 }
-plan(multicore(workers=7))
-all<-future_map(1:(J-L-N+1),forecast_j)
-all_nomable<-map(all,function(x){x[-1]}) #Delete mable
-all_mable<-map(all,function(x){x[1]}) #Extract mable
+out<-forecast_j(j)
+
+nomable<-out[-1] #Delete mable
+mable<-out[1] #Extract mable
 
 #Save output
-saveRDS(all_nomable,'../Base_Results/fc_base.rds')
+saveRDS(nomable,paste0('../Base_Results/base_',j,'.rds'))
 
 #Save output
-saveRDS(all_mable,'../Base_Results/fc_mable.rds')
+saveRDS(mable,paste0('../Base_Results/mable_',j,'.rds'))
 
 
 # autoplot(filter(f,Source%in%c('Total','Renewable','non-Renewable')),

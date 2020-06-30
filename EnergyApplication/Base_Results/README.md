@@ -2,6 +2,6 @@
 
 Files that can be obtained by running the script in ../Base_Forecasts/
 
-- The file *fc_base.rds* is a big list containing all information required from base forecasting.  Each element corresponds to one rolling window.
-- The file *fc_mable.rds* is a big list with each element corresponds to a mable for one rolling window.
+- The files *base_j.rds* contains all information required from base forecasting.  Each file corresponds to one rolling window (window j).
+- The file *mable_j.rds* corresponds to a mable for one rolling window (window j).
 
