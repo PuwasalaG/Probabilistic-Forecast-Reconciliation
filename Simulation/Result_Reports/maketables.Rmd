@@ -1,8 +1,10 @@
 ---
 title: "Results Summary"
 author: "Anastasios Panagiotelis"
-date: "19 June 2020"
-output: pdf_document
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  pdf_document: 
+    fig_caption: yes
 header-includes:
   - \usepackage{float}
 params: 
@@ -10,7 +12,7 @@ params:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE,fig.pos = 'H',fig.height = 6.5)
+knitr::opts_chunk$set(echo = FALSE,fig.pos = 'H',fig.width = 7.5)
 library(tidyverse)
 library(tsutils)
 library(kableExtra)
@@ -30,6 +32,20 @@ res_all%>%
 
 BaseMs<-unique(res_energy$BaseMethod)
 
+# A function for captioning and referencing images
+fig <- local({
+    i <- 0
+    ref <- list()
+    list(
+        cap=function(refName, text) {
+            i <<- i + 1
+            ref[[refName]] <<- i
+            paste("Figure ", i, ": ", text, sep="")
+        },
+        ref=function(refName) {
+            ref[[refName]]
+        })
+})
 
 ```
 
@@ -48,6 +64,7 @@ Four methods are used to generate base forecasts.  Either base forecasts are dra
 - ScoreOptVIn: Variogram score Optimisation by stochastic gradient descent but with predicted values (in-sample) used instead of rolling window forecasts.
 - WLS: Weighted least squares using structural scaling.
 
+
 ```{r, echo=FALSE,message=F}
 # simtable<-read_csv('../Base_Forecasts/SimulationTable.csv')
 # simj<-simtable[scen,] #Extract row of table
@@ -56,6 +73,8 @@ Four methods are used to generate base forecasts.  Either base forecasts are dra
   modelj<-simj$model #Is model ARIMA or ETS
 ```
 
+
+The first table and first four figures all correspond to forecasts evaluated using the energy score.  The second table and last four figures correspond to using the variogram score.  This report is `r paste('for',modelj,'modelling with a',distj,trendj,'DGP.',sep=' ')`
 
 ```{r,message=F}
 
@@ -73,7 +92,6 @@ res_energy%>%
 ```
 
 ```{r,fig.cap=paste('Nemenyi matrix for',modelj,'modelling with a',distj,trendj,'DGP using energy score',sep=' ')}
-par(mfrow=c(2,2))
     for (b in BaseMs){
       res_energy%>%
         filter(BaseModel==modelj)%>%
@@ -83,11 +101,8 @@ par(mfrow=c(2,2))
         pivot_wider(names_from = Method, values_from = Score)%>%
         select(-EvaluationPeriod)->dat
       datm<-as.matrix(dat) 
-      if(nrow(dat)!=0){
-        nemenyi(datm,plottype = 'matrix',main=b)->nn
-      }else{
-        plot(0,0,'n',main=b)
-      }
+      nemenyi(datm,plottype = 'matrix',main=b)->nn
+      nn
 
 
     }
@@ -112,9 +127,9 @@ res_variogram%>%
 
 ```
 
-```{r,fig.cap=paste('Nemenyi matrix for',modelj,'modelling with a',distj,trendj,'DGP using variogram score',sep=' ')}
-par(mfrow=c(2,2))
-    for (b in BaseMs){
+```{r}
+j<-0    
+for (b in BaseMs){
       res_variogram%>%
         filter(BaseModel==modelj)%>%
         filter(DGP==paste(distj,trendj,sep='_'))%>%
@@ -123,13 +138,6 @@ par(mfrow=c(2,2))
         pivot_wider(names_from = Method, values_from = Score)%>%
         select(-EvaluationPeriod)->dat
       datm<-as.matrix(dat)
-      if(nrow(dat)!=0){
-        nemenyi(datm,plottype = 'matrix',main=b)->nn
-      }else{
-        plot(0,0,'n',main=b)
-      }
-
-
+      nemenyi(datm,plottype = 'matrix',main=b)
     }
 ```
-
