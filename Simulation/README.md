@@ -16,4 +16,6 @@
 
 - The directory *Generate_Data* includes R scripts that generate DGPs.
 
+- The directory *Evaluate* contains files for evaluating many reconciliation methods using energy score and variogram score.
 
+- The directory *Result_Reports* contains files for tabulating results.
