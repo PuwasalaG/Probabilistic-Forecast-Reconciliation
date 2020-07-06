@@ -82,7 +82,7 @@ par(mfrow=c(2,2))
         select(-DGP,-BaseMethod, -BaseModel)%>%
         pivot_wider(names_from = Method, values_from = Score)%>%
         select(-EvaluationPeriod)->dat
-      datm<-as.matrix(dat[,1:10]) #remove 1:10 once variogram ready
+      datm<-as.matrix(dat) 
       if(nrow(dat)!=0){
         nemenyi(datm,plottype = 'matrix',main=b)->nn
       }else{
@@ -122,7 +122,7 @@ par(mfrow=c(2,2))
         select(-DGP,-BaseMethod, -BaseModel)%>%
         pivot_wider(names_from = Method, values_from = Score)%>%
         select(-EvaluationPeriod)->dat
-      datm<-as.matrix(dat[,1:10])
+      datm<-as.matrix(dat)
       if(nrow(dat)!=0){
         nemenyi(datm,plottype = 'matrix',main=b)->nn
       }else{

@@ -3,7 +3,7 @@ library(tidyverse)
 library(rmarkdown)
 
 simtable<-read_csv('../Base_Forecasts/SimulationTable.csv')
-for (scen in 1:7){
+for (scen in 1:8){
   simj<-simtable[scen,] #Extract row of table
   outname<-paste0('Reports/Results','_',simj$dist,'_',simj$trend,'_',simj$model,'.pdf')
   render('maketables.Rmd',output_file = outname,params=list(args=simj))
