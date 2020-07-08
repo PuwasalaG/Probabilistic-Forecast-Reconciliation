@@ -116,7 +116,7 @@ forecast_j<-function(j){
               fc_sd=fc_sd,
               fc_Sigma_sam=Sigma_sam,
               fc_Sigma_shr=Sigma_shr,
-              resid=r))
+              resid=t(r)))
 
 
 }
@@ -126,10 +126,10 @@ nomable<-out[-1] #Delete mable
 mable<-out[1] #Extract mable
 
 #Save output
-saveRDS(nomable,paste0('../Base_Results/base_',j,'.rds'))
+saveRDS(nomable,paste0('../Base_Results/base_',n+l+j-1,'.rds'))
 
 #Save output
-saveRDS(mable,paste0('../Base_Results/mable_',j,'.rds'))
+saveRDS(mable,paste0('../Base_Results/mable_',n+l+j-1,'.rds'))
 
 
 # autoplot(filter(f,Source%in%c('Total','Renewable','non-Renewable')),
