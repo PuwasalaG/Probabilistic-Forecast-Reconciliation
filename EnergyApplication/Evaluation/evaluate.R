@@ -120,6 +120,10 @@ data%>%
 
 yhat<-yin-fc_i$resid      
 
+#Get out of sample trained reconciliation weights
+
+allopt<-readRDS(paste0('../Reconciled_Results/scoreopt_',i,'.rds'))
+
 eval<-function(bb){
   if (bb==1){
     #Gaussian independent
@@ -276,6 +280,20 @@ eval<-function(bb){
   xsopt<-S%*%(optV$d+optV$G%*%xs)
   ScoreOptVIn<-energy_score(y,xopt,xsopt)
   ScoreOptVInv<-variogram_score(y,xopt,xsopt)
+  
+  #ScoreOpt (Energy)
+  optE<-allopt[[bb]]
+  xopt<-S%*%(optE$d+optE$G%*%x)
+  xsopt<-S%*%(optE$d+optE$G%*%xs)
+  ScoreOptE<-energy_score(y,xopt,xsopt)
+  ScoreOptEv<-variogram_score(y,xopt,xsopt)
+  
+  #ScoreOptIn (Variogram)
+  optV<-allopt[[bb]]
+  xopt<-S%*%(optV$d+optV$G%*%x)
+  xsopt<-S%*%(optV$d+optV$G%*%xs)
+  ScoreOptV<-energy_score(y,xopt,xsopt)
+  ScoreOptVv<-variogram_score(y,xopt,xsopt)
     
 res<-tibble(Base,BottomUp,JPP,BTTH,OLS,WLS,MinTSam,MinTShr,ScoreOptE,ScoreOptEIn,ScoreOptV,ScoreOptVIn)%>%
   add_column(ScoreEval='Energy')

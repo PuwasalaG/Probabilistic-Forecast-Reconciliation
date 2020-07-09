@@ -85,9 +85,15 @@ J<-length(alldate)
     return(fc_j)
   }
   fc<-map((i-inW):(i-1),fc_j)
-  #Functors
-  
-  if ((innovationsj=='gaussian')&&(depj=='independent')){
+
+  #Initialise  all
+  all<-as.list(rep(NA,4))
+  #Loop for each base method
+for (bb in 1:4){  
+  if (bb==1){
+    #Gaussian independent
+    innovationsj='gaussian'
+    depj='independent'
     #Independent Gaussian
     make_genfunc<-function(input){
       f<-function(){
@@ -98,8 +104,10 @@ J<-length(alldate)
       }
       return(f)
     }
-  }else if((innovationsj=='gaussian')&&(depj=='joint')){
-    #Joint Gaussian (using sample estimate of covariance)
+  }else if(bb==2){
+    #Gaussian dependent
+    innovationsj='gaussian'
+    depj='joint'
     make_genfunc<-function(input){
       f<-function(){
         fc_mean<-input$fc_mean
@@ -109,8 +117,10 @@ J<-length(alldate)
       }
       return(f)
     }
-  }else if((innovationsj=='bootstrap')&&(depj=='independent')){
-    #Bootstrapping residuals ignoring dependence
+  }else if(bb==3){
+    #Bootstrap independent
+    innovationsj='bootstrap'
+    depj='independent'
     make_genfunc<-function(input){
       f<-function(){
         fc_mean<-input$fc_mean
@@ -125,8 +135,10 @@ J<-length(alldate)
       }
       return(f)
     }
-  }else if((innovationsj=='bootstrap')&&(depj=='joint')){
-    #Bootstrapping residuals jointly
+  }else if(bb==4){
+    #Joint bootstrapping
+    innovationsj='bootstrap'
+    depj='joint'
     make_genfunc<-function(input){
       f<-function(){
         fc_mean<-input$fc_mean
@@ -140,7 +152,7 @@ J<-length(alldate)
   }
   
   
-  all_prob<-map(fc,make_genfunc)
+  all_prob[bb]<-map(fc,make_genfunc)
   
   #Set match TRUE if bootstrapping
   
@@ -163,9 +175,10 @@ J<-length(alldate)
               G_vec_store=solve(t(S)%*%S,t(S)),
               val_store=0)
   }
-  
+
   print(tt)
-  
+  all[bb]<-opt
+}  
   
 
 
