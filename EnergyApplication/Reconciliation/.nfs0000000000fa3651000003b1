@@ -165,7 +165,7 @@ for (bb in 1:4){
                       S,
                       score = list(score='energy',alpha=1),
                       trace = T,
-                      control = list(maxIter=5000, tol=1E-12),
+                      control = list(maxIter=600, tol=1E-12),
                       match=match))->err)
   if(class(err)=='try-error'){
     optE<-list(d=rep(0,4),
@@ -181,7 +181,7 @@ for (bb in 1:4){
                        S,
                        score = list(score='variogram',alpha=1),
                        trace = T,
-                       control = list(maxIter=5000, tol=1E-12),
+                       control = list(maxIter=600, tol=1E-12),
                        match=match))->err)
   if(class(err)=='try-error'){
     optV<-list(d=rep(0,4),
