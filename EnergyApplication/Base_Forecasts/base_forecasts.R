@@ -126,10 +126,10 @@ nomable<-out[-1] #Delete mable
 mable<-out[1] #Extract mable
 
 #Save output
-saveRDS(nomable,paste0('../Base_Results/base_',n+l+j-1,'.rds'))
+saveRDS(nomable,paste0('../Base_Results/base_',N+L+j-1,'.rds'))
 
 #Save output
-saveRDS(mable,paste0('../Base_Results/mable_',n+l+j-1,'.rds'))
+saveRDS(mable,paste0('../Base_Results/mable_',N+L+j-1,'.rds'))
 
 
 # autoplot(filter(f,Source%in%c('Total','Renewable','non-Renewable')),
