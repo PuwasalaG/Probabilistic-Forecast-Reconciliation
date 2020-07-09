@@ -307,4 +307,4 @@ rbind(res_long_energy,
 
 all_i<-map_dfr(1:4,eval)%>%add_column(EvalDate=alldate[i+1])
 
-saveRDS(all_i,paste0('Results/results_',i))
+saveRDS(all_i,paste0('Results/results_',i,'.rds'))
