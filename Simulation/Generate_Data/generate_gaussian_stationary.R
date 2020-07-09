@@ -1,5 +1,5 @@
 # This code generates bottom level time series for the 
-# simulation study from a Gaussian DGP
+# simulation study from a Gaussian stationary DGP
 require(portes)
 require(MASS)
 require(tidyr)

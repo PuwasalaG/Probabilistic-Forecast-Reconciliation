@@ -10,9 +10,10 @@ The filename is made up of three parts
 
 Each file is an rds file containing a single R object.  This is a list with R=1000 elements each corresponding to a window.  Each element contains 5 further elements
 
-- The details of the models are included in the field  *mable*.
 - The forecast means are included in the field *fc_mean*.
 - The forecast standard deviations are included in the field *fc_sd*.
 - The forecast covariance matrix (sample) in included in the field *fc_Sigma_sam*.
 - The forecast covariance matrix (shrink) in included in the field *fc_Sigma_shr*.
 - The residuals are included in the field *resid*.
+
+The mables are large objects that are stored in separate files with the suffix *mable*.

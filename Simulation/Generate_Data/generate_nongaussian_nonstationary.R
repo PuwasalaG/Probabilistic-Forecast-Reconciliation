@@ -1,5 +1,5 @@
 # This code generates bottom level time series for the 
-# simulation study from a non-Gaussian DGP
+# simulation study from a non-Gaussian non-stationary DGP
 
 require(portes)
 require(sn)

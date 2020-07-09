@@ -1,5 +1,4 @@
-#This script selects and fits base models for each window. 
-#The forecast mean, forecast standard deviation, two estimates of the covariance matrix and residuals are retained.
+#This script trains reconciliation weights for each simulation scenario
 
 library(mvtnorm)
 library(tidyverse)
