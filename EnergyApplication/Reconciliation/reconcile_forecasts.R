@@ -11,7 +11,7 @@ library(ProbReco)
 rm(list=ls())
 
 
-i<- 197 #If running within R uncomment this.  This will only run one window
+i<- 196 #If running within R uncomment this.  This will only run one window
 #i<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this should start from L+N+inW 
 
 # Order of variables
@@ -54,7 +54,7 @@ arrange(data,match(Source,order))->datlong
 #Sample sizes
 N<-112 # Size of window
 L<-28 # Lags to leave at beginning of window
-Q<-10000 #Number of draws to estimate energy score
+Q<-200#Number of draws to estimate energy score
 inW<-56 #inner window for training reco weights
 m<-23 #Number of series
 
@@ -65,11 +65,9 @@ alldate<-seq.Date(startdate,enddate,by=1)
 
 J<-length(alldate)
 
-#Loop over evaluation periods
   #Select correct realised values
   obs_j<-function(j){
     data%>%
-      data%>%
       filter(date==alldate[j])%>%
       arrange(match(Source,order))%>%
       pull(Generation)->y
@@ -87,7 +85,8 @@ J<-length(alldate)
   fc<-map((i-inW):(i-1),fc_j)
 
   #Initialise  all
-  all<-as.list(rep(NA,4))
+  allE<-as.list(rep(NA,4))
+  allV<-as.list(rep(NA,4))
   #Loop for each base method
 for (bb in 1:4){  
   if (bb==1){
@@ -152,7 +151,7 @@ for (bb in 1:4){
   }
   
   
-  all_prob[bb]<-map(fc,make_genfunc)
+  all_prob<-map(fc,make_genfunc)
   
   #Set match TRUE if bootstrapping
   
@@ -160,24 +159,43 @@ for (bb in 1:4){
   
   #Train reconciliation weights using SGA 
   
-  tt<-system.time(
-    try(opt<-scoreopt(all_y,
+  tt1<-system.time(
+    try(optE<-scoreopt(all_y,
                       all_prob,
                       S,
-                      score = list(score=scorej,alpha=1),
+                      score = list(score='energy',alpha=1),
                       trace = T,
                       control = list(maxIter=600, tol=1E-12),
                       match=match))->err)
   if(class(err)=='try-error'){
-    opt<-list(d=rep(0,4),
+    optE<-list(d=rep(0,4),
               G=solve(t(S)%*%S,t(S)),
               val=0,
               G_vec_store=solve(t(S)%*%S,t(S)),
               val_store=0)
   }
-
-  print(tt)
-  all[bb]<-opt
+  
+  tt2<-system.time(
+    try(optV<-scoreopt(all_y,
+                       all_prob,
+                       S,
+                       score = list(score='variogram',alpha=1),
+                       trace = T,
+                       control = list(maxIter=600, tol=1E-12),
+                       match=match))->err)
+  if(class(err)=='try-error'){
+    optV<-list(d=rep(0,4),
+               G=solve(t(S)%*%S,t(S)),
+               val=0,
+               G_vec_store=solve(t(S)%*%S,t(S)),
+               val_store=0)
+  }
+  
+  print(tt1)
+  print(tt2)
+  print(class(err))
+  allE[[bb]]<-optE
+  allV[[bb]]<-optV
 }  
   
 
@@ -185,5 +203,6 @@ for (bb in 1:4){
 
 
 #Save output
-saveRDS(all,paste0('Reconciled_Results/scoreopt_',j,'.rds'))
+saveRDS(allE,paste0('Reconciliation_Results/scoreopt_energy_',i,'.rds'))
+saveRDS(allE,paste0('Reconciliation_Results/scoreopt_variogram_',i,'.rds'))
 

@@ -100,7 +100,6 @@ variogram_score<-function(y,x,xs){
 #Read in base forecast
 fc_i<-readRDS(paste0('../Base_Results/base_',i,'.rds'))
 
-fc_i$resid<-t(fc_i$resid)
 
 #Get realisation
 data%>%
@@ -122,7 +121,8 @@ yhat<-yin-fc_i$resid
 
 #Get out of sample trained reconciliation weights
 
-allopt<-readRDS(paste0('../Reconciled_Results/scoreopt_',i,'.rds'))
+alloptE<-readRDS(paste0('../Reconciliation/Reconciliation_Results/scoreopt_energy_',i,'.rds'))
+alloptV<-readRDS(paste0('../Reconciliation/Reconciliation_Results/scoreopt_variogram_',i,'.rds'))
 
 eval<-function(bb){
   if (bb==1){
@@ -263,11 +263,6 @@ eval<-function(bb){
   }
   print(tt2)
   print(class(err))
-  ScoreOptE<-NA
-  ScoreOptV<-NA
-  
-  ScoreOptEv<-NA
-  ScoreOptVv<-NA
   
   #ScoreOptIn (Energy)
   xopt<-S%*%(optE$d+optE$G%*%x)
@@ -282,14 +277,14 @@ eval<-function(bb){
   ScoreOptVInv<-variogram_score(y,xopt,xsopt)
   
   #ScoreOpt (Energy)
-  optE<-allopt[[bb]]
+  optE<-alloptE[[bb]]
   xopt<-S%*%(optE$d+optE$G%*%x)
   xsopt<-S%*%(optE$d+optE$G%*%xs)
   ScoreOptE<-energy_score(y,xopt,xsopt)
   ScoreOptEv<-variogram_score(y,xopt,xsopt)
   
   #ScoreOptIn (Variogram)
-  optV<-allopt[[bb]]
+  optV<-alloptV[[bb]]
   xopt<-S%*%(optV$d+optV$G%*%x)
   xsopt<-S%*%(optV$d+optV$G%*%xs)
   ScoreOptV<-energy_score(y,xopt,xsopt)
