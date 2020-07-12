@@ -408,7 +408,7 @@ The same property does not hold for all scores. For example, the energy score is
 
 \section{Score Optimal Reconciliation}\label{sec:scoreoptSGD}
 
-We now propose an algorithm for finding reconciliation weights by optimising an objective function based on scores.  We will consider the special case of the energy score, however the algorithm can be generalised to any score that is computed by sample from the probabilistic forecast, including the variogram score and kernel score.  We consider linear reconciliation of the form $\tilde{\bm{y}}=\psi_{\bm{\gamma}}({\bm{\hat{y}}})={\bm{S}}\left(\bm{d}+\bm{G}{\bm{\hat{y}}}\right)$, where ${\bm\gamma}:=\left(\bm{d},vec(\bm{G})\right)$. This allows for more flexibility than a projection, which would imply the constraints $\bm{d}=\bm{0}$ and $\bm{G}\bm{S}=\bm{I}$.  This added flexibility is motivated by Theorem~\ref{theo:OptRec} which shows that projections in general are not guaranteed to recover the true predictive distribution even in the elliptical case. When making a $h$-step ahead forecast at time $T$, the objective used to determine an optimal value of $\bm{\gamma}$ is the total energy score based on in-sample information given by:
+We now propose an algorithm for finding reconciliation weights by optimising an objective function based on scores.  For clarity of exposition, we consider the special case of the energy score. However, the algorithm can be generalised to any score that is computed by sampling from the probabilistic forecast, and in Section~\ref{sec:simulations} and Section~\ref{sec:Application} we consider optimising with respect to both the energy and variogram score.  We consider linear reconciliation of the form $\tilde{\bm{y}}=\psi_{\bm{\gamma}}({\bm{\hat{y}}})={\bm{S}}\left(\bm{d}+\bm{G}{\bm{\hat{y}}}\right)$, where ${\bm\gamma}:=\left(\bm{d},vec(\bm{G})\right)$. This allows for more flexibility than a projection, which would imply the constraints $\bm{d}=\bm{0}$ and $\bm{G}\bm{S}=\bm{I}$.  This added flexibility is motivated by Theorem~\ref{theo:OptRec} which shows that projections in general are not guaranteed to recover the true predictive distribution even in the elliptical case. When making a $h$-step ahead forecast at time $T$, the objective used to determine an optimal value of $\bm{\gamma}$ is the total energy score based on in-sample information given by:
 \begin{equation}
 \mathcal{E}\left(\bm{\gamma}\right)=\sum\limits_{t=T-h-R+1}^{T-h} \textit{ES}(\tilde{f}^{\bm{\gamma}}_{t+h|t},\bm{y}_{t+h})\,,
 \label{eq:tes}
@@ -455,15 +455,15 @@ The aim of the simulations that follow is to demonstrate probabilistic forecast 
 
 \subsection{Data Generating Processes}\label{sec:dgp}
 
-The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. The orders $p$, and $q$ are randomly selected from $\{1,2\}$ for each bottom level series. Both a non-stationary case where $d$ is randomly chosen for each bottom level from $\{0,1\}$ and a stationary case where $d$ is set to zero for all bottom level series are considered.  The parameters for the AR and MA components are randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively, where in the case of the stationary series these are only accepted if they belong to the stationary and invertible region.
+The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. The orders $p$, and $q$ are randomly selected from $\{1,2\}$ for each bottom level series. The AR and MA parameters randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively, and only accepted if they belong to the stationary and invertible region.  In addition a non-stationary case where $d$ is randomly chosen for each bottom level from $\{0,1\}$ was considered, these results are omitted for brevity.
 
-We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with $\textrm{Beta}(1,3)$ margins. After simulating from the ARIMA models, additional noise is added to ensure bottom level series have a lower signal-to-noise ratio that top level series with specific details provided in Appendix \ref{app:DGP}.  This yields a total of four data generating processes (DGPs) for each combination of stationary/non-stationary and Gaussian/non-Gaussian.  For each series the first 500 observations are ignored to avoid the impact of initial values. 
+We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with $\textrm{Beta}(1,3)$ margins. After simulating from the ARIMA models, additional noise is added to ensure bottom level series have a lower signal-to-noise ratio that top level series with specific details provided in Appendix \ref{app:DGP}. For each series the first 500 observations are ignored to avoid the impact of initial values. 
 
 %All forecasts are evaluated using a rolling window with a training sample of 500. This yields 1,000 probabilistic forecasts for evaluation. The predictive accuracy of the alternative methods is evaluated using the scoring rules presented in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores, i.e., the percentage improvement of a probabilistic forecast over a reference method. A positive (negative) value indicates a percentage gain (loss) in forecast accuracy over the reference method.
 
 \subsection{Modelling and Base Forecasts}
 
-We fit univariate ARIMA and exponential smoothing (ETS) models to each series using the \verb|auto.arima()| and \verb|ets()| functions in the \verb|fable| package \citep{Rfable} in R \citep{Rcore}.  Note that the order of the ARIMA models is not set to the true order but is chosen using the algorithm of \cite{hynkan2007}, allowing for the possibility of misspecification.  Indeed, an advantage of forecast reconciliation is the ability to down-weight the forecasts of series within the hierarchy that come from misspecified models.  For each series and model, base probabilistic forecasts are constructed in four different ways.  Letting $\hat{\bm y}_{t+h|h}=\left(\hat{y}_{1,t+h|h},\ldots,\hat{y}_{n,t+h|h}\right)'$ where $\hat{y}_{i,t+h|h}$ is the point forecast for series $i$ and $e_{i,t}$ be residuals stacked in a $(n \times T)$ matrix $\bm{E}:=\left\{e_{i,t}\right\}_{i=1,\dots,n,t=1,\dots,T}$, these are:
+We fit univariate ARIMA models to each series using the \verb|ARIMA()| function in the \verb|fable| package \citep{Rfable} in R \citep{Rcore}.  Note that the order of the ARIMA models is not set to the true order but is chosen using the algorithm of \cite{hynkan2007}, allowing for the possibility of misspecification.  Indeed, an advantage of forecast reconciliation is the ability to down-weight the forecasts of series within the hierarchy that come from misspecified models.  Also considered were ETS models which were fit using the \verb|ETS()| function in the \verb|fable| package.  These are omitted for brevity.  For each series and model, base probabilistic forecasts are constructed in four different ways.  Letting $\hat{\bm y}_{t+h|h}=\left(\hat{y}_{1,t+h|h},\ldots,\hat{y}_{n,t+h|h}\right)'$ where $\hat{y}_{i,t+h|h}$ is the point forecast for series $i$ and $e_{i,t}$ be residuals stacked in a $(n \times T)$ matrix $\bm{E}:=\left\{e_{i,t}\right\}_{i=1,\dots,n,t=1,\dots,T}$, these are:
 
 \begin{enumerate}[label=(\alph*)]
 	\item The base probabilistic forecast is made up of independent Gaussian distributions with the forecast mean and variance of variable $i$ given by $\hat{y}_{i,t+h|h}$ and $\hat{\sigma}^2_{i,t+h|h}$, where $\hat{\sigma}^2_{i,t+h|h}$ is the sample variance of the residuals in the $i^{th}$ row of $\bm{E}$,
@@ -484,156 +484,178 @@ For each DGP, model and method for obtaining base forecasts, reconciled probabil
 	\item \textbf{BTTH} The method of \cite{Taieb2017}.  This is a method whereby draws from the probabilistic forecasts of the bottom level series are permuted so that they have the same empirical copula as the residuals.  These are then aggregated to form a sample from the distribution of all series.  The mean is adjusted to be equivalent to the mean that would be obtained using the MinT method \cite{WicEtAl2019} described in Table~\ref{tab:recomethods}. 
 	\item \textbf{BottomUp:} Reconciliation via premultiplication by $\bm{S}\bm{G}$ where $\bm{G}=\left(\bm{0}_{m\times(n-m)},\bm{I}_{m\times m}\right)$ 
 	\item \textbf{OLS:} Reconciliation via premultiplication by $\bm{S}\left(\bm{S}'\bm{S}\right)^{-1}\bm{S}'$,
-	\item \textbf{WLS:} Reconciliation via premultiplication by the same matrix used in \cite{JeoEtAl2019} but without any reordering of the draws,
-	\item \textbf{MinT:} Reconciliation via premultiplication by the same matrix used in \cite{WicEtAl2019} but applied to probabilistic rather than point forecasting,
-	\item \textbf{ScoreOpt:} The algorithm described in Section~\ref{sec:scoreoptSGD}.
+	\item \textbf{MinTShr:} Reconciliation via premultiplication using the shinkage estimator of the covariance matrix used by \cite{WicEtAl2019} but applied to probabilistic rather than point forecasting,
+	\item \textbf{ScoreOptE:} The algorithm described in Section~\ref{sec:scoreoptSGD} used to optimise energy score.
+	\item \textbf{ScoreOptV:} The algorithm described in Section~\ref{sec:scoreoptSGD} used to optimise variogram score.
 \end{itemize}
 
-Note that JPP and BTTH are two methods previously existing in the literature. The methods BottomUp, OLS, WLS and MinT have been used extensively in the point forecasting literature but their application to probabilistic forecasting for general base forecasts is, to our knowledge, novel in this paper.
+Note that JPP and BTTH are two methods previously existing in the literature. The methods BottomUp, OLS, and MinTShr have been used extensively in the point forecasting literature but their application to probabilistic forecasting for general base forecasts is, to our knowledge, novel in this paper.
+
+In addition to these methods, two further reconciliation methods were considerd; WLS, which reconciles via premultiplication by the same matrix used in \cite{JeoEtAl2019} but without any reordering of the draws, and MinTSam which uses a sample estimate of the covariance matrix rather than a shrinkage estimator.  These methods were mostly dominated by OLS and MinTShr respectively and are therefore omitted for brevity.  However, a complete set of results for the simulation study, including non-stationary DGPs, ETS base forecasting and all reconciliation methods can be found at the github repository \url{https://github.com/PuwasalaG/Probabilistic-Forecast-Reconciliation/Simulation/Result_Reports/Reports/}.
 
 \subsection{Results for Gaussian probabilistic forecasts}\label{sec:SimAnalysticalResults}
 
-%We assume a Gaussian predictive density for the simulated hierarchical time series, i.e., $\hat{\bm{y}}\sim N(\hat{\bm{\mu}},\hat{\bm{\Sigma}})$. The analytical tractability of the normal distribution allows for evaluation using all scoring rules (including the log-score). $\hat{\bm{\mu}}$ is given by the mean of the incoherent base probabilistic forecasts. We estimate $\hat{\bm{\Sigma}}$ from the in-sample one-step ahead forecast errors using the shrinkage estimator of \citet{Schafer2005} (as the one presented in Table \ref{tab:ReconMethods}). Coherent probabilistic forecasts are then generated as $\tilde{\bm{y}}\sim N(\bm{S}\bm{G}\hat{\bm{\mu}},\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$ where ${\bm G}=(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$ and $\bm{R}'_\bot=\bm{S}'\bm{W}^{-1}$ for the different choices of $\bm{W}$ as presented in Table \ref{tab:ReconMethods}.
-
-Table~\ref{tab:SimAnalyticalMulti} summarises the forecasting performance of incoherent, bottom-up, OLS, WLS and two MinT reconciliation methods using log score, energy score and variogram score. The top panel refers to the Gaussian DGP whereas the bottom panel refers to the non-Gaussian DGP. Recall that the log score is improper with respect to incoherent forecasts. Hence, we calculate the skill scores with reference to the bottom-up forecasts in all cases leaving blank the cells for log score of the incoherent forecasts. Further, all log scores are evaluated on the basis of bottom-level series only, as these differ from the log scores for the full hierarchy by a fixed constant. Please refer to Table \ref{tab:ScoringRulesProperties} for further explanations.
-
-All reconciliation approaches that use information from all levels of the hierarchy improve on the incoherent base forecasts. The bottom-up that uses information only from the bottom-level does not improve on the base incoherent forecasts when considering the Energy Score. Overall, the MinT methods provide the most improvement over the incoherent base forecasts irrespective of the scoring rule or the nature of the DGP.
-
-Tables~\ref{tab:SimAnalyticalUni} (and \ref{tab:SimAnalyticalUni_h2} and \ref{tab:SimAnalyticalUni_h3} in Appendix \ref{app:AnalysticalSolMargins} break down the forecasting performance of the different methods by considering univariate scores on each individual margin. Univariate log score and CRPS are considered, while skill scores are computed with the incoherent forecasts as a reference. When broken down in this fashion, irrespective of DGP, the methods based on MinT perform best for most series and outperform bottom-up forecasts in almost all cases.
+\begin{itemize}
+	\item For energy score ScoreOptE is slightly better for independent base forecasts. ScoreOpt Reconciliation can pick up dependence when it is misspecified in the base forecasts (as can MinT).
+	\item For energy score MinT is slightly better for dependent base forecasts.
+	\item MinT ScoreOptE and OLS are not significantly different from one another.
+\end{itemize}
 
 \begin{table}[H]
-	\caption{Forecast evaluation of hierarchical probabilistic forecasts for $h=1, 2$ and $3$ steps ahead. Entries show the percentage (\%) skill score with reference to the bottom-up method. A positive (negative) entry shows a gain (loss) in forecast accuracy over the reference method. The top panel shows the results from the Gaussian DGP while the bottom panel shows the results from the non-Gaussian DGP. The Log Score entries are based on the joint forecast distribution for the bottom-level (see Table \ref{tab:ScoringRulesProperties} for a further explanation), while the Energy and Variogram skill scores are based on the joint forecast distribution across the entire hierarchy.}
-\label{tab:SimAnalyticalMulti}
+	\caption{\label{tab:gse}Mean Energy score for ARIMA 
+		modelling with a Gaussian Stationary DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
 	\centering
-	\resizebox{\linewidth}{!}{
-		\begin{tabular}{lccccccccc}
-			\toprule
-			\multicolumn{1}{c}{} & \multicolumn{3}{c}{Log Score (\%)} & \multicolumn{3}{c}{Energy Score (\%)} & \multicolumn{3}{c}{Variogram Score (\%)} \\
-			\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
-			$h$ & 1 & 2 & 3 & 1 & 2 & 3 & 1 & 2 & 3\\
-			\toprule
-			\multicolumn{10}{c}{Gaussian DGP}\\
-			\toprule
-			Incoherent base & & & & 12.46 & 9.58 & 7.19 & 4.91 & 5.89 & 6.02\\
-			Bottom-up & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			OLS & 5.56 & -1.55 & -10.74 & 16.83 & 13.43 & 10.44 & 9.17 & 9.63 & 9.02\\
-			WLS & 6.66 & -2.79 & -15.79 & 19.06 & 15.34 & 11.88 & 11.52 & 12.24 & 11.62\\
-			MinT(Sample) & \textbf{7.73} & -2.59 & -17.07 & \textbf{21.55} & \textbf{17.36} & 13.60 & \textbf{15.74} & 15.75 & 15.51\\
-			MinT(Shrink) & 7.70 & -2.63 & -17.12 & 21.44 & 17.33 & 13.60 & 15.65 & \textbf{15.98} & \textbf{15.58}\\
-			Optimal & 5.31 & \textbf{2.86} &\textbf{ 4.28} & 8.08 & 13.75 & \textbf{15.10} & -14.12 & 3.60 & 6.57\\
-			%		\midrule
-			%		\textit{Bottom up} & $\mathbi{11.9}$ & $\mathbi{5.49}$ & $\mathbi{2.25}$ & $\mathbi{14.3}$ & $\mathbi{6.37}$ & $\mathbi{2.40}$ & $\mathbi{17.00}$ & $\mathbi{7.35}$ & $\mathbi{2.56}$\\
-			\toprule
-			\multicolumn{10}{c}{Non-Gaussian DGP}\\
-			\toprule
-			Incoherent base & & & & 7.18 & 7.37 & 7.13 & -0.44 & -0.35 & -0.22\\
-			Bottom-up & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			OLS & 12.11 & 7.48 & -1.61 & 9.73 & 10.28 & 10.18 & 0.50 & 0.52 & 0.87\\
-			WLS & 19.80 & 1.56 & -39.14 & 11.20 & 12.00 & 11.52 & 0.49 & 0.46 & 0.62\\
-			MinT(Sample) & \textbf{22.89} & 4.69 & -36.42 & \textbf{12.94} & 14.07 & \textbf{13.44} & \textbf{1.78} & 2.16 & 2.07\\
-			MinT(Shrink) & 22.67 & 4.43 & -36.76 & 12.92 & \textbf{14.13} & 13.39 & 1.63 & \textbf{2.18} & \textbf{2.20}\\
-			Optimal & 19.15 & \textbf{9.26} & -4.11 & -3.31 & 3.48 & 2.41 & -27.79 & -19.37 & -22.70\\
-			\bottomrule
-		\end{tabular}
-	}
+	\begin{tabular}[t]{l|r|r|r|r}
+		\hline
+		Method & Ind. Bootstrap & Ind. Gaussian & Joint Bootstrap & Joint Gaussian\\
+		\hline
+		Base & 11.3256 & 11.3247 & 11.0662 & 11.0556\\
+		\hline
+		BottomUp & 11.9759 & 11.9705 & 11.6429 & 11.6203\\
+		\hline
+		BTTH & 21.7508 & 21.8051 & 21.8542 & 21.8826\\
+		\hline
+		JPP & 22.8651 & 22.8986 & 22.8573 & 22.8599\\
+		\hline
+		MinTShr & 10.8865 & 10.8905 & \textbf{10.7475} & \textbf{10.7428}\\
+		\hline
+		OLS & 11.1284 & 11.1264 & 10.8396 & 10.8292\\
+		\hline
+		ScoreOptE & \textbf{10.8053} & \textbf{10.8297} & 10.8433 & 10.8406\\
+		\hline
+		ScoreOptV & 11.2066 & 11.2074 & 11.0413 & 11.0262\\
+		\hline
+	\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+	\label{fig:nsv}
+	\includegraphics[width=.95\textwidth]{Figs/gse.pdf}
+	\caption{Nemenyi matrix for Variogram score for ARIMA 
+		modelling with a Gaussian Stationary DGP.}
+\end{figure}
+
+\begin{itemize}
+	\item For varigram score BTTH does significantly better than anything else.  This is a unique result that is not observed for any other simulation scenario.
+	\item Otherwise ScoreOptV is the best.
+	\item MinT ScoreOptE and OLS are not significantly different from one another.
+\end{itemize}
+
+\begin{table}[H]
+	\caption{\label{tab:gsv}Mean Variogram score for ARIMA 
+		modelling with a Gaussian Stationary DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
+	\centering
+	\begin{tabular}[t]{l|r|r|r|r}
+		\hline
+		Method & Ind. Bootstrap & Ind Gaussian & Joint Bootstrap & Joint Gaussian\\
+		\hline
+		Base & 694.5012 & 694.6362 & 694.7861 & 694.5443\\
+		\hline
+		BottomUp & 888.7264 & 891.1163 & 697.9468 & 697.7384\\
+		\hline
+		BTTH & \textbf{630.8518} & \textbf{632.3063} & \textbf{632.7646} & \textbf{631.8727}\\
+		\hline
+		JPP & 1032.9742 & 1039.0791 & 1033.3112 & 1038.1928\\
+		\hline
+		MinTShr & 683.3065 & 683.0490 & 677.8987 & 677.4923\\
+		\hline
+		OLS & 713.4531 & 713.5246 & 680.3692 & 680.1407\\
+		\hline
+		ScoreOptE & 686.0447 & 686.8067 & 683.5021 & 684.2645\\
+		\hline
+		ScoreOptV & 675.1864 & 675.2327 & 673.5918 & 672.3905\\
+		\hline
+	\end{tabular}
 \end{table}
 
 
-\begin{table}[H]
-	\caption{Forecast evaluation of univariate hierarchical probabilistic forecasts for $h=1$-step ahead. Entries show the percentage (\%) skill score base on the Log Score and CRPS with reference to the incoherent base forecasts. A positive (negative) entry shows a gain (loss) in forecast accuracy over the incoherent base forecasts. The left panel shows the results from the Gaussian DGP while the right panel shows the results from the non-Gaussian DGP.}
-\label{tab:SimAnalyticalUni}
-	\centering
-	\resizebox{\linewidth}{!}{
-		\begin{tabular}{lcccccccccccccc}
-			\toprule
-			\multicolumn{1}{c}{ } & \multicolumn{7}{c}{Gaussian} & \multicolumn{7}{c}{Non-Gaussian}\\
-			\cmidrule(lr){2-8} \cmidrule(lr){9-15}
-						
-			Series & Tot & A & B & AA & AB & BA & BB & Tot & A & B & AA & AB & BA & BB \\
-			\toprule
-			\multicolumn{15}{c}{Log Score (\%)}\\
-			\toprule
-			Incoherent Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			Bottom up & -29.59 & -2.99 & -4.24 & 0.00 & 0.00 & -5.94 & 8.11 & -263.36 & -0.72 & -3.54 & 0.00 & 0.00 & -0.81 & -12.22\\
-			OLS & 12.26 & 2.51 & 0.43 & 1.80 & 1.06 & -3.41 & 7.59 & 49.53 & 0.38 & 2.58 & -1.40 & 3.51 & 0.55 & -11.33\\
-			WLS & \textbf{16.10} & -3.73 & -14.04 & 2.34 & 1.27 & -3.08 & 0.45 & 75.34 & 4.86 & -269.27 & -1.38 & 3.36 & 0.91 & -5.38\\
-			MinT(Sample) & -0.07 & \textbf{4.80} & \textbf{0.54} & \textbf{3.86} & \textbf{2.55} & -2.34 & \textbf{8.20} & 0.24 & 0.44 & \textbf{5.18} & \textbf{0.61} & 3.73 & \textbf{2.46} & -10.21\\
-			MinT(Shrink) & -0.05 & \textbf{4.80} & \textbf{0.54} & 3.65 & 2.48 & -2.36 & \textbf{8.20} & 0.27 & \textbf{0.45} & \textbf{5.18} & -1.42 & \textbf{3.75} & 2.30 & -10.32\\
-			Optimal & 13.86 & 1.37 & -18.41 & -0.28 & -1.75 & -6.75 & 4.13 & \textbf{70.23} & -5.37 & -287.34 & -6.99 & -2.02 & -4.07 & -17.38\\
-			\hline
-			
-			\toprule
-			\multicolumn{15}{c}{CRPS (\%)}\\
-			\toprule
-			
-			Incoherent Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			Bottom up & -134.06 & -10.99 & -15.42 & -0.05 & -0.14 & -21.39 & 25.07 & -485.01 & -1.41 & -9.35 & -0.01 & 0.08 & -1.85 & -36.37\\
-			OLS & 35.17 & 8.45 & 1.17 & 6.49 & 3.07 & -11.45 & 23.77 & 74.22 & 1.30 & 6.77 & -3.85 & 9.21 & 1.82 & -33.37\\
-			WLS & \textbf{43.24} & -13.62 & -50.06 & 8.16 & 3.82 & -10.32 & 1.12 & 87.17 & \textbf{12.20} & -503.54 & -3.90 & 8.85 & 2.85 & -16.01\\
-			MinT(Sample) & -0.20 & \textbf{15.84} & \textbf{1.75} & \textbf{12.48} & \textbf{7.98} & -7.53 & \textbf{25.38} & 0.24 & 1.34 & 12.79 & \textbf{1.39} & 9.67 & \textbf{6.70} & -29.83\\
-			MinT(Shrink) & -0.19 & 15.69 & 1.59 & 12.06 & 7.76 & -7.61 & 25.35 & 0.26 & 1.52 & \textbf{12.88} & -3.82 & \textbf{9.84}& 6.38 & -30.00\\
-			Optimal & 37.22 & 3.37 & -74.40 & -2.85 & -8.50 & -27.27 & 11.28 & \textbf{85.14} & -16.83 & -599.74 & -21.16 & -7.42 & -13.08 & -55.62\\
-			\bottomrule
-		\end{tabular}
-	}
-\end{table}
+
+\begin{figure}[H]
+	\label{fig:gsv}
+	\includegraphics[width=.95\textwidth]{Figs/gsv.pdf}
+	\caption{Nemenyi matrix for Variogram score for ARIMA 
+		modelling with a Gaussian Stationary DGP.}
+\end{figure}	
 
 \subsection{Results for non-Gaussian probabilistic forecast} \label{sec:SimSamplingResults}
 
+\begin{itemize}
+	\item For energy score results are similar to Gaussian case.
+	\item For variogram score ScoreOptV is best for dependent base forecasts.
+	\item Overall MinTShr, ScoreOptE and OLS are the best perfoming.
+\end{itemize}
 
-%Bootstrap approach: Generate 2102 data points for each series. Ignoring first 500 observations to avoid the impact of initial values. Choose 600 observations for outer rolling window and follow the steps in the algorithm to generate reconciled probabilistic forecasts for  h = 1, 2 and 3 steps ahead forecast horizons.  Replicate the process for 1000 times by rolling the window one step at a time. This yields 1000 forecast distributions for evaluation for all forecast horizons.
-
-%\subsection{Simulation setup for non-parametric solution}
-
-%We now implement the non-parametric approach introduced in Section \ref{sec:SampleSolution}. Our main focus in this study is to compare different reconciliation methods to optimal reconciliation. We narrow down the study to find optimality with respect to energy score. Following equation (\ref{eq:Energy_score}) for samples from the probability distribution and for $\alpha = 1$, we can rewrite the objective function in (\ref{eq:Obj_func_apprx}) as,
-
-%\begin{equation}\label{eq:Obj_func_apprx_ES}
-%\operatornamewithlimits{argmin}_{\bm{G}} \frac{1}{N}\sum_{j=1}^{N}\left\{\frac{1}{B}\sum_{b=1}^{B}||\bm{SG}_h\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}||-\frac{1}{2(B-1)}\sum_{b=1}^{B-1}||\bm{SG}_h(\bm{y}_{T+h,j}^b -\bm{y}_{T+h,j}^{b+1})||\right\}
-%\end{equation}
-
-%First we generate $2500$ data points for each series in the hierarchy using the same DGP discussed in Section \ref{sec:simulations}. Following the algorithm explained in Section \ref{sec:OptRec}, we choose $L=600$ observations for outer rolling window and $T=500$ observations for inner rolling window. We fit univariate ARIMA models using \verb|auto.arima()| function and generate $B=1000$ of $h=1$ to $3$ steps-ahead incoherent bootstrapped future paths following steps 2 and 3. We repeat these steps for $N=100$ times by moving the inner window one step at a time. Following step 6, we then estimate $\bm{G}_h^{Opt}$. We use numerical optimisation methods to attain the optimum. Next, we generate $\tilde{\bm{\Upsilon}}_{T+h}$ following step 7 and compute $\tilde{\bm{\Upsilon}}'_{T+h} = \bm{SG}_h\hat{\bm{\Upsilon}}'_{T+h}$ for $h=1,2,3$ as described in step 8. We use $\bm{G}_h^{Opt}$ as well as other $\bm{G}$ matrices given in Table \ref{tab:ReconMethods} (in appendix) for reconciliation in step 8. Finally we repeat this whole process for $1000$ times by moving the outer rolling window one step-ahead at a time. Collect $1000$ reconciled future paths, $\tilde{\bm{\Upsilon}}_{T+h}$, from different reconciliation methods for $h=1,2,3$ and evaluate the forecasting performances.
-
-%We also note that different parameterisation methods were used for estimation $\bm{G}_h^{Opt}$. This was discussed in detail in Section \ref{app:ReparaG} in Appendix.
-
-%\subsubsection{Results and discussion}
-
-We use energy score and variogram score to assess the predictive performance from different reconciliation methods. Results following from Non-Gaussian and Gaussian DGP are presented in left and right panels of Table \ref{table:Non-paraSimulation} respectively.
-
-Mann-Whitney test was used to compare the difference of scores between reconciliation methods. The results support that the ES and VS for all reconciled forecasts are significantly lower than those of incoherent forecasts. This implies that all reconciliation methods produce coherent probabilistic forecasts with improved predictive ability compared to the incoherent forecasts. In addition to that, the MinT(Shrink) and Optimal method have similar prediction accuracy as there is no significant difference between the scores from these reconciliation methods. Although the scores are relatively larger for Gaussian than non-Gaussian data, the overall conclusions are consistent.
-
-The simulation results from reparameterisation methods are presented in Table \ref{table:Non-paraSim_re-para} in Appendix. From these we note that the different parameterisation of $\bm{G}$ for optimal reconciliation give equivalent results irrespective to the forecast horizon or the DGP.
-
-However we also note that optimal reconciliation required a high computational cost for larger hierarchies. Further, it requires sufficient data points to learn the $\bm{G}$ matrix. Thus we suggest using the MinT $\bm{G}$ for reconciling bootstrapped future paths for two reasons. First, it is computationally efficient relative to the optimal method, and second, it produces accurate probabilistic forecasts that are at least as good as the Optimal method with respect to the energy score.
-
-\begin{table}
-	\caption{Energy scores (ES) and variogram scores (VS) for probabilistic forecasts from different reconciliation methods are presented. Bottom row represent the scores for base forecasts which are not coherent. The smaller the scores, the better the forecasts are.} \label{table:Non-paraSimulation}
-	%	\centering
-	\begin{center}
-		\tabcolsep=0.08cm\small
-		\resizebox{\linewidth}{!}{
-			\begin{tabular}{@{}lSSSSSS|SSSSSS@{}}
-				\toprule
-				\multicolumn{1}{c}{} & \multicolumn{6}{c|}{Energy Score} & \multicolumn{6}{c}{Variogram Score}\\
-				\toprule
-				 &
-				\multicolumn{3}{c}{Gaussian DGP} &
-				\multicolumn{3}{c|}{Non-Gaussian DGP} &
-				\multicolumn{3}{c}{Gaussian DGP} &
-				\multicolumn{3}{c}{Non-Gaussian DGP}\\
-				\cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
-				h & {}{1} &  {2} & {3} & {1} &  {2} & {3} & {1} &  {2} & {3} & {1} &  {2} & {3}  \\
-				\midrule
-				Base & 11.7 & 14.6 & 17.8 & 5.71 & 5.94 & 6.27 & 5.56 & 6.61 & 7.87 & 1.28 & 1.37 & 1.49 \\
-				OLS & 11.1 & 13.7 & 16.7 & 5.51 & 5.70 & 5.98 & 4.86 & 5.35 & 6.05 & 1.23 & 1.30 & 1.40 \\
-				WLS & 10.7 & 13.2 & 16.0 & 5.43 & 5.60 & 5.89 & 4.86 & 5.35 & 5.86 & 1.23 & 1.30 & 1.40 \\
-				MinT(Shrink)* & 10.5 & 12.8 & 15.7 & 5.33 & 5.50 & 5.77 & 4.77 & 5.24 & 5.86 & 1.19 & 1.26 & 1.34 \\
-				Optimal* & 10.6 & 12.9 & 15.7 & 5.36 & 5.51 & 5.83 & 4.85 & 5.30 & 5.86 & 1.21 & 1.27 & 1.40 \\
-				\bottomrule
-			\end{tabular}
-		}
-	\end{center}
-	\textit{The differences in scores between methods noted by ``*'' are statistically insignificant. The differences between these and the incoherent forecasts are statistically significant.}
+\begin{table}[H]	
+	\caption{\label{tab:nse} Mean Energy score for ARIMA 
+		modelling with a Gaussian Stationary DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
+	\centering
+	\begin{tabular}[t]{l|r|r|r|r}
+		\hline
+		Method & Ind. Bootstrap & Ind. Gaussian & Joint Bootstrap & Joint Gaussian\\
+		\hline
+		Base & 1.4169 & 1.4246 & 1.3850 & 1.3912\\
+		\hline
+		BottomUp & 1.5071 & 1.5305 & 1.4658 & 1.4731\\
+		\hline
+		BTTH & 2.7704 & 2.9271 & 2.7817 & 2.9335\\
+		\hline
+		JPP & 2.8805 & 2.9737 & 2.8788 & 2.9672\\
+		\hline
+		MinTShr & 1.3514 & 1.3504 & \textbf{1.3297} & \textbf{1.3367}\\
+		\hline
+		OLS & 1.3643 & 1.3638 & 1.3409 & 1.3483\\
+		\hline
+		ScoreOptE & \textbf{1.3391} & \textbf{1.3379} & 1.3384 & 1.3391\\
+		\hline
+		ScoreOptV & 1.3772 & 1.3772 & 1.3746 & 1.3738\\
+		\hline
+	\end{tabular}
 \end{table}
+
+
+\begin{figure}[H]
+	\label{fig:nse}
+	\includegraphics[width=.95\textwidth]{Figs/nse.pdf}
+	\caption{Nemenyi matrix for Variogram score for ARIMA 
+		modelling with a non-Gaussian Stationary DGP.}
+\end{figure}
+
+\begin{table}[H]
+	
+	\caption{\label{tab:nsv}Mean Variogram score for ARIMA 
+		modelling with a Gaussian Stationary DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
+	\centering
+	\begin{tabular}[t]{l|r|r|r|r}
+		\hline
+		Method & Ind. Bootstrap & Ind. Gaussian & Joint Bootstrap & Joint Gaussian\\
+		\hline
+		Base & 26.2480 & 26.2638 & 26.2339 & 26.2643\\
+		\hline
+		BottomUp & 28.5977 & 28.7956 & 27.6925 & 27.7625\\
+		\hline 
+		BTTH & 29.2544 & 29.1507 & 29.0767 & 29.0854\\
+		\hline
+		JPP & 26.3968 & 26.3993 & 26.3833 & 26.4030\\
+		\hline
+		MinTShr & \textbf{25.4412} & \textbf{25.4215} & 25.4799 & 25.5248\\
+		\hline
+		OLS & 25.6498 & 25.6362 & 25.6860 & 25.7348\\
+		\hline
+		ScoreOptE & 25.6992 & 25.6954 & 25.5763 & 25.6889\\
+		\hline
+		ScoreOptV & 25.5433 & 25.5325 & \textbf{25.4541} & \textbf{25.4798}\\
+		\hline
+	\end{tabular}
+\end{table}
+
+
+
+\begin{figure}[H]
+	\label{fig:nsv}
+	\includegraphics[width=.95\textwidth]{Figs/nsv.pdf}
+	\caption{Nemenyi matrix for Variogram score for ARIMA 
+		modelling with a non-Gaussian Stationary DGP.}
+\end{figure}	
 
 
 \section{Forecasting Australian domestic tourism flows}\label{sec:Application}

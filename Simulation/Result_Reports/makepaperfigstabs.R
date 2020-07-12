@@ -38,8 +38,10 @@ res_energy%>%
   summarise(Score=mean(Score))%>%
   pivot_wider(id_cols = Method,names_from=BaseMethod, values_from = Score)%>%
   kable(digits = 4,format = 'latex',
-        caption = 'Mean energy score for ARIMA 
-                        modelling with a Gaussian Stationary DGP')->tabgse
+        caption = 'Mean Energy score for ARIMA 
+                        modelling with a Gaussian Stationary DGP. Values 
+        in bold indicate the best reconciliation 
+        method for a given base forecasting method.')->tabgse
 
 capture.output(print(tabgse),file = 'PaperTabFigs/tabgse.tex')
 
@@ -76,8 +78,10 @@ res_variogram%>%
   summarise(Score=mean(Score))%>%
   pivot_wider(id_cols = Method,names_from=BaseMethod, values_from = Score)%>%
   kable(digits = 4,format = 'latex',
-        caption = 'Mean energy score for ARIMA 
-                        modelling with a Gaussian Stationary DGP')->tabgsv
+        caption = 'Mean Variogram score for ARIMA 
+                        modelling with a Gaussian Stationary DGP. Values 
+        in bold indicate the best reconciliation method for a given 
+        base forecasting method')->tabgsv
 
 capture.output(print(tabgsv),file = 'PaperTabFigs/tabgsv.tex')
 
@@ -114,8 +118,10 @@ res_energy%>%
   summarise(Score=mean(Score))%>%
   pivot_wider(id_cols = Method,names_from=BaseMethod, values_from = Score)%>%
   kable(digits = 4,format = 'latex',
-        caption = 'Mean energy score for ARIMA 
-                        modelling with a Gaussian Stationary DGP')->tabnse
+        caption = 'Mean Energy score for ARIMA 
+                        modelling with a Gaussian Stationary DGP. Values 
+        in bold indicate the best reconciliation method for a given 
+        base forecasting method')->tabnse
 capture.output(print(tabnse),file = 'PaperTabFigs/tabnse.tex')
 
 pdf('PaperTabFigs/nse.pdf')
@@ -150,8 +156,10 @@ res_variogram%>%
   summarise(Score=mean(Score))%>%
   pivot_wider(id_cols = Method,names_from=BaseMethod, values_from = Score)%>%
   kable(digits = 4,format = 'latex',
-        caption = 'Mean energy score for ARIMA 
-                        modelling with a Gaussian Stationary DGP')->tabnsv
+        caption = 'Mean Variogram score for ARIMA 
+                        modelling with a Gaussian Stationary DGP. Values 
+        in bold indicate the best reconciliation method for a given 
+        base forecasting method')->tabnsv
 
 pdf('PaperTabFigs/nsv.pdf')
 
