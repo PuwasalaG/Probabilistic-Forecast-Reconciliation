@@ -204,5 +204,5 @@ for (bb in 1:4){
 
 #Save output
 saveRDS(allE,paste0('Reconciliation_Results/scoreopt_energy_',i,'.rds'))
-saveRDS(allE,paste0('Reconciliation_Results/scoreopt_variogram_',i,'.rds'))
+saveRDS(allV,paste0('Reconciliation_Results/scoreopt_variogram_',i,'.rds'))
 
