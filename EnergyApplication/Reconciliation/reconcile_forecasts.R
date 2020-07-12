@@ -158,13 +158,13 @@ for (bb in 1:4){
   match<-(innovationsj=='bootstrap')
   
   #Train reconciliation weights using SGA 
-  
+  tracei<-(round(i/10)==(i/10))
   tt1<-system.time(
     try(optE<-scoreopt(all_y,
                       all_prob,
                       S,
                       score = list(score='energy',alpha=1),
-                      trace = T,
+                      trace = tracei,
                       control = list(maxIter=5000, tol=1E-12),
                       match=match))->err)
   if(class(err)=='try-error'){
@@ -180,7 +180,7 @@ for (bb in 1:4){
                        all_prob,
                        S,
                        score = list(score='variogram',alpha=1),
-                       trace = T,
+                       trace = tracei,
                        control = list(maxIter=5000, tol=1E-12),
                        match=match))->err)
   if(class(err)=='try-error'){
