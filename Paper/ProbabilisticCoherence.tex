@@ -495,11 +495,7 @@ In addition to these methods, two further reconciliation methods were considerd;
 
 \subsection{Results for Gaussian probabilistic forecasts}\label{sec:SimAnalysticalResults}
 
-\begin{itemize}
-	\item For energy score ScoreOptE is slightly better for independent base forecasts. ScoreOpt Reconciliation can pick up dependence when it is misspecified in the base forecasts (as can MinT).
-	\item For energy score MinT is slightly better for dependent base forecasts.
-	\item MinT ScoreOptE and OLS are not significantly different from one another.
-\end{itemize}
+Table~\ref{tab:gse} shows the mean energy score for different reconciliation methods and different methods of generating base forecasts.  When base probabilistic forecasts are generated independently, score optimisation with the energy score (ScoreOptE) performs best, while when base forecasts are generated jointly, using the shrinkage estimator from the MinT method for reconciliation  (MinTShr) yields the most accurate forecasts.  The bottom up method as well as BTTH and JPP fail to even improve upon base forecasts in all cases.  As expected score optimisation using the variogram score does not perform as well as score optimisation using energy score, when evaluation is carried out with respect to the latter.  However, the results are quite close suggesting that score optimisation is fairly robust to using an alternative proper score.
 
 \begin{table}[H]
 	\caption{\label{tab:gse}Mean Energy score for ARIMA 
@@ -528,18 +524,16 @@ In addition to these methods, two further reconciliation methods were considerd;
 	\end{tabular}
 \end{table}
 
+To assess significant differences between the reported results, we use post-hoc Nemenyi tests ~\citep{HolEtAl2013}. The Nemenyi test is a non-parametric test that identifies groups of forecasts which cannot be significantly distinguished from one another. We use the implementation of the tests available in the \verb|tsutils| R package~\citep{tsutilspackage}.  Figure~\ref{fig:gse} reports the results which should be looked at column-wise.  A blue square indicates that the method in the corresponding row, is statistically indistinguishable from the method in that column.  For all four methods of generating base forecasts, MinTShr, ScoreOptE and OLS significantly outperfom base forecasts, bottom up forecasts as well as BTTH and JPP.
+
 \begin{figure}[H]
-	\label{fig:nsv}
 	\includegraphics[width=.95\textwidth]{Figs/gse.pdf}
 	\caption{Nemenyi matrix for Variogram score for ARIMA 
 		modelling with a Gaussian Stationary DGP.}
+	\label{fig:gse}
 \end{figure}
 
-\begin{itemize}
-	\item For varigram score BTTH does significantly better than anything else.  This is a unique result that is not observed for any other simulation scenario.
-	\item Otherwise ScoreOptV is the best.
-	\item MinT ScoreOptE and OLS are not significantly different from one another.
-\end{itemize}
+Table~\ref{tab:gsv} and Figure~\ref{fig:gsv} report the same output but using the variogram score for evaluation.  For this specific DGP and for this specific  the BTTH method significantly outperforms all other methods.  However, this result was not observed when using BTTH for any other simulation scenario, including those reported only in the online supplement.  Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well.  Score optimisation, OLS, MinTShr and BTTH all lead to significantly improvements relative to base forecasts, bottom up methods and the method of JPP.
 
 \begin{table}[H]
 	\caption{\label{tab:gsv}Mean Variogram score for ARIMA 
@@ -568,22 +562,17 @@ In addition to these methods, two further reconciliation methods were considerd;
 	\end{tabular}
 \end{table}
 
-
-
 \begin{figure}[H]
-	\label{fig:gsv}
 	\includegraphics[width=.95\textwidth]{Figs/gsv.pdf}
 	\caption{Nemenyi matrix for Variogram score for ARIMA 
 		modelling with a Gaussian Stationary DGP.}
+	\label{fig:gsv}
+	
 \end{figure}	
 
 \subsection{Results for non-Gaussian probabilistic forecast} \label{sec:SimSamplingResults}
 
-\begin{itemize}
-	\item For energy score results are similar to Gaussian case.
-	\item For variogram score ScoreOptV is best for dependent base forecasts.
-	\item Overall MinTShr, ScoreOptE and OLS are the best perfoming.
-\end{itemize}
+Table~\ref{tab:nse} reports the mean energy score for the non-Gaussian DGP.  Overall, the results are quite similar to the Gaussian DGP.  The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent.  The Nemenyi matrix is omitted for brevity, but leads to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MintShr and OLS are statistically indistinguishable from one another but are significantly better that base forecasts and the bottom up method.  The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts. 
 
 \begin{table}[H]	
 	\caption{\label{tab:nse} Mean Energy score for ARIMA 
@@ -612,13 +601,7 @@ In addition to these methods, two further reconciliation methods were considerd;
 	\end{tabular}
 \end{table}
 
-
-\begin{figure}[H]
-	\label{fig:nse}
-	\includegraphics[width=.95\textwidth]{Figs/nse.pdf}
-	\caption{Nemenyi matrix for Variogram score for ARIMA 
-		modelling with a non-Gaussian Stationary DGP.}
-\end{figure}
+Finally, Table~\ref{tab:nsv} and Figure~\ref{fig:nsv} report results for the non-Gaussian DGP using the variogram score to evaluate forecasts.  In this case, score optimisation with respect to the variogram score yields the best performance when base forecasts are dependent, while MinTShr yields the best performance when base forecasts are independent.  In contrast to the Gaussian DGP, the JPP method leads to significant improvements over base forecasts, while the BTTH method leads to a significantly worse performance than base forecasts.
 
 \begin{table}[H]
 	
@@ -648,8 +631,6 @@ In addition to these methods, two further reconciliation methods were considerd;
 	\end{tabular}
 \end{table}
 
-
-
 \begin{figure}[H]
 	\label{fig:nsv}
 	\includegraphics[width=.95\textwidth]{Figs/nsv.pdf}
@@ -657,6 +638,7 @@ In addition to these methods, two further reconciliation methods were considerd;
 		modelling with a non-Gaussian Stationary DGP.}
 \end{figure}	
 
+Overall, the main conclusion from the simulation study is that score optimisation leads to significant improvements in forecast performance over base forecasts irrespective of whether the DGP is Gaussian or non-Gaussian and irrespective of whether the energy or variogram score is used for evaluation.  For the DGPs considered in the simulation study, MinTShr and to a lesser extent OLS also provided significant improvements over base and bottom up forecasts.  While the existing probabilistic forecast reconciliation methods considered in the literature (BTTH and JPP) performed well in some scenarios (particularly BTTH for the Gaussian DGP evaluated by variogram score), overall they lacked consistency and even led to a statistically significant deterioration in forecast quality relative to base forecasts in some settings.
 
 \section{Forecasting Australian domestic tourism flows}\label{sec:Application}
 
@@ -848,76 +830,6 @@ For the Gaussian DGP, $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathca
 For the non-Gaussian case, errors are generated from a Gumbel copula with Beta margins as described in Section~\ref{sec:dgp}. Rather than add Gaussian noise, we simulate $u_t$ and $v_t$ from skew t distributions using the \texttt{sn} package \citep{snpackage}.  The scale, skew and degrees of freedom parameters are chosen as 0.5,1.5 and 4 and 0.9,2 and 8 for $u_t$ and $v_t$ respectively.  Monte Carlo simulations show that these values satisfy the inequalities described above.
 
 \clearpage
-\section{Simulation results from parametric solution for marginal forecast distributions for $h=2$ and $h=3$}\label{app:AnalysticalSolMargins}
-
-\begin{table}[H]
-	\caption{Comparison of incoherent vs coherent forecasts based on the univariate forecast distribution of each series. Each entry represents the percentage skill score with reference to the incoherent forecasts based on ``CRPS" and ``LS". These entries show the percentage increase in score for different forecasting methods relative to the incoherent forecasts for $h=2$ step-ahead forecast. Results from the Gaussian DGP are presented in the top panel whereas the results from the non-Gaussian DGP are presented in the bottom panel}\label{tab:SimAnalyticalUni_h2}
-	\centering
-	\resizebox{\linewidth}{!}{
-		\begin{tabular}{lcccccccccccccc}
-			\toprule
-			\multicolumn{1}{c}{ } & \multicolumn{7}{c}{Gaussian} & \multicolumn{7}{c}{Non-Gaussian}\\
-			\cmidrule(lr){2-8} \cmidrule(lr){9-15}
-			Series & Tot & A & B & AA & AB & BA & BB & Tot & A & B & AA & AB & BA & BB \\
-			\toprule
-			\multicolumn{15}{c}{Log Score (\%)}\\
-			\toprule
-			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			Bottom up & \textbf{9.87} & -0.72 & -4.28 & 0.00 & 0.00 & -10.02 & \textbf{18.99} & -8.05 & -0.30 & -3.12 & 0.00 & 0.00 & -1.46 & -11.80\\
-			OLS & -22.52 & 1.31 & 0.50 & 1.81 & 0.25 & -6.72 & 18.12 & 30.16 & 0.20 & 3.28 & -1.53 & 4.33 & 0.18 & -10.70\\
-			WLS & -27.45 & -13.81 & 26.50 & 2.41 & 0.57 & -6.17 & 5.10 & 12.65 & \textbf{7.09} & -6.06 & -1.55 & 4.11 & 0.71 & -1.67\\
-			MinT(Sample) & -0.28 & 2.65 & 0.57 & \textbf{3.51} & \textbf{1.80} & -5.36 & 18.86 & -0.02 & 0.43 & \textbf{6.80}& \textbf{0.64} & 4.66 & \textbf{2.44} & -9.36\\
-			MinT(Shrink) & -0.29 & 2.60 & 0.56 & 3.37 & 1.72 & -5.34 & 18.90 & -0.06 & 0.42 & 6.79 & -1.50 & \textbf{4.67} & 2.26 & -9.46\\
-			Optimal & -12.70 & \textbf{5.42} & \textbf{26.71} & 2.86 & 0.52 & -6.42 & 17.11 & \textbf{34.04} & -2.98 & -7.45 & -6.28 & -0.19 & -2.31 & -14.48\\	
-			\toprule
-			\multicolumn{15}{c}{CRPS (\%)}\\
-			\toprule
-			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			Bottom up & -45.40 & -5.11 & -16.82 & 0.02 & -0.05 & -37.16 & 46.65 & -185.36 & -0.54 & -8.18 & 0.08 & -0.03 & -3.54 & -35.55\\
-			OLS & -14.62 & 6.88 & 1.64 & 7.06 & 0.78 & -23.24 & 45.12 & 61.90 & 0.64 & 8.48 & -4.32 & 11.30 & 1.10 & -31.86\\
-			WLS & -10.18 & -41.19 & 23.92 & 8.75 & 1.83 & -21.19 & 14.60 & 70.13 & \textbf{17.33} & -171.66 & -4.30 & 10.76 & 2.52 & -6.06\\
-			MinT(Sample) & -0.13 & \textbf{12.14} & 2.13 & 11.19 & \textbf{6.18} & -17.67 & 46.49 & 0.26 & 1.29 & 16.54 & \textbf{1.60} & 11.95 & \textbf{6.76} & -27.69\\
-			MinT(Shrink) & -0.08 & 12.03 & 2.05 & \textbf{11.62} & 5.74 & -17.91 & \textbf{46.64} & 0.32 & 1.44 & \textbf{16.71} & -4.15 & \textbf{12.14} & 6.54 & -27.79\\
-			Optimal & -10.80 & 10.78 & \textbf{22.61} & 7.57 & -0.96 & -25.69 & 41.91 & \textbf{71.52} & -8.89 & -184.63 & -18.29 & -1.88 & -7.13 & -44.68\\
-			\bottomrule
-		\end{tabular}
-	}
-\end{table}
-
-\begin{table}[H]
-	\caption{Comparison of incoherent vs coherent forecasts based on the univariate forecast distribution of each series. Each entry represents the percentage skill score with reference to the incoherent forecasts based on ``CRPS" and ``LS". These entries show the percentage increase in score for different forecasting methods relative to the incoherent forecasts for $h=3$ step-ahead forecast. Results from the Gaussian DGP are presented in the top panel whereas the results from the non-Gaussian DGP are presented in the bottom panel}\label{tab:SimAnalyticalUni_h3}
-	\centering
-	\resizebox{\linewidth}{!}{
-		\begin{tabular}{lcccccccccccccc}
-			\toprule
-			\multicolumn{1}{c}{ } & \multicolumn{7}{c}{Gaussian} & \multicolumn{7}{c}{Non-Gaussian}\\
-			\cmidrule(lr){2-8} \cmidrule(lr){9-15}
-			Series & Tot & A & B & AA & AB & BA & BB & Tot & A & B & AA & AB & BA & BB \\
-			\toprule
-			\multicolumn{15}{c}{Log Score (\%)}\\
-			\toprule
-			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 	0.00 & 0.00 & 0.00 & 0.00\\
-			Bottom up & 34.32 & 1.21 & -3.97 & 0.00 & 0.00 & -14.82 & 29.16 & 56.40 & -0.15 & -2.89 & 0.00 & 0.00 & -1.73 & -11.81\\
-			OLS & -67.52 & -0.68 & 0.48 & 0.27 & -0.27 & -10.97 & 28.06 & -5.91 & 0.47 & 2.87 & -1.78 & 5.14 & 0.07 & -10.68\\
-			WLS & -85.70 & -26.29 & 50.39 & 0.68 & 0.12 & -10.26 & 10.40 & -129.42 & 10.02 & 57.99 & -1.71 & 4.84 & 0.75 & 1.18\\
-			MinT(Sample) & -0.40 & -1.26 & 0.45 & 2.29 & 1.61 & -9.34 & 28.94 & -0.09 & 0.65 & 5.79 & 0.75 & 5.58 & 2.48 & -9.97\\
-			MinT(Shrink) & -0.42 & -1.32 & 0.46 & 1.39 & 1.50 & -9.27 & 28.99 & -0.16 & 0.63 & 5.77 & -1.74 & 5.60 & 2.34 & -9.93\\
-			Optimal & -24.58 & 10.50 & 51.73 & 2.73 & 3.03 & -8.64 & 27.28 & -12.25 & -2.65 & 57.70 & -7.44 & 0.17 & -2.67 & -15.72\\
-			\toprule
-			\multicolumn{15}{c}{CRPS (\%)}\\
-			\toprule
-			Base & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00\\
-			Bottom up & -22.10 & -3.52 & -16.10 & -0.04 & -0.09 & -53.20 & 58.23 & -80.43 & -0.35 & -8.48 & -0.17 & -0.05 & -4.20 & -36.03\\
-			OLS & -47.20 & 4.67 & 2.04 & 2.52 & 0.48 & -36.36 & 56.33 & 44.08 & 1.46 & 7.70 & -4.75 & 13.40 & 0.90 & -31.65\\
-			WLS & -44.96 & -60.44 & 42.85 & 3.92 & 1.71 & -33.62 & 25.60 & 46.73 & 22.77 & -66.37 & -4.90 & 12.58 & 2.58 & -0.12\\
-			MinT(Sample) & 0.02 & 7.99 & 2.21 & 9.03 & 6.23 & -29.83 & 57.85 & 0.21 & 1.88 & 14.24 & 1.88 & 14.20 & 6.81 & -29.36\\
-			MinT(Shrink) & -0.03 & 7.89 & 2.34 & 6.61 & 6.05 & -29.59 & 57.94 & 0.15 & 1.75 & 14.18 & -4.92 & 14.34 & 6.61 & -29.31\\
-			Optimal & -30.12 & 13.11 & 42.74 & 4.33 & 5.29 & -34.52 & 54.09 & 54.69 & -8.71 & -75.04 & -22.55 & -0.69 & -8.13 & -50.60\\
-			\bottomrule
-		\end{tabular}
-	}
-\end{table}
-
 
 %\section{Application}
 %
