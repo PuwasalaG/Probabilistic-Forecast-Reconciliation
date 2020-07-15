@@ -8,8 +8,8 @@ library(ProbReco)
 rm(list=ls())
 
 
-i<- 196 #If running within R uncomment this.  This will only run one window
-#i<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this should start from L+N+inW 
+#i<- 196 #If running within R uncomment this.  This will only run one window
+i<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this should start from L+N+inW 
 
 # Order of variables
 
@@ -223,17 +223,17 @@ eval<-function(bb){
   #Score opt in
   
   #Train reconciliation weights using SGA 
-  
+ tracei<-(((i/10)!=round(i/10))) 
   tt1<-system.time(
     try(optE<-inscoreopt(yin,
                         yhat,
                         S,
-                        control = list(maxIter=50,tol=1E-12),
+                        control = list(maxIter=2000,tol=1E-12),
                         basedep = depj,
                         basedist = innovationsj,
                         Q=200,
                         score=list(score='energy',alpha=1),
-                        trace = T))->err)
+                        trace = tracei))->err)
   if(class(err)=='try-error'){
     opt<-list(d=rep(0,4),
               G=solve(t(S)%*%S,t(S)),
@@ -248,12 +248,12 @@ eval<-function(bb){
     try(optV<-inscoreopt(yin,
                         yhat,
                         S,
-                        control = list(maxIter=50,tol=1E-12),
+                        control = list(maxIter=2000,tol=1E-12),
                         basedep = depj,
                         basedist = innovationsj,
                         Q=200,
                         score=list(score='variogram',alpha=1),
-                        trace = T))->err)
+                        trace = tracei))->err)
   if(class(err)=='try-error'){
     opt<-list(d=rep(0,4),
               G=solve(t(S)%*%S,t(S)),
