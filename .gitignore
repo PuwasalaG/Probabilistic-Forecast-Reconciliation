@@ -13,6 +13,5 @@
 *.fls
 *.synctex.gz
 *.out
-*.csv
 
 .Rproj.user

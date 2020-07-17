@@ -9,7 +9,7 @@ readj<-function(j){
   return(a)
 }
 
-all<-map_dfr(c(196:263,265:278,280:289),readj)
+all<-map_dfr(c(196:326),readj)
 
 all%>%
   filter(ScoreEval=='Energy')%>%
