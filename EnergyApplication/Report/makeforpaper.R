@@ -7,6 +7,100 @@ library(tsutils)
 library(fable)
 library(kableExtra)
 library(corrplot)
+library(tsibble)
+
+#Plots of data
+
+dat<-readRDS('../Data/nem_generation_by_source.rds')%>%
+  as_tibble()%>%
+  rename(Date=date)
+
+
+pdf('tsPlots/toptwolevels.pdf')
+
+dat%>%
+  filter(Source%in%c('Total',
+         'non-Renewable',
+         'Renewable'))%>%
+  ggplot(aes(x=Date,y=Generation))+
+  geom_line()+
+  facet_wrap(~Source,
+             nrow = 3, 
+             ncol = 1,
+             scales = 'free_y')
+
+dev.off()
+
+pdf('tsPlots/fossils.pdf')
+
+dat%>%
+  filter(Source%in%c('Coal',
+                     'Black Coal',
+                     'Brown Coal',
+                     'Gas',
+                     'Gas (OCGT)',
+                     'Gas (CCGT)',
+                     'Gas (Reciprocating)',
+                     'Gas (Steam)',                     
+                     'Distillate'))%>%
+  ggplot(aes(x=Date,y=Generation))+
+  geom_line()+
+  facet_wrap(~Source,
+             nrow = 3, 
+             ncol = 3,
+             scales = 'free_y')
+       
+dev.off()
+
+pdf('tsPlots/batteryhydrosolar.pdf')
+
+dat%>%
+  filter(Source%in%c('Solar',
+                     'Solar (Rooftop)',
+                     'Solar (Utility)',
+                     'Hydro (inc. Pumps)',
+                     'Hydro',
+                     'Pumps',
+                     'Battery',
+                     'Battery (Charging)',
+                     'Battery (Discharging)'))%>%
+  ggplot(aes(x=Date,y=Generation))+
+  geom_line()+
+  facet_wrap(~Source,
+             nrow = 3, 
+             ncol = 3,
+             scales = 'free_y')
+
+dev.off()
+
+pdf('tsPlots/windbiomas.pdf')
+
+dat%>%
+  filter(Source%in%c('Wind',
+                     'Biomass'))%>%
+  ggplot(aes(x=Date,y=Generation))+
+  geom_line()+
+  facet_wrap(~Source,
+             nrow = 2, 
+             ncol = 1,
+             scales = 'free_y')
+
+dev.off()
+
+pdf('forPaper/selected.pdf')
+
+dat%>%
+  filter(Source%in%c('Wind',
+                     'Solar',
+                     'Distillate'))%>%
+  ggplot(aes(x=Date,y=Generation))+
+  geom_line()+
+  facet_wrap(~Source,
+             nrow = 3, 
+             ncol = 1,
+             scales = 'free_y')
+
+dev.off()
 
 #Base Results
 

@@ -18,10 +18,7 @@ dat%>%
          Total=Renewable+`non-Renewable`+Battery+Pumps)%>%
   pivot_longer(cols=-date,names_to = 'Source',values_to = 'Generation')->alldata
   
-# ggplot(alldata,aes(x=date,y=Generation))+geom_line()+facet_wrap(~Source,
-#                                                    nrow = 6, 
-#                                                    ncol = 4,
-#                                                    scales = 'free_y')
+
 
 data_ts<-as_tsibble(alldata,key = Source)
 

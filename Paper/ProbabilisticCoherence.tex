@@ -644,22 +644,37 @@ Overall, the main conclusion from the simulation study is that score optimisatio
 
 \subsection{Data Description}\label{sec:datadesc}
 
-\subsection{Base Forecasts}\label{sec:applbase}
+To demonstrate the potential of the proposed methods for probabilistic forecasting methods we consider an application to forecasting Australian electricity generation from different sources of energy.  The time series data were obtained form \url{opennem.org.au}, a website that compiles publicly available data from the Australian Energy Market Operator(AEMO).  Probabilistic day-ahead forecasts are crucial to the efficient operation of the electricity grid including mitigating the risk of blackouts.  This has become a more challenging problem with the growth in intermittent sources of generation such as wind and solar.
 
-The forecast evaluation is based on a rolling window.  Each training window consists of  140 days (20 weeks) of data. One-step ahead forecasts were computed leading to 170 evaluation periods.  Each series was independently modelled using a one-layer feed-forward neural network with up to 28 lags of the target variable as inputs.  This was implemented using the \verb|NNETAR| function in the \verb|fable| package.  Neural networks are used to highlight the versatility of reconciliation to different forecasting approaches.  A number of improvements could be made to the neural network including the inclusion of more layers, or including meteorological variables as predictors.  However, we emphasise that the primary objective of the empirical study is to assess the effectiveness of different forecast evaluation methods.
+The hierarchy was constructed in the following manner.  Total generation is decomposed into generation from renewable sources and non renewable sources.  Non-renewable sources are decomposed into Coal, Gas and Distillate, where Coal is further decomposed into Black Coal and Brown Coal, while Gas is decomposed into Gas (OCGT), Gas (CCGT), Gas (Steam), Gas (Reciprocating). Renewable sources are decomposed into Biomass, Batteries, Hydro (net of water pumped up stream), Solar and Wind.  Battery is generation given by Discharging minus Charging, Hydro can be into Hydro generation and power used for Pumps, while Solar can be decomposed into Solar (Rooftop) and Solar (Utility).  In total there are $n=23$ series of which $m=15$ are bottom level series.
 
-Base forecasts are produced under four different sets of assumptions.  Probabilistic forecasts may be assumed to be Gaussian, or bootstrapped from residuals.  In both these cases, probabilistic forecasts may be dependent or independent.  The histograms in Figure~\ref{fig:emp_hist} demonstrate departures from normality while the correlation heatmap in Figure~\ref{fig:emp_corr} demonstrates departures from independence.  Therefore the independent Gaussian probabilistic forecasts are likely to represent a case of severe misspecification.
+Figure~\ref{fig:selected} shows time series plots for selected series\footnote{Time series plots for the remaining series area available from \url|https://github.com/PuwasalaG/Probabilistic-Forecast-Reconciliation/tree/master/EnergyApplication/Report/tsPlots|.}.  We observe very different patterns in all series.  While total generation exhibits a seasonal pattern with peaks in winter and summer (when electricity demand is high for heating and cooling purposed respectively), generation from Solar peaks in the summer, while generation from Distillate exhibits spikes.
 
 \begin{figure}[H]
-	\label{fig:emp_hist}
-	\includegraphics[width=.95\textwidth]{Figs/densities.pdf}
+	\includegraphics[width=.95\textwidth]{Figs/selected.pdf}
+	\caption{Time series plots for selected series from from June 11, 2019 to June 10, 2020.}
+	\label{fig:selected}
+\end{figure}	
+
+
+
+\subsection{Base Forecasts}\label{sec:applbase}
+
+The forecast evaluation is based on a rolling window.  Each training window consists of  140 days (20 weeks) of data. One-step ahead forecasts were computed leading to 170 evaluation periods.  Each series was independently modelled using a one-layer feed-forward neural network with up to 28 lags of the target variable as inputs.  This was implemented using the \verb|NNETAR| function in the \verb|fable| package.  Neural networks are used to highlight the versatility of reconciliation to different forecasting approaches.  While including more layers or meteorological variables as predictors may led to improved base forecasts, the primary objective is to assess the effectiveness of different forecast evaluation methods.
+
+Base forecasts are assumed to be Gaussian or bootstrapped from residuals and either dependent or independent.  The histograms in Figure~\ref{fig:emp_hist} demonstrate departures from normality while the correlation heatmap in Figure~\ref{fig:emp_corr} demonstrates departures from independence.  Therefore the independent Gaussian probabilistic forecasts are likely to represent a case of severe misspecification.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=.7\textwidth]{Figs/densities.pdf}
 	\caption{Densities of residuals for selected series from a typical training window of October 2, 2019 to January 21, 2020.}
+	\label{fig:emp_hist}
 \end{figure}	
 
 \begin{figure}[H]
-\label{fig:emp_corr}
 \includegraphics[width=.95\textwidth]{Figs/corr.pdf}
 \caption{Correlation heatmap of residuals from a typical training window of October 2, 2019 to January 21, 2020. Blue circles indicate positive correlation, while red circles indicate negative correlation with larger circles indicating stronger correlations.}
+\label{fig:emp_corr}
 \end{figure}	
 
 \subsection{Reconciliation}\label{sec:applreco}
@@ -698,16 +713,18 @@ The mean energy score for all four base forecasting methods is summarised in Tab
 
 \begin{figure}[H]
 	\label{fig:nem_app_ig}
-	\includegraphics[width=.95\textwidth]{Figs/nemenyi_ig.pdf}
+	\centering
+	\includegraphics[width=.75\textwidth]{Figs/nemenyi_ig.pdf}
 	\caption{Nemenyi matrix for Energy score for electricity application when base forecasts are independent and Gaussian.}
 \end{figure}	
 
-For all other methods the best performing method is OLS.  Figure~\ref{fig:nem_app_jb} shows the Nemenyi matrix for jointly bootstrapped base forecasts, the corresponding figures for joint Gaussian and independent bootstrap look roughly similar.  Reconciliation via OLS is significantly better than all other reconciliation methods and although Score optimisation does not improve upon base, the differences are not significant.  For all base forecasting methods, both JPP and BTTH perform significantly worse than base forecasts when evaluated by energy score.
+For all other methods the best performing method is OLS.  Figure~\ref{fig:nem_app_jb} shows the Nemenyi matrix for jointly bootstrapped base forecasts, the corresponding figures for joint Gaussian and independent bootstrap look roughly similar.  Reconciliation via OLS is significantly better than all other reconciliation methods. Although score optimisation does not improve upon base, the differences are not significant.  For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
 
 
 \begin{figure}[H]
 	\label{fig:nem_app_jb}
-	\includegraphics[width=.95\textwidth]{Figs/nemenyi_jb.pdf}
+	\centering
+	\includegraphics[width=.75\textwidth]{Figs/nemenyi_jb.pdf}
 	\caption{Nemenyi matrix for Energy score for electricity application when base forecasts are obtained by jointly bootstrapping residuals.}
 \end{figure}	
 
@@ -715,9 +732,9 @@ For all other methods the best performing method is OLS.  Figure~\ref{fig:nem_ap
 
 In this paper we have introduced a rigorous formulation of reconciliation in the probabilistic setting. This can be applied when the probabilistic forecast is available as a density in closed form or when a sample has been drawn from probabilistic forecast.  In the elliptical case, we prove that reconciliation can recover the correct probabilistic distribution as long as the base forecast is of the correct form. The scale and location of the base forecast is irrelevant. Evidence for this can be seen in the simulations and empirical applications which demonstrate that score optimisation and to a lesser extent the MinT method, work well even when the base forecasts are assumed to be independent.
 
-We also prove that the log score is not proper when incoherent and coherent forecasts are compared to one another.  Consequently, we introduce a new algorithm that trains reconciliation weights by maximising energy score and variogram score.  Since the scores can only be approximated by Monte Carlo, the method of stochastic gradient descent is used for optimisation.  This method is shown to lead to significant improvements over base forecasts, over methods that reconcile quantiles \citep{JeoEtAl2019} and over bottom up methods including \cite{BenTaieb2017} across a wide variety of simulated and empirical examples. 
+We also prove that the log score is not proper when incoherent and coherent forecasts are compared.  Consequently, we introduce a new algorithm that trains reconciliation weights by maximising energy score and variogram score.  Since the scores can only be approximated by Monte Carlo, the method of stochastic gradient descent is used for optimisation.  This method is shown to lead to significant improvements over base forecasts, over methods that reconcile quantiles \citep{JeoEtAl2019} and over bottom up methods including \cite{BenTaieb2017} across a wide variety of simulated and empirical examples. 
 
-One interesting result is that projections methods, heretofore shown to have certain optimality properties in the point forecasting setting, also work well when extended to probabilistic case.  In particular, a simple ordinary least squares projection is the best performing method in the high-dimensional empirical example, as long as the base forecasts are not too badly misspecified.  This may be due to the fact that projections implicitly provide constrained versions of the reconciliation weights and in the case of an OLS projection require no estimation.  This suggests that an interesting avenue for future research may be to consider regularised versions of score optimisation.  This may be achieved either by adding an L1 or L2 penalty to the objective function.  Alternatively, early stopping \citep{BuhYu2003,YaoEtAl2007} of the gradient descent may lead to a better bias-variance tradeoff in learning reconciliation weights.
+An interesting result is that projections methods that have certain optimality properties in the point forecasting setting, also work well when extended to probabilistic case.  In particular, a simple least squares projection is the best performing method in the high-dimensional empirical example, when base forecasts are not too badly misspecified.  This may arise since projections implicitly provide constrained versions of the reconciliation weights which in the case of an OLS projection require no estimation.  An interesting avenue for future research may be to consider regularised versions of score optimisation.  This may be achieved either by adding an L1 or L2 penalty to the objective function.  Alternatively, early stopping \citep{BuhYu2003,YaoEtAl2007} of the gradient descent may lead to a better bias-variance tradeoff in learning reconciliation weights.
 
 A final important avenue of future research is the development of probabilistic forecast reconciliation for domains other than the real line.  These may include domains constrained above zero, discrete domains or domains that are a mixture of continuous distributions and discrete point masses.  While such problems are challenging, the geometric interpretation of probabilistic forecast introduced in this paper, lays the foundation for this research agenda.
 
