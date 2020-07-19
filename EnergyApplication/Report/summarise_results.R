@@ -10,7 +10,7 @@ readj<-function(j){
 }
 
 all<-map_dfr(c(196:365),readj)
-
+write_csv(all,'all.csv')
 all%>%
   filter(ScoreEval=='Energy')%>%
   mutate(BaseMethod=paste(BaseDep,BaseDist,sep='_'),

@@ -22,4 +22,9 @@ perfectly dependent, i.e. it reconciles quantiles. Reconciliation is done by WLS
 (in-sample) used instead of rolling window forecasts.
 - **WLS**: Weighted least squares using structural scaling.
 
-The .csv files contain mean energy score and mean variogram score. Nemenyi matrix plots are given as pdf files.
+# Files
+
+- The file *all.csv* contains all results.
+- The files *MeanScoreEnergy.csv* and *MeanScoreVariogram.csv* contains mean energy score and mean variogram score. 
+- Nemenyi matrix plots are given as pdf files.
+- The script *makeforpaper.R* makes files for the paper which are contained in the folder *forPaper*
