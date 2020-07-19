@@ -90,13 +90,14 @@ dev.off()
 pdf('forPaper/selected.pdf')
 
 dat%>%
-  filter(Source%in%c('Wind',
+  filter(Source%in%c('Total',
+                     'Wind',
                      'Solar',
                      'Distillate'))%>%
   ggplot(aes(x=Date,y=Generation))+
   geom_line()+
   facet_wrap(~Source,
-             nrow = 3, 
+             nrow = 4, 
              ncol = 1,
              scales = 'free_y')
 
