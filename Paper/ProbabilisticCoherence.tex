@@ -646,36 +646,43 @@ Overall, the main conclusion from the simulation study is that score optimisatio
 
 \subsection{Base Forecasts}\label{sec:applbase}
 
+The forecast evaluation is based on a rolling window.  Each training window consists of  140 days (20 weeks) of data. One-step ahead forecasts were computed leading to 170 evaluation periods.  Each series was independently modelled using a one-layer feed-forward neural network with up to 28 lags of the target variable as inputs.  This was implemented using the \verb|NNETAR| function in the \verb|fable| package.  Neural networks are used to highlight the versatility of reconciliation to different forecasting approaches.  A number of improvements could be made to the neural network including the inclusion of more layers, or including meteorological variables as predictors.  However, we emphasise that the primary objective of the empirical study is to assess the effectiveness of different forecast evaluation methods.
+
+Base forecasts are produced under four different sets of assumptions.  Probabilistic forecasts may be assumed to be Gaussian, or bootstrapped from residuals.  In both these cases, probabilistic forecasts may be dependent or independent.
+
 \subsection{Reconciliation}\label{sec:applreco}
 
-The mean energy score is summarised in Table~\ref{tab:appres}.
+The same methods were used for reconciliation as in the simulation study with score optimisation based on an objective function containing 56 days (8 weeks) of score evaluations.  For brevity, only the results for energy score are presented here.  Also, results for MinT with the sample covariance estimator, WLS, and the in-sample version of energy score optimisation are omitted.  A full set of results are available from \url{https://github.com/PuwasalaG/Probabilistic-Forecast-Reconciliation/tree/master/EnergyApplication/Report}.
+
+The mean energy score for all four base forecasting methods is summarised in Table~\ref{tab:appres}.  When base forecasts are generated assuming both independence and a Gaussian distribution, score optimisation achieves a mean energy score that is considerably smaller than all other competing methods, with MinT providing the second smallest value.  Figure~\ref{fig:nem_app_ig} provides the Nemenyi matrix for this set of base forecasts, and shows that the superior forecasting performance of score optimisation is statistically significant.  This suggests that score optimisation is best for guarding against severe model misspecification.   
+
 
 \begin{table}[H]
 
-\caption{\label{tab:appes} Mean Energy Score for electricity application.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
+\caption{\label{tab:appres} Mean Energy Score for electricity application.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
+
 
 \begin{tabular}{l|r|r|r|r}
 	\hline
-	Method & Ind. Bootstrap & Joint Bootstrap & Ind. Gaussian & Joint Gaussian\\
+	RecoMethod & Ind. Bootstrap & Ind. Gaussian & Joint Bootstrap & Joint Gaussian\\
 	\hline
-	Base & 36.41 & 36.54 & 95.02 & 36.32\\
+	Base & 36.41 & 95.02 & 36.54 & 36.32\\
 	\hline
-	BottomUp & 35.89 & 35.72 & 90.64 & 35.51\\
+	BottomUp & 35.89 & 90.64 & 35.72 & 35.51\\
 	\hline
-	BTTH & 58.57 & 58.23 & 269.40 & 59.07\\
+	BTTH & 58.57 & 269.40 & 58.23 & 59.07\\
 	\hline
-	JPP & 55.15 & 55.16 & 292.27 & 55.89\\
+	JPP & 55.15 & 292.27 & 55.16 & 55.89\\
 	\hline
-	MinTShr & 37.89 & 38.52 & 54.80 & 38.33\\
+	MinTShr & 37.89 & 54.80 & 38.52 & 38.33\\
 	\hline
-	OLS & \textbf{35.42} & \textbf{34.71} & 73.72 & \textbf{34.48}\\
+	OLS & \textbf{35.42} & 73.72 & \textbf{34.71} & \textbf{34.48}\\
 	\hline
-	ScoreOptE & 38.23 & 39.39 & \textbf{39.96} & 39.07\\
+	ScoreOptE & 38.23 & \textbf{39.96} & 39.39 & 39.07\\
 	\hline
 \end{tabular}
-\end{table}
 
-Figure~\ref{fig:nem_app_ig} shows the Nemenyi matrix for independent Gaussian base forecasts.  Score optimisation is significantly better than all other reconciliation methods.
+\end{table}
 
 \begin{figure}[H]
 	\label{fig:nem_app_ig}
@@ -683,7 +690,8 @@ Figure~\ref{fig:nem_app_ig} shows the Nemenyi matrix for independent Gaussian ba
 	\caption{Nemenyi matrix for Energy score for electricity application when base forecasts are independent and Gaussian.}
 \end{figure}	
 
-Figure~\ref{fig:nem_app_jb} shows the Nemenyi matrix for jointly bootstrapped base forecasts.  Reconciliation via OLS and WLS are significantly better than all other reconciliation methods.  Although Score optimisation does not improve upon base, the differences are not significant.
+For all other methods the best performing method is OLS.  Figure~\ref{fig:nem_app_jb} shows the Nemenyi matrix for jointly bootstrapped base forecasts, the corresponding figures for joint Gaussian and independent bootstrap look roughly similar.  Reconciliation via OLS is significantly better than all other reconciliation methods and although Score optimisation does not improve upon base, the differences are not significant.  For all base forecasting methods, both JPP and BTTH perform significantly worse than base forecasts when evaluated by energy score.
+
 
 \begin{figure}[H]
 	\label{fig:nem_app_jb}
@@ -701,7 +709,6 @@ One interesting result is that projections methods, heretofore shown to have cer
 
 A final important avenue of future research is the development of probabilistic forecast reconciliation for domains other than the real line.  These may include domains constrained above zero, discrete domains or domains that are a mixture of continuous distributions and discrete point masses.  While such problems are challenging, the geometric interpretation of probabilistic forecast introduced in this paper, lays the foundation for this research agenda.
 
-geometric
 
 \newpage
 
