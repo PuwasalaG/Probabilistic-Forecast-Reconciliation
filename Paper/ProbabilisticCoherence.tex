@@ -648,7 +648,19 @@ Overall, the main conclusion from the simulation study is that score optimisatio
 
 The forecast evaluation is based on a rolling window.  Each training window consists of  140 days (20 weeks) of data. One-step ahead forecasts were computed leading to 170 evaluation periods.  Each series was independently modelled using a one-layer feed-forward neural network with up to 28 lags of the target variable as inputs.  This was implemented using the \verb|NNETAR| function in the \verb|fable| package.  Neural networks are used to highlight the versatility of reconciliation to different forecasting approaches.  A number of improvements could be made to the neural network including the inclusion of more layers, or including meteorological variables as predictors.  However, we emphasise that the primary objective of the empirical study is to assess the effectiveness of different forecast evaluation methods.
 
-Base forecasts are produced under four different sets of assumptions.  Probabilistic forecasts may be assumed to be Gaussian, or bootstrapped from residuals.  In both these cases, probabilistic forecasts may be dependent or independent.
+Base forecasts are produced under four different sets of assumptions.  Probabilistic forecasts may be assumed to be Gaussian, or bootstrapped from residuals.  In both these cases, probabilistic forecasts may be dependent or independent.  The histograms in Figure~\ref{fig:emp_hist} demonstrate departures from normality while the correlation heatmap in Figure~\ref{fig:emp_corr} demonstrates departures from independence.  Therefore the independent Gaussian probabilistic forecasts are likely to represent a case of severe misspecification.
+
+\begin{figure}[H]
+	\label{fig:emp_hist}
+	\includegraphics[width=.95\textwidth]{Figs/densities.pdf}
+	\caption{Densities of residuals for selected series from a typical training window of October 2, 2019 to January 21, 2020.}
+\end{figure}	
+
+\begin{figure}[H]
+\label{fig:emp_corr}
+\includegraphics[width=.95\textwidth]{Figs/corr.pdf}
+\caption{Correlation heatmap of residuals from a typical training window of October 2, 2019 to January 21, 2020. Blue circles indicate positive correlation, while red circles indicate negative correlation with larger circles indicating stronger correlations.}
+\end{figure}	
 
 \subsection{Reconciliation}\label{sec:applreco}
 

@@ -4,7 +4,33 @@ rm(list=ls())
 
 library(tidyverse)
 library(tsutils)
+library(fable)
 library(kableExtra)
+library(corrplot)
+
+#Base Results
+
+#Pull data for 21st January
+b30<-readRDS('../Base_Results/base_30.rds')
+
+dates<-seq.Date(from=as.Date('2019/10/2'),to=as.Date('2020/01/21'),by=1)
+as_tibble(b30$resid)%>%
+  add_column(Date=dates)->resid_df
+
+pdf('forPaper/densities.pdf')
+resid_df%>%
+  select(Date,Total,Coal,Gas,Wind,Distillate,`Solar (Rooftop)`, `Solar (Utility)`,Pumps,Biomass)%>%
+  pivot_longer(cols = -Date,names_to = 'Source', values_to = 'Generation')%>%
+  ggplot(aes(x=Generation))+
+  geom_histogram()+
+  facet_wrap(~Source,nrow = 3,3,scales = 'free')
+dev.off()
+
+pdf('forPaper/corr.pdf')
+b30$fc_Sigma_shr%>%cov2cor%>%corrplot  
+dev.off()
+
+#Reconciliation results
 
 all<-read_csv('all.csv')
 
