@@ -96,7 +96,7 @@
 
 
 \begin{abstract}
-We develop a framework for prediction or forecasting of multivariate data that follow some known linear constraints, such as the example where some variables are aggregates of others. For point prediction, an increasingly popular technique is reconciliation, whereby predictions or forecasts are made for all series (so called `base' forecasts) and subsequently adjusted to ensure coherence with the constraints.  This paper extends reconciliation from the setting of point prediction to probabilistic prediction.  A novel definition of reconciliation is developed and used to construct densities and draw samples from a reconciled probabilistic prediction.  In the elliptical case, it is proven that the true predictive distribution can be recovered from reconciliation even when the location and scale matrix of the base prediction are chosen arbitrarily.  To find reconciliation weights, an objective function based on scoring rules is optimised.  The energy score is chosen since the log score is improper in the context of comparing unreconciled to reconciled forecasts, a result also proved in this paper.  To account for the stochastic nature of the energy score, optimisation is achieved using stochastic gradient descent.  ADD SOMETHING ABOUT SIMULATION AND APPLICATION.
+We develop a framework for prediction or forecasting of multivariate data that follow some known linear constraints, such as the example where some variables are aggregates of others. For point prediction, an increasingly popular technique is reconciliation, whereby predictions or forecasts are made for all series (so called `base' forecasts) and subsequently adjusted to ensure coherence with the constraints.  This paper extends reconciliation from the setting of point prediction to probabilistic prediction.  A novel definition of reconciliation is developed and used to construct densities and draw samples from a reconciled probabilistic prediction.  In the elliptical case, it is proven that the true predictive distribution can be recovered from reconciliation even when the location and scale matrix of the base prediction are chosen arbitrarily.  To find reconciliation weights, an objective function based on scoring rules is optimised.  The energy and variogram scores are considered since the log score is improper in the context of comparing unreconciled to reconciled forecasts, a result also proved in this paper.  To account for the stochastic nature of the energy and variogram score, optimisation is achieved using stochastic gradient descent.  This method is shown to improve base forecasts in simulation studies and an empirical application, particularly when the base forecasting models are badly misspecified.  When misspecification is not too severe, extending popular reconciliation methods for point prediction can result in a similar performance to score optimisation via stochastic gradient descent.
 
 
 
@@ -129,7 +129,7 @@ This paper seeks to address a number of open issues in probabilistic forecast re
 
 %Finally we applied both parametric and non-parametric approaches to generate probabilistic forecasts for domestic tourism flow in Australia. The results show that reconciliation improves forecast accuracy compared to incoherent forecasts in both parametric and non-parametric approaches and furthermore, MinT reconciliation performs best.
 
-The remainder of the paper is structured as follows. In Section~\ref{sec:ProbForecasts}, after  brief review of point forecast reconciliation, novel definitions are provided for coherent forecasts and reconciliation in the probabilistic setting. In Section~\ref{sec:AnalyticalSolution}, we outline how reconciliation can be achieved in the both the case where the density of the base probabilistic forecast is available, and in the case where a sample has been generated from the base probabilistic forecast.  In Section~\ref{sec:evaluation}, we consider the evaluation of probabilistic hierarchical forecasts via scoring rules, including theoretical results on the impropriety of the log score in the context of forecast reconciliation.  The use of scoring rules motivates our algorithm for finding optimal reconciliation weights using stochastic gradient descent, which is described in Section~\ref{sec:scoreoptSGD} and evaluated in an extensive simulation study in Section~\ref{sec:simulations}. An empirical application on tourism forecasting is contained in Section~\ref{sec:Application}. Finally Section~\ref{sec:conclusion} concludes with some discussion and thoughts on future research.
+The remainder of the paper is structured as follows. In Section~\ref{sec:ProbForecasts}, after  brief review of point forecast reconciliation, novel definitions are provided for coherent forecasts and reconciliation in the probabilistic setting. In Section~\ref{sec:AnalyticalSolution}, we outline how reconciliation can be achieved in the both the case where the density of the base probabilistic forecast is available, and in the case where a sample has been generated from the base probabilistic forecast.  In Section~\ref{sec:evaluation}, we consider the evaluation of probabilistic hierarchical forecasts via scoring rules, including theoretical results on the impropriety of the log score in the context of forecast reconciliation.  The use of scoring rules motivates our algorithm for finding optimal reconciliation weights using stochastic gradient descent, which is described in Section~\ref{sec:scoreoptSGD} and evaluated in an extensive simulation study in Section~\ref{sec:simulations}. An empirical application on forecasting electricity generation from different sources is contained in Section~\ref{sec:Application}. Finally Section~\ref{sec:conclusion} concludes with some discussion and thoughts on future research.
 
 \section{Hierarchical probabilistic forecasts}\label{sec:ProbForecasts}
 
@@ -640,43 +640,58 @@ Finally, Table~\ref{tab:nsv} and Figure~\ref{fig:nsv} report results for the non
 
 Overall, the main conclusion from the simulation study is that score optimisation leads to significant improvements in forecast performance over base forecasts irrespective of whether the DGP is Gaussian or non-Gaussian and irrespective of whether the energy or variogram score is used for evaluation.  For the DGPs considered in the simulation study, MinTShr and to a lesser extent OLS also provided significant improvements over base and bottom up forecasts.  While the existing probabilistic forecast reconciliation methods considered in the literature (BTTH and JPP) performed well in some scenarios (particularly BTTH for the Gaussian DGP evaluated by variogram score), overall they lacked consistency and even led to a statistically significant deterioration in forecast quality relative to base forecasts in some settings.
 
-\section{Forecasting Australian domestic tourism flows}\label{sec:Application}
+\section{Forecasting Australian Electricity Generation}\label{sec:Application}
 
-Previous studies have shown that point forecast reconciliation can generate more accurate forecasts compared to incoherent base forecasts or traditional methods such as bottom-up for forecasting Australian tourism flows \citep[see for example,][]{AthEtAl2009, HynEtAl2011, WicEtAl2019}. This study is the first to apply reconciliation methods for forecasting Australian tourism in a probabilistic framework. We use ``overnight trips'' to different destinations across the country as a measure of tourism flows. These naturally disaggregate through a geographic hierarchy consisting of 7 states, 27 zones and 76 regions. Hence, this 3-level hierarchy comprises 111 series in total. More details about the data and the individual series are provided in Appendix \ref{app:AustralianData}.
+\subsection{Data Description}\label{sec:datadesc}
 
-We consider monthly data for all series spanning the period January 1998 to December 2018. This gives 252 observations per series. Using a rolling window of 100 observations as the training sample we generate incoherent base probabilistic forecasts for $h=1$ to 12-steps ahead from univariate ARIMA and ETS models for each series using \verb|auto.arima()| and \verb|ets()| from the \verb|forecast| package \citep{Rforecast} in R software \citep{Rcore}.
+\subsection{Base Forecasts}\label{sec:applbase}
 
-We apply both the analytic, by assuming Gaussian incoherent base forecasts, and the non-parametric sampling reconciliation approaches discussed in Sections \ref{sec:AnalyticalSolution} and \ref{sec:SampleSolution} respectively. We do not implement the MinT(Sample) approach as the sample size of the training data is smaller than the dimension of the hierarchy. The process is repeated by rolling the training window forward one month at a time until the end of the sample. This yields, $152$ 1-step ahead, $151$ 2-steps ahead through to $141$ 12-step ahead probabilistic forecasts available for evaluation. In what follows we only present the results for ARIMA. The results for ETS lead to similar conclusions and are available upon request.
+\subsection{Reconciliation}\label{sec:applreco}
 
-Figure \ref{fig:Scores_Overall} shows energy and variogram scores across the entire hierarchy for the different reconciliation methods, calculated over the rolling windows. Results from the analytic approach are presented on the left. Results from the non-parametric sampling approach are presented on the right. Recall that we follow negatively-oriented scoring rules so that a lower (higher) score implies a more (less) accurate forecast. For both scoring rules all forecasts from the analytic Gaussian approach are more accurate (although marginally) than the forecasts from the non-parametric sampling approach. A result also verified when comparing scores across each level of the hierarchy. This indicates that assuming Gaussianity for the incoherent base forecasts and using the analytic approach is adequate for this data set. Hence, in what follows we concentrate only on the analytic Gaussian reconciliation results. All other results are available upon request.
+The mean energy score is summarised in Table~\ref{tab:appres}.
 
-\begin{figure}
-	\centering
-	\small
-    \includegraphics[width=.95\textwidth]{Empirical-results/Results-ARIMA/RawScore_Overall.pdf}
-	\caption{Energy and variogram scores for multivariate predictive distributions across the entire hierarchy. A lower (higher) score indicates a more (less) accurate forecast. Results from the analytic approach assuming Gaussian incoherent base forecasts are presented on the left while results from the non-parametric approach are presented on the right.} \label{fig:Scores_Overall}
-\end{figure}
+\begin{table}[H]
 
-As shown in Figure \ref{fig:Scores_Overall}, applying MinT(Shrink) for reconciliation of incoherent base forecasts generates the most accurate forecasts in all cases. As expected accuracy for all forecasts deteriorates as the forecast horizon increases. The skill scores presented in Figure \ref{fig:SkillScores_Overall} for the analytic solution show improvements upon the incoherent Gaussian base forecasts across the hierarchy as a whole. The improvements start at 2.5\% for $h=1$ and increase to above 5\% for $h\ge 9$ for the energy score and are consistently above 5\% for the variogram score. Note that in all cases the bottom-up forecasts are always inferior to the incoherent base forecasts. This comes to no surprise reflecting upon the fact that the bottom-level series are the noisiest and most challenging to forecast and information is lost when levels above are not considered as with a reconciliation approach.
+\caption{\label{tab:appes} Mean Energy Score for electricity application.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
 
-\begin{figure}
-	\centering
-	\small
-    \includegraphics[width=.95\textwidth]{Empirical-results/Results-ARIMA/SkillScore_Overall.pdf}
-	\caption{Skill scores (\%) relative to incoherent base forecasts, across the entire Australian tourism hierarchy based on energy score (on the left) and variogram score (on the right). A higher (lower) score indicates a gain (loss) in forecast accuracy relative to the incoherent base forecasts. The results are for the analytic solution assuming Gaussian incoherent base forecasts.} \label{fig:SkillScores_Overall}
-\end{figure}
+\begin{tabular}{l|r|r|r|r}
+	\hline
+	RecoMethod & bootstrap\_independent & bootstrap\_joint & gaussian\_independent & gaussian\_joint\\
+	\hline
+	Base & 36.41 & 36.54 & 95.02 & 36.32\\
+	\hline
+	BottomUp & 35.89 & 35.72 & 90.64 & 35.51\\
+	\hline
+	BTTH & 58.57 & 58.23 & 269.40 & 59.07\\
+	\hline
+	JPP & 55.15 & 55.16 & 292.27 & 55.89\\
+	\hline
+	MinTShr & 37.89 & 38.52 & 54.80 & 38.33\\
+	\hline
+	OLS & 35.42 & 34.71 & 73.72 & 34.48\\
+	\hline
+	WLS & \textbf{35.28} & \textbf{34.08} & 68.18 & \textbf{33.85}\\
+	\hline
+	ScoreOptE & 38.23 & 39.39 & \textbf{39.96} & 39.07\\
+	\hline
+\end{tabular}
+\end{table}
 
-Figure \ref{fig:ES-SS-Levels} shows skill scores (\%) for the Gaussian analytic approach, relative to the incoherent base forecasts across each level of the Australia tourism hierarchy (please see Figure \ref{fig:ES-Levels} in Appendix \ref{app:AustralianData} for the raw scores). The top-panel presents the results for the aggregate level based on the CRPS, the univariate equivalent to the Energy score. For the levels below skill scores based on both the energy and variogram scores are presented.
+Figure~\ref{fig:nem_app_ig} shows the Nemenyi matrix for independent Gaussian base forecasts.  Score optimisation is significantly better than all other reconciliation methods.
 
-Based on both scoring rules MinT(Shrink) improves upon the incoherent base forecasts at all levels and all forecast horizons (the only exception being forecast horizons 4 and 5 at the top-level for which a marginal loss is shown). The improvements for the top-level seem to be higher for the longer forecast horizons, increasing to 5\% or more for $h\ge7$. For the levels below the improvements seem to be more homogenous across the forecast horizons. Based on the energy score improvements are around 3\%, 4\% and 2\% for States, Zones and Regions respectively. These are considerably higher based on the variogram score for which gains around 10\%, 7\% and 3\% are shown. \textcolor{red}{We could comment on the bottom-up and the OLS results but I am not sure it is worth it.}
+\begin{figure}[H]
+	\label{fig:nem_app_ig}
+	\includegraphics[width=.95\textwidth]{Figs/nemenyi_ig.pdf}
+	\caption{Nemenyi matrix for Energy score for electricity application when base forecasts are independent and Gaussian.}
+\end{figure}	
 
-\begin{figure}
-	\centering
-	\small
-	\includegraphics[width= 0.85\textwidth, height= 0.85\textheight]{Empirical-results/Results-ARIMA/SkillScore_Gauss_Levels.pdf}
-	\caption{Skill scores (\%) relative to incoherent base forecasts, for the CRPS for the top-level and energy and variogram scores for the levels below for the Australia tourism hierarchy. A higher (lower) score indicates a gain (loss) in forecast accuracy relative to the incoherent base forecasts. All results are for the analytic solution assuming Gaussian incoherent base forecasts.} \label{fig:ES-SS-Levels}
-\end{figure}
+Figure~\ref{fig:nem_app_jb} shows the Nemenyi matrix for jointly bootstrapped base forecasts.  Reconciliation via OLS and WLS are significantly better than all other reconciliation methods.  Although Score optimisation does not improve upon base, the differences are not significant.
 
+\begin{figure}[H]
+	\label{fig:nem_app_jb}
+	\includegraphics[width=.95\textwidth]{Figs/nemenyi_jb.pdf}
+	\caption{Nemenyi matrix for Energy score for electricity application when base forecasts are obtained by jointly bootstrapping residuals.}
+\end{figure}	
 
 \section{Conclusions}\label{sec:conclusion}
 
@@ -856,111 +871,6 @@ For the non-Gaussian case, errors are generated from a Gumbel copula with Beta m
 %	\caption{Skill score based on CRPS (with reference to the ETS base forecasts) for univariate probabilistic forecasts for the Total (top level) overnight trips are presented. Left panel shows the results from Gaussian approach and right panel shows the results from non-parametric approach. }\label{fig:EmpResults_TopLevel_ETS}
 %\end{figure}
 \clearpage
-\section{Application}
-
-\subsection{Results from ETS base forecasts}
-
-\begin{figure}[!hbt]
-	\centering
-	\small
-%	\includegraphics[width= .95\textwidth]{Empirical-results/AllTS_MultiVScores_ETS.pdf}
-	\caption{Skill scores with reference to ETS base forecasts for multivariate predictive distribution of the whole hierarchy from different reconciliation methods are presented. Top panel shows the results from Gaussian approach and the bottom panel shows the results from non-parametric approach. Left and right panels shows the skill scores based on energy score and variogram score respectively.}\label{fig:EmpResults_AllTS_ETS}
-\end{figure}
-
-\begin{figure}[!hbt]
-	\centering
-	\small
-%	\includegraphics[width= 0.8\textwidth, height= 0.85\textheight]{Empirical-results/Levels_MultiVScores_ETS.pdf}
-	\caption{Skill score (with reference to ETS base forecasts) for multivariate probabilistic forecasts of different levels of the hierarchy are presented. Results from Gaussian approach are presented in the top three panels and results from the non-parametric approach are presented in the bottom three panels.}\label{fig:EmpResults_Levels_ETS}
-\end{figure}
-
-\begin{figure}[!hbt]
-	\centering
-	\small
-%	\includegraphics[width= \textwidth]{Empirical-results/UniVScore_TopLevel_ETS.pdf}
-	\caption{Skill score based on CRPS (with reference to the ETS base forecasts) for univariate probabilistic forecasts for the Total (top level) overnight trips are presented. Left panel shows the results from Gaussian approach and right panel shows the results from non-parametric approach. }\label{fig:EmpResults_TopLevel_ETS}
-\end{figure}
-
-\FloatBarrier
-
-\clearpage
-
-\section{Australian Tourism Hierarchy}\label{app:AustralianData}
-
-Data are collected through the National Visitor Survey managed by Tourism Research Australia based on an annual sample of $120,000$ Australian residents aged $15$ years or more, through telephone interviews \citep{TourismResearch2019}.
-
-\begin{table}[!hb]
-	\caption{Geographic hierarchy of Australian tourism flows}\label{tab:AusTourRegions}
-	\centering\tabcolsep=0.08cm
-	\fontsize{7}{6}\selectfont
-	\resizebox{\linewidth}{!}{
-		\begin{tabular}{lllllllllll}
-			\toprule
-			\multicolumn{3}{c}{\textbf{Level 0 - Total}}    &&  \multicolumn{3}{l}{\textit{Regions cont.}}   &  & \multicolumn{3}{l}{\textit{Regions cont.}} \\
-			\cmidrule(lr){1-3}
-			1 & {\text{Tot}} & {Australia} &&  37	& AAB & Central Coast && 75  & CBD & Mackay   \\
-			\cmidrule(lr){1-3}
-			\multicolumn{3}{c}{\textbf{Level 1 - States$^*$ }} && 38  & ABA & Hunter && 76 & CBE & Capricorn \\
-			\cmidrule(lr){1-3}
-			2 & A & NSW 				&  & 39  & ABB & North Coast NSW   && 77 & CBF & Gladstone\\
-			3 & B & Victoria 			&  & 40  & ACA & South Coast  && 78  & CCA & Whitsundays\\
-			4 & C & Queensland 			&  & 41  & ADA & Snowy Mountains && 79  & CCB & Townsville  \\
-			5 & D & South Australia     &  & 42  & ADB & Capital Country && 80  & CCC & Tropical North Queensland   \\
-			6 & E & Western Australia   &  & 43  & ADC & The Murray   && 81  & CDA & Southern QLD country\\
-			7 & F & Tasmania   			&  & 44  & ADD & Riverina  &&82  & CDB & Outback QLD\\
-			8 & G & Northern Territory  &  & 45  & AEA & Central NSW &&83  & DAA & Adelaide   \\
-			\cmidrule(lr){1-3}
-			\multicolumn{3}{c}{\textbf{Level 2 - Zones}}  &  &  46  & AEB & New England North West && 84  & DAB & Barossa\\
-			\cmidrule(lr){1-3}
-			9 	& AA & Metro NSW 	  	   	&  & 47  & AEC & Outback NSW   &&85  & DAC & Adelaide Hills\\
-			10 	& AB & North Coast NSW 	   	&  & 48  & AED & Blue Mountains  && 86  & DBA & Limestone Coast\\
-			11	& AC & South Coast NSW	   	&  & 49  & AFA & Canberra   &&  87  & DBB & Fleurieu Peninsula\\
-			12	& AD & South NSW 			&  & 50  & BAA & Melbourne &&88  & DBC & Kangaroo Island\\
-			13	& AE & North NSW 			&  & 51  & BAB & Peninsula    &&89  & DCA & Murraylands\\
-			14	& AF & ACT					&  &  52  & BAC & Geelong  && 90  & DCB & Riverland\\
-			15	& BA & Metro VIC			&  &  53  & BBA & Western   &&91  & DCC & Clare Valley\\
-			16	& BB & West Coast VIC		&  &  54  & BCA & Lakes  &&92  & DCD & Flinders Range and Outback\\
-			17	& BC & East Coast VIC		&  &  55  & BCB & Gippsland    &&93  & DDA & Eyre Peninsula\\
-			18	& BD & North East VIC		&  &  56  & BCC & Phillip Island   &&  94  & DDB & Yorke Peninsula \\
-			19	& BE & North West VIC		&  &  57  & BDA & Central Murray    &&95  & EAA & Australia's Coral Coast\\
-			20  & CA & Metro QLD			&  & 58  & BDB & Goulburn    &&96  & EAB & Experience Perth\\
-			21  & CB & Central Coast QLD	&  & 59  & BDC & High Country   &&97  & EAC & Australia's South West\\
-			22  & CC & North Coast QLD		&  &  60  & BDD & Melbourne East &&98  & EBA & Australia's North West \\
-			23  & CD & Inland QLD			&  &   61  & BDE & Upper Yarra &&99  & ECA & Australia's Golden Outback\\
-			24	& DA & Metro SA				&  & 62  & BDF & Murray East  && 100 & FAA & Hobart and South\\
-			25	& DB & South Coast SA		&  &  63  & BEA & Wimmera+Mallee &&101 & FBA & East Coast\\
-			26	& DC & Inland SA			&  & 64  & BEB & Western Grampians &&102 & FBB & Launceston, Tamar \& North\\
-			27	& DD & West Coast SA		&  &65  & BEC & Bendigo Loddon  &&103 & FCA & North West\\
-			
-			28	& EA & West Coast WA 	& &  66  & BED & Macedon    &&104 & FCB& West coast\\
-			29	& EB & North WA			& &  67  & BEE & Spa Country   &&105 & GAA& Darwin \\
-			30	& EC & South WA 		& &   68  & BEF & Ballarat     &&106 & GAB& Litchfield Kakadu Arnhem\\
-			31	& FA & South TAS		& &  69  & BEG & Central Highlands  &&107 & GAC& Katherine Daly\\
-			32	& FB & North East TAS	& & 70  & CAA & Gold Coast  &&108 & GBA& Barkly\\
-			33	& FC & North West TAS	& & 71  & CAB & Brisbane  &&109 & GBB& Lasseter\\
-			34	& GA & North Coast NT	& & 72  & CAC & Sunshine Coast &&110 & GBC& Alice Springs\\
-			35	& GB & Central NT		& &  73  & CBB & Bundaberg      &&111 & GBD& MacDonnell\\
-			\cmidrule(lr){1-3}
-			\multicolumn{3}{c}{\textbf{Level 2 - Regions}} & & 74  & CBC & Fraser Coast    &&\\
-			\cmidrule(lr){1-3}
-			36	& AAA & Sydney 			& 	&  &&\\
-			
-			\bottomrule
-		\end{tabular}
-	}
-\fontsize{8}{9}\selectfont
-$^*$ We consider the Australian Capital Territory as a part of New South Wales and the Northern Territory as a state.
-\end{table}
-
-
-\clearpage
-\begin{figure}
-	\centering
-	\small
-	\includegraphics[width= 0.85\textwidth, height= 0.85\textheight]{Empirical-results/Results-ARIMA/RawScore_Gauss_Levels.pdf}
-	\caption{Forecast accuracy results across the different levels of the Australia tourism hierarchy. CRPS results are presented for the top-level and energy and variogram scores for the levels below. A lower (higher) score indicates a more (less) accurate forecast. All results are for the analytic solution assuming Gaussian incoherent base forecasts.} \label{fig:ES-Levels}
-\end{figure}
-
 
 \bibliographystyle{agsm}
 
