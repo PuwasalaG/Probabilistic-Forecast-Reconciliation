@@ -656,7 +656,7 @@ The mean energy score is summarised in Table~\ref{tab:appres}.
 
 \begin{tabular}{l|r|r|r|r}
 	\hline
-	RecoMethod & bootstrap\_independent & bootstrap\_joint & gaussian\_independent & gaussian\_joint\\
+	Method & Ind. Bootstrap & Joint Bootstrap & Ind. Gaussian & Joint Gaussian\\
 	\hline
 	Base & 36.41 & 36.54 & 95.02 & 36.32\\
 	\hline
@@ -668,9 +668,7 @@ The mean energy score is summarised in Table~\ref{tab:appres}.
 	\hline
 	MinTShr & 37.89 & 38.52 & 54.80 & 38.33\\
 	\hline
-	OLS & 35.42 & 34.71 & 73.72 & 34.48\\
-	\hline
-	WLS & \textbf{35.28} & \textbf{34.08} & 68.18 & \textbf{33.85}\\
+	OLS & \textbf{35.42} & \textbf{34.71} & 73.72 & \textbf{34.48}\\
 	\hline
 	ScoreOptE & 38.23 & 39.39 & \textbf{39.96} & 39.07\\
 	\hline
@@ -695,16 +693,15 @@ Figure~\ref{fig:nem_app_jb} shows the Nemenyi matrix for jointly bootstrapped ba
 
 \section{Conclusions}\label{sec:conclusion}
 
-Although hierarchical point forecasting is well studied in the literature, there has been a relative lack of attention given to the probabilistic setting. We fill this gap in the literature by providing a mathematically rigorous formulation of coherence and reconciliation for probabilistic forecasts.
+In this paper we have introduced a rigorous formulation of reconciliation in the probabilistic setting. This can be applied when the probabilistic forecast is available as a density in closed form or when a sample has been drawn from probabilistic forecast.  In the elliptical case, we prove that reconciliation can recover the correct probabilistic distribution as long as the base forecast is of the correct form. The scale and location of the base forecast is irrelevant. Evidence for this can be seen in the simulations and empirical applications which demonstrate that score optimisation and to a lesser extent the MinT method, work well even when the base forecasts are assumed to be independent.
 
-The geometric interpretation of point forecast reconciliation can be extended to the probabilistic setting. We have also discussed strategies for evaluating probabilistic forecasts for hierarchical time series advocating the use of multivariate scoring rules on the full hierarchy, while establishing a key result that the log score is not proper with respect to incoherent forecasts.
+We also prove that the log score is not proper when incoherent and coherent forecasts are compared to one another.  Consequently, we introduce a new algorithm that trains reconciliation weights by maximising energy score and variogram score.  Since the scores can only be approximated by Monte Carlo, the method of stochastic gradient descent is used for optimisation.  This method is shown to lead to significant improvements over base forecasts, over methods that reconcile quantiles \citep{JeoEtAl2019} and over bottom up methods including \cite{BenTaieb2017} across a wide variety of simulated and empirical examples. 
 
-We have shown that for elliptical distributions the true predictive density can be recovered by linear reconciliation and we have established conditions for when this is a projection. Although this projection cannot feasibly be obtained in practice, a projection similar to the MinT approach provides a good approximation in applications. This is supported by the results of a simulation study as well as the empirical application.
+One interesting result is that projections methods, heretofore shown to have certain optimality properties in the point forecasting setting, also work well when extended to probabilistic case.  In particular, a simple ordinary least squares projection is the best performing method in the high-dimensional empirical example, as long as the base forecasts are not too badly misspecified.  This may be due to the fact that projections implicitly provide constrained versions of the reconciliation weights and in the case of an OLS projection require no estimation.  This suggests that an interesting avenue for future research may be to consider regularised versions of score optimisation.  This may be achieved either by adding an L1 or L2 penalty to the objective function.  Alternatively, early stopping \citep{BuhYu2003,YaoEtAl2007} of the gradient descent may lead to a better bias-variance tradeoff in learning reconciliation weights.
 
-We have further proposed a novel non-parametric approach for obtaining coherent probabilistic forecasts for when the parametric densities are unavailable. Initially this method involves generating thousands of sample paths using bootstrapped forecast errors. Then each sample path is reconciled via projections. Using an extensive simulation setting we have shown that the MinT projection is at least as good as the optimal projection with respect to minimising Energy score. Further we have shown in an empirical application that reconciled probabilistic forecasts via MinT show gains in the forecast accuracy over incoherent and bottom-up forecasts.
+A final important avenue of future research is the development of probabilistic forecast reconciliation for domains other than the real line.  These may include domains constrained above zero, discrete domains or domains that are a mixture of continuous distributions and discrete point masses.  While such problems are challenging, the geometric interpretation of probabilistic forecast introduced in this paper, lays the foundation for this research agenda.
 
-
-In many ways this chapter sets up a substantial future research agenda. For example, having defined what amounts to an entire class of reconciliation methods for probabilistic forecasts it will be worthwhile investigating which specific projections are optimal. This is likely to depend on the specific scoring rule employed as well as the properties of the base forecasts. Another avenue worth investigating is to consider whether it is possible to recover the true predictive distribution for non-elliptical distributions via a non-linear function $g(.)$.
+geometric
 
 \newpage
 
