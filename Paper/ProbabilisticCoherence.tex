@@ -451,11 +451,11 @@ While Algorithm~\ref{alg:scoreopt} is not the first instance of calibrating para
 
 \section{Simulations}\label{sec:simulations}
 
-The aim of the simulations that follow is to demonstrate probabilistic forecast reconciliation including the algorithm discussed in Section~\ref{sec:scoreoptSGD}.  For all simulations, the tuning parameters are set as $\eta=0.001$, $\beta_1=0.9$, $\beta_2=0.999$ and $\epsilon=1\times 10^{-8}$, which are the values recommended by \cite{kingma2014} and used in popular software packages such as TensorFlow, Keras and Torch amongst others.  Convergence is achieved when the change in all gradients is less than 10\% of the step size $\eta$.  Also the number of sample periods used to construct the objective function is $R=250$, while the number of sample used to estimate each score is $Q=250$.  All estimation of base models uses a sample size of $T=500$ and all evaluations is carried out using a rolling window, also of size $W=500$.  
+The aim of the simulations that follow is to demonstrate probabilistic forecast reconciliation including the algorithm discussed in Section~\ref{sec:scoreoptSGD}.  For all simulations, the tuning parameters are set as $\eta=0.001$, $\beta_1=0.9$, $\beta_2=0.999$ and $\epsilon=1\times 10^{-8}$, which are the values recommended by \cite{kingma2014} and used in popular software packages such as TensorFlow, Keras and Torch amongst others.  Convergence is achieved when the change in all gradients is less than 10\% of the step size $\eta$.  Also the number of sample periods used to construct the objective function is $R=250$, while the number of draws used to estimate each score is $Q=250$.  All estimation of base models uses a sample size of $T=500$ and all evaluations are carried out using a rolling window, also of size $W=500$.  
 
 \subsection{Data Generating Processes}\label{sec:dgp}
 
-The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. The orders $p$, and $q$ are randomly selected from $\{1,2\}$ for each bottom level series. The AR and MA parameters randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively, and only accepted if they belong to the stationary and invertible region.  In addition a non-stationary case where $d$ is randomly chosen for each bottom level from $\{0,1\}$ was considered, these results are omitted for brevity.
+The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. The orders $p$, and $q$ are randomly selected from $\{1,2\}$ for each bottom level series. The AR and MA parameters are randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively, and only accepted if they belong to the stationary and invertible region.  In addition a non-stationary case where $d$ is randomly chosen for each bottom level from $\{0,1\}$ was considered, these results are omitted for brevity.
 
 We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with $\textrm{Beta}(1,3)$ margins. After simulating from the ARIMA models, additional noise is added to ensure bottom level series have a lower signal-to-noise ratio that top level series with specific details provided in Appendix \ref{app:DGP}. For each series the first 500 observations are ignored to avoid the impact of initial values. 
 
@@ -472,7 +472,7 @@ We fit univariate ARIMA models to each series using the \verb|ARIMA()| function 
 	\item A draw from the joint probabilistic forecast is made as $\hat{\bm y}_{t+h|h}+\bm{e}_{\tau}$ where $\bm{e}_{\tau}$ is the $\tau^{th}$ column of $\bm{E}$, where $\tau$ is drawn randomly (with replacement) from $1,2,\ldots, T$.
 \end{enumerate}
 
-We restrict our attention to the case of $h=1$ although these methods can be generalised to larger $h$ using the recursive method \citep{FPP2018}.  For multi-step ahead forecasts, methods (c) and (d) should sample in blocks to preserve serial dependence in the residuals.
+We restrict our attention to the case of $h=1$ although these methods can be generalised to larger $h$ using the recursive method \citep{FPP2018}.  For multi-step ahead forecasts, methods (c) and (d) should be sample in blocks to preserve serial dependence in the residuals.
 
 \subsection{Reconciliation}
 
@@ -480,7 +480,7 @@ For each DGP, model and method for obtaining base forecasts, reconciled probabil
 
 \begin{itemize}
 	\item \textbf{Base:} The base forecasts with no reconciliation.
-	\item \textbf{JPP:} The best method of \cite{JeoEtAl2019}.  This is equivalent to reconcile quantiles.  A sample is drawn from the base forecast, these are ranked, one variable at a time (so that the smallest value drawn from each variable are put together, etc.).  These are then pre-multipled by $\bm{S}\left(\bm{S}'\bm{W}\bm{S}\right)^{-1}\bm{S}'\bm{W}$ where $\bm{W}$ is a diagonal matrix with elements ($1/4^2$,$1/2^2$,$1/2^2$,$1$,$1$,$1$,$1$).  These are the squared reciprocals of the number of bottom level series used to form an aggregate.
+	\item \textbf{JPP:} The best method of \cite{JeoEtAl2019}.  This is equivalent to reconciling quantiles.  A sample is drawn from the base forecast, these are ranked, one variable at a time (so that the smallest value drawn from each variable are put together, etc.).  These are then pre-multipled by $\bm{S}\left(\bm{S}'\bm{W}\bm{S}\right)^{-1}\bm{S}'\bm{W}$ where $\bm{W}$ is a diagonal matrix with elements ($1/4^2$,$1/2^2$,$1/2^2$,$1$,$1$,$1$,$1$).  These are the squared reciprocals of the number of bottom level series used to form an aggregate.
 	\item \textbf{BTTH} The method of \cite{Taieb2017}.  This is a method whereby draws from the probabilistic forecasts of the bottom level series are permuted so that they have the same empirical copula as the residuals.  These are then aggregated to form a sample from the distribution of all series.  The mean is adjusted to be equivalent to the mean that would be obtained using the MinT method \cite{WicEtAl2019} described in Table~\ref{tab:recomethods}. 
 	\item \textbf{BottomUp:} Reconciliation via premultiplication by $\bm{S}\bm{G}$ where $\bm{G}=\left(\bm{0}_{m\times(n-m)},\bm{I}_{m\times m}\right)$ 
 	\item \textbf{OLS:} Reconciliation via premultiplication by $\bm{S}\left(\bm{S}'\bm{S}\right)^{-1}\bm{S}'$,
@@ -489,7 +489,7 @@ For each DGP, model and method for obtaining base forecasts, reconciled probabil
 	\item \textbf{ScoreOptV:} The algorithm described in Section~\ref{sec:scoreoptSGD} used to optimise variogram score.
 \end{itemize}
 
-Note that JPP and BTTH are two methods previously existing in the literature. The methods BottomUp, OLS, and MinTShr have been used extensively in the point forecasting literature but their application to probabilistic forecasting for general base forecasts is, to our knowledge, novel in this paper.
+Note that JPP and BTTH are two methods previously existing in the literature. The methods BottomUp, OLS, and MinTShr have been used extensively in the point forecasting literature but their application to probabilistic forecasting for general base forecasts is, to the best of our knowledge, novel in this paper.
 
 In addition to these methods, two further reconciliation methods were considerd; WLS, which reconciles via premultiplication by the same matrix used in \cite{JeoEtAl2019} but without any reordering of the draws, and MinTSam which uses a sample estimate of the covariance matrix rather than a shrinkage estimator.  These methods were mostly dominated by OLS and MinTShr respectively and are therefore omitted for brevity.  However, a complete set of results for the simulation study, including non-stationary DGPs, ETS base forecasting and all reconciliation methods can be found at the github repository \url{https://github.com/PuwasalaG/Probabilistic-Forecast-Reconciliation/Simulation/Result_Reports/Reports/}.
 
@@ -498,8 +498,8 @@ In addition to these methods, two further reconciliation methods were considerd;
 Table~\ref{tab:gse} shows the mean energy score for different reconciliation methods and different methods of generating base forecasts.  When base probabilistic forecasts are generated independently, score optimisation with the energy score (ScoreOptE) performs best, while when base forecasts are generated jointly, using the shrinkage estimator from the MinT method for reconciliation  (MinTShr) yields the most accurate forecasts.  The bottom up method as well as BTTH and JPP fail to even improve upon base forecasts in all cases.  As expected score optimisation using the variogram score does not perform as well as score optimisation using energy score, when evaluation is carried out with respect to the latter.  However, the results are quite close suggesting that score optimisation is fairly robust to using an alternative proper score.
 
 \begin{table}[H]
-	\caption{\label{tab:gse}Mean Energy score for ARIMA 
-		modelling with a Gaussian Stationary DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
+	\footnotesize
+	\caption{\label{tab:gse}Mean Energy score for Gaussian DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
 	\centering
 	\begin{tabular}[t]{l|r|r|r|r}
 		\hline
@@ -527,17 +527,17 @@ Table~\ref{tab:gse} shows the mean energy score for different reconciliation met
 To assess significant differences between the reported results, we use post-hoc Nemenyi tests ~\citep{HolEtAl2013}. The Nemenyi test is a non-parametric test that identifies groups of forecasts which cannot be significantly distinguished from one another. We use the implementation of the tests available in the \verb|tsutils| R package~\citep{tsutilspackage}.  Figure~\ref{fig:gse} reports the results which should be looked at column-wise.  A blue square indicates that the method in the corresponding row, is statistically indistinguishable from the method in that column.  For all four methods of generating base forecasts, MinTShr, ScoreOptE and OLS significantly outperfom base forecasts, bottom up forecasts as well as BTTH and JPP.
 
 \begin{figure}[H]
-	\includegraphics[width=.95\textwidth]{Figs/gse.pdf}
-	\caption{Nemenyi matrix for Variogram score for ARIMA 
-		modelling with a Gaussian Stationary DGP.}
+	\centering
+	\includegraphics[width=.85\textwidth]{Figs/gse.pdf}
+	\caption{Nemenyi matrix for Variogram score for Gaussian DGP.}
 	\label{fig:gse}
 \end{figure}
 
-Table~\ref{tab:gsv} and Figure~\ref{fig:gsv} report the same output but using the variogram score for evaluation.  For this specific DGP and for this specific  the BTTH method significantly outperforms all other methods.  However, this result was not observed when using BTTH for any other simulation scenario, including those reported only in the online supplement.  Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well.  Score optimisation, OLS, MinTShr and BTTH all lead to significantly improvements relative to base forecasts, bottom up methods and the method of JPP.
+Table~\ref{tab:gsv} and Figure~\ref{fig:gsv} report the same output but using the variogram score for evaluation.  For this specific DGP, base model and score, BTTH significantly outperforms all other methods.  However, this result was not observed when using BTTH for any other simulation scenario, including those reported only in the online supplement.  Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well.  Score optimisation, OLS, MinTShr and BTTH all lead to significantly improvements relative to base, bottom up and JPP.
 
 \begin{table}[H]
-	\caption{\label{tab:gsv}Mean Variogram score for ARIMA 
-		modelling with a Gaussian Stationary DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
+	\footnotesize
+	\caption{\label{tab:gsv}Mean Variogram score for Gaussian DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
 	\centering
 	\begin{tabular}[t]{l|r|r|r|r}
 		\hline
@@ -563,20 +563,20 @@ Table~\ref{tab:gsv} and Figure~\ref{fig:gsv} report the same output but using th
 \end{table}
 
 \begin{figure}[H]
-	\includegraphics[width=.95\textwidth]{Figs/gsv.pdf}
-	\caption{Nemenyi matrix for Variogram score for ARIMA 
-		modelling with a Gaussian Stationary DGP.}
+	\centering
+	\includegraphics[width=.75\textwidth]{Figs/gsv.pdf}
+	\caption{Nemenyi matrix for Variogram score for Gaussian Stationary DGP.}
 	\label{fig:gsv}
 	
 \end{figure}	
 
 \subsection{Results for non-Gaussian probabilistic forecast} \label{sec:SimSamplingResults}
 
-Table~\ref{tab:nse} reports the mean energy score for the non-Gaussian DGP.  Overall, the results are quite similar to the Gaussian DGP.  The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent.  The Nemenyi matrix is omitted for brevity, but leads to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MintShr and OLS are statistically indistinguishable from one another but are significantly better that base forecasts and the bottom up method.  The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts. 
+Table~\ref{tab:nse} reports the mean energy score for the non-Gaussian DGP.  Overall, the results are quite similar to the Gaussian DGP.  The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent.  The Nemenyi matrix is omitted for brevity, but leads to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MinTShr and OLS are statistically indistinguishable from one another but are significantly better that base forecasts and the bottom up method.  The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts. 
 
-\begin{table}[H]	
-	\caption{\label{tab:nse} Mean Energy score for ARIMA 
-		modelling with a Gaussian Stationary DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
+\begin{table}[H]
+	\footnotesize	
+	\caption{\label{tab:nse} Mean Energy score for non-Gaussian DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
 	\centering
 	\begin{tabular}[t]{l|r|r|r|r}
 		\hline
@@ -604,9 +604,8 @@ Table~\ref{tab:nse} reports the mean energy score for the non-Gaussian DGP.  Ove
 Finally, Table~\ref{tab:nsv} and Figure~\ref{fig:nsv} report results for the non-Gaussian DGP using the variogram score to evaluate forecasts.  In this case, score optimisation with respect to the variogram score yields the best performance when base forecasts are dependent, while MinTShr yields the best performance when base forecasts are independent.  In contrast to the Gaussian DGP, the JPP method leads to significant improvements over base forecasts, while the BTTH method leads to a significantly worse performance than base forecasts.
 
 \begin{table}[H]
-	
-	\caption{\label{tab:nsv}Mean Variogram score for ARIMA 
-		modelling with a Gaussian Stationary DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
+	\footnotesize
+	\caption{\label{tab:nsv}Mean Variogram score for non-Gaussian DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
 	\centering
 	\begin{tabular}[t]{l|r|r|r|r}
 		\hline
@@ -632,26 +631,27 @@ Finally, Table~\ref{tab:nsv} and Figure~\ref{fig:nsv} report results for the non
 \end{table}
 
 \begin{figure}[H]
+	\centering
+	\includegraphics[width=.75\textwidth]{Figs/nsv.pdf}
+	\caption{Nemenyi matrix for Variogram score with a non-Gaussian DGP.}
 	\label{fig:nsv}
-	\includegraphics[width=.95\textwidth]{Figs/nsv.pdf}
-	\caption{Nemenyi matrix for Variogram score for ARIMA 
-		modelling with a non-Gaussian Stationary DGP.}
 \end{figure}	
 
-Overall, the main conclusion from the simulation study is that score optimisation leads to significant improvements in forecast performance over base forecasts irrespective of whether the DGP is Gaussian or non-Gaussian and irrespective of whether the energy or variogram score is used for evaluation.  For the DGPs considered in the simulation study, MinTShr and to a lesser extent OLS also provided significant improvements over base and bottom up forecasts.  While the existing probabilistic forecast reconciliation methods considered in the literature (BTTH and JPP) performed well in some scenarios (particularly BTTH for the Gaussian DGP evaluated by variogram score), overall they lacked consistency and even led to a statistically significant deterioration in forecast quality relative to base forecasts in some settings.
+Overall, the main conclusion from the simulation study is that score optimisation leads to significant improvements in forecast performance over base forecasts irrespective of whether the DGP is Gaussian or non-Gaussian and irrespective of whether the energy or variogram score is used for evaluation.  For the DGPs considered in the simulation study, MinTShr and to a lesser extent OLS also provided significant improvements over base and bottom up forecasts.  While the existing probabilistic forecast reconciliation methods considered in the literature (BTTH and JPP) performed well in some scenarios (particularly BTTH for the Gaussian DGP evaluated by variogram score), overall results for these methods was mixed and even led to a statistically significant deterioration in forecast quality relative to base forecasts in some settings.
 
 \section{Forecasting Australian Electricity Generation}\label{sec:Application}
 
 \subsection{Data Description}\label{sec:datadesc}
 
-To demonstrate the potential of the proposed methods for probabilistic forecasting methods we consider an application to forecasting Australian electricity generation from different sources of energy.  The time series data were obtained form \url{opennem.org.au}, a website that compiles publicly available data from the Australian Energy Market Operator(AEMO).  Probabilistic day-ahead forecasts are crucial to the efficient operation of the electricity grid including mitigating the risk of blackouts.  This has become a more challenging problem with the growth in intermittent sources of generation such as wind and solar.
+To demonstrate the potential of the proposed methods, we consider an application to forecasting Australian electricity generation from different sources of energy.  The time series data were obtained form \url{opennem.org.au}, a website that compiles publicly available data from the Australian Energy Market Operator (AEMO).  Probabilistic day-ahead forecasts are crucial inputs into operational and planning decisions that ensure the efficiency and stability of the power network.  This has become a more challenging problem with the growth in intermittent sources of generation such as wind and solar.
 
-The hierarchy was constructed in the following manner.  Total generation is decomposed into generation from renewable sources and non renewable sources.  Non-renewable sources are decomposed into Coal, Gas and Distillate, where Coal is further decomposed into Black Coal and Brown Coal, while Gas is decomposed into Gas (OCGT), Gas (CCGT), Gas (Steam), Gas (Reciprocating). Renewable sources are decomposed into Biomass, Batteries, Hydro (net of water pumped up stream), Solar and Wind.  Battery is generation given by Discharging minus Charging, Hydro can be into Hydro generation and power used for Pumps, while Solar can be decomposed into Solar (Rooftop) and Solar (Utility).  In total there are $n=23$ series of which $m=15$ are bottom level series.
+The hierarchy was constructed in the following manner.  \textit{Total} generation is the sum of generation from \textit{Renewable} sources and \textit{non-Renewable} sources.  \textit{Non-Renewable} is the sum of \textit{Coal}, \textit{Gas} and \textit{Distillate}, where \textit{Coal} generation is the sum of \textit{Black Coal} and \textit{Brown Coal}, while \textit{Gas} is the sum of \textit{Gas (OCGT)}, \textit{Gas (CCGT)}, \textit{Gas (Steam)}, \textit{Gas (Reciprocating)}. \textit{Renewable} generation is the sum of \textit{Biomass}, \textit{Batteries}, \textit{Hydro (inc. Pumps)}, \textit{Solar} and \textit{Wind}.  \textit{Battery} generation given by \textit{Battery (Discharging)} minus \textit{Battery (Charging)}, \textit{Hydro (inc. Pumps)} is \textit{Hydro} generation minus \textit{Pumps} (energy used to pump water upstream), while \textit{Solar} generation is the sum of \textit{Solar (Rooftop)} and \textit{Solar (Utility)}.  In total there are $n=23$ series of which $m=15$ are bottom level series.
 
 Figure~\ref{fig:selected} shows time series plots for selected series\footnote{Time series plots for the remaining series area available from \url|https://github.com/PuwasalaG/Probabilistic-Forecast-Reconciliation/tree/master/EnergyApplication/Report/tsPlots|.}.  We observe very different patterns in all series.  While total generation exhibits a seasonal pattern with peaks in winter and summer (when electricity demand is high for heating and cooling purposed respectively), generation from Solar peaks in the summer, while generation from Distillate exhibits spikes.
 
 \begin{figure}[H]
-	\includegraphics[width=.95\textwidth]{Figs/selected.pdf}
+	\centering
+	\includegraphics[width=.90\textwidth]{Figs/selected.pdf}
 	\caption{Time series plots for selected series from from June 11, 2019 to June 10, 2020.}
 	\label{fig:selected}
 \end{figure}	
@@ -666,12 +666,12 @@ Base forecasts are assumed to be Gaussian or bootstrapped from residuals and eit
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=.7\textwidth]{Figs/densities.pdf}
+	\includegraphics[width=.8\textwidth]{Figs/densities.pdf}
 	\caption{Densities of residuals for selected series from a typical training window of October 2, 2019 to January 21, 2020.}
 	\label{fig:emp_hist}
 \end{figure}	
 
-\begin{figure}[H]
+\begin{figure}
 \includegraphics[width=.95\textwidth]{Figs/corr.pdf}
 \caption{Correlation heatmap of residuals from a typical training window of October 2, 2019 to January 21, 2020. Blue circles indicate positive correlation, while red circles indicate negative correlation with larger circles indicating stronger correlations.}
 \label{fig:emp_corr}
@@ -679,13 +679,14 @@ Base forecasts are assumed to be Gaussian or bootstrapped from residuals and eit
 
 \subsection{Reconciliation}\label{sec:applreco}
 
-The same methods were used for reconciliation as in the simulation study with score optimisation based on an objective function containing 56 days (8 weeks) of score evaluations.  For brevity, only the results for energy score are presented here.  Also, results for MinT with the sample covariance estimator, WLS, and the in-sample version of energy score optimisation are omitted.  A full set of results are available from \url{https://github.com/PuwasalaG/Probabilistic-Forecast-Reconciliation/tree/master/EnergyApplication/Report}.
+The same methods were used for reconciliation as in the simulation study with score optimisation based on an objective function containing 56 days (8 weeks) of score evaluations.  For brevity, only the results for energy score are presented here.  Also, results for MinT with the sample covariance estimator and WLS are omitted.  A full set of results are available from \url{https://github.com/PuwasalaG/Probabilistic-Forecast-Reconciliation/tree/master/EnergyApplication/Report}.
 
 The mean energy score for all four base forecasting methods is summarised in Table~\ref{tab:appres}.  When base forecasts are generated assuming both independence and a Gaussian distribution, score optimisation achieves a mean energy score that is considerably smaller than all other competing methods, with MinT providing the second smallest value.  Figure~\ref{fig:nem_app_ig} provides the Nemenyi matrix for this set of base forecasts, and shows that the superior forecasting performance of score optimisation is statistically significant.  This suggests that score optimisation is best for guarding against severe model misspecification.   
 
 
 \begin{table}[H]
-
+\footnotesize
+\centering
 \caption{\label{tab:appres} Mean Energy Score for electricity application.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
 
 
@@ -711,30 +712,30 @@ The mean energy score for all four base forecasting methods is summarised in Tab
 
 \end{table}
 
-\begin{figure}[H]
-	\label{fig:nem_app_ig}
+\begin{figure}
 	\centering
-	\includegraphics[width=.75\textwidth]{Figs/nemenyi_ig.pdf}
+	\includegraphics[width=.4\textheight]{Figs/nemenyi_ig.pdf}
 	\caption{Nemenyi matrix for Energy score for electricity application when base forecasts are independent and Gaussian.}
+		\label{fig:nem_app_ig}
 \end{figure}	
 
-For all other methods the best performing method is OLS.  Figure~\ref{fig:nem_app_jb} shows the Nemenyi matrix for jointly bootstrapped base forecasts, the corresponding figures for joint Gaussian and independent bootstrap look roughly similar.  Reconciliation via OLS is significantly better than all other reconciliation methods. Although score optimisation does not improve upon base, the differences are not significant.  For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
+For all other methods the best performing method is OLS.  This difference is statistically significant as seen in Figure~\ref{fig:nem_app_jb}, which shows the Nemenyi matrix for jointly bootstrapped base forecasts. The corresponding figures for joint Gaussian and independent bootstrap look mostly similar to Figure~\ref{fig:nem_app_jb}.  Although score optimisation does not improve upon base, the differences are not significant.  For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
 
 
-\begin{figure}[H]
-	\label{fig:nem_app_jb}
+\begin{figure}
 	\centering
-	\includegraphics[width=.75\textwidth]{Figs/nemenyi_jb.pdf}
+	\includegraphics[width=.4\textheight]{Figs/nemenyi_jb.pdf}
 	\caption{Nemenyi matrix for Energy score for electricity application when base forecasts are obtained by jointly bootstrapping residuals.}
+		\label{fig:nem_app_jb}
 \end{figure}	
 
 \section{Conclusions}\label{sec:conclusion}
 
-In this paper we have introduced a rigorous formulation of reconciliation in the probabilistic setting. This can be applied when the probabilistic forecast is available as a density in closed form or when a sample has been drawn from probabilistic forecast.  In the elliptical case, we prove that reconciliation can recover the correct probabilistic distribution as long as the base forecast is of the correct form. The scale and location of the base forecast is irrelevant. Evidence for this can be seen in the simulations and empirical applications which demonstrate that score optimisation and to a lesser extent the MinT method, work well even when the base forecasts are assumed to be independent.
+This paper introduces a rigorous formulation of reconciliation in the probabilistic setting. It can be applied when the probabilistic forecast is either available as a density or when a sample has been drawn from probabilistic forecast.  In the elliptical case, we prove that reconciliation can recover the correct probabilistic distribution as long as the base forecast is of the correct form, irrespective of the scale and location of the base forecast. Likely due to this reason, score optimisation works well in applications even when the base forecasts are assumed to be independent.
 
-We also prove that the log score is not proper when incoherent and coherent forecasts are compared.  Consequently, we introduce a new algorithm that trains reconciliation weights by maximising energy score and variogram score.  Since the scores can only be approximated by Monte Carlo, the method of stochastic gradient descent is used for optimisation.  This method is shown to lead to significant improvements over base forecasts, over methods that reconcile quantiles \citep{JeoEtAl2019} and over bottom up methods including \cite{BenTaieb2017} across a wide variety of simulated and empirical examples. 
+We also prove that the log score is not proper when comparing incoherent and coherent forecasts.  Consequently, we introduce a new algorithm that trains reconciliation weights by maximising energy score and variogram score.  Since the scores are approximated by Monte Carlo, stochastic gradient descent is used for optimisation.  This method is shown to lead to significant improvements over base forecasts, bottom up methods and existing probabilistic reconciliation approaches across a wide variety of simulated and empirical examples. 
 
-An interesting result is that projections methods that have certain optimality properties in the point forecasting setting, also work well when extended to probabilistic case.  In particular, a simple least squares projection is the best performing method in the high-dimensional empirical example, when base forecasts are not too badly misspecified.  This may arise since projections implicitly provide constrained versions of the reconciliation weights which in the case of an OLS projection require no estimation.  An interesting avenue for future research may be to consider regularised versions of score optimisation.  This may be achieved either by adding an L1 or L2 penalty to the objective function.  Alternatively, early stopping \citep{BuhYu2003,YaoEtAl2007} of the gradient descent may lead to a better bias-variance tradeoff in learning reconciliation weights.
+An interesting result is that projections methods with certain optimality properties in the point forecasting setting, also work well when extended to probabilistic case.  In particular, a simple least squares projection is the best performing method in the high-dimensional empirical example, as long as base forecasts are not too badly misspecified.  This may arise since projections implicitly provide constrained versions of the reconciliation weights.  An promising future research avenue may involve regularised versions of score optimisation that add an L1 or L2 penalty to the objective function.  Alternatively, early stopping \citep{BuhYu2003,YaoEtAl2007} of the gradient descent may lead to a better bias-variance tradeoff in learning reconciliation weights.
 
 A final important avenue of future research is the development of probabilistic forecast reconciliation for domains other than the real line.  These may include domains constrained above zero, discrete domains or domains that are a mixture of continuous distributions and discrete point masses.  While such problems are challenging, the geometric interpretation of probabilistic forecast introduced in this paper, lays the foundation for this research agenda.
 
