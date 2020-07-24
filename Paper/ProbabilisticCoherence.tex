@@ -58,16 +58,17 @@
 	\if1\blind
 	{
 		\title{\bf Probabilistic Forecasts for Hierarchical~Time~Series}
-		        \author{Puwasala Gamakumara\\
-			    Department of Econometrics and Business Statistics,\\
-			    Monash University,\\ VIC 3800, Australia.\\
-			    Email: puwasala.gamakumara@monash.edu \\
-			    and \\
+		        \author{
 			    Anastasios Panagiotelis\thanks{
 			    	The authors gratefully acknowledge the support of Australian Research Council Grant DP140103220.  We also thank Professor Mervyn Silvapulle for valuable comments.}\hspace{.2cm}\\
 			    Department of Econometrics and Business Statistics,\\
 		    	Monash University,\\ VIC 3800, Australia.\\
 			    Email: anastasios.panagiotelis@monash.edu \\
+			    and \\
+			    Puwasala Gamakumara\\
+			    Department of Econometrics and Business Statistics,\\
+			    Monash University,\\ VIC 3800, Australia.\\
+			    Email: puwasala.gamakumara@monash.edu \\
 			    and \\
 		        George Athanasopoulos\\
 		        Department of Econometrics and Business Statistics,\\
@@ -166,7 +167,7 @@ An example of a hierarchy is shown in Figure~\ref{fig:twoL-hier}. There are $n=7
 \]
 where $\bm{I}_4$ is the $4\times 4$ identity matrix.
 
-The connection between this characterisation and the coherent subspace is that the columns of $\bm{S}$ span $\mathfrak{s}$.  Below, the notation $s:\mathbb{R}^m\rightarrow\mathbb{R}^n$ is used when premultiplication by $\bm{S}$ is though of as a mapping.  Finally, while $\bm{S}$ is defined in terms of $m$ bottom-level series here, in general any $m$ series can be chosen with the $\bm{S}$ matrix redefined accordingly.  The columns of all appropriately defined $\bm{S}$ matrices span the same coherent subspace $\mathfrak{s}$.
+The connection between this characterisation and the coherent subspace is that the columns of $\bm{S}$ span $\mathfrak{s}$.  Below, the notation $s:\mathbb{R}^m\rightarrow\mathbb{R}^n$ is used when premultiplication by $\bm{S}$ is thought of as a mapping.  Finally, while $\bm{S}$ is defined in terms of $m$ bottom-level series here, in general any $m$ series can be chosen with the $\bm{S}$ matrix redefined accordingly.  The columns of all appropriately defined $\bm{S}$ matrices span the same coherent subspace $\mathfrak{s}$.
 
 When forecasts of all $n$ series are produced, they may not adhere to constraints.  In this case forecasts are called {\em incoherent base} forecasts and are denoted $\hat{\bm y}_{t+h}$, with the subscript $t+h$ implying a $h$-step ahead forecast at time $t$.  To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as {\em forecast reconciliation}.  At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm y}_{t+h}=\psi(\hat{\bm y}_{t+h})$, where $\tilde{\bm y}_{t+h}\in\mathfrak{s}$ is called the {\em reconciled} forecast.  The mapping $\psi$ may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ combines incoherent base forecasts of all series to produce new bottom-level forecasts, which are then aggregated via $s$.  Many existing point forecasting approaches including the bottom-up \citep{Dunn1976}, OLS \citep{HynEtAl2011}, WLS \citep[][]{Hyndman2016,AthEtAl2017} and MinT \citep{WicEtAl2019} methods, are special cases where $g$ involves premultiplication by a matrix $\bm{G}$ and where $\bm{S}\bm{G}$ is a projection matrix. These are summarised in Table \ref{tab:ReconMethods}.
 
@@ -733,7 +734,7 @@ For all other methods the best performing method is OLS.  This difference is sta
 
 This paper introduces a rigorous formulation of reconciliation in the probabilistic setting. It can be applied when the probabilistic forecast is either available as a density or when a sample has been drawn from probabilistic forecast.  In the elliptical case, we prove that reconciliation can recover the correct probabilistic distribution as long as the base forecast is of the correct form, irrespective of the scale and location of the base forecast. Likely due to this reason, score optimisation works well in applications even when the base forecasts are assumed to be independent.
 
-We also prove that the log score is not proper when comparing incoherent and coherent forecasts.  Consequently, we introduce a new algorithm that trains reconciliation weights by maximising energy score and variogram score.  Since the scores are approximated by Monte Carlo, stochastic gradient descent is used for optimisation.  This method is shown to lead to significant improvements over base forecasts, bottom up methods and existing probabilistic reconciliation approaches across a wide variety of simulated and empirical examples. 
+We also prove that the log score is not proper when comparing incoherent and coherent forecasts.  Consequently, we introduce a new algorithm that trains reconciliation weights by minimising energy score or variogram score.  Since the scores are approximated by Monte Carlo, stochastic gradient descent is used for optimisation.  This method is shown to lead to significant improvements over base forecasts, bottom up methods and existing probabilistic reconciliation approaches across a wide variety of simulated and empirical examples. 
 
 An interesting result is that projections methods with certain optimality properties in the point forecasting setting, also work well when extended to probabilistic case.  In particular, a simple least squares projection is the best performing method in the high-dimensional empirical example, as long as base forecasts are not too badly misspecified.  This may arise since projections implicitly provide constrained versions of the reconciliation weights.  An promising future research avenue may involve regularised versions of score optimisation that add an L1 or L2 penalty to the objective function.  Alternatively, early stopping \citep{BuhYu2003,YaoEtAl2007} of the gradient descent may lead to a better bias-variance tradeoff in learning reconciliation weights.
 
