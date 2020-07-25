@@ -94,6 +94,10 @@ dat%>%
                      'Wind',
                      'Solar',
                      'Distillate'))%>%
+  mutate(Source=ordered(Source,levels=c('Total',
+                               'Wind',
+                               'Solar',
+                               'Distillate')))%>%
   ggplot(aes(x=Date,y=Generation))+
   geom_line()+
   facet_wrap(~Source,
