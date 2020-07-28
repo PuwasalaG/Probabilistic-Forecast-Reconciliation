@@ -291,7 +291,7 @@ After the change of variables, the density can be recognised as a multivariate G
 
 More generally, consider linear reconciliation of the form $\psi(\hat{\bm{y}})=\bm{S}(\bm{d}+\bm{G}\hat{\bm{y}})$.  For an elliptical base probabilistic forecast, with location $\hat{\bm\mu}$ and scale $\hat{\bm\Sigma}$, the reconciled probabilistic forecast will also be elliptical with location $\tilde{\bm{\mu}}=\bm{S}(\bm{d}+\bm{G}\hat{\bm{\mu}})$ and scale   $\tilde{\bm{\Sigma}}=\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'$.  This is a consequence of the fact that elliptical distributions are closed under linear transformations and marginalisation. While the base and reconciled distribution may be of a different form they will both belong to the elliptical family.  This leads to the following result
 
-\begin{theo}[Recovering the true density through reconciliation.]\label{theo:OptRec}
+\begin{theo}[Recovering the true density through reconciliation]\label{theo:OptRec}
 	Assume the true predictive distribution is elliptical with location ${\bm\mu}$ and scale ${\bm\Sigma}$.  Then for an elliptical base probabilistic forecast with arbitrary location $\hat{\bm\mu}$ and scale $\hat{\bm\Sigma}$, there exists $\bm{d}_{opt}$ and $\bm{G}_{opt}$ such that the true predictive distribution is recovered by reconciliation.
 \end{theo}
 \begin{proof}
