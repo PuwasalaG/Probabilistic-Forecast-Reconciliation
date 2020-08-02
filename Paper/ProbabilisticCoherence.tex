@@ -48,13 +48,13 @@
 
 
 	%\bibliographystyle{natbib}
-	
+
 	\def\spacingset#1{\renewcommand{\baselinestretch}%
 		{#1}\small\normalsize} \spacingset{1}
-	
-	
+
+
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	
+
 	\if1\blind
 	{
 		\title{\bf Probabilistic Forecasts for Hierarchical~Time~Series}
@@ -81,7 +81,7 @@
 	            Email: rob.hyndman@monash.edu \\}
 		\maketitle
 	} \fi
-	
+
 	\if0\blind
 	{
 		\bigskip
@@ -92,7 +92,7 @@
 		\end{center}
 		\medskip
 	} \fi
-	
+
 	\bigskip
 
 
@@ -112,7 +112,7 @@ We develop a framework for prediction or forecasting \textcolor{red}{I see why w
 
 Many multivariate prediction problems involve data that follow some linear constraints.  For instance, in retail or tourism it is important to forecast demand in individual regions as well as aggregate demand of a whole country.  In recent years reconciliation has become an increasingly popular method for handling such problems \citep[see][for an overview]{FPP2018}.  Reconciliation involves producing predictions for all variables and making a subsequent adjustment to ensure these adhere to known linear constraints.  While this methodology has been extensively developed for point prediction, there is a paucity of literature dealing with probabilistic predictions.  As such, this paper develops a formal framework for probabilistic reconciliation, derives theoretical results that allow reconciled probabilistic forecasts to be constructed and evaluated, and proposes an algorithm for optimally reconciling probabilistic forecasts with respect to a proper scoring rule.
 
-Before describing the need for probabilistic reconciliation we briefly review the literature on point forecast\footnote{Such has been the predominance of forecasting in the literature on reconciliation, that we will refer to forecasting throughout the remainder of the paper.  However, we note that the techniques discussed throughout the paper generalise to prediction problems in general and are not limited to time series.} reconciliation.  Prior to the development of forecast reconciliation, the focus was on finding a subset of variables that could be subsequently aggregated or disaggregated to find forecasts for all series \citep[see][and references therin]{Dunn1976,Gross1990}.  An alternative approach emerged with \cite{AthEtAl2009} and \cite{HynEtAl2011} who recommended producing forecasts of all series and then adjusting, or `reconciling', these forecasts to be `coherent', i.e. adhere to the aggregation constraints. These papers formulated reconciliation as a regression model, however subsequent work has formulated reconciliation as an optimisation problem where weights are chosen to minimise a loss, such as a weighted squared error \citep{VanErven2015a,nystrup2020}, a penalised version thereof \citep{bentaiebkoo} or the trace of the forecast error covariance \citep{WicEtAl2019}.
+Before describing the need for probabilistic reconciliation we briefly review the literature on point forecast\footnote{Such has been the predominance of forecasting in the literature on reconciliation, that we will refer to forecasting throughout the remainder of the paper.  However, we note that the techniques discussed throughout the paper generalise to prediction problems in general and are not limited to time series.} reconciliation.  Prior to the development of forecast reconciliation, the focus was on finding a subset of variables that could be subsequently aggregated or disaggregated to find forecasts for all series \citep[see][and references therein]{Dunn1976,Gross1990}.  An alternative approach emerged with \cite{AthEtAl2009} and \cite{HynEtAl2011} who recommended producing forecasts of all series and then adjusting, or `reconciling', these forecasts to be `coherent', i.e. adhere to the aggregation constraints. These papers formulated reconciliation as a regression model, however subsequent work has formulated reconciliation as an optimisation problem where weights are chosen to minimise a loss, such as a weighted squared error \citep{VanErven2015a,nystrup2020}, a penalised version thereof \citep{bentaiebkoo} or the trace of the forecast error covariance \citep{WicEtAl2019}.
 
 In contrast to the point forecasts, the entire probability distribution of future values provides a full description of the uncertainty associated with the predictions \citep{Abramson1995, Gneiting2014}. Therefore probabilistic forecasting has become of great interest in many disciplines such as, economics \citep{zarnowitz1987, rossi2014}, meteorological studies \citep{pinson2009, mclean2013}, energy forecasting \citep{wytock2013, BenTaieb2017} and retail forecasting \citep{bose2017}, among other fields. An early attempt towards probabilistic forecast reconciliation came from \cite{ShaHyn2017} who applied reconciliation to forecast quantiles, rather than to the point forecasts, in order to construct prediction intervals.  This idea was extended to constructing a full probabilistic forecast by \citet{JeoEtAl2019} who propose a number of algorithms, one of which is equivalent to reconciling a large number of forecast quantiles.  \citet{Taieb2017} also propose an algorithm to obtain probabilistic forecasts that cohere to linear constraints. In particular, \citet{Taieb2017} draw a sample from the probabilistic forecasts of univariate models for the bottom level data, reorder these to match the empirical copula of residuals, and aggregate these in a bottom-up fashion.  The only sense in which top level forecasts are used is in the mean, which is adjusted to match that obtained using the MinT reconciliation method \citep{WicEtAl2019}.
 
@@ -401,7 +401,7 @@ The same property does not hold for all scores. For example, the energy score is
 		Energy Score & Proper & Full hierarchy should be used\\
 		\hline
 	\end{tabular}
-	
+
 	\label{tab:prop}
 \end{table}
 
@@ -428,7 +428,7 @@ The objective function is optimised by Stochastic Gradient Descent (SGD). The SG
 	\begin{algorithmic}[1]
 		\Procedure{ScoreOpt}{$\hat{f}_{2|1},\ldots,\hat{f}_{T|T-1|1}$, $\bm{y}_1,\ldots,\bm{y}_T$, $\beta_1$,$\beta_2$,$\epsilon$,$\eta$}.
 		\For{t=T:T+R}
-		  \State Find base forecasts $\hat{f}_{t+1|t}$ using $t-T+1,t-T+2,\ldots,t$ as training data.		
+		  \State Find base forecasts $\hat{f}_{t+1|t}$ using $t-T+1,t-T+2,\ldots,t$ as training data.
 		\EndFor
 		\State Initialise $\bm{m}_0=\bm{0}, \bm{v}_0=\bm{0}$ and $\bm{\gamma}_0=\left(\bm{0},vec\left((\bm{S}'\bm{S})^{-1}\bm{S}'\right)\right)$
 		\For{j = 1,2,3,\ldots up to convergence}
@@ -481,11 +481,11 @@ For each DGP, model and method for obtaining base forecasts, reconciled probabil
 
 \begin{itemize}
 	\item \textbf{Base:} The base forecasts with no reconciliation.
-	\item \textbf{JPP:} The best method of \cite{JeoEtAl2019}.  This is equivalent to reconciling quantiles.  A sample is drawn from the base forecast, these are ranked, one variable at a time (so that the smallest value drawn from each variable are put together, etc.).  These are then pre-multipled by $\bm{S}\left(\bm{S}'\bm{W}\bm{S}\right)^{-1}\bm{S}'\bm{W}$ where $\bm{W}$ is a diagonal matrix with elements ($1/4^2$,$1/2^2$,$1/2^2$,$1$,$1$,$1$,$1$).  These are the squared reciprocals of the number of bottom-level series used to form an aggregate.
+	\item \textbf{JPP:} The best method of \cite{JeoEtAl2019}.  This is equivalent to reconciling quantiles.  A sample is drawn from the base forecast, these are ranked, one variable at a time (so that the smallest value drawn from each variable are put together, etc.).  These are then pre-multiplied by $\bm{S}\left(\bm{S}'\bm{W}\bm{S}\right)^{-1}\bm{S}'\bm{W}$ where $\bm{W}$ is a diagonal matrix with elements ($1/4^2$,$1/2^2$,$1/2^2$,$1$,$1$,$1$,$1$).  These are the squared reciprocals of the number of bottom-level series used to form an aggregate.
 	\item \textbf{BTTH:} The method of \cite{Taieb2017}.  This is a method whereby draws from the probabilistic forecasts of the bottom-level series are permuted so that they have the same empirical copula as the residuals.  These are then aggregated to form a sample from the distribution of all series.  The mean is adjusted to be equivalent to the mean that would be obtained using the MinT method of \cite{WicEtAl2019} described in Table~\ref{tab:recomethods}.
 	\item \textbf{BottomUp:} Reconciliation via premultiplication by $\bm{S}\bm{G}$ where $\bm{G}=\left(\bm{0}_{m\times(n-m)},\bm{I}_{m\times m}\right)$.
 	\item \textbf{OLS:} Reconciliation via premultiplication by $\bm{S}\left(\bm{S}'\bm{S}\right)^{-1}\bm{S}'$.
-	\item \textbf{MinTShr:} Reconciliation via premultiplication using the shinkage estimator of the covariance matrix used by \cite{WicEtAl2019} but applied to probabilistic rather than point forecasting.
+	\item \textbf{MinTShr:} Reconciliation via premultiplication using the shrinkage estimator of the covariance matrix used by \cite{WicEtAl2019} but applied to probabilistic rather than point forecasting.
 	\item \textbf{ScoreOptE:} The algorithm described in Section~\ref{sec:scoreoptSGD} used to optimise energy score.
 	\item \textbf{ScoreOptV:} The algorithm described in Section~\ref{sec:scoreoptSGD} used to optimise variogram score.
 \end{itemize}
@@ -534,7 +534,7 @@ Table~\ref{tab:gse} shows the mean energy score for different reconciliation met
 	\label{fig:ES1}
 \end{figure}
 
-To assess significant differences between the reported results, we use post-hoc Nemenyi tests ~\citep{HolEtAl2013}. The Nemenyi test is a non-parametric test that identifies groups of forecasts which cannot be significantly distinguished from one another. We use the implementation of the tests available in the \verb|tsutils| R package~\citep{tsutilspackage}.  Figure~\ref{fig:gse} reports the results which should be looked at column-wise.  A blue square indicates that the method in the corresponding row, is statistically indistinguishable from the method in that column.  For all four methods of generating base forecasts, MinTShr, ScoreOptE and OLS significantly outperfom base forecasts, bottom-up forecasts as well as BTTH and JPP.
+To assess significant differences between the reported results, we use post-hoc Nemenyi tests ~\citep{HolEtAl2013}. The Nemenyi test is a non-parametric test that identifies groups of forecasts which cannot be significantly distinguished from one another. We use the implementation of the tests available in the \verb|tsutils| R package~\citep{tsutilspackage}.  Figure~\ref{fig:gse} reports the results which should be looked at column-wise.  A blue square indicates that the method in the corresponding row, is statistically indistinguishable from the method in that column.  For all four methods of generating base forecasts, MinTShr, ScoreOptE and OLS significantly outperform base forecasts, bottom-up forecasts as well as BTTH and JPP.
 
 \textcolor{red}{I had the idea of joining these like shown on the bottom of page 24 (in the annotated by George pdf) with the average rank shown on the rows of the left had side - as we really don't care that much about these (we do not even comment on them). From discussions with Tas he suggested an alternative may be a 32$\times$32 where everything is compared to everything. It may be that the best way to present these is the current Figure \ref{fig:gse}. Rob what do you think?}
 
@@ -579,15 +579,15 @@ Table~\ref{tab:gsv} and Figure~\ref{fig:gsv} report the same output but using th
 	\includegraphics[width=.75\textwidth]{Figs/gsv.pdf}
 	\caption{Nemenyi matrix for Variogram score for Gaussian Stationary DGP.}
 	\label{fig:gsv}
-	
-\end{figure}	
+
+\end{figure}
 
 \subsection{Results for non-Gaussian probabilistic forecast} \label{sec:SimSamplingResults}
 
 Table~\ref{tab:nse} reports the mean energy score for the non-Gaussian DGP.  Overall, the results are quite similar to the Gaussian DGP.  The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent.  The Nemenyi matrix is omitted for brevity(please refer to Footnote \ref{foot:github} for accessing a full set of results). However, these lead to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MinTShr and OLS are statistically indistinguishable from one another but are significantly better than base forecasts and the bottom-up method.  The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts.
 
 \begin{table}[H]
-	\footnotesize	
+	\footnotesize
 	\caption{\label{tab:nse} Mean Energy score for non-Gaussian DGP.  Values in bold indicate the best reconciliation method for a given base forecasting method.}
 	\centering
 	\begin{tabular}[t]{l|r|r|r|r}
@@ -647,7 +647,7 @@ Finally, Table~\ref{tab:nsv} and Figure~\ref{fig:nsv} report results for the non
 	\includegraphics[width=.75\textwidth]{Figs/nsv.pdf}
 	\caption{Nemenyi matrix for Variogram score with a non-Gaussian DGP.}
 	\label{fig:nsv}
-\end{figure}	
+\end{figure}
 
 Overall, the main conclusion from the simulation study is that score optimisation leads to significant improvements in forecast performance over base forecasts irrespective of whether the DGP is Gaussian or non-Gaussian and irrespective of whether the energy or variogram score is used for evaluation.  For the DGPs considered in the simulation study, MinTShr and to a lesser extent OLS also provided significant improvements over base and bottom-up forecasts.  While the existing probabilistic forecast reconciliation methods considered in the literature (BTTH and JPP) performed well in some scenarios (particularly BTTH for the Gaussian DGP evaluated by variogram score), overall results for these methods was mixed and even led to a statistically significant deterioration in forecast quality relative to base forecasts in some settings.
 
@@ -678,7 +678,7 @@ The diversity and prominence of the features in each series and each level of ag
 	\includegraphics[width=.90\textwidth]{Figs/selected.pdf}
 	\caption{Time series plots for selected series from from June 11, 2019 to June 10, 2020.}
 	\label{fig:selected}
-\end{figure}	
+\end{figure}
 
 
 
@@ -693,13 +693,13 @@ Base forecasts are assumed to be Gaussian or bootstrapped from residuals and eit
 	\includegraphics[width=.8\textwidth]{Figs/densities.pdf}
 	\caption{Densities of residuals for selected series from a typical training window of October 2, 2019 to January 21, 2020.}
 	\label{fig:emp_hist}
-\end{figure}	
+\end{figure}
 
 \begin{figure}
 \includegraphics[width=.95\textwidth]{Figs/corr.pdf}
 \caption{Correlation heatmap of residuals from a typical training window of October 2, 2019 to January 21, 2020. Blue circles indicate positive correlation, while red circles indicate negative correlation with larger circles indicating stronger correlations.}
 \label{fig:emp_corr}
-\end{figure}	
+\end{figure}
 
 \subsection{Reconciliation}\label{sec:applreco}
 
@@ -741,7 +741,7 @@ The mean energy score for all four base forecasting methods is summarised in Tab
 	\includegraphics[width=.4\textheight]{Figs/nemenyi_ig.pdf}
 	\caption{Nemenyi matrix for Energy score for electricity application when base forecasts are independent and Gaussian.}
 		\label{fig:nem_app_ig}
-\end{figure}	
+\end{figure}
 
 For all other methods the best performing method is OLS.  This difference is statistically significant as seen in Figure~\ref{fig:nem_app_jb}, which shows the Nemenyi matrix for jointly bootstrapped base forecasts. The corresponding figures for joint Gaussian and independent bootstrap look mostly similar to Figure~\ref{fig:nem_app_jb} (please refer to Footnote \ref{foot:github} for accessing a full set of results).  Although score optimisation does not improve upon base, the differences are not significant.  For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
 
@@ -751,7 +751,7 @@ For all other methods the best performing method is OLS.  This difference is sta
 	\includegraphics[width=.4\textheight]{Figs/nemenyi_jb.pdf}
 	\caption{Nemenyi matrix for Energy score for electricity application when base forecasts are obtained by jointly bootstrapping residuals.}
 		\label{fig:nem_app_jb}
-\end{figure}	
+\end{figure}
 
 \section{Conclusions}\label{sec:conclusion}
 
@@ -841,7 +841,7 @@ The proof relies on the following change of variables,
 \]
 Also recall from the proof of Theorem~\ref{theo:fulldens} that $\bm{S}^*=\left(\bm{S}\,\vdots\,\bm{S_\perp}\right)^{-1}$
 
-Let the density of the true predictive $f(\bm{y})$ after a change of variables, be given by $|\bm{S^*}|^{-1}f_{\bm b}(\bm{b})\mathbb{1}\left\{\bm{u}=\bm{0}\right\}$.  To prove that the log score is improper we construct an incoherent base density $\hat{f}$ such that $E_f\left[LS\left(\hat{f},\bm{y}\right)\right]<E_f\left[LS\left(f,\bm{y}\right)\right]$. This incoherent density is constructed, so that after the same change of variables it can be written as $|\bm{S^*}|^{-1}\hat{f}_{\bm b}(\bm{b})\hat{f}_{\bm{u}}(\bm{u})$. We require $\hat{f}_{\bm u}(\bm{0})>1$, i.e., ${\bm u}$ is highly concentrated around $\bm{0}$ but still non-degenerate. An example is an independent normal with mean 0 and variances less than $(2\pi)^{-1}$. Now, let $\bm{y}^*$ be a realisation from $f$. Let the first $m$ elements of $\bm{S}^*\bm{y}^*$ be $\bm{b^*}$, and the remaining elements be ${\bm u}^*$.  The log score for $f$ is thus,	
+Let the density of the true predictive $f(\bm{y})$ after a change of variables, be given by $|\bm{S^*}|^{-1}f_{\bm b}(\bm{b})\mathbb{1}\left\{\bm{u}=\bm{0}\right\}$.  To prove that the log score is improper we construct an incoherent base density $\hat{f}$ such that $E_f\left[LS\left(\hat{f},\bm{y}\right)\right]<E_f\left[LS\left(f,\bm{y}\right)\right]$. This incoherent density is constructed, so that after the same change of variables it can be written as $|\bm{S^*}|^{-1}\hat{f}_{\bm b}(\bm{b})\hat{f}_{\bm{u}}(\bm{u})$. We require $\hat{f}_{\bm u}(\bm{0})>1$, i.e., ${\bm u}$ is highly concentrated around $\bm{0}$ but still non-degenerate. An example is an independent normal with mean 0 and variances less than $(2\pi)^{-1}$. Now, let $\bm{y}^*$ be a realisation from $f$. Let the first $m$ elements of $\bm{S}^*\bm{y}^*$ be $\bm{b^*}$, and the remaining elements be ${\bm u}^*$.  The log score for $f$ is thus,
 \begin{align}
 LS\left(f,\bm{y}^*\right) &= -\log f(\bm{y}^*) \nonumber\\
 &=-\log|\bm{S^*}|-\log f_{\bm{b}}\left(\bm{b}^*\right)-\log\left(\mathbb{1}\left\{\bm{u}^*=\bm{0}\right\}\right)\label{eq:diraccancel}\\
@@ -934,4 +934,4 @@ For the non-Gaussian case, errors are generated from a Gumbel copula with Beta m
 
 \bibliography{References_paper2}
 
-\end{document} 
+\end{document}
