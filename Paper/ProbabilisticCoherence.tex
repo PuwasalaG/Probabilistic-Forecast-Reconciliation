@@ -292,28 +292,28 @@ After the change of variables, the density can be recognised as a multivariate G
 
 \subsection{Elliptical distributions}\label{sec:elliptical}
 
-More generally, consider linear reconciliation of the form $\psi(\hat{\bm{y}})=\bm{S}(\bm{d}+\bm{G}\hat{\bm{y}})$. For an elliptical base probabilistic forecast, with location $\hat{\bm\mu}$ and scale $\hat{\bm\Sigma}$, the reconciled probabilistic forecast will also be elliptical with location $\tilde{\bm{\mu}}=\bm{S}(\bm{d}+\bm{G}\hat{\bm{\mu}})$ and scale $\tilde{\bm{\Sigma}}=\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'$. This is a consequence of the fact that elliptical distributions are closed under linear transformations and marginalisation. While the base and reconciled distribution may be of a different form they will both belong to the elliptical family. This leads to the following result
+More generally, consider linear reconciliation of the form $\psi(\hat{\bm{y}})=\bm{S}(\bm{d}+\bm{G}\hat{\bm{y}})$. For an elliptical base probabilistic forecast, with location $\hat{\bm\mu}$ and scale $\hat{\bm\Sigma}$, the reconciled probabilistic forecast will also be elliptical with location $\tilde{\bm{\mu}}=\bm{S}(\bm{d}+\bm{G}\hat{\bm{\mu}})$ and scale $\tilde{\bm{\Sigma}}=\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'$. This is a consequence of the fact that elliptical distributions are closed under linear transformations and marginalisation. While the base and reconciled distribution may be of a different form, they will both belong to the elliptical family. This leads to the following result.
 
 \begin{theo}[Recovering the true density through reconciliation]\label{theo:OptRec}
-	Assume the true predictive distribution is elliptical with location ${\bm\mu}$ and scale ${\bm\Sigma}$. Then for an elliptical base probabilistic forecast with arbitrary location $\hat{\bm\mu}$ and scale $\hat{\bm\Sigma}$, there exists $\bm{d}_{opt}$ and $\bm{G}_{opt}$ such that the true predictive distribution is recovered by reconciliation.
+	Assume the true predictive distribution is elliptical with location ${\bm\mu}$ and scale ${\bm\Sigma}$. Then for an elliptical base probabilistic forecast with arbitrary location $\hat{\bm\mu}$ and scale $\hat{\bm\Sigma}$, there exists $\bm{d}_{\text{opt}}$ and $\bm{G}_{\text{opt}}$ such that the true predictive distribution is recovered by reconciliation.
 \end{theo}
 \begin{proof}
-	First consider finding a $\bm{G}_{opt}$ for which the following holds,
+	First consider finding a $\bm{G}_{\text{opt}}$ for which the following holds,
 	\begin{equation*}
-	\bm{\Sigma}=\bm{S}\bm{G}_{opt}\hat{\bm{\Sigma}}\bm{G}'_{opt}\bm{S}'\,.
+	\bm{\Sigma}=\bm{S}\bm{G}_{\text{opt}}\hat{\bm{\Sigma}}\bm{G}'_{\text{opt}}\bm{S}'\,.
 	\end{equation*}
-	This can be solved as $\bm{G}_{opt}=\bm{\Omega}_0^{1/2}\hat{\bm{\Sigma}}^{-1/2}$, where $\hat{\bm{\Sigma}}^{1/2}$ is any matrix such that $\hat{\bm{\Sigma}}=\hat{\bm{\Sigma}}^{1/2}(\hat{\bm{\Sigma}}^{1/2})'$ (for example a Cholesky factor), ${\bm{\Omega}}_0^{1/2}({\bm{\Omega}}_0^{1/2})'={\bm\Omega}$ and ${\bm\Omega}$ is the true scale matrix for the bottom-level series. To ensure conformability of matrix multiplication, ${\bm{\Omega}}^{1/2}$ must be a $m\times n$ matrix so can be set to the Cholesky factor of ${\bm{\Omega}}$ augmented with an additional $n-m$ columns of zeros. To reconcile the location solve the following for $\bm{d}_{opt}$
+	This can be solved as $\bm{G}_{\text{opt}}=\bm{\Omega}_0^{1/2}\hat{\bm{\Sigma}}^{-1/2}$, where $\hat{\bm{\Sigma}}^{1/2}$ is any matrix such that $\hat{\bm{\Sigma}}=\hat{\bm{\Sigma}}^{1/2}(\hat{\bm{\Sigma}}^{1/2})'$ (for example a Cholesky factor), ${\bm{\Omega}}_0^{1/2}({\bm{\Omega}}_0^{1/2})'={\bm\Omega}$ and ${\bm\Omega}$ is the true scale matrix for the bottom-level series. To ensure conformability of matrix multiplication, ${\bm{\Omega}}^{1/2}$ must be an $m\times n$ matrix; so it can be set to the Cholesky factor of ${\bm{\Omega}}$ augmented with an additional $n-m$ columns of zeros. To reconcile the location. solve the following for $\bm{d}_{\text{opt}}$
 	\begin{equation*}
-	\bm{\mu}=\bm{S}(\bm{d}_{opt}+\bm{G}_{opt}\hat{\bm{\mu}})\,
+	\bm{\mu}=\bm{S}(\bm{d}_{\text{opt}}+\bm{G}_{\text{opt}}\hat{\bm{\mu}})\,
 	\end{equation*}
-	which is given by $\bm{d}_{opt}=\bm{\beta}-\bm{G}_{opt}\hat{\bm\mu}$, where $\bm{\beta}$ is defined so that $\bm{\mu}=\bm{S}\bm{\beta}$.
+	which is given by $\bm{d}_{\text{opt}}=\bm{\beta}-\bm{G}_{\text{opt}}\hat{\bm\mu}$, where $\bm{\beta}$ is defined so that $\bm{\mu}=\bm{S}\bm{\beta}$.
 \end{proof}
 
-While the above theorem is not feasible in practice (exploiting the result requires knowledge of $\bm{\mu}$ and $\bm{\Sigma}$), it does nonetheless have important consequences for the algorithm that we introduce in Section~\ref{sec:scoreoptSGD}. In particular, note that $\bm{S}\bm{G}_{opt}$ is not a projection matrix in general. This implies that in the probabilistic forecasting setting, it is advised to include a translation $\bm{d}$ in the reconciliation procedure. This holds even if the base forecasts are unbiased (i.e. $\hat{\bm{\mu}}=\bm{\mu}$) since in general $\bm{S}\bm{G}_{opt}\hat{\bm{\mu}}\neq\bm{\mu}$.
+While the above theorem is not feasible in practice (exploiting the result requires knowledge of $\bm{\mu}$ and $\bm{\Sigma}$), it does nonetheless have important consequences for the algorithm that we introduce in Section~\ref{sec:scoreoptSGD}. In particular, note that $\bm{S}\bm{G}_{\text{opt}}$ is not a projection matrix in general. This implies that in the probabilistic forecasting setting, it is advised to include a translation $\bm{d}$ in the reconciliation procedure. This holds even if the base forecasts are unbiased (i.e. $\hat{\bm{\mu}}=\bm{\mu}$) since in general $\bm{S}\bm{G}_{\text{opt}}\hat{\bm{\mu}}\neq\bm{\mu}$.
 
-Although $\bm{S}\bm{G}_{opt}$ is not a projection matrix in general, there are some conditions under which it will be. These are described by the following theorem.
+Although $\bm{S}\bm{G}_{\text{opt}}$ is not a projection matrix in general, there are some conditions under which it will be. These are described by the following theorem.
 \begin{theo}[Optimal Projection for Reconciliation]\label{theo:OptRecProj}
-	Let $\hat{\bm{\Sigma}}$ be the scale matrix from an elliptical but incoherent base forecast and assume base forecasts are also unbiased. When the true predictive is also elliptical, then this can be recovered via reconciliation using a projection if $\textrm{rank}(\hat{\bm{\Sigma}}-\bm{\Sigma})\leq n-m$.
+	Let $\hat{\bm{\Sigma}}$ be the scale matrix from an elliptical but incoherent base forecast and assume base forecasts are also unbiased. When the true predictive distribution is also elliptical, then this can be recovered via reconciliation using a projection if $\textrm{rank}(\hat{\bm{\Sigma}}-\bm{\Sigma})\leq n-m$.
 \end{theo}
 \begin{proof}
 	See Appendix~\ref{app:OptRecProj}.
@@ -323,18 +323,18 @@ Although $\bm{S}\bm{G}_{opt}$ is not a projection matrix in general, there are s
 
 In practice it is often the case that samples are drawn from a probabilistic forecast since an analytical expression is either unavailable, or relies on unrealistic parametric assumptions. A useful result is the following.
 \begin{theo}[Reconciled samples]
-	Suppose that $\left(\hat{\bm{y}}^{[1]},\ldots,\hat{\bm{y}}^{[L]}\right)$ is a sample drawn from an incoherent probability measure $\hat{\nu}$. Then $\left(\tilde{\bm{y}}^{[1]},\ldots,\tilde{\bm{y}}^{[L]}\right)$ where $\tilde{\bm{y}}^{[l]}:=\psi(\hat{\bm{y}}^{[l]})$ for all $l=1,\ldots,L$ is a sample drawn from the reconciled probability measure $\tilde{\nu}$ as defined in Definition~\ref{def:reconprob}
+	Suppose that $\left(\hat{\bm{y}}^{[1]},\ldots,\hat{\bm{y}}^{[L]}\right)$ is a sample drawn from an incoherent probability measure $\hat{\nu}$. Then $\left(\tilde{\bm{y}}^{[1]},\ldots,\tilde{\bm{y}}^{[L]}\right)$ where $\tilde{\bm{y}}^{[\ell]}:=\psi(\hat{\bm{y}}^{[\ell]})$ for $\ell=1,\ldots,L$, is a sample drawn from the reconciled probability measure $\tilde{\nu}$ as defined in Definition~\ref{def:reconprob}.
 \end{theo}
 \begin{proof}
 	For any $\mathcal{A}\in\mathscr{F}_{\mathfrak{s}}$
 \begin{align}
-	\mbox{Pr}(\hat{\bm{y}}\in\psi^{-1}(\mathcal{A}))&=\underset{L\rightarrow\infty}{\lim}\sum\limits_{l=1}^L\mathbb{1}\left\{\hat{\bm{y}}^{[l]}\in\psi^{-1}(\mathcal{A})\right\}\nonumber\\
-	&=\underset{L\rightarrow\infty}{\lim}\sum\limits_{l=1}^L\mathbb{1}\left\{\psi(\hat{\bm{y}}^{[l]})\in(\mathcal{A})\right\}\nonumber\\
+	\mbox{Pr}(\hat{\bm{y}}\in\psi^{-1}(\mathcal{A}))&=\underset{L\rightarrow\infty}{\lim}\sum\limits_{\ell=1}^L\mathbb{1}\big\{\hat{\bm{y}}^{[\ell]}\in\psi^{-1}(\mathcal{A})\big\}\nonumber\\
+	&=\underset{L\rightarrow\infty}{\lim}\sum\limits_{\ell=1}^L\mathbb{1}\big\{\psi(\hat{\bm{y}}^{[\ell]})\in(\mathcal{A})\big\}\nonumber\\
 	&=\mbox{Pr}(\tilde{\bm{y}}\in(\mathcal{A}))\nonumber
 \end{align}
 \end{proof}
 
-This result implies that reconciling each member of a sample drawn from an incoherent distribution provides a sample from the reconciled distribution. Such a strategy has already been used by \cite{JeoEtAl2019}, without formal justification. This result allows coherent forecasts to be built in a general and modular fashion, the mechanism for simulating base forecasts is separated from the question of reconciliation. This will become clear in the Simulation Study covered in Section~\ref{sec:simulations}.
+This result implies that reconciling each member of a sample drawn from an incoherent distribution provides a sample from the reconciled distribution. Such a strategy has already been used by \cite{JeoEtAl2019}, without formal justification. This result allows coherent forecasts to be built in a general and modular fashion, the mechanism for simulating base forecasts is separated from the question of reconciliation. This will become clear in the simulation study covered in Section~\ref{sec:simulations}.
 
 %In the point forecasting setting it is common to generate forecasts from independent statistical models, allowing forecast reconciliation to be scaled up to large hierarchies. Since a single point forecast is generated for each series there is no ambiguity as to how these should be stacked into a vector of base forecasts $\hat{\bm{y}}$. This is no longer the case in the probabilistic setting where multiple draws are made for each series. \cite{JeoEtAl2019} recommend some crude heuristics that can be used to form joint samples. In Section~\ref{sec:drawbase} we provide an alternative based on resampling forecast errors. This provides a sample from a base probabilistic forecast. A sample from the reconciled distribution can be obtained by premultiplying these draws by $\bm{S}\bm{G}$. Strategies for choosing $\bm{G}$ are discussed in Section~\ref{sec:OptRec}.
 
@@ -443,7 +443,7 @@ The objective function is optimised by Stochastic Gradient Descent (SGD). The SG
 		\State $\hat{\bm{v}}_j\gets \bm{v}_j/(1-\beta_2^j)$ \Comment{Bias correct}
 		\State $\bm{\gamma}_j\gets\bm{\gamma}_{j-1}+\eta\frac{\hat{\bm{m}}_j}{(\hat{\bm{v}}_j+\epsilon)}$ \Comment{Update weights}
 		\EndFor
-		\State Set the reconciled forecast as $\tilde{f}^{\bm{\gamma}_{opt}}_{T+1|T}$ where $\bm{\gamma}_{opt}$ is the converged value of $\bm{\gamma}$.
+		\State Set the reconciled forecast as $\tilde{f}^{\bm{\gamma}_{\text{opt}}}_{T+1|T}$ where $\bm{\gamma}_{\text{opt}}$ is the converged value of $\bm{\gamma}$.
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
@@ -765,20 +765,20 @@ A final important avenue of future research is the development of probabilistic 
 
 \section{Proof of Theorem~\ref{theo:bottomdens} and Theorem~\ref{theo:fulldens}} \label{app:Bottom&FullDens}
 
-Consider the region $\mathcal{I}$ given by the Cartesian product of intervals $(l_1,u_1),(l_2,u_2),\ldots(l_m,u_m)$. We derive the probability, under the reconciled measure, that the bottom-level series lie in $\mathcal{I}$, i.e. $\mbox{Pr}(\bm{l}\succ\bm{b}\succ\bm{u})$, where $\bm{l}=(l_1,l_2,\ldots,l_m)$, $\bm{u}=(u_1,u_2,\ldots,u_m)$ and $\succ$ denotes element-wise inequality between vectors. The pre-image of $\mathcal{I}$ under $g$ can similarly be denoted as all points $\bm{y}$ satisfying $\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}$. Using Definition~\ref{def:reconprob},
+Consider the region $\mathcal{I}$ given by the Cartesian product of intervals $(l_1,u_1),(l_2,u_2),\ldots(l_m,u_m)$. We derive the probability, under the reconciled measure, that the bottom-level series lie in $\mathcal{I}$, i.e. $\mbox{Pr}(\bm{\ell}\succ\bm{b}\succ\bm{u})$, where $\bm{\ell}=(\ell_1,\ell_2,\ldots,\ell_m)$, $\bm{u}=(u_1,u_2,\ldots,u_m)$ and $\succ$ denotes element-wise inequality between vectors. The pre-image of $\mathcal{I}$ under $g$ can similarly be denoted as all points $\bm{y}$ satisfying $\bm{\ell}\succ\bm{G}\bm{y}\succ\bm{u}$. Using Definition~\ref{def:reconprob},
 \[
-\mbox{Pr}(\bm{l}\succ\bm{b}\succ\bm{u})=\int\limits_{\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d\bm{y}\,,
+\mbox{Pr}(\bm{\ell}\succ\bm{b}\succ\bm{u})=\int\limits_{\bm{\ell}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d\bm{y}\,,
 \]
 where $\hat{f}$ is the density of the base probabilistic forecast. Now consider a change of variables to an $n$-dimensional vector $\bm{z}$ where $\bm{y}=\bm{G}^*\bm{z}$. Recall, $\bm{G}^*=\left(\bm{G}^{-}\,\vdots\,\bm{G}_\perp\right)$, $\bm{G}^{-}$ is a generalised inverse of $\bm{G}$ and $\bm{G}_\perp$ is an orthogonal complement of $\bm{G}$. By the change of variables
 
 \begin{align}
-\mbox{Pr}(\bm{l}\succ\bm{b}\succ\bm{u})&=\int\limits_{\bm{l}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d\bm{y}\nonumber\\
-&=\int\limits_{\bm{l}\succ\bm{G}\bm{G}^*\bm{z}\succ\bm{u}}\hat{f}(\bm{G}^*\bm{z})|\bm{G}^*|d\bm{z}\nonumber\\
-&=\int\limits_{\bm{l}\succ\bm{z}_1\succ\bm{u}}\hat{f}(\bm{G}^*\bm{z})|\bm{G}^*|d\bm{z}\nonumber\,,
+\mbox{Pr}(\bm{\ell}\succ\bm{b}\succ\bm{u})&=\int\limits_{\bm{\ell}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d\bm{y}\nonumber\\
+&=\int\limits_{\bm{\ell}\succ\bm{G}\bm{G}^*\bm{z}\succ\bm{u}}\hat{f}(\bm{G}^*\bm{z})|\bm{G}^*|d\bm{z}\nonumber\\
+&=\int\limits_{\bm{\ell}\succ\bm{z}_1\succ\bm{u}}\hat{f}(\bm{G}^*\bm{z})|\bm{G}^*|d\bm{z}\nonumber\,,
 \end{align}
 where $\bm{z}_1$ denotes the first $m$ elements of $\bm{z}$. Letting $\bm{a}$ denote the last $n-m$ elements of $\bm{z}$ the integral above can be written as
 \[
-\mbox{Pr}(\bm{b}\in \mathcal{I})=\int\limits_{\bm{l}\succ\bm{z}_1\succ\bm{u}}\int\hat{f}(\bm{G}^{-}\bm{z}_1+\bm{G}_{\perp}\bm{a})|\bm{G}^*|d\bm{a}d\bm{z}_1\nonumber\\
+\mbox{Pr}(\bm{b}\in \mathcal{I})=\int\limits_{\bm{\ell}\succ\bm{z}_1\succ\bm{u}}\int\hat{f}(\bm{G}^{-}\bm{z}_1+\bm{G}_{\perp}\bm{a})|\bm{G}^*|d\bm{a}d\bm{z}_1\nonumber\\
 \]
 Replacing $\bm{z}_1$ with $\bm{b}$, it can be seen that the term inside the outer integral is a density for the bottom-level series. Therefore
 
@@ -823,7 +823,7 @@ If reconciliation is carried out via a projection onto $\mathfrak{s}$, then $\bm
 &\bm{S}\bm{\Omega}{\bm{S}}'+\bm{S}\bm{G}\bm{D}\bm{G}'\bm{S}'\nonumber\\
 &\bm{\Sigma}+\bm{S}\bm{G}\bm{D}\bm{G}'\bm{S}'\nonumber\,.
 \end{align}
-Therefore to recover the true predictive using a projection, some $\bm{G}_{opt}$ must be found such that $\bm{G}_{opt}\bm{D}=\bm{0}$. Let the eigenvalue decomposition of $\bm{D}$ be given by $\bm{R}\bm{\Lambda}\bm{R}'$ , where $\bm{R}$ is an $n\times q$ matrix with $q=\textrm{rank}({\bm{D}})$ and ${\bm\Lambda}$ is an $q\times q$ diagonal matrix containing non-zero eigenvalues of $\bm{D}$. By the rank nullity theorem, $\bm{R}$ will have an orthogonal complement $\bm{R}_{\perp}$ of dimension $n\times (n-q)$. If $q=n-m$ then the number of columns of $\bm{R}_{\perp}$ is $m$ and $\bm{G}_{opt}$ can be formed as the $m\times n$ matrix $(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$. If $q<n-m$ the number of columns of $\bm{R}_{\perp}$ is greater than $m$, and any $m$ columns of $\bm{R}_{\perp}$ can be used to form $\bm{G}_{opt}$ in a similar fashion. However when $q>n-m$, the number of columns of $\bm{R}_{\perp}$ is less than $m$ and no such $m\times n$ matrix $\bm{G}_{opt}$ can be formed. Therefore the true predictive can only be recovered via a projection when $\textrm{rank}(\bm{D})\leq n-m$.
+Therefore to recover the true predictive using a projection, some $\bm{G}_{\text{opt}}$ must be found such that $\bm{G}_{\text{opt}}\bm{D}=\bm{0}$. Let the eigenvalue decomposition of $\bm{D}$ be given by $\bm{R}\bm{\Lambda}\bm{R}'$ , where $\bm{R}$ is an $n\times q$ matrix with $q=\textrm{rank}({\bm{D}})$ and ${\bm\Lambda}$ is an $q\times q$ diagonal matrix containing non-zero eigenvalues of $\bm{D}$. By the rank nullity theorem, $\bm{R}$ will have an orthogonal complement $\bm{R}_{\perp}$ of dimension $n\times (n-q)$. If $q=n-m$ then the number of columns of $\bm{R}_{\perp}$ is $m$ and $\bm{G}_{\text{opt}}$ can be formed as the $m\times n$ matrix $(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$. If $q<n-m$ the number of columns of $\bm{R}_{\perp}$ is greater than $m$, and any $m$ columns of $\bm{R}_{\perp}$ can be used to form $\bm{G}_{\text{opt}}$ in a similar fashion. However when $q>n-m$, the number of columns of $\bm{R}_{\perp}$ is less than $m$ and no such $m\times n$ matrix $\bm{G}_{\text{opt}}$ can be formed. Therefore the true predictive can only be recovered via a projection when $\textrm{rank}(\bm{D})\leq n-m$.
 
 With respect to the location, if $\bm{S}\bm{G}$ is a projection then reconciled forecasts will be unbiased as long as the base forecasts are also unbiased. When base forecasts are biased they can be bias corrected before reconciliation as described by \cite{PanEtAl2020_Geometry} in the point forecasting setting.
 
