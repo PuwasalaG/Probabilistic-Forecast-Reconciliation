@@ -132,7 +132,7 @@ Before introducing coherence and reconciliation to the probabilistic setting, we
 
 A \emph{hierarchical time series} is a collection of time series adhering to some known linear constraints. Stacking the value of each series at time $t$ into an $n$-vector $\bm{y}_t$, the constraints imply that $\bm{y}_t$ lies in an $m$-dimensional linear subspace of $\mathbb{R}^n$ for all $t$. This subspace is referred to as the \emph{coherent subspace} and is denoted as $\mathfrak{s}$. A typical (and the original) motivating example is a collection of time series some of which are aggregates of other series. In this case $\bm{b}_t \in \mathbb{R}^m$ can be defined as the values of the most disaggregated or \emph{bottom-level series} at time $t$ and the aggregation constraints can be formulated as,
 \begin{equation*}
-\bm{y}_t = \bm{Sb}_t,
+\bm{y}_t = \bm{S}\bm{b}_t,
 \end{equation*}
 where $\bm{S}$ is an $n \times m$ constant matrix for a given hierarchical structure.
 
@@ -358,7 +358,7 @@ Alternatively there are a number of other multivariate scoring rules that are di
 \E_{P}
 ||{\bm{y}}-\bm{\omega}||^\alpha -\frac{1}{2}\E_{P}||\bm{y}-\bm{y}^*||^\alpha, \,\, \alpha \in (0,2]\,,
 \end{equation}
-where $\bm{y}$ and $\bm{y}^*$ are independent copies drawn from the distribution $P$, and we follow common convention by setting $\alpha=0.5$. While the expectations in Equation~\ref{eq:Energy_score} may have no closed form, they can be easily approximated via Monte Carlo using a sample drawn from the probabilistic forecast. Other scores with similar behaviour are kernel-based scores \citep{dawid2007,Gneiting2007} and the variogram score \citep{SCHEUERER2015}.
+where $\bm{y}$ and $\bm{y}^*$ are independent copies drawn from the distribution $P$. In the empirical results described later, we follow common convention by setting $\alpha=0.5$. While the expectations in Equation~\eqref{eq:Energy_score} may have no closed form, they can be easily approximated via simulations using a sample drawn from the probabilistic forecast. Other scores with similar behaviour are kernel-based scores \citep{dawid2007,Gneiting2007} and the variogram score \citep{SCHEUERER2015}.
 
 %The energy score has been criticised by \citet{Pinson2013a} for its low discriminative ability for incorrectly specified covariances. The variogram score \citep{SCHEUERER2015}, overcomes this issue and is defined as
 %\begin{equation*}
@@ -384,12 +384,12 @@ As a result of Theorem~\ref{theo:logS_improp} we recommend avoiding the log scor
 
 If a probabilistic forecast is available for any $m$ series, then a probabilistic forecast for the full hierarchy can be derived. Definition~\ref{def:cohprob} provides an example using the bottom-level series. This suggests that it may be adequate to merely compare two coherent forecasts to one another using the bottom-level series only. This is true for the log score.
 
-Consider a coherent probabilistic forecast with density $\tilde{f}_{\bm{y}}$ for the full hierarchy and $\tilde{f}_{\bm{b}}$ for the bottom-level series. By Theorem~\ref{theo:fulldens}, $\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{y})\mathbb{1}{\bm{y}\in\mathfrak{s}}$. Any realisation $\bm{y}^*$ will lie on the coherent subspace and can be written as $\bm{S}\bm{b}^*$. The expression for the log score is therefore
+Consider a coherent probabilistic forecast with density $\tilde{f}_{\bm{y}}$ for the full hierarchy and $\tilde{f}_{\bm{b}}$ for the bottom-level series. By Theorem~\ref{theo:fulldens}, $\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{y})\mathbb{1}\{\bm{y}\in\mathfrak{s}\}$. Any realisation $\bm{y}^*$ will lie on the coherent subspace and can be written as $\bm{S}\bm{b}^*$. The expression for the log score is therefore
 \begin{align}
 \text{LS}(\tilde{f}_{\bm{y}},\bm{y}^*)&=-\log\left(|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{S}\bm{b}^*)\right)\nonumber\\
 &=-\log|\bm{S}^*|-\log \tilde{f}_{\bm{b}}(\bm{b}^*).\nonumber
 \end{align}
-For coherent densities, the log score for the full hierarchy differs from the log score for the bottom-level series only by $-\log|\bm{S}^*|$. This term is independent from the choice of $\bm{G}$. As such, rankings of different reconciliation methods using the log score for the full hierarchy will not change if only the bottom-level series is used.
+For coherent densities, the log score for the full hierarchy differs from the log score for the bottom-level series only by $-\log|\bm{S}^*|$. This term is independent of the choice of $\bm{G}$. Consequently, rankings of different reconciliation methods using the log score for the full hierarchy will not change if only the bottom-level series is used.
 
 The same property does not hold for all scores. For example, the energy score is invariant under orthogonal transformations \citep{Szekely2013} but not under linear transformations in general. Therefore it is possible for one method to outperform another when energy score is calculated using the full hierarchy, but for these rankings to change if only bottom-level series are considered. We therefore recommend computing the energy score using the full hierarchy. The properties of multivariate scoring rules in the context of evaluating reconciled probabilistic forecasts are summarised in Table~\ref{tab:prop}.
 
@@ -423,7 +423,7 @@ One of the challenges to optimising this objective function is that there is, in
 \end{equation}
 where $\tilde{\bm{y}}^{[q]}_{t+h|t}=\bm{S}\left(\bm{d}+\bm{G}{\hat{\bm{y}}}^{[q]}_{t+h|t}\right)$, $\tilde{\bm{y}}^{*[q]}_{t+h|t}=\bm{S}\left(\bm{d}+\bm{G}{\hat{\bm{y}}}^{*[q]}_{t+h|t}\right)$ and ${\hat{\bm{y}}}^{[q]}_{t+h|t},{\hat{\bm{y}}}^{*[q]}_{t+h|t}\overset{iid}{\sim} \hat{f}_{t+h|t}$ for $q=1,\ldots,Q$, and $t=1,\ldots,T-h$.
 
-The objective function is optimised by Stochastic Gradient Descent (SGD). The SGD technique has become increasingly popular in machine learning and statistics over the past decade having been applied to training neural networks \citep{bottou2010} and Variational Bayes \citep{kingma2013}. The method requires an estimate of the gradient $\partial\hat{\mathcal{E}}/\partial{\gamma}$ which is computed by automatically differentiating Equation~\ref{eq:obj_mc} using the header only C++ library of the Stan project~\citep{carpenter2015}. The learning rates used for SGD are those of the Adam method \citep[see][for details]{kingma2014}. Pseudocode for the full procedure in the case where $h=1$ is provided in Algorithm~\ref{alg:scoreopt} and is implemented in the R package \texttt{ProbReco}, publicly available at the GitHub repository \texttt{anastasiospanagiotelis/ProbReco}. \textcolor{red}{I think we need to promote this as a contribution of this paper. I have added comments to the intro and abstract.}
+The objective function is optimised by Stochastic Gradient Descent (SGD). The SGD technique has become increasingly popular in machine learning and statistics over the past decade having been applied to training neural networks \citep{bottou2010} and Variational Bayes \citep{kingma2013}. The method requires an estimate of the gradient $\partial\hat{\mathcal{E}}/\partial{\gamma}$ which is computed by automatically differentiating Equation~\eqref{eq:obj_mc} using the header only C++ library of the Stan project~\citep{carpenter2015}. The learning rates used for SGD are those of the Adam method \citep[see][for details]{kingma2014}. Pseudocode for the full procedure in the case where $h=1$ is provided in Algorithm~\ref{alg:scoreopt} and is implemented in the R package \texttt{ProbReco}, publicly available at the GitHub repository \texttt{anastasiospanagiotelis/ProbReco}. \textcolor{red}{I think we need to promote this as a contribution of this paper. I have added comments to the intro and abstract.}
 
 \begin{algorithm}
 	\caption{SGD with Adam for score optimal reconciliation (one-step ahead forecasts). The initial value of $\bm{\gamma}$ is given by OLS reconciliation. Steps 9-14 are the standard steps for SGD with Adam. Squaring $\bm{g}_j$ in Step 11 and division and addition in Step 14 are element-wise operations.}\label{alg:scoreopt}.
@@ -448,7 +448,7 @@ The objective function is optimised by Stochastic Gradient Descent (SGD). The SG
 	\end{algorithmic}
 \end{algorithm}
 
-While Algorithm~\ref{alg:scoreopt} is not the first instance of calibrating parameters by optimising scoring rules \citep[see][for an example]{gneiting2005}, to the best of our knowledge it is the first instance of doing so using SGD and the first application to forecast reconciliation. It is amenable to parallel computing architectures. The loop beginning at line 2 of the pseudocode of Algorithm~\ref{alg:scoreopt} can be done in parallel as can the computation of the gradient. Finally, the total score in Equation~\ref{eq:tes} can be replaced with a weighted sum where appropriate, for instance weights that decay for scores computed further in the past will favour choices of $\bm{\gamma}$ that produced better forecasting performance for more recent forecast windows.
+While Algorithm~\ref{alg:scoreopt} is not the first instance of calibrating parameters by optimising scoring rules \citep[see][for an example]{gneiting2005}, to the best of our knowledge it is the first instance of doing so using SGD and the first application to forecast reconciliation. It is amenable to parallel computing architectures. The loop beginning at line 2 of the pseudocode of Algorithm~\ref{alg:scoreopt} can be done in parallel as can the computation of the gradient. Finally, the total score in Equation~\eqref{eq:tes} can be replaced with a weighted sum where appropriate, for instance weights that decay for scores computed further in the past will favour choices of $\bm{\gamma}$ that produced better forecasting performance for more recent forecast windows.
 
 \section{Simulations}\label{sec:simulations}
 
@@ -789,7 +789,7 @@ Replacing $\bm{z}_1$ with $\bm{b}$, it can be seen that the term inside the oute
 is the density of $\bm{b}$. To obtain the density of the full hierarchy we first augment the density in Equation \eqref{eq:densb} by $n-m$ variables denoted $\bm{u}$
 
 \begin{equation}
-f(\bm{b},\bm{u})=\tilde{f}_b(\bm{b})\mathbb{1}\left\{\bm{u}=0\right\}\,,
+f(\bm{b},\bm{u})=\tilde{f}_b(\bm{b})\mathbb{1}\{\bm{u}=0\}\,,
 \end{equation}
 such that the density $f(\bm{b},\bm{u})$ is a density for $n$-dimensional vector that is degenerate across the dimensions corresponding to $\bm{u}$. Using the change of variables,
 \[
@@ -802,11 +802,11 @@ where $\bm{S}^-_{\perp}$ is a generalised inverse such that $\bm{S}'_{\perp}\bm{
 \]
 it can be seen that $\bm{b}=\bm{S}^-\bm{y}$ and $\bm{u}=\bm{S}'_\perp\bm{y}$. Applying this change of variables yields the density
 \[
-\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{y})\mathbb{1}\left\{\bm{S}'_\perp\bm{y}=\bm{0}\right\}\,.
+\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{y})\mathbb{1}\{\bm{S}'_\perp\bm{y}=\bm{0}\}\,.
 \]
 Since $\bm{S}'_\perp$ is the orthogonal complement of $\bm{S}$ and since the columns of $\bm{S}$ span the coherent subspace, the statement $\bm{S}'_\perp\bm{y}=0$ is equivalent to the statement $\bm{y}\in\mathfrak{s}$. As such, the reconciled density is given by
 \[
-\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_b(\bm{S}^-\bm{y})\mathbb{1}\left\{\bm{y}\in\mathfrak{s}\right\}.
+\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_b(\bm{S}^-\bm{y})\mathbb{1}\{\bm{y}\in\mathfrak{s}\}.
 \]
 \clearpage
 \section{Proof of Theorem~\ref{theo:OptRecProj}}
@@ -836,13 +836,13 @@ The proof relies on the following change of variables,
 \]
 Also recall from the proof of Theorem~\ref{theo:fulldens} that $\bm{S}^*=\left(\bm{S}\,\vdots\,\bm{S}_\perp\right)^{-1}$
 
-Let the density of the true predictive $f(\bm{y})$ after a change of variables, be given by $|\bm{S}^*|^{-1}f_{\bm{b}}(\bm{b})\mathbb{1}\left\{\bm{u}=\bm{0}\right\}$. To prove that the log score is improper we construct an incoherent base density $\hat{f}$ such that $E_f\left[LS\left(\hat{f},\bm{y}\right)\right]<E_f\left[LS\left(f,\bm{y}\right)\right]$. This incoherent density is constructed, so that after the same change of variables it can be written as $|\bm{S}^*|^{-1}\hat{f}_{\bm{b}}(\bm{b})\hat{f}_{\bm{u}}(\bm{u})$. We require $\hat{f}_{\bm{u}}(\bm{0})>1$, i.e., $\bm{u}$ is highly concentrated around $\bm{0}$ but still non-degenerate. An example is an independent normal with mean 0 and variances less than $(2\pi)^{-1}$. Now, let $\bm{y}^*$ be a realisation from $f$. Let the first $m$ elements of $\bm{S}^*\bm{y}^*$ be $\bm{b}^*$, and the remaining elements be $\bm{u}^*$. The log score for $f$ is thus,
+Let the density of the true predictive $f(\bm{y})$ after a change of variables, be given by $|\bm{S}^*|^{-1}f_{\bm{b}}(\bm{b})\mathbb{1}\{\bm{u}=\bm{0}\}$. To prove that the log score is improper we construct an incoherent base density $\hat{f}$ such that $E_f\left[LS\left(\hat{f},\bm{y}\right)\right]<E_f\left[LS\left(f,\bm{y}\right)\right]$. This incoherent density is constructed, so that after the same change of variables it can be written as $|\bm{S}^*|^{-1}\hat{f}_{\bm{b}}(\bm{b})\hat{f}_{\bm{u}}(\bm{u})$. We require $\hat{f}_{\bm{u}}(\bm{0})>1$, i.e., $\bm{u}$ is highly concentrated around $\bm{0}$ but still non-degenerate. An example is an independent normal with mean 0 and variances less than $(2\pi)^{-1}$. Now, let $\bm{y}^*$ be a realisation from $f$. Let the first $m$ elements of $\bm{S}^*\bm{y}^*$ be $\bm{b}^*$, and the remaining elements be $\bm{u}^*$. The log score for $f$ is thus,
 \begin{align}
 LS\left(f,\bm{y}^*\right) &= -\log f(\bm{y}^*) \nonumber\\
-&=-\log|\bm{S}^*|-\log f_{\bm{b}}\left(\bm{b}^*\right)-\log\left(\mathbb{1}\left\{\bm{u}^*=\bm{0}\right\}\right)\label{eq:diraccancel}\\
+&=-\log|\bm{S}^*|-\log f_{\bm{b}}\left(\bm{b}^*\right)-\log\left(\mathbb{1}\{\bm{u}^*=\bm{0}\}\right)\label{eq:diraccancel}\\
 &=-\log|\bm{S}^*|-\log f_{\bm{b}}\left(\bm{b}^*\right),\nonumber
 \end{align}
-where the third term in Equation~\ref{eq:diraccancel} is equal to zero since the fact that $\bm{y}^*\in\mathfrak{s}$ implies that $\bm{u}^*=\bm{0}$. The log score for $\hat{f}$ is
+where the third term in Equation~\eqref{eq:diraccancel} is equal to zero since the fact that $\bm{y}^*\in\mathfrak{s}$ implies that $\bm{u}^*=\bm{0}$. The log score for $\hat{f}$ is
 \[
 LS\left(\hat{f},\bm{y}^*\right) = -\log|\bm{S}^*|-\log f_{\bm{b}}(\bm{b}^*)- \log f_{\bm{u}}(\bm{0})\,.
 \]
