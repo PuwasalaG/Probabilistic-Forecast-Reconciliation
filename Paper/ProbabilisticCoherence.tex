@@ -160,7 +160,7 @@ where $\bm{I}_4$ is the $4\times 4$ identity matrix.
 
 The connection between this characterisation and the coherent subspace is that the columns of $\bm{S}$ span $\mathfrak{s}$. Below, the notation $s:\mathbb{R}^m\rightarrow\mathbb{R}^n$ is used when premultiplication by $\bm{S}$ is thought of as a mapping. Finally, while $\bm{S}$ is defined in terms of $m$ bottom-level series here, in general any $m$ series can be chosen with the $\bm{S}$ matrix redefined accordingly. The columns of all appropriately defined $\bm{S}$ matrices span the same coherent subspace $\mathfrak{s}$.
 
-When forecasts of all $n$ series are produced, they may not adhere to constraints. In this case forecasts are called \emph{incoherent base} forecasts and are denoted $\hat{\bm{y}}_{t+h}$, with the subscript $t+h$ implying a $h$-step-ahead forecast at time $t$. To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as \emph{forecast reconciliation}. At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm{y}}_{t+h}=\psi(\hat{\bm{y}}_{t+h})$, where $\tilde{\bm{y}}_{t+h}\in\mathfrak{s}$ is called the \emph{reconciled} forecast. The mapping $\psi$ may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ combines incoherent base forecasts of all series to produce new bottom-level forecasts, which are then aggregated via $s$. Many existing point forecasting approaches including the bottom-up \citep{Dunn1976}, OLS \citep{HynEtAl2011}, WLS \citep[][]{Hyndman2016,AthEtAl2017} and MinT \citep{WicEtAl2019} methods, are special cases where $g$ involves premultiplication by a matrix $\bm{G}$ and where $\bm{S}\bm{G}$ is a projection matrix. These are summarised in Table \ref{tab:ReconMethods}.
+When forecasts of all $n$ series are produced, they may not adhere to constraints. In this case forecasts are called \emph{incoherent base} forecasts and are denoted $\hat{\bm{y}}_{t+h}$, with the subscript $t+h$ implying a $h$-step-ahead forecast at time $t$. To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as \emph{forecast reconciliation}. At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm{y}}_{t+h}=\psi(\hat{\bm{y}}_{t+h})$, where $\tilde{\bm{y}}_{t+h}\in\mathfrak{s}$ is called the \emph{reconciled} forecast. The mapping $\psi$ may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ combines incoherent base forecasts of all series to produce new bottom-level forecasts, which are then aggregated via $s$. Many existing point forecasting approaches including the bottom-up \citep{Dunn1976}, OLS \citep{HynEtAl2011}, WLS \citep[][]{Hyndman2016,AthEtAl2017} and MinT \citep{WicEtAl2019} methods, are special cases where $g$ involves premultiplication by a matrix $\bm{G}$ and where $\bm{S}\bm{G}$ is a projection matrix. These are summarised in Table~\ref{tab:ReconMethods}.
 
 \begin{table}[!t]
 	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix. Here $\bm{W}$ is some diagonal matrix, $\hat{\bm{\Sigma}}_{\text{sam}}$ is a sample estimate of the residual covariance matrix and $\hat{\bm{\Sigma}}_{\text{shr}}$ is a shrinkage estimator proposed by \citet{Schafer2005}, given by $\tau \textrm{diag}(\hat{\bm{\Sigma}}_{\text{sam}})+(1-\tau)\hat{\bm{\Sigma}}_{\text{sam}}$ where $\tau = \displaystyle\frac{\sum_{i \neq j}\hat{\var}(\hat{\sigma}_{ij})}{\sum_{i \neq j}{\hat{\sigma}}^2_{ij}}$ and $\sigma_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{\Sigma}}_{\text{sam}}$.} \label{tab:ReconMethods}
@@ -232,7 +232,7 @@ The following theorem shows how a reconciled density can be derived from any bas
 \end{theo}
 
 \begin{proof}
-	See Appendix \ref{app:Bottom&FullDens}.
+	See Appendix~\ref{app:Bottom&FullDens}.
 \end{proof}
 
 \begin{theo}[Reconciled density of full hierarchy]\label{theo:fulldens}
@@ -254,7 +254,7 @@ The following theorem shows how a reconciled density can be derived from any bas
 \end{theo}
 
 \begin{proof}
-	See Appendix \ref{app:Bottom&FullDens}.
+	See Appendix~\ref{app:Bottom&FullDens}.
 \end{proof}
 
 \subsubsection*{Example: Gaussian Distribution}
@@ -377,7 +377,7 @@ When an expression for the density of an incoherent base forecast is available, 
 \end{theo}
 
 \begin{proof}
-	See Appendix \ref{app:logS_improp}.
+	See Appendix~\ref{app:logS_improp}.
 \end{proof}
 
 As a result of Theorem~\ref{theo:logS_improp} we recommend avoiding the log score when comparing reconciled and unreconciled probabilistic forecasts.
@@ -423,7 +423,7 @@ One of the challenges in optimising this objective function is that there is, in
 \end{equation}
 where $\tilde{\bm{y}}^{[q]}_{t+h|t}=\bm{S}\big(\bm{d}+\bm{G}{\hat{\bm{y}}}^{[q]}_{t+h|t}\big)$, $\tilde{\bm{y}}^{*[q]}_{t+h|t}=\bm{S}\big(\bm{d}+\bm{G}{\hat{\bm{y}}}^{*[q]}_{t+h|t}\big)$ and ${\hat{\bm{y}}}^{[q]}_{t+h|t},{\hat{\bm{y}}}^{*[q]}_{t+h|t}\overset{iid}{\sim} \hat{f}_{t+h|t}$ for $q=1,\ldots,Q$, and $t=1,\ldots,T-h$.
 
-The objective function is optimised by Stochastic Gradient Descent (SGD). The SGD technique has become increasingly popular in machine learning and statistics over the past decade having been applied to training neural networks \citep{bottou2010} and Variational Bayes \citep{kingma2013}. The method requires an estimate of the gradient $\partial\hat{\mathcal{E}}/\partial{\gamma}$ which is computed by automatically differentiating Equation~\eqref{eq:obj_mc} using the header only C++ library of the Stan project~\citep{carpenter2015}. The learning rates used for SGD are those of the Adam method \citep[see][for details]{kingma2014}. Pseudocode for the full procedure in the case where $h=1$ is provided in Algorithm~\ref{alg:scoreopt} and is implemented in the R package \textit{ProbReco} \citep{RProbReco}.
+The objective function is optimised by Stochastic Gradient Descent (SGD). The SGD technique has become increasingly popular in machine learning and statistics over the past decade having been applied to training neural networks \citep{bottou2010} and Variational Bayes \citep{kingma2013}. The method requires an estimate of the gradient $\partial\hat{\mathcal{E}}/\partial{\gamma}$ which is computed by automatically differentiating Equation~\eqref{eq:obj_mc} using the header only C++ library of the Stan project~\citep{carpenter2015}. The learning rates used for SGD are those of the Adam method \citep[see][for details]{kingma2014}. Pseudo-code for the full procedure in the case where $h=1$ is provided in Algorithm~\ref{alg:scoreopt} and is implemented in the R package \textit{ProbReco} \citep{RProbReco}.
 
 \begin{algorithm}
 	\caption{SGD with Adam for score optimal reconciliation (one-step-ahead forecasts). The initial value of $\bm{\gamma}$ is given by OLS reconciliation. Steps 9--14 are the standard steps for SGD with Adam. Squaring $\bm{g}_j$ in Step 11 and division and addition in Step 14 are element-wise operations.}\label{alg:scoreopt}.
@@ -448,31 +448,31 @@ The objective function is optimised by Stochastic Gradient Descent (SGD). The SG
 	\end{algorithmic}
 \end{algorithm}
 
-While Algorithm~\ref{alg:scoreopt} is not the first instance of calibrating parameters by optimising scoring rules \citep[see][for an earlier example]{gneiting2005}, to the best of our knowledge it is the first instance of doing so using SGD and the first application to forecast reconciliation. It is amenable to parallel computing architectures: the loop beginning at line 2 of the pseudocode of Algorithm~\ref{alg:scoreopt} can be done in parallel as can the computation of the gradient. Finally, the total score in Equation~\eqref{eq:tes} can be replaced with a weighted sum where appropriate; for instance weights that decay for scores computed further in the past will favour choices of $\bm{\gamma}$ that produced better forecasting performance for more recent forecast windows.
+While Algorithm~\ref{alg:scoreopt} is not the first instance of calibrating parameters by optimising scoring rules \citep[see][for an earlier example]{gneiting2005}, to the best of our knowledge it is the first instance of doing so using SGD and the first application to forecast reconciliation. It is amenable to parallel computing architectures: the loop beginning at line 2 of the pseudo-code of Algorithm~\ref{alg:scoreopt} can be done in parallel as can the computation of the gradient. Finally, the total score in Equation~\eqref{eq:tes} can be replaced with a weighted sum where appropriate; for instance weights that decay for scores computed further in the past will favour choices of $\bm{\gamma}$ that produced better forecasting performance for more recent forecast windows.
 
 \section{Simulations}\label{sec:simulations}
 
-The aim of the simulations that follow is to demonstrate probabilistic forecast reconciliation including the algorithm discussed in Section~\ref{sec:scoreoptSGD}. For all simulations, the tuning parameters are set as $\eta=0.001$, $\beta_1=0.9$, $\beta_2=0.999$ and $\epsilon=1\times 10^{-8}$, which are the values recommended by \cite{kingma2014} and used in popular software packages such as TensorFlow, Keras and Torch amongst others. Convergence is achieved when the change in all gradients is less than 10\% of the step size $\eta$. The number of sample periods used to construct the objective function is $R=250$, while the number of draws used to estimate each score is $Q=250$. All estimation of base models uses a sample size of $T=500$. All forecast evaluations are carried out using a rolling window, also of size $W=500$.
+The aim of the simulations that follow is to demonstrate probabilistic forecast reconciliation including the algorithm discussed in Section~\ref{sec:scoreoptSGD}. For all simulations, the tuning parameters for the SGD are set as $\eta=0.001$, $\beta_1=0.9$, $\beta_2=0.999$ and $\epsilon=1\times 10^{-8}$, which are the values recommended by \cite{kingma2014} and used in popular software packages such as TensorFlow, Keras and Torch amongst others. Convergence is achieved when the change in all gradients is less than 10\% of the step size $\eta$. The number of sample periods used to construct the objective function is $R=250$, while the number of draws used to estimate each score is $Q=250$. All estimation of base models uses a sample size of $T=500$. All forecast evaluations are carried out using a rolling window, also of size $W=500$.
 
 \subsection{Data Generating Processes}\label{sec:dgp}
 
-The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure \ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. The orders $p$, and $q$ are randomly selected from $\{1,2\}$ for each bottom-level series. The AR and MA parameters are randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively, and only accepted if they belong to the stationary and invertible region. In addition a non-stationary case where $d$ is randomly chosen for each bottom-level from $\{0,1\}$ was considered, these results are omitted for brevity\footnote{\textcolor{red}{The first time we refer to the github is at the end of Section 6.3 and then in Section 7.3 with results in between just referred to as ``omitted for brevity''. I've added this here as to the inpatient or not careful readers it may seem that we are hiding some results, with a result to draw negative vibes. I then refer to this footnote in all other places. Do you think this works?} A complete set of results, including ones referred to as ``omitted for brevity'' in the rest of the paper, are available at the github repository \url{https://github.com/PuwasalaG/Probabilistic-Forecast-Reconciliation/Simulation/Result_Reports/Reports/}.\label{foot:github}}.
+The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure~\ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. The orders $p$ and $q$ are randomly selected from $\{1,2\}$ for each bottom-level series. The AR and MA parameters are randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively, and only accepted if they belong to the stationary and invertible region. In addition a non-stationary case where $d$ is randomly chosen for each bottom-level from $\{0,1\}$ was considered, these results are omitted for brevity. A complete set of results are available at the github repository \url{https://git.io/JJwQB}.
 
-We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. More specifically the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with $\textrm{Beta}(1,3)$ margins. After simulating from the ARIMA models, additional noise is added to ensure bottom-level series have a lower signal-to-noise ratio that top level series with details provided in Appendix \ref{app:DGP}. For each series the first 500 observations are ignored to avoid the impact of initial values.
+We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. Specifically, the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with $\text{Beta}(1,3)$ margins. After simulating from the ARIMA models, additional noise is added to ensure bottom-level series have a lower signal-to-noise ratio than top level series with details provided in Appendix~\ref{app:DGP}. For each series the first 500 observations are ignored to avoid the impact of initial values.
 
 %All forecasts are evaluated using a rolling window with a training sample of 500. This yields 1,000 probabilistic forecasts for evaluation. The predictive accuracy of the alternative methods is evaluated using the scoring rules presented in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores, i.e., the percentage improvement of a probabilistic forecast over a reference method. A positive (negative) value indicates a percentage gain (loss) in forecast accuracy over the reference method.
 
 \subsection{Modelling and Base Forecasts}
 
-We fit univariate ARIMA models to each series using the \verb|ARIMA()| function in the \verb|fable| package \citep{Rfable} in R \citep{Rcore}. Note that the order of the ARIMA models is not set to the true order but is chosen using the algorithm of \cite{HynKha2008}, allowing for the possibility of misspecification. Indeed, an advantage of forecast reconciliation is the ability to down-weight the forecasts of series within the hierarchy that come from misspecified models. Also considered were exponential smoothing (ETS) models using the \verb|ETS()| function in the \verb|fable| package. These are omitted for brevity (please refer to Footnote \ref{foot:github} for accessing a full set of results).
+We fit univariate ARIMA models to each series using the \verb|ARIMA()| function in the \verb|fable| package \citep{Rfable} in R \citep{Rcore}. Note that the order of the ARIMA models is not set to the true order but is chosen using the algorithm of \cite{HynKha2008}, allowing for the possibility of misspecification. Indeed, an advantage of forecast reconciliation is the ability to down-weight the forecasts of series within the hierarchy that come from misspecified models. We also considered exponential smoothing (ETS) models using the \verb|ETS()| function in the \verb|fable| package. These are omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results.
 
-Let $\hat{\bm{y}}_{t+h|h}=\left(\hat{y}_{1,t+h|h},\ldots,\hat{y}_{n,t+h|h}\right)'$ where $\hat{y}_{i,t+h|h}$ is the $h$-step-ahead point forecast for series $i$, and $\bm{E}:=\left\{e_{i,t}\right\}_{i=1,\dots,n,t=1,\dots,T}$ where $e_{i,t}$ is the residual stacked in the $(n \times T)$ matrix. For each series and model, base probabilistic forecasts are constructed in the following four ways:
+Let $\hat{\bm{y}}_{t+h|t}=\left(\hat{y}_{1,t+h|t},\ldots,\hat{y}_{n,t+h|t}\right)'$, where $\hat{y}_{i,t+h|t}$ is the $h$-step-ahead point forecast for series $i$, and $\bm{E}:=\left\{e_{i,t}\right\}_{i=1,\dots,n;t=1,\dots,T}$ where $e_{i,t}$ is the residual stacked in the $(n \times T)$ matrix. For each series and model, base probabilistic forecasts for $h=1$ are constructed in the following four ways:
 
 \begin{itemize}
-	\item \textbf{Independent Gaussian:} The base probabilistic forecast is made up of independent Gaussian distributions with the forecast mean and variance of variable $i$ given by $\hat{y}_{i,t+h|h}$ and $\hat{\sigma}^2_{i,t+h|h}$, where $\hat{\sigma}^2_{i,t+h|h}$ is the sample variance of the residuals in the $i^{th}$ row of $\bm{E}$.
-	\item \textbf{Joint Gaussian:} The base probabilistic forecast is a multivariate Gaussian distribution with the forecast mean $\hat{\bm{y}}_{t+h|h}$ and variance covariance matrix $\hat{\bm\Sigma}$, where $\hat{\bm\Sigma}$ is the variance covariance matrix of the residuals.
-	\item \textbf{Independent Bootstrap:} A draw from the base probabilistic forecast is made independently for each variable as $\hat{y}_{i,t+h|h}+e_{i,\tau}$ where $\tau$ is drawn randomly (with replacement) from $1,2,\ldots, T$.
-	\item \textbf{Joint Bootstrap:} A draw from the joint probabilistic forecast is made as $\hat{\bm{y}}_{t+h|h}+\bm{e}_{\tau}$ where $\bm{e}_{\tau}$ is the $\tau^{th}$ column of $\bm{E}$, where $\tau$ is drawn randomly (with replacement) from $1,2,\ldots, T$.
+	\item \textbf{Independent Gaussian:} The base probabilistic forecast is made up of independent Gaussian distributions with the forecast mean and variance of variable $i$ given by $\hat{y}_{i,t+h|t}$ and $\hat{\sigma}^2_{i,t+h|t}$, where $\hat{\sigma}^2_{i,t+h|t}$ is the sample variance of the residuals in the $i$th row of $\bm{E}$.
+	\item \textbf{Joint Gaussian:} The base probabilistic forecast is a multivariate Gaussian distribution with the forecast mean $\hat{\bm{y}}_{t+h|t}$ and variance covariance matrix $\hat{\bm\Sigma}$, where $\hat{\bm\Sigma}$ is the variance covariance matrix of the residuals.
+	\item \textbf{Independent Bootstrap:} A draw from the base probabilistic forecast is made independently for each variable as $\hat{y}_{i,t+h|t}+e_{i,\tau}$ where $\tau$ is drawn randomly (with replacement) from $1,2,\ldots, T$.
+	\item \textbf{Joint Bootstrap:} A draw from the joint probabilistic forecast is made as $\hat{\bm{y}}_{t+h|t}+\bm{e}_{\tau}$ where $\bm{e}_{\tau}$ is the $\tau$th column of $\bm{E}$, where $\tau$ is drawn randomly (with replacement) from $1,2,\ldots, T$.
 \end{itemize}
 
 We restrict our attention to the case of $h=1$ although these methods can be generalised to larger $h$ using the recursive method \citep{FPP2018}. For multi-step-ahead forecasts, methods (c) and (d) should be sampled in blocks to preserve serial dependence in the residuals.
@@ -486,46 +486,41 @@ For each DGP, model and method for obtaining base forecasts, reconciled probabil
 	\item \textbf{JPP:} The best method of \cite{JeoEtAl2019}. This is equivalent to reconciling quantiles. A sample is drawn from the base forecast, these are ranked, one variable at a time (so that the smallest value drawn from each variable are put together, etc.). These are then pre-multiplied by $\bm{S}\left(\bm{S}'\bm{W}\bm{S}\right)^{-1}\bm{S}'\bm{W}$ where $\bm{W}$ is a diagonal matrix with elements ($1/4^2$,$1/2^2$,$1/2^2$,$1$,$1$,$1$,$1$). These are the squared reciprocals of the number of bottom-level series used to form an aggregate.
 	\item \textbf{BTTH:} The method of \cite{Taieb2017}. This is a method whereby draws from the probabilistic forecasts of the bottom-level series are permuted so that they have the same empirical copula as the residuals. These are then aggregated to form a sample from the distribution of all series. The mean is adjusted to be equivalent to the mean that would be obtained using the MinT method of \cite{WicEtAl2019} described in Table~\ref{tab:recomethods}.
 	\item \textbf{BottomUp:} Reconciliation via premultiplication by $\bm{S}\bm{G}$ where $\bm{G}=\left(\bm{0}_{m\times(n-m)},\bm{I}_{m\times m}\right)$.
-	\item \textbf{OLS:} Reconciliation via premultiplication by $\bm{S}\left(\bm{S}'\bm{S}\right)^{-1}\bm{S}'$.
-	\item \textbf{MinTShr:} Reconciliation via premultiplication using the shrinkage estimator of the covariance matrix used by \cite{WicEtAl2019} but applied to probabilistic rather than point forecasting.
+	\item \textbf{OLS:} Reconciliation via pre-multiplication by $\bm{S}\left(\bm{S}'\bm{S}\right)^{-1}\bm{S}'$.
+	\item \textbf{MinTShr:} Reconciliation via pre-multiplication using the shrinkage estimator of the covariance matrix used by \cite{WicEtAl2019} but applied to probabilistic rather than point forecasting.
 	\item \textbf{ScoreOptE:} The algorithm described in Section~\ref{sec:scoreoptSGD} used to optimise energy score.
 	\item \textbf{ScoreOptV:} The algorithm described in Section~\ref{sec:scoreoptSGD} used to optimise variogram score.
 \end{itemize}
 
 Note that JPP and BTTH are two methods previously existing in the literature. The methods BottomUp, OLS, and MinTShr have been used extensively in the point forecasting literature but their application to probabilistic forecasting for general base forecasts is, to the best of our knowledge, novel in this paper.
 
-In addition to these methods, two further reconciliation methods were considerd; WLS, which reconciles via premultiplication by the same matrix used in \cite{JeoEtAl2019} but without any reordering of the draws, and MinTSam which uses a sample estimate of the covariance matrix rather than a shrinkage estimator. These methods were mostly dominated by OLS and MinTShr respectively and are therefore omitted for brevity (please refer to Footnote \ref{foot:github} for accessing a full set of results).
+In addition to these methods, two further reconciliation methods were considered; WLS, which reconciles via pre-multiplication by the same matrix used in \cite{JeoEtAl2019} but without any reordering of the draws, and MinTSam which uses a sample estimate of the covariance matrix rather than a shrinkage estimator. These methods were mostly dominated by OLS and MinTShr respectively and are therefore omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results.
 
 \subsection{Results for Gaussian probabilistic forecasts}\label{sec:SimAnalysticalResults}
 
 Table~\ref{tab:gse} shows the mean energy score for different reconciliation methods and different methods of generating base forecasts. When base probabilistic forecasts are generated independently, score optimisation with the energy score (ScoreOptE) performs best, while when base forecasts are generated jointly, the MinT method for reconciliation using the shrinkage estimator (MinTShr) yields the most accurate forecasts. The bottom-up method as well as BTTH and JPP fail to even improve upon base forecasts in all cases. As expected score optimisation using the variogram score does not perform as well as score optimisation using energy score, when evaluation is carried out with respect to the latter. However, the results are quite close suggesting that score optimisation is fairly robust to using an alternative proper score.
 
-\textcolor{red}{Suggestions for below. (1) We agreed with Tas to swap the columns so that they are Ind. Gaussian | Ind. Bootstrap | Joint Gaussian | Joint Bootstrap. (2) Was thinking about leaving Base as is and presenting everything as percentage difference to Base Ind. Gaussian (could be messy and hard to read) (3) Maybe present these as the sample plot below \ref{fig:ES1}. Rob any other ideas?}
+\textcolor{red}{Suggestions for below. (1) We agreed with Tas to swap the columns so that they are Ind. Gaussian | Ind. Bootstrap | Joint Gaussian | Joint Bootstrap. (2) Was thinking about leaving Base as is and presenting everything as percentage difference to Base Ind. Gaussian (could be messy and hard to read) (3) Maybe present these as the sample plot below~\ref{fig:ES1}. Rob any other ideas?}
+\todo[inline]{I think we should just show the graph sketched in Fig \ref{fig:ES1}, but showing energy scores not ratios.
+}
 
 \begin{table}[H]
 	\footnotesize
-	\caption{\label{tab:gse}Mean Energy score for Gaussian DGP. Values in bold indicate the best reconciliation method for a given base forecasting method.}
+	\caption{\label{tab:gse}Mean Energy score for Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
 	\centering
-	\begin{tabular}[t]{l|r|r|r|r}
-		\hline
-		Method & Ind. Bootstrap & Ind. Gaussian & Joint Bootstrap & Joint Gaussian\\
-		\hline
-		Base & 11.3256 & 11.3247 & 11.0662 & 11.0556\\
-		\hline
-		BottomUp & 11.9759 & 11.9705 & 11.6429 & 11.6203\\
-		\hline
-		BTTH & 21.7508 & 21.8051 & 21.8542 & 21.8826\\
-		\hline
-		JPP & 22.8651 & 22.8986 & 22.8573 & 22.8599\\
-		\hline
-		MinTShr & 10.8865 & 10.8905 & \textbf{10.7475} & \textbf{10.7428}\\
-		\hline
-		OLS & 11.1284 & 11.1264 & 10.8396 & 10.8292\\
-		\hline
-		ScoreOptE & \textbf{10.8053} & \textbf{10.8297} & 10.8433 & 10.8406\\
-		\hline
-		ScoreOptV & 11.2066 & 11.2074 & 11.0413 & 11.0262\\
-		\hline
+	\begin{tabular}[t]{lrrrr}
+		\toprule
+		Method    & Ind. Bootstrap   & Ind. Gaussian    & Joint Bootstrap  & Joint Gaussian\\
+		\midrule
+    Base      & 11.3256          & 11.3247          & 11.0662          & 11.0556\\
+    BottomUp  & 11.9759          & 11.9705          & 11.6429          & 11.6203\\
+    BTTH      & 21.7508          & 21.8051          & 21.8542          & 21.8826\\
+    JPP       & 22.8651          & 22.8986          & 22.8573          & 22.8599\\
+    MinTShr   & 10.8865          & 10.8905          & \textbf{10.7475} & \textbf{10.7428}\\
+    OLS       & 11.1284          & 11.1264          & 10.8396          & 10.8292\\
+    ScoreOptE & \textbf{10.8053} & \textbf{10.8297} & 10.8433          & 10.8406\\
+    ScoreOptV & 11.2066          & 11.2074          & 11.0413          & 11.0262\\
+		\bottomrule
 	\end{tabular}
 \end{table}
 
@@ -536,9 +531,10 @@ Table~\ref{tab:gse} shows the mean energy score for different reconciliation met
 	\label{fig:ES1}
 \end{figure}
 
-To assess significant differences between the reported results, we use post-hoc Nemenyi tests ~\citep{HolEtAl2013}. The Nemenyi test is a non-parametric test that identifies groups of forecasts which cannot be significantly distinguished from one another. We use the implementation of the tests available in the \verb|tsutils| R package~\citep{tsutilspackage}. Figure~\ref{fig:gse} reports the results which should be looked at column-wise. A blue square indicates that the method in the corresponding row, is statistically indistinguishable from the method in that column. For all four methods of generating base forecasts, MinTShr, ScoreOptE and OLS significantly outperform base forecasts, bottom-up forecasts as well as BTTH and JPP.
+To assess significant differences between the reported results, we use post-hoc Nemenyi tests \citep{HolEtAl2013}. The Nemenyi test is a non-parametric test that identifies groups of forecasts which cannot be significantly distinguished from one another. We use the implementation of the tests available in the \verb|tsutils| R package \citep{tsutilspackage}. Figure~\ref{fig:gse} reports the results which should be looked at column-wise. A blue square indicates that the method in the corresponding row, is statistically indistinguishable from the method in that column. For all four methods of generating base forecasts, MinTShr, ScoreOptE and OLS significantly outperform base forecasts, bottom-up forecasts, BTTH and JPP.
 
-\textcolor{red}{I had the idea of joining these like shown on the bottom of page 24 (in the annotated by George pdf) with the average rank shown on the rows of the left had side - as we really don't care that much about these (we do not even comment on them). From discussions with Tas he suggested an alternative may be a 32$\times$32 where everything is compared to everything. It may be that the best way to present these is the current Figure \ref{fig:gse}. Rob what do you think?}
+\textcolor{red}{I had the idea of joining these like shown on the bottom of page 24 (in the annotated by George pdf) with the average rank shown on the rows of the left had side - as we really don't care that much about these (we do not even comment on them). From discussions with Tas he suggested an alternative may be a 32$\times$32 where everything is compared to everything. It may be that the best way to present these is the current Figure~\ref{fig:gse}. Rob what do you think?}
+\todo[inline]{I think what is there is probably ok without complicating things. But show Nemenyi matrices side-by-side to save space. No need to repeat row labels in that case -- as per George's diagram on p24.}
 
 \begin{figure}[H]
 	\centering
@@ -549,30 +545,25 @@ To assess significant differences between the reported results, we use post-hoc 
 
 Table~\ref{tab:gsv} and Figure~\ref{fig:gsv} report the same output but using the variogram score for evaluation. For this specific DGP, base model and score, BTTH significantly outperforms all other methods. However, this result was not observed when using BTTH for any other simulation scenario, including those reported only in the online supplement. Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well. Score optimisation, OLS, MinTShr and BTTH all lead to significantly improvements relative to base, bottom-up and JPP.
 
+\todo[inline]{Suggest Table~\ref{tab:gsv} be replaced with a graph similar to Fig \ref{fig:ES1}.}
+
 \begin{table}[H]
 	\footnotesize
-	\caption{\label{tab:gsv}Mean Variogram score for Gaussian DGP. Values in bold indicate the best reconciliation method for a given base forecasting method.}
+	\caption{\label{tab:gsv}Mean Variogram score for Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
 	\centering
-	\begin{tabular}[t]{l|r|r|r|r}
-		\hline
-		Method & Ind. Bootstrap & Ind Gaussian & Joint Bootstrap & Joint Gaussian\\
-		\hline
-		Base & 694.5012 & 694.6362 & 694.7861 & 694.5443\\
-		\hline
-		BottomUp & 888.7264 & 891.1163 & 697.9468 & 697.7384\\
-		\hline
-		BTTH & \textbf{630.8518} & \textbf{632.3063} & \textbf{632.7646} & \textbf{631.8727}\\
-		\hline
-		JPP & 1032.9742 & 1039.0791 & 1033.3112 & 1038.1928\\
-		\hline
-		MinTShr & 683.3065 & 683.0490 & 677.8987 & 677.4923\\
-		\hline
-		OLS & 713.4531 & 713.5246 & 680.3692 & 680.1407\\
-		\hline
-		ScoreOptE & 686.0447 & 686.8067 & 683.5021 & 684.2645\\
-		\hline
-		ScoreOptV & 675.1864 & 675.2327 & 673.5918 & 672.3905\\
-		\hline
+	\begin{tabular}[t]{lrrrr}
+		\toprule
+    Method    & Ind. Bootstrap    & Ind Gaussian      & Joint Bootstrap   & Joint Gaussian\\
+		\midrule
+    Base      & 694.5012          & 694.6362          & 694.7861          & 694.5443\\
+    BottomUp  & 888.7264          & 891.1163          & 697.9468          & 697.7384\\
+    BTTH      & \textbf{630.8518} & \textbf{632.3063} & \textbf{632.7646} & \textbf{631.8727}\\
+    JPP       & 1032.9742         & 1039.0791         & 1033.3112         & 1038.1928\\
+    MinTShr   & 683.3065          & 683.0490          & 677.8987          & 677.4923\\
+    OLS       & 713.4531          & 713.5246          & 680.3692          & 680.1407\\
+    ScoreOptE & 686.0447          & 686.8067          & 683.5021          & 684.2645\\
+    ScoreOptV & 675.1864          & 675.2327          & 673.5918          & 672.3905\\
+		\bottomrule
 	\end{tabular}
 \end{table}
 
@@ -586,32 +577,28 @@ Table~\ref{tab:gsv} and Figure~\ref{fig:gsv} report the same output but using th
 
 \subsection{Results for non-Gaussian probabilistic forecast} \label{sec:SimSamplingResults}
 
-Table~\ref{tab:nse} reports the mean energy score for the non-Gaussian DGP. Overall, the results are quite similar to the Gaussian DGP. The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent. The Nemenyi matrix is omitted for brevity(please refer to Footnote \ref{foot:github} for accessing a full set of results). However, these lead to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MinTShr and OLS are statistically indistinguishable from one another but are significantly better than base forecasts and the bottom-up method. The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts.
+Table~\ref{tab:nse} reports the mean energy score for the non-Gaussian DGP\@. Overall, the results are quite similar to the Gaussian DGP\@. The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent. The Nemenyi matrix is omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results. However, these lead to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MinTShr and OLS are statistically indistinguishable from one another but are significantly better than base forecasts and the bottom-up method. The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts.
+
+\todo[inline]{Suggest Tables~\ref{tab:nse} and~\ref{tab:nsv} be replaced with a graph similar to Fig \ref{fig:ES1}.}
+
 
 \begin{table}[H]
 	\footnotesize
-	\caption{\label{tab:nse} Mean Energy score for non-Gaussian DGP. Values in bold indicate the best reconciliation method for a given base forecasting method.}
+	\caption{\label{tab:nse} Mean Energy score for non-Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
 	\centering
-	\begin{tabular}[t]{l|r|r|r|r}
-		\hline
-		Method & Ind. Bootstrap & Ind. Gaussian & Joint Bootstrap & Joint Gaussian\\
-		\hline
-		Base & 1.4169 & 1.4246 & 1.3850 & 1.3912\\
-		\hline
-		BottomUp & 1.5071 & 1.5305 & 1.4658 & 1.4731\\
-		\hline
-		BTTH & 2.7704 & 2.9271 & 2.7817 & 2.9335\\
-		\hline
-		JPP & 2.8805 & 2.9737 & 2.8788 & 2.9672\\
-		\hline
-		MinTShr & 1.3514 & 1.3504 & \textbf{1.3297} & \textbf{1.3367}\\
-		\hline
-		OLS & 1.3643 & 1.3638 & 1.3409 & 1.3483\\
-		\hline
-		ScoreOptE & \textbf{1.3391} & \textbf{1.3379} & 1.3384 & 1.3391\\
-		\hline
-		ScoreOptV & 1.3772 & 1.3772 & 1.3746 & 1.3738\\
-		\hline
+	\begin{tabular}[t]{lrrrr}
+		\toprule
+    Method    & Ind. Bootstrap  & Ind. Gaussian   & Joint Bootstrap & Joint Gaussian\\
+		\midrule
+    Base      & 1.4169          & 1.4246          & 1.3850          & 1.3912\\
+    BottomUp  & 1.5071          & 1.5305          & 1.4658          & 1.4731\\
+    BTTH      & 2.7704          & 2.9271          & 2.7817          & 2.9335\\
+    JPP       & 2.8805          & 2.9737          & 2.8788          & 2.9672\\
+    MinTShr   & 1.3514          & 1.3504          & \textbf{1.3297} & \textbf{1.3367}\\
+    OLS       & 1.3643          & 1.3638          & 1.3409          & 1.3483\\
+    ScoreOptE & \textbf{1.3391} & \textbf{1.3379} & 1.3384          & 1.3391\\
+    ScoreOptV & 1.3772          & 1.3772          & 1.3746          & 1.3738\\
+		\bottomrule
 	\end{tabular}
 \end{table}
 
@@ -619,28 +606,21 @@ Finally, Table~\ref{tab:nsv} and Figure~\ref{fig:nsv} report results for the non
 
 \begin{table}[H]
 	\footnotesize
-	\caption{\label{tab:nsv}Mean Variogram score for non-Gaussian DGP. Values in bold indicate the best reconciliation method for a given base forecasting method.}
+	\caption{\label{tab:nsv}Mean Variogram score for non-Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
 	\centering
-	\begin{tabular}[t]{l|r|r|r|r}
-		\hline
-		Method & Ind. Bootstrap & Ind. Gaussian & Joint Bootstrap & Joint Gaussian\\
-		\hline
-		Base & 26.2480 & 26.2638 & 26.2339 & 26.2643\\
-		\hline
-		BottomUp & 28.5977 & 28.7956 & 27.6925 & 27.7625\\
-		\hline
-		BTTH & 29.2544 & 29.1507 & 29.0767 & 29.0854\\
-		\hline
-		JPP & 26.3968 & 26.3993 & 26.3833 & 26.4030\\
-		\hline
-		MinTShr & \textbf{25.4412} & \textbf{25.4215} & 25.4799 & 25.5248\\
-		\hline
-		OLS & 25.6498 & 25.6362 & 25.6860 & 25.7348\\
-		\hline
-		ScoreOptE & 25.6992 & 25.6954 & 25.5763 & 25.6889\\
-		\hline
-		ScoreOptV & 25.5433 & 25.5325 & \textbf{25.4541} & \textbf{25.4798}\\
-		\hline
+	\begin{tabular}[t]{lrrrr}
+		\toprule
+    Method    & Ind. Bootstrap   & Ind. Gaussian    & Joint Bootstrap  & Joint Gaussian\\
+		\midrule
+    Base      & 26.2480          & 26.2638          & 26.2339          & 26.2643\\
+    BottomUp  & 28.5977          & 28.7956          & 27.6925          & 27.7625\\
+    BTTH      & 29.2544          & 29.1507          & 29.0767          & 29.0854\\
+    JPP       & 26.3968          & 26.3993          & 26.3833          & 26.4030\\
+    MinTShr   & \textbf{25.4412} & \textbf{25.4215} & 25.4799          & 25.5248\\
+    OLS       & 25.6498          & 25.6362          & 25.6860          & 25.7348\\
+    ScoreOptE & 25.6992          & 25.6954          & 25.5763          & 25.6889\\
+    ScoreOptV & 25.5433          & 25.5325          & \textbf{25.4541} & \textbf{25.4798}\\
+		\bottomrule
 	\end{tabular}
 \end{table}
 
@@ -702,7 +682,7 @@ Base forecasts are assumed to be Gaussian or bootstrapped from residuals and eit
 
 \subsection{Reconciliation}\label{sec:applreco}
 
-The same methods were used for reconciliation as in the simulation study with score optimisation based on an objective function containing 56 days (8 weeks) of score evaluations. For brevity, only the results for energy score are presented here (please refer to Footnote \ref{foot:github} for accessing a full set of results).
+The same methods were used for reconciliation as in the simulation study with score optimisation based on an objective function containing 56 days (8 weeks) of score evaluations. For brevity, only the results for energy score are presented here; please refer to \url{https://git.io/JJwQB} for a full set of results.
 
 The mean energy score for all four base forecasting methods is summarised in Table~\ref{tab:appres}. When base forecasts are generated assuming both independence and a Gaussian distribution, score optimisation achieves a mean energy score that is considerably smaller than all other competing methods, with MinT providing the second smallest value. Figure~\ref{fig:nem_app_ig} provides the Nemenyi matrix for this set of base forecasts, and shows that the superior forecasting performance of score optimisation is statistically significant. This suggests that score optimisation is best for guarding against severe model misspecification.
 
@@ -740,7 +720,7 @@ The mean energy score for all four base forecasting methods is summarised in Tab
 		\label{fig:nem_app_ig}
 \end{figure}
 
-For all other methods the best performing method is OLS. This difference is statistically significant as seen in Figure~\ref{fig:nem_app_jb}, which shows the Nemenyi matrix for jointly bootstrapped base forecasts. The corresponding figures for joint Gaussian and independent bootstrap look mostly similar to Figure~\ref{fig:nem_app_jb} (please refer to Footnote \ref{foot:github} for accessing a full set of results). Although score optimisation does not improve upon base, the differences are not significant. For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
+For all other methods the best performing method is OLS. This difference is statistically significant as seen in Figure~\ref{fig:nem_app_jb}, which shows the Nemenyi matrix for jointly bootstrapped base forecasts. The corresponding figures for joint Gaussian and independent bootstrap look mostly similar to Figure~\ref{fig:nem_app_jb}; please refer to \url{https://git.io/JJwQB} for a full set of results. Although score optimisation does not improve upon base, the differences are not significant. For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
 
 \begin{figure}
 	\centering
