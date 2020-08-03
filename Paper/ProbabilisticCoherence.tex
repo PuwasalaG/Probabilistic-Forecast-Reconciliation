@@ -23,6 +23,12 @@
 \addtolength{\textheight}{1in}%
 \addtolength{\topmargin}{-.8in}%
 
+\usepackage{caption}
+\DeclareCaptionStyle{italic}[justification=centering]
+ {labelfont={bf},textfont={it},labelsep=colon}
+\captionsetup[figure]{style=italic,format=hang,singlelinecheck=true}
+\captionsetup[table]{style=italic,format=hang,singlelinecheck=true}
+
 \DeclareMathOperator*{\argmin}{arg\,min}
 \newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
 
