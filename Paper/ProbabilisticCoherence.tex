@@ -1,20 +1,17 @@
 %%%%&latex
 \documentclass[12pt]{article}
-\usepackage{amsmath}
-\usepackage{graphicx}
-\usepackage{psfrag,epsf,enumerate}
-\usepackage{enumerate}
-\usepackage{natbib}
-\usepackage{url} % not crucial - just used below for the URL
-\usepackage{amssymb, qtree, bm, multirow, textcmds, siunitx,paralist}
-\usepackage{mathrsfs, float, booktabs,todonotes,amsthm}
+\usepackage{amsmath, bm, amssymb, amsthm, mathrsfs}
 \usepackage[bb=boondox]{mathalfa}
-\usepackage{tikz}
-\usepackage{enumitem}
+\usepackage{enumerate, enumitem}
+\usepackage{natbib}
+\usepackage{url}
+\usepackage{multirow, booktabs, float, textcmds, siunitx}
+\usepackage{todonotes}
+\usepackage{qtree, tikz}
 \usetikzlibrary{arrows,positioning,shapes,fit,calc}
-\usepackage{amsfonts}
+\usepackage{graphicx}
 \usepackage[section]{placeins}
-\usepackage{amsthm,algorithm,algorithmicx,algpseudocode}
+\usepackage{algorithm, algorithmicx, algpseudocode}
 %\pdfminorversion=4
 % NOTE: To produce blinded version, replace "0" with "1" below.
 \newcommand{\blind}{1}
@@ -28,11 +25,9 @@
 
 \DeclareMathOperator*{\argmin}{arg\,min}
 \newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
-\def\mathbi#1{\textit{ #1}}
-\def\mathB#1{\textbf{ #1}}
+
 \def\E{\text{E}}
 \def\var{\text{Var}}
-
 \def\PQ{\begin{pmatrix}\bm{G}\\[-0.2cm]\bm{G}_{\perp}^-\end{pmatrix}}
 \def\bt{\begin{pmatrix}{\bm{b}}\\[-0.2cm]{\bm{a}}\end{pmatrix}}
 
@@ -42,16 +37,10 @@
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
 
-
-
 \begin{document}
-
-
-	%\bibliographystyle{natbib}
 
 	\def\spacingset#1{\renewcommand{\baselinestretch}%
 		{#1}\small\normalsize} \spacingset{1}
-
 
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -95,7 +84,6 @@
 
 	\bigskip
 
-
 \begin{abstract}
 We develop a framework for prediction of multivariate data that follow some known linear constraints, such as the example where some variables are aggregates of others. This is particularly common when forecasting time series (predicting the future), but also arises in other types of prediction. For point prediction, an increasingly popular technique is reconciliation, whereby predictions are made for all series (so-called `base' predictions) and subsequently adjusted to ensure coherence with the constraints. This paper extends reconciliation from the setting of point prediction to probabilistic prediction. A novel definition of reconciliation is developed and used to construct densities and draw samples from a reconciled probabilistic prediction. In the elliptical case, it is proven that the true predictive distribution can be recovered from reconciliation even when the location and scale matrix of the base prediction are chosen arbitrarily. To find reconciliation weights, an objective function based on scoring rules is optimised. The energy and variogram scores are considered since the log score is improper in the context of comparing unreconciled to reconciled predictions, a result also proved in this paper. To account for the stochastic nature of the energy and variogram scores, optimisation is achieved using stochastic gradient descent. This method is shown to improve base predictions in simulation studies and in an empirical application, particularly when the base prediction models are severely misspecified. When misspecification is not too severe, extending popular reconciliation methods for point prediction can result in a similar performance to score optimisation via stochastic gradient descent. The methods described here are implemented in the \emph{ProbReco} package for R.
 \end{abstract}
@@ -132,7 +120,6 @@ The remainder of the paper is structured as follows. In Section~\ref{sec:ProbFor
 \section{Hierarchical probabilistic forecasts}\label{sec:ProbForecasts}
 
 Before introducing coherence and reconciliation to the probabilistic setting, we first briefly refresh these concepts in the case of point forecasts. In doing so, we follow the geometric interpretation introduced by \cite{PanEtAl2020_Geometry}, since this formulation naturally generalises to probabilistic forecasting.
-
 
 \subsection{Point Forecasting}\label{sec:PointForecasts}
 
@@ -285,7 +272,6 @@ where $\bm{G}_{\perp}^-$ is an $(n-m)\times n$ matrix such that $\bm{G}_{\perp}^
 \]
 After the change of variables, the density can be recognised as a multivariate Gaussian in $\bm{b}$ and $\bm{a}$. The mean and covariance matrix for the margins of the first $m$ elements are $\bm{G}\hat{\bm{\mu}}$ and $\bm{G}\hat{\bm{\Sigma}}\bm{G}'$ respectively. Marginalising out $\bm{a}$, the reconciled forecast for the bottom-level is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$. Using standard results from matrix algebra of normals, $\tilde{\bm{y}} \sim \mathcal{N}(\bm{SG}\hat{\bm{\mu}}, \bm{SG}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$.
 
-
 \subsection{Elliptical distributions}\label{sec:elliptical}
 
 More generally, consider linear reconciliation of the form $\psi(\hat{\bm{y}})=\bm{S}(\bm{d}+\bm{G}\hat{\bm{y}})$. For an elliptical base probabilistic forecast, with location $\hat{\bm\mu}$ and scale $\hat{\bm\Sigma}$, the reconciled probabilistic forecast will also be elliptical with location $\tilde{\bm{\mu}}=\bm{S}(\bm{d}+\bm{G}\hat{\bm{\mu}})$ and scale   $\tilde{\bm{\Sigma}}=\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'$. This is a consequence of the fact that elliptical distributions are closed under linear transformations and marginalisation. While the base and reconciled distribution may be of a different form they will both belong to the elliptical family. This leads to the following result
@@ -314,7 +300,6 @@ Although $\bm{S}\bm{G}_{opt}$ is not a projection matrix in general, there are s
 \begin{proof}
 	See Appendix~\ref{app:OptRecProj}.
 \end{proof}
-
 
 \subsection{Simulation from a Reconciled Distribution}\label{sec:SampleSolution}
 
@@ -665,7 +650,6 @@ The hierarchy comprises three levels of aggregation.
 \end{enumerate}
 In total there are $n=23$ series of which $m=15$ are bottom-level series.
 
-
 %\textit{Total} generation is the sum of generation from \textit{Renewable} sources and \textit{non-Renewable} sources. \textit{Non-Renewable} is the sum of \textit{Coal}, \textit{Gas} and \textit{Distillate}, where \textit{Coal} generation is the sum of \textit{Black Coal} and \textit{Brown Coal}, while \textit{Gas} is the sum of \textit{Gas (OCGT)}, \textit{Gas (CCGT)}, \textit{Gas (Steam)}, \textit{Gas (Reciprocating)}. \textit{Renewable} generation is the sum of \textit{Biomass}, \textit{Batteries}, \textit{Hydro (inc. Pumps)}, \textit{Solar} and \textit{Wind}. \textit{Battery} generation given by \textit{Battery (Discharging)} minus \textit{Battery (Charging)}, \textit{Hydro (inc. Pumps)} is \textit{Hydro} generation minus \textit{Pumps} (energy used to pump water upstream), while \textit{Solar} generation is the sum of \textit{Solar (Rooftop)} and \textit{Solar (Utility)}. In total there are $n=23$ series of which $m=15$ are bottom-level series.
 
 Figure~\ref{fig:selected} shows time plots for some selected series\textcolor{red}{Tas I have swapped the order of the series}\footnote{Time plots for the remaining series area available from \url|https://github.com/PuwasalaG/Probabilistic-Forecast-Reconciliation/tree/master/EnergyApplication/Report/tsPlots|.}. The series exhibit some very interesting and unique features. At the aggregate level \textit{Total} generation shows strong weekly seasonality, with troughs corresponding to weekends. An annual seasonal pattern is also displayed with peaks occurring during the months of June-August as well as December-February. These periods correspond to the winter and summer months in Australia for which electricity demand peaks for heating and cooling purposes respectively. As expected, generation from \textit{Solar} peaks during the summer months of December-February. There are also some unusually large spikes observed in both the \textit{Total} and \textit{Solar} series during February and January 2020 respectively. \textit{Wind} displays higher volatility (especially outside the summer months), while generation from \textit{Distillate} exhibits aperiodic spikes.
@@ -678,8 +662,6 @@ The diversity and prominence of the features in each series and each level of ag
 	\caption{Time series plots for selected series from from June 11, 2019 to June 10, 2020.}
 	\label{fig:selected}
 \end{figure}
-
-
 
 \subsection{Base Forecasts}\label{sec:applbase}
 
@@ -706,12 +688,10 @@ The same methods were used for reconciliation as in the simulation study with sc
 
 The mean energy score for all four base forecasting methods is summarised in Table~\ref{tab:appres}. When base forecasts are generated assuming both independence and a Gaussian distribution, score optimisation achieves a mean energy score that is considerably smaller than all other competing methods, with MinT providing the second smallest value. Figure~\ref{fig:nem_app_ig} provides the Nemenyi matrix for this set of base forecasts, and shows that the superior forecasting performance of score optimisation is statistically significant. This suggests that score optimisation is best for guarding against severe model misspecification.
 
-
 \begin{table}[H]
 \footnotesize
 \centering
 \caption{\label{tab:appres} Mean Energy Score for electricity application. Values in bold indicate the best reconciliation method for a given base forecasting method.}
-
 
 \begin{tabular}{l|r|r|r|r}
 	\hline
@@ -744,7 +724,6 @@ The mean energy score for all four base forecasting methods is summarised in Tab
 
 For all other methods the best performing method is OLS. This difference is statistically significant as seen in Figure~\ref{fig:nem_app_jb}, which shows the Nemenyi matrix for jointly bootstrapped base forecasts. The corresponding figures for joint Gaussian and independent bootstrap look mostly similar to Figure~\ref{fig:nem_app_jb} (please refer to Footnote \ref{foot:github} for accessing a full set of results). Although score optimisation does not improve upon base, the differences are not significant. For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
 
-
 \begin{figure}
 	\centering
 	\includegraphics[width=.4\textheight]{Figs/nemenyi_jb.pdf}
@@ -761,7 +740,6 @@ We also prove that the log score is not proper when comparing incoherent and coh
 An interesting result is that projections methods with certain optimality properties in the point forecasting setting, also work well when extended to probabilistic case. In particular, a simple least squares projection is the best performing method in the high-dimensional empirical example, as long as base forecasts are not too badly misspecified. This may arise since projections implicitly provide constrained versions of the reconciliation weights. An promising future research avenue may involve regularised versions of score optimisation that add an L1 or L2 penalty to the objective function. Alternatively, early stopping \citep{BuhYu2003,YaoEtAl2007} of the gradient descent may lead to a better bias-variance tradeoff in learning reconciliation weights.
 
 A final important avenue of future research is the development of probabilistic forecast reconciliation for domains other than the real line. These may include domains constrained above zero, discrete domains or domains that are a mixture of continuous distributions and discrete point masses. While such problems are challenging, the geometric interpretation of probabilistic forecast introduced in this paper, lays the foundation for this research agenda.
-
 
 \newpage
 
@@ -872,7 +850,6 @@ where $w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}$ are generated from ARIMA processes a
 %y_{B,t} &= w_{BA,t} + w_{BB,t} + v_t,\\
 %y_{Tot,t} &= w_{AA,t} + w_{AB,t} + w_{BA,t} + w_{BB,t}.
 %\end{align*}
-
 
 For the Gaussian DGP, $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathcal{N}(0,\sigma^2_v)$ and  $\{\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}\} \overset{iid}{\sim} \mathcal{N}(\bm{0}, \bm{\Sigma})~\forall t$. We follow \cite{WicEtAl2019} and set
 \begin{equation*}\label{eq:SigmaGaussian}
