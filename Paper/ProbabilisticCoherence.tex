@@ -636,97 +636,83 @@ Overall, the main conclusion from the simulation study is that score optimisatio
 
 \subsection{Data Description}\label{sec:datadesc}
 
-\textcolor{red}{I have re-written part of this and added a little more to the application - especially the data. I think it is a very interesting and current data set and hence we should comment or show some of its interesting features. Rob can you please check the flow of this section.}
-To demonstrate the potential of the proposed methods, we consider an application to forecasting Australian electricity generation from different sources of energy. Daily time series were obtained form \url{opennem.org.au}, a website that compiles publicly available data from the Australian Energy Market Operator (AEMO). Probabilistic day-ahead forecasts are crucial inputs into operational and planning decisions that ensure the efficiency and stability of the power network. This has become a more challenging problem with the growth in intermittent sources of generation such as wind and solar.
+To demonstrate the potential of the proposed methods, we consider an application to forecasting Australian electricity generation from different sources of energy. Daily time series were obtained form \url{opennem.org.au}, a website that compiles publicly available data from the Australian Energy Market Operator (AEMO)\@. Probabilistic day-ahead forecasts are crucial inputs into operational and planning decisions that ensure the efficiency and stability of the power network. This has become a more challenging problem with the growth in intermittent sources of generation such as wind and solar.
 
 The hierarchy comprises three levels of aggregation.
-\begin{enumerate}
+\begin{compactenum}
   \item \textit{Total} generation is the sum of generation from \textit{Renewable} and \textit{non-Renewable} sources.
   \item \textit{Renewable} generation is the sum of \textit{Batteries}, \textit{Hydro (inc. Pumps)}, \textit{Solar}, \textit{Wind} and \textit{Biomass}. \textit{Non-Renewable} is the sum of \textit{Coal}, \textit{Gas} and \textit{Distillate}
   \item \textit{Battery} generation is given by \textit{Battery (Discharging)} minus \textit{Battery (Charging)}, \textit{Hydro (inc. Pumps)} is \textit{Hydro} generation minus \textit{Pumps} (energy used to pump water upstream), while \textit{Solar} generation is the sum of \textit{Solar (Rooftop)} and \textit{Solar (Utility)}. \textit{Coal} generation is the sum of \textit{Black Coal} and \textit{Brown Coal}, while \textit{Gas} is the sum of \textit{Gas (OCGT)}, \textit{Gas (CCGT)}, \textit{Gas (Steam)}, \textit{Gas (Reciprocating)}.
-\end{enumerate}
-In total there are $n=23$ series of which $m=15$ are bottom-level series.
+\end{compactenum}
+In total, there are $n=23$ series of which $m=15$ are bottom-level series.
 
 %\textit{Total} generation is the sum of generation from \textit{Renewable} sources and \textit{non-Renewable} sources. \textit{Non-Renewable} is the sum of \textit{Coal}, \textit{Gas} and \textit{Distillate}, where \textit{Coal} generation is the sum of \textit{Black Coal} and \textit{Brown Coal}, while \textit{Gas} is the sum of \textit{Gas (OCGT)}, \textit{Gas (CCGT)}, \textit{Gas (Steam)}, \textit{Gas (Reciprocating)}. \textit{Renewable} generation is the sum of \textit{Biomass}, \textit{Batteries}, \textit{Hydro (inc. Pumps)}, \textit{Solar} and \textit{Wind}. \textit{Battery} generation given by \textit{Battery (Discharging)} minus \textit{Battery (Charging)}, \textit{Hydro (inc. Pumps)} is \textit{Hydro} generation minus \textit{Pumps} (energy used to pump water upstream), while \textit{Solar} generation is the sum of \textit{Solar (Rooftop)} and \textit{Solar (Utility)}. In total there are $n=23$ series of which $m=15$ are bottom-level series.
 
-Figure~\ref{fig:selected} shows time plots for some selected series\textcolor{red}{Tas I have swapped the order of the series}\footnote{Time plots for the remaining series area available from \url|https://github.com/PuwasalaG/Probabilistic-Forecast-Reconciliation/tree/master/EnergyApplication/Report/tsPlots|.}. The series exhibit some very interesting and unique features. At the aggregate level \textit{Total} generation shows strong weekly seasonality, with troughs corresponding to weekends. An annual seasonal pattern is also displayed with peaks occurring during the months of June-August as well as December-February. These periods correspond to the winter and summer months in Australia for which electricity demand peaks for heating and cooling purposes respectively. As expected, generation from \textit{Solar} peaks during the summer months of December-February. There are also some unusually large spikes observed in both the \textit{Total} and \textit{Solar} series during February and January 2020 respectively. \textit{Wind} displays higher volatility (especially outside the summer months), while generation from \textit{Distillate} exhibits aperiodic spikes.
-
-The diversity and prominence of the features in each series and each level of aggregation, highlights the importance of modelling and forecasting each series on its own merits and then applying a reconciliation approach rather than approaches that ignore some.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=.90\textwidth]{Figs/selected.pdf}
-	\caption{Time series plots for selected series from from June 11, 2019 to June 10, 2020.}
-	\label{fig:selected}
+\begin{figure}[!b]
+  \centering
+  \includegraphics[width=.90\textwidth]{Figs/selected.pdf}
+  \caption{Time series plots for selected series from 11 June 2019 to 10 June 2020.}
+  \label{fig:selected}
 \end{figure}
+
+Figure~\ref{fig:selected} shows time plots for some selected series\footnote{Time plots for the remaining series area available from \url|https://git.io/JJwd0|.}. The series exhibit some interesting and unique features. At the aggregate level, \textit{Total} generation shows strong weekly seasonality, with troughs corresponding to weekends. An annual seasonal pattern is also displayed with peaks occurring during the months of June--August as well as December--February. These periods correspond to the winter and summer months in Australia for which electricity demand peaks for heating and cooling purposes respectively. As expected, generation from \textit{Solar} peaks during the summer months of December--February. There are also some unusually large spikes observed in both the \textit{Total} and \textit{Solar} series during February and January 2020 respectively. \textit{Wind} displays higher volatility (especially outside the summer months), while generation from \textit{Distillate} exhibits aperiodic spikes.
+
+The diversity and prominence of the features in each series and each level of aggregation highlights the importance of modelling and forecasting each series on its own merits and then applying a reconciliation approach.
 
 \subsection{Base Forecasts}\label{sec:applbase}
 
-The forecast evaluation is based on a rolling window. Each training window consists of 140 days (20 weeks) of data. One-step-ahead forecasts were generated leading to 170 daily forecasts for evaluation. Each series was independently modelled using a one-layer feed-forward neural network with up to 28 lags of the target variable as inputs. This was implemented using the \verb|NNETAR| function in the \verb|fable| package. Neural networks are used to highlight the versatility of reconciliation to different forecasting approaches. While including more layers or meteorological variables as predictors may led to improved base forecasts, the primary objective is to assess the effectiveness of different forecast reconciliation methods.
+The forecast evaluation is based on a rolling window. Each training window consists of 140 days (20 weeks) of data. One-step-ahead forecasts were generated leading to 170 daily forecasts for evaluation. Each series was independently modelled using a one-layer feed-forward neural network with up to 28 lags of the target variable as inputs. This was implemented using the \verb|NNETAR| function in the \verb|fable| package. Neural networks are used to highlight the versatility of reconciliation to different forecasting approaches. While including more layers or meteorological variables as predictors will probably lead to improved base forecasts, the primary objective is to assess the effectiveness of different forecast reconciliation methods.
 
-Base forecasts are assumed to be Gaussian or bootstrapped from residuals and either dependent or independent. The histograms in Figure~\ref{fig:emp_hist} demonstrate departures from normality while the correlation heatmap in Figure~\ref{fig:emp_corr} demonstrates departures from independence. Therefore, independent Gaussian probabilistic forecasts are likely to represent a case of severe misspecification.
-
-\begin{figure}[H]
+\begin{figure}[!htb]
 	\centering
 	\includegraphics[width=.8\textwidth]{Figs/densities.pdf}
-	\caption{Densities of residuals for selected series from a typical training window of October 2, 2019 to January 21, 2020.}
+	\caption{Densities of residuals for selected series from a typical training window of 2 October 2019 to 21 January 2020.}
 	\label{fig:emp_hist}
 \end{figure}
 
-\begin{figure}
-\includegraphics[width=.95\textwidth]{Figs/corr.pdf}
-\caption{Correlation heatmap of residuals from a typical training window of October 2, 2019 to January 21, 2020. Blue circles indicate positive correlation, while red circles indicate negative correlation with larger circles indicating stronger correlations.}
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=.8\textwidth]{Figs/corr.pdf}
+\caption{Correlation heatmap of residuals from a typical training window of 2 October 2019 to 21 January 2020. Blue circles indicate positive correlation, while red circles indicate negative correlation with larger circles indicating stronger correlations.}
 \label{fig:emp_corr}
 \end{figure}
+
+Four situations were considered where base forecasts are assumed to be either Gaussian or bootstrapped from residuals, and either dependent or independent. The histograms in Figure~\ref{fig:emp_hist} demonstrate departures from normality while the correlation heatmap in Figure~\ref{fig:emp_corr} demonstrates departures from independence. Therefore, independent Gaussian probabilistic forecasts are likely to represent a case of severe misspecification.
 
 \subsection{Reconciliation}\label{sec:applreco}
 
 The same methods were used for reconciliation as in the simulation study with score optimisation based on an objective function containing 56 days (8 weeks) of score evaluations. For brevity, only the results for energy score are presented here; please refer to \url{https://git.io/JJwQB} for a full set of results.
 
-The mean energy score for all four base forecasting methods is summarised in Table~\ref{tab:appres}. When base forecasts are generated assuming both independence and a Gaussian distribution, score optimisation achieves a mean energy score that is considerably smaller than all other competing methods, with MinT providing the second smallest value. Figure~\ref{fig:nem_app_ig} provides the Nemenyi matrix for this set of base forecasts, and shows that the superior forecasting performance of score optimisation is statistically significant. This suggests that score optimisation is best for guarding against severe model misspecification.
-
-\begin{table}[H]
-\footnotesize
+\begin{table}[!htb]
+\small
 \centering
 \caption{\label{tab:appres} Mean Energy Score for electricity application. Values in bold indicate the best reconciliation method for a given base forecasting method.}
 
-\begin{tabular}{l|r|r|r|r}
-	\hline
+\begin{tabular}{lrrrr}
+	\toprule
 	RecoMethod & Ind. Bootstrap & Ind. Gaussian & Joint Bootstrap & Joint Gaussian\\
-	\hline
+	\midrule
 	Base & 36.41 & 95.02 & 36.54 & 36.32\\
-	\hline
 	BottomUp & 35.89 & 90.64 & 35.72 & 35.51\\
-	\hline
 	BTTH & 58.57 & 269.40 & 58.23 & 59.07\\
-	\hline
 	JPP & 55.15 & 292.27 & 55.16 & 55.89\\
-	\hline
 	MinTShr & 37.89 & 54.80 & 38.52 & 38.33\\
-	\hline
 	OLS & \textbf{35.42} & 73.72 & \textbf{34.71} & \textbf{34.48}\\
-	\hline
 	ScoreOptE & 38.23 & \textbf{39.96} & 39.39 & 39.07\\
-	\hline
+	\bottomrule
 \end{tabular}
-
 \end{table}
 
 \begin{figure}
-	\centering
-	\includegraphics[width=.4\textheight]{Figs/nemenyi_ig.pdf}
-	\caption{Nemenyi matrix for Energy score for electricity application when base forecasts are independent and Gaussian.}
-		\label{fig:nem_app_ig}
+	\centerline{\includegraphics[width=.45\textwidth]{Figs/nemenyi_ig.pdf}
+  \includegraphics[width=.45\textwidth]{Figs/nemenyi_jb.pdf}}
+	\caption{Nemenyi matrices for Energy score for the electricity application. Left: base forecasts are independent and Gaussian. Right: base forecasts are obtained by jointly bootstrapping residuals.}\label{fig:nem_app}
 \end{figure}
 
-For all other methods the best performing method is OLS. This difference is statistically significant as seen in Figure~\ref{fig:nem_app_jb}, which shows the Nemenyi matrix for jointly bootstrapped base forecasts. The corresponding figures for joint Gaussian and independent bootstrap look mostly similar to Figure~\ref{fig:nem_app_jb}; please refer to \url{https://git.io/JJwQB} for a full set of results. Although score optimisation does not improve upon base, the differences are not significant. For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
+The mean energy score for all four base forecasting methods is summarised in Table~\ref{tab:appres}. When base forecasts are generated assuming both independence and a Gaussian distribution, score optimisation achieves a mean energy score that is considerably smaller than all other competing methods, with MinT providing the second smallest value. Figure~\ref{fig:nem_app} (left) provides the Nemenyi matrix for this set of base forecasts, and shows that the superior forecasting performance of score optimisation is statistically significant. This suggests that score optimisation is best for guarding against severe model misspecification.
 
-\begin{figure}
-	\centering
-	\includegraphics[width=.4\textheight]{Figs/nemenyi_jb.pdf}
-	\caption{Nemenyi matrix for Energy score for electricity application when base forecasts are obtained by jointly bootstrapping residuals.}
-		\label{fig:nem_app_jb}
-\end{figure}
+For all other methods the best performing method is OLS. This difference is statistically significant as seen in Figure~\ref{fig:nem_app} (right), which shows the Nemenyi matrix for jointly bootstrapped base forecasts. The corresponding figures for joint Gaussian and independent bootstrap look mostly similar to Figure~\ref{fig:nem_app}; please refer to \url{https://git.io/JJwQB} for a full set of results. Although score optimisation does not improve upon base, the differences are not significant. For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
+
 
 \section{Conclusions}\label{sec:conclusion}
 
@@ -738,7 +724,7 @@ An interesting result is that projections methods with certain optimality proper
 
 A final important avenue of future research is the development of probabilistic forecast reconciliation for domains other than the real line. These may include domains constrained above zero, discrete domains or domains that are a mixture of continuous distributions and discrete point masses. While such problems are challenging, the geometric interpretation of probabilistic forecast introduced in this paper, lays the foundation for this research agenda.
 
-\newpage
+\clearpage
 
 \appendix
 
@@ -787,7 +773,9 @@ Since $\bm{S}'_\perp$ is the orthogonal complement of $\bm{S}$ and since the col
 \[
 \tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_b(\bm{S}^-\bm{y})\mathbb{1}\{\bm{y}\in\mathfrak{s}\}.
 \]
+
 \clearpage
+
 \section{Proof of Theorem~\ref{theo:OptRecProj}}
 \label{app:OptRecProj}
 
@@ -807,6 +795,7 @@ Therefore to recover the true predictive using a projection, some $\bm{G}_{\text
 With respect to the location, if $\bm{S}\bm{G}$ is a projection then reconciled forecasts will be unbiased as long as the base forecasts are also unbiased. When base forecasts are biased they can be bias corrected before reconciliation as described by \cite{PanEtAl2020_Geometry} in the point forecasting setting.
 
 \clearpage
+
 \section{Proof of Theorem~\ref{theo:logS_improp}}\label{app:logS_improp}
 
 The proof relies on the following change of variables,
@@ -832,6 +821,7 @@ LS\left(\hat{f},\bm{y}^*\right) <-\log|\bm{S}^*|-\log f_{\bm{b}}(\bm{b}^*)=LS\le
 Since this holds for any possible realisation, it will also hold after taking expectations (by the monotonicity of expectations). Thus $\hat{f}$ violates the condition for a proper scoring rule.
 
 \clearpage
+
 \section{Data generating process} \label{app:DGP}
 
 To ensure that bottom-level series are noisier than top level series (a feature often observed empirically), noise is added to the bottom-level series in the following manner
@@ -901,6 +891,7 @@ For the non-Gaussian case, errors are generated from a Gumbel copula with Beta m
 %%	\includegraphics[width= \textwidth]{Empirical-results/UniVScore_TopLevel_ETS.pdf}
 %	\caption{Skill score based on CRPS (with reference to the ETS base forecasts) for univariate probabilistic forecasts for the Total (top level) overnight trips are presented. Left panel shows the results from Gaussian approach and right panel shows the results from non-parametric approach. }\label{fig:EmpResults_TopLevel_ETS}
 %\end{figure}
+
 \clearpage
 
 \bibliographystyle{agsm}
