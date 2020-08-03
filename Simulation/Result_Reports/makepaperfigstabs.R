@@ -3,6 +3,7 @@
 library(tidyverse)
 library(tsutils)
 library(kableExtra)
+library(ggthemes)
 res_all<-read_csv('../Evaluate/all_results.csv')
 
 .simpleCap <- function(s, strict = FALSE) {
@@ -35,7 +36,8 @@ res_energy%>%
                          'ScoreOptVIn')))%>%
   select(-BaseModel,-DGP)%>%
   group_by(Method, BaseMethod)%>%
-  summarise(Score=mean(Score))%>%
+  summarise(Score=mean(Score))->figgse
+figgse%>%
   pivot_wider(id_cols = Method,names_from=BaseMethod, values_from = Score)%>%
   kable(digits = 4,format = 'latex',
         caption = 'Mean Energy score for ARIMA 
@@ -44,6 +46,30 @@ res_energy%>%
         method for a given base forecasting method.')->tabgse
 
 capture.output(print(tabgse),file = 'PaperTabFigs/tabgse.tex')
+
+pdf('PaperTabFigs/tableasplot_gse.pdf')
+
+figgse%>%
+  rename(`Reconciliation\n Method`=Method, `Energy Score`=Score)%>%
+  mutate(`Base Method`=ordered(BaseMethod,
+                            levels = c('Independent Gaussian',
+                                       'Independent Bootstrap',
+                                       'Joint Gaussian',
+                                       'Joint Bootstrap'),
+                            labels = c('Independent\n Gaussian',
+                                       'Independent\n Bootstrap',
+                                       'Joint\n Gaussian',
+                                       'Joint\n Bootstrap')))%>%
+  ggplot(aes(x=`Base Method`,
+             y=`Energy Score`,
+             col=`Reconciliation\n Method`,
+             group=`Reconciliation\n Method`))+
+  geom_point()+
+  geom_line()+
+  scale_y_log10()+
+  scale_color_colorblind()
+
+dev.off()
 
 pdf('PaperTabFigs/gse.pdf')
         
@@ -75,7 +101,8 @@ res_variogram%>%
                          'ScoreOptVIn')))%>%
   select(-BaseModel,-DGP)%>%
   group_by(Method, BaseMethod)%>%
-  summarise(Score=mean(Score))%>%
+  summarise(Score=mean(Score))->figgsv
+figgsv%>%  
   pivot_wider(id_cols = Method,names_from=BaseMethod, values_from = Score)%>%
   kable(digits = 4,format = 'latex',
         caption = 'Mean Variogram score for ARIMA 
@@ -84,6 +111,31 @@ res_variogram%>%
         base forecasting method')->tabgsv
 
 capture.output(print(tabgsv),file = 'PaperTabFigs/tabgsv.tex')
+
+
+pdf('PaperTabFigs/tableasplot_gsv.pdf')
+
+figgsv%>%
+  rename(`Reconciliation\n Method`=Method, `Variogram Score`=Score)%>%
+  mutate(`Base Method`=ordered(BaseMethod,
+                               levels = c('Independent Gaussian',
+                                          'Independent Bootstrap',
+                                          'Joint Gaussian',
+                                          'Joint Bootstrap'),
+                               labels = c('Independent\n Gaussian',
+                                          'Independent\n Bootstrap',
+                                          'Joint\n Gaussian',
+                                          'Joint\n Bootstrap')))%>%
+  ggplot(aes(x=`Base Method`,
+             y=`Variogram Score`,
+             col=`Reconciliation\n Method`,
+             group=`Reconciliation\n Method`))+
+  geom_point()+
+  geom_line()+
+  scale_y_log10()+
+  scale_color_colorblind()
+
+dev.off()
 
 pdf('PaperTabFigs/gsv.pdf')
 
@@ -115,7 +167,8 @@ res_energy%>%
                          'ScoreOptVIn')))%>%
   select(-BaseModel,-DGP)%>%
   group_by(Method, BaseMethod)%>%
-  summarise(Score=mean(Score))%>%
+  summarise(Score=mean(Score))->fignse
+fignse%>%
   pivot_wider(id_cols = Method,names_from=BaseMethod, values_from = Score)%>%
   kable(digits = 4,format = 'latex',
         caption = 'Mean Energy score for ARIMA 
@@ -123,6 +176,30 @@ res_energy%>%
         in bold indicate the best reconciliation method for a given 
         base forecasting method')->tabnse
 capture.output(print(tabnse),file = 'PaperTabFigs/tabnse.tex')
+
+pdf('PaperTabFigs/tableasplot_nse.pdf')
+
+fignse%>%
+  rename(`Reconciliation\n Method`=Method, `Energy Score`=Score)%>%
+  mutate(`Base Method`=ordered(BaseMethod,
+                               levels = c('Independent Gaussian',
+                                          'Independent Bootstrap',
+                                          'Joint Gaussian',
+                                          'Joint Bootstrap'),
+                               labels = c('Independent\n Gaussian',
+                                          'Independent\n Bootstrap',
+                                          'Joint\n Gaussian',
+                                          'Joint\n Bootstrap')))%>%
+  ggplot(aes(x=`Base Method`,
+             y=`Energy Score`,
+             col=`Reconciliation\n Method`,
+             group=`Reconciliation\n Method`))+
+  geom_point()+
+  geom_line()+
+  scale_y_log10()+
+  scale_color_colorblind()
+
+dev.off()
 
 pdf('PaperTabFigs/nse.pdf')
 
@@ -153,13 +230,38 @@ res_variogram%>%
                          'ScoreOptVIn')))%>%
   select(-BaseModel,-DGP)%>%
   group_by(Method, BaseMethod)%>%
-  summarise(Score=mean(Score))%>%
+  summarise(Score=mean(Score))->fignsv
+fignsv%>%
   pivot_wider(id_cols = Method,names_from=BaseMethod, values_from = Score)%>%
   kable(digits = 4,format = 'latex',
         caption = 'Mean Variogram score for ARIMA 
                         modelling with a Gaussian Stationary DGP. Values 
         in bold indicate the best reconciliation method for a given 
         base forecasting method')->tabnsv
+
+pdf('PaperTabFigs/tableasplot_nsv.pdf')
+
+fignsv%>%
+  rename(`Reconciliation\n Method`=Method, `Energy Score` = Score)%>%
+  mutate(`Base Method`=ordered(BaseMethod,
+                               levels = c('Independent Gaussian',
+                                          'Independent Bootstrap',
+                                          'Joint Gaussian',
+                                          'Joint Bootstrap'),
+                               labels = c('Independent\n Gaussian',
+                                          'Independent\n Bootstrap',
+                                          'Joint\n Gaussian',
+                                          'Joint\n Bootstrap')))%>%
+  ggplot(aes(x=`Base Method`,
+             y=`Energy Score`,
+             col=`Reconciliation\n Method`,
+             group=`Reconciliation\n Method`))+
+  geom_point()+
+  geom_line()+
+  scale_y_log10()+
+  scale_color_colorblind()
+
+dev.off()
 
 pdf('PaperTabFigs/nsv.pdf')
 
