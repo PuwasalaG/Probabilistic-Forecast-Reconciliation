@@ -34,8 +34,8 @@
 
 \def\E{\text{E}}
 \def\var{\text{Var}}
-\def\PQ{\begin{pmatrix}\bm{G}\\[-0.2cm]\bm{G}_{\perp}^-\end{pmatrix}}
-\def\bt{\begin{pmatrix}{\bm{b}}\\[-0.2cm]{\bm{a}}\end{pmatrix}}
+\def\PQ{\bigg(\begin{matrix}\bm{G}\\[-0.2cm]\bm{G}_{\perp}^-\end{matrix}\bigg)}
+\def\bt{\bigg(\begin{matrix}\bm{b}\\[-0.2cm]\bm{a}\end{matrix}\bigg)}
 
 %\theoremstyle{theo}
 \newtheorem{theo}{Theorem}[section]
@@ -238,11 +238,19 @@ The following theorem shows how a reconciled density can be derived from any bas
 \begin{theo}[Reconciled density of full hierarchy]\label{theo:fulldens}
 	Consider the case where a reconciled density for the bottom-level series has been obtained using Theorem~\ref{theo:bottomdens}. The density of the full hierarchy under the reconciled distribution is
 	\[
-	\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_{\bm{b}}({\bm{S}^-\bm{y}})\mathbb{1}\left\{\bm{y}\in\mathfrak{s}\right\}\,,
+	 \tilde{f}_{\bm{y}}(\bm{y}) =
+     |\bm{S}^*| \tilde{f}_{\bm{b}}({\bm{S}^-\bm{y}})
+     \mathbb{1}\{\bm{y}\in\mathfrak{s}\}\,,
 	\]
-	where $\mathbb{1}\left\{.\right\}$ equals $1$ when the statement in braces is true and 0 otherwise and,
-	\[\bm{S}^*=\begin{pmatrix}\bm{S}^-\\\bm{S}'_\perp\end{pmatrix}\,,\]
-	and $\bm{S^-}$ is an $m\times n$ generalised inverse of $\bm{S}$ such that $\bm{S}^-\bm{S}=\bm{I}$, $\bm{S_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{S}$ such that $\bm{S}'_\perp\bm{S}=\bm{0}$.
+	where $\mathbb{1}\{\cdot\}$ equals $1$ when the statement in braces is true and 0 otherwise,
+	\[
+    \bm{S}^*=\begin{pmatrix}
+      \bm{S}^-\\
+      \bm{S}'_\perp
+    \end{pmatrix}\,,
+  \]
+	$\bm{S^-}$ is an $m\times n$ generalised inverse of $\bm{S}$ such that $\bm{S}^-\bm{S}=\bm{I}$,
+  and $\bm{S_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{S}$ such that $\bm{S}'_\perp\bm{S}=\bm{0}$.
 \end{theo}
 
 \begin{proof}
@@ -251,33 +259,36 @@ The following theorem shows how a reconciled density can be derived from any bas
 
 \subsubsection*{Example: Gaussian Distribution}
 
-Let the incoherent base forecasts be Gaussian with mean $\hat{\bm{\mu}}$, covariance matrix $\hat{\bm{\Sigma}}$ and density,
+Suppose the incoherent base forecasts are Gaussian with mean $\hat{\bm{\mu}}$, covariance matrix $\hat{\bm{\Sigma}}$ and density,
 \begin{equation}
 \hat{f}(\hat{y})=(2\pi)^{-n/2}|\hat{\bm{\Sigma}}|^{-1/2}\exp\left\{-\frac{1}{2}\left[({\bm{y}}-\hat{\bm{\mu}})'\hat{\bm{\Sigma}}^{-1}({\bm{y}}-\hat{\bm{\mu}})\right]\right\}\nonumber.
 \end{equation}
-Using Theorem~\ref{theo:bottomdens}, the reconciled density for the bottom-level series is given by,
+Then, using Theorem~\ref{theo:bottomdens}, the reconciled density for the bottom-level series is given by
 \begin{equation}
-\tilde{f}_{\bm{b}}(\bm{b})=\int(2\pi)^{-\frac{n}{2}}\Big|\hat{\bm{\Sigma}}\Big|^{-\frac{1}{2}}|\bm{G}^*|\exp\{-\frac{1}{2}q\}d\bm{a}\nonumber\,,
+\tilde{f}_{\bm{b}}(\bm{b})=\int(2\pi)^{-\frac{n}{2}}|\hat{\bm{\Sigma}}|^{-\frac{1}{2}}|\bm{G}^*|e^{q/2} d\bm{a}\nonumber\,,
 \end{equation}
 where
 \begin{align*}
 	q& =
-	\left(\bm{G}^*\bt-\hat{\bm{\mu}}\right)' \hat{\bm{\Sigma}}^{-1}\left(\bm{G}^*\bt-\hat{\bm{\mu}}\right)\\
+	\bigg[\bm{G}^*\bt-\hat{\bm{\mu}}\bigg]' \hat{\bm{\Sigma}}^{-1}\bigg[\bm{G}^*\bt-\hat{\bm{\mu}}\bigg]\\
 	& =
-	\left(\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\right)' \Big[\bm{G}^{*-1}\hat{\bm{\Sigma}}\left(\bm{G}^{*-1}\right)'\Big]^{-1}
-	\left(\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\right)\,.
+	\bigg[\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\bigg]'
+  \bigg[\bm{G}^{*-1}\hat{\bm{\Sigma}}(\bm{G}^{*-1})'\bigg]^{-1}
+	\bigg[\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\bigg]\,.
 \end{align*}
 Noting that
 \[
-\bm{G}^{*-1}=\begin{pmatrix}
+\bm{G}^{*-1}=\Bigg(\begin{matrix}
 \bm{G} \\\bm{G}_{\perp}^-
-\end{pmatrix}\,,
+\end{matrix}\Bigg)\,,
 \]
 where $\bm{G}_{\perp}^-$ is an $(n-m)\times n$ matrix such that $\bm{G}_{\perp}^-\bm{G}_{\perp}=\bm{I}$, $q$ can be rearranged as
 \[
- \left[\bt-\PQ\hat{\bm{\mu}}\right]' \left[\PQ\hat{\bm{\Sigma}}\PQ'\right]^{-1}\left[\bt-\PQ\hat{\bm{\mu}}\right]\,.
+ \bigg[\bt-\PQ\hat{\bm{\mu}}\bigg]'
+ \bigg[\PQ\hat{\bm{\Sigma}}\PQ'\bigg]^{-1}
+ \bigg[\bt-\PQ\hat{\bm{\mu}}\bigg]\,.
 \]
-After the change of variables, the density can be recognised as a multivariate Gaussian in $\bm{b}$ and $\bm{a}$. The mean and covariance matrix for the margins of the first $m$ elements are $\bm{G}\hat{\bm{\mu}}$ and $\bm{G}\hat{\bm{\Sigma}}\bm{G}'$ respectively. Marginalising out $\bm{a}$, the reconciled forecast for the bottom-level is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$. Using standard results from matrix algebra of normals, $\tilde{\bm{y}} \sim \mathcal{N}(\bm{SG}\hat{\bm{\mu}}, \bm{SG}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$.
+After the change of variables, the density can be recognised as a multivariate Gaussian in $\bm{b}$ and $\bm{a}$. The mean and covariance matrix for the margins of the first $m$ elements are $\bm{G}\hat{\bm{\mu}}$ and $\bm{G}\hat{\bm{\Sigma}}\bm{G}'$ respectively. Marginalising out $\bm{a}$, the reconciled forecast for the bottom-level is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$. Using standard results from matrix algebra of normals, $\tilde{\bm{y}} \sim \mathcal{N}(\bm{S}\bm{G}\hat{\bm{\mu}}, \bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$.
 
 \subsection{Elliptical distributions}\label{sec:elliptical}
 
@@ -333,7 +344,7 @@ This result implies that reconciling each member of a sample drawn from an incoh
 %
 %The $\bm{\mathcal{E}}^b$ can then be used together with forecasts $\hat{\bm{y}}_{T+h}$ for $h=1,\ldots,H$ to recursively form $B$ sample paths of the full hierarchy. As a simple example consider the case where each forecast comes from (the same) AR(1) model and $H=2$. Then $\hat{{y}}^b_{i,T+1}=\phi{{y}}_{i,T}+e^b_{i,1}$ and $\hat{{y}}^b_{i,T+2}=\phi\hat{{y}}^b_{i,T+1}+e^b_{i,2}$ for each $i=1,\ldots,n$ and $b=1,\ldots,B$ and where $e^b_{i,h}$ is the element in row $i$ and column $h$ of $\bm{\mathcal{E}}^b$. Each future path can be stacked into a vector $\hat{\bm{y}}^b_{T+h}:=(\hat{{y}}^b_{1,T+h},\ldots,\hat{{y}}^b_{n,T+h})'$ which in turn are stacked into a $n\times B$ matrix $\hat{\bm{\Upsilon}}_{T+h} = (\hat{\bm{y}}^1_{T+h},\dots,\hat{\bm{y}}^B_{T+h})$.
 %
-%As discussed previously, reconciling each draw from an incoherent distribution yields a sample from the reconciled distribution. Therefore setting $\tilde{\bm{\Upsilon}}_{T+h} = \bm{SG}\hat{\bm{\Upsilon}}_{T+h}$ yields a matrix whose columns $\tilde{\bm{y}}^b_{T+h} := \bm{SG}\hat{\bm{y}}^b_{T+h}$ are a sample from the reconciled distribution. In principle $\bm{G}$ matrices from popular point forecasting reconciliation methods can be used. In Section~\ref{sec:OptRec}, we propose a way to find an optimal $\bm{G}$ for reconciling future paths by minimising a proper multivariate scoring rule.
+%As discussed previously, reconciling each draw from an incoherent distribution yields a sample from the reconciled distribution. Therefore setting $\tilde{\bm{\Upsilon}}_{T+h} = \bm{S}\bm{G}\hat{\bm{\Upsilon}}_{T+h}$ yields a matrix whose columns $\tilde{\bm{y}}^b_{T+h} := \bm{S}\bm{G}\hat{\bm{y}}^b_{T+h}$ are a sample from the reconciled distribution. In principle $\bm{G}$ matrices from popular point forecasting reconciliation methods can be used. In Section~\ref{sec:OptRec}, we propose a way to find an optimal $\bm{G}$ for reconciling future paths by minimising a proper multivariate scoring rule.
 
 \section{Evaluation of Hierarchical Probabilistic Forecasts} \label{sec:evaluation}
 
@@ -814,7 +825,7 @@ If reconciliation is carried out via a projection onto $\mathfrak{s}$, then $\bm
 \end{align}
 Therefore to recover the true predictive using a projection, some $\bm{G}_{opt}$ must be found such that $\bm{G}_{opt}\bm{D}=\bm{0}$. Let the eigenvalue decomposition of $\bm{D}$ be given by $\bm{R}\bm{\Lambda}\bm{R}'$ , where $\bm{R}$ is an $n\times q$ matrix with $q=\textrm{rank}({\bm{D}})$ and ${\bm\Lambda}$ is an $q\times q$ diagonal matrix containing non-zero eigenvalues of $\bm{D}$. By the rank nullity theorem, $\bm{R}$ will have an orthogonal complement $\bm{R}_{\perp}$ of dimension $n\times (n-q)$. If $q=n-m$ then the number of columns of $\bm{R}_{\perp}$ is $m$ and $\bm{G}_{opt}$ can be formed as the $m\times n$ matrix $(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$. If $q<n-m$ the number of columns of $\bm{R}_{\perp}$ is greater than $m$, and any $m$ columns of $\bm{R}_{\perp}$ can be used to form $\bm{G}_{opt}$ in a similar fashion. However when $q>n-m$, the number of columns of $\bm{R}_{\perp}$ is less than $m$ and no such $m\times n$ matrix $\bm{G}_{opt}$ can be formed. Therefore the true predictive can only be recovered via a projection when $\textrm{rank}(\bm{D})\leq n-m$.
 
-With respect to the location, if $\bm{SG}$ is a projection then reconciled forecasts will be unbiased as long as the base forecasts are also unbiased. When base forecasts are biased they can be bias corrected before reconciliation as described by \cite{PanEtAl2020_Geometry} in the point forecasting setting.
+With respect to the location, if $\bm{S}\bm{G}$ is a projection then reconciled forecasts will be unbiased as long as the base forecasts are also unbiased. When base forecasts are biased they can be bias corrected before reconciliation as described by \cite{PanEtAl2020_Geometry} in the point forecasting setting.
 
 \clearpage
 \section{Proof of Theorem~\ref{theo:logS_improp}}\label{app:logS_improp}
