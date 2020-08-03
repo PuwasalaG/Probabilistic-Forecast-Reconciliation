@@ -163,16 +163,16 @@ The connection between this characterisation and the coherent subspace is that t
 When forecasts of all $n$ series are produced, they may not adhere to constraints. In this case forecasts are called \emph{incoherent base} forecasts and are denoted $\hat{\bm{y}}_{t+h}$, with the subscript $t+h$ implying a $h$-step ahead forecast at time $t$. To exploit the fact that the target of the forecast adheres to known linear constraints, these forecasts can be adjusted in a process known as \emph{forecast reconciliation}. At its most general, this involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm{y}}_{t+h}=\psi(\hat{\bm{y}}_{t+h})$, where $\tilde{\bm{y}}_{t+h}\in\mathfrak{s}$ is called the \emph{reconciled} forecast. The mapping $\psi$ may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ combines incoherent base forecasts of all series to produce new bottom-level forecasts, which are then aggregated via $s$. Many existing point forecasting approaches including the bottom-up \citep{Dunn1976}, OLS \citep{HynEtAl2011}, WLS \citep[][]{Hyndman2016,AthEtAl2017} and MinT \citep{WicEtAl2019} methods, are special cases where $g$ involves premultiplication by a matrix $\bm{G}$ and where $\bm{S}\bm{G}$ is a projection matrix. These are summarised in Table \ref{tab:ReconMethods}.
 
 \begin{table}[!t]
-	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix. Here $\bm{W}$ is some diagonal matrix, $\bm{\hat\Sigma}_{sam}$ is a sample estimate of the residual covariance matrix and $\bm{\hat\Sigma}_{shr}$ is a shrinkage estimator proposed by \citet{Schafer2005}, given by $\tau \textrm{diag}(\bm{\hat\Sigma}_{sam})+(1-\tau)\bm{\hat\Sigma}_{sam}$ where $\tau = \frac{\sum_{i \neq j}\hat{\var}(\hat{\sigma}_{ij})}{\sum_{i \neq j}{\hat{\sigma}}^2_{ij}}$ and $\sigma_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{\Sigma}}^{\text{sam}}$.} \label{tab:ReconMethods}
+	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix. Here $\bm{W}$ is some diagonal matrix, $\hat{\bm{\Sigma}}_{\text{sam}}$ is a sample estimate of the residual covariance matrix and $\hat{\bm{\Sigma}}_{\text{shr}}$ is a shrinkage estimator proposed by \citet{Schafer2005}, given by $\tau \textrm{diag}(\hat{\bm{\Sigma}}_{\text{sam}})+(1-\tau)\hat{\bm{\Sigma}}_{\text{sam}}$ where $\tau = \displaystyle\frac{\sum_{i \neq j}\hat{\var}(\hat{\sigma}_{ij})}{\sum_{i \neq j}{\hat{\sigma}}^2_{ij}}$ and $\sigma_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{\Sigma}}_{\text{sam}}$.} \label{tab:ReconMethods}
 	\centering
 	\begin{tabular}{l@{\hskip 0.4in}l}
 		\toprule
-		\textbf{Reconciliation method} & \textbf{$\bm{G}$} \\
+		\textbf{Reconciliation method} & $\bm{G}$ \\
 		\midrule
 		OLS             & $(\bm{S}'\bm{S})^{-1}\bm{S}'$ \\
 		WLS             & $(\bm{S}'\bm{W}\bm{S})^{-1}\bm{S}'\bm{W}$ \\
-		MinT(Sample)    & $(\bm{S}'\bm{\hat\Sigma}_{sam}^{-1}\bm{S})^{-1}\bm{S}' \bm{\hat\Sigma}_{sam}^{-1}$  \\
-		MinT(Shrink)    & $(\bm{S}'\bm{\hat\Sigma}_{shr}^{-1}\bm{S})^{-1}\bm{S}' \bm{\hat\Sigma}_{shr}^{-1}$  \\
+		MinT(Sample)    & $(\bm{S}'\hat{\bm{\Sigma}}_{\text{sam}}^{-1}\bm{S})^{-1}\bm{S}' \hat{\bm{\Sigma}}_{\text{sam}}^{-1}$  \\
+		MinT(Shrink)    & $(\bm{S}'\hat{\bm{\Sigma}}_{\text{shr}}^{-1}\bm{S})^{-1}\bm{S}' \hat{\bm{\Sigma}}_{\text{shr}}^{-1}$  \\
 		\bottomrule
 	\end{tabular}
 	\label{tab:recomethods}
@@ -189,7 +189,7 @@ We now turn our attention towards a novel definition of coherence in a probabili
 	\]
 \end{definition}
 
-To the best of our knowledge, the only other definition of coherent probabilistic forecasts is given by \cite{Taieb2017} who define them in terms of convolutions. While these definitions do not contradict one another our definition has two advantages. First it can more naturally be extended to problems with non-linear constraints with the coherent subspace $\mathfrak{s}$ replaced with a manifold. Second, it facilitates a definition of probabilistic forecast reconciliation to which we now turn our attention.
+To the best of our knowledge, the only other definition of coherent probabilistic forecasts is given by \cite{Taieb2017} who define them in terms of convolutions. While these definitions do not contradict one another, our definition has two advantages. First it can more naturally be extended to problems with non-linear constraints with the coherent subspace $\mathfrak{s}$ replaced with a manifold. Second, it facilitates a definition of probabilistic forecast reconciliation to which we now turn our attention.
 
 \subsection{Probabilistic forecast reconciliation}
 
@@ -205,9 +205,9 @@ Let $(\mathbb{R}^n, \mathscr{F}_{\mathbb{R}^n}, \hat{\nu})$ be a probability tri
 
 This definition naturally extends forecast reconciliation to the probabilistic setting. In the point forecasting case, the reconciled forecast is obtained by passing an incoherent forecast through a transformation. Similarly, for probabilistic forecasts, sets of points is mapped to sets of points by a transformation. The same probabilities are assigned to these sets under the base and reconciled measures respectively. Recall that the mapping $\psi$ can also be expressed as a composition of two transformations $s\circ g$. In this case, an $m$-dimensional reconciled probabilistic distribution $\nu$ can be obtained such that $\nu(\mathcal{B})= \hat{\nu}(g^{-1}(\mathcal{B}))$ for all $\mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}$ and a probabilistic forecast for the full hierarchy can then be obtained via Definition~\ref{def:cohprob}. This construction will be used in Section~\ref{sec:AnalyticalSolution}.
 
-Definition~\ref{def:reconprob} can use any continuous mapping $\psi$, where continuity is required to ensure that open sets in $\mathbb{R}^n$ used to construct $\mathscr{F}_{\mathbb{R}^n}$ are mapped to open sets in $\mathfrak{s}$. However, hereafter, we restrict our attention to $\psi$ as a linear mapping. This is depicted in Figure~\ref{fig:probfr_sch} when $\psi$ is a projection. This figure is only a schematic, since even the most trivial hierarchy is $3$-dimensional. The arrow labelled $\bm{S}$ spans an $m$-dimensional coherent subspace $\mathfrak{s}$, while the arrow labelled $\bm{R}$ spans an $n-m$-dimensional direction of projection. The mapping $g$ collapses all points in the blue shaded region $g^{-1}(\mathcal{B})$, to the black interval $\mathcal{B}$. Under $s$, $\mathcal{B}$ is mapped to $s(\mathcal{B})$ shown in red. Under our definition of reconciliation, the same probability is assigned to the red region under the reconciled measure as is assigned to the blue region under the incoherent measure.
+Definition~\ref{def:reconprob} can use any continuous mapping $\psi$, where continuity is required to ensure that open sets in $\mathbb{R}^n$ used to construct $\mathscr{F}_{\mathbb{R}^n}$ are mapped to open sets in $\mathfrak{s}$. However, hereafter, we restrict our attention to $\psi$ as a linear mapping. This is depicted in Figure~\ref{fig:probfr_sch} when $\psi$ is a projection. This figure is only a schematic, since even the most trivial hierarchy is $3$-dimensional. The arrow labelled $\bm{S}$ spans an $m$-dimensional coherent subspace $\mathfrak{s}$, while the arrow labelled $\bm{R}$ spans an $(n-m)$-dimensional direction of projection. The mapping $g$ collapses all points in the blue shaded region $g^{-1}(\mathcal{B})$, to the black interval $\mathcal{B}$. Under $s$, $\mathcal{B}$ is mapped to $s(\mathcal{B})$ shown in red. Under our definition of reconciliation, the same probability is assigned to the red region under the reconciled measure as is assigned to the blue region under the incoherent measure.
 
-\begin{figure}
+\begin{figure}[!htb]
 	\centering \includegraphics[width=0.6\textwidth]{Figs/probforerec_schematic-crop.pdf}
 	\caption{Summary of probabilistic forecast reconciliation. The probability that $\bm{y}_{t+h}$ lies in the red line segment under the reconciled probabilistic forecast is defined to be equal to the probability that $\bm{y}_{t+h}$ lies in the shaded blue area under the unreconciled probabilistic forecast. Note that since the smallest possible hierarchy involves three dimensions, this figure is only a schematic.}\label{fig:probfr_sch}
 \end{figure}
