@@ -469,21 +469,19 @@ We consider a multivariate Gaussian and a non-Gaussian setting for the errors dr
 We fit univariate ARIMA models to each series using the \verb|ARIMA()| function in the \verb|fable| package \citep{Rfable} in R \citep{Rcore}. Note that the order of the ARIMA models is not set to the true order but is chosen using the algorithm of \cite{HynKha2008}, allowing for the possibility of misspecification. Indeed, an advantage of forecast reconciliation is the ability to down-weight the forecasts of series within the hierarchy that come from misspecified models. We also considered exponential smoothing (ETS) models using the \verb|ETS()| function in the \verb|fable| package. These are omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results.
 
 Let $\hat{\bm{y}}_{t+h|t}=\left(\hat{y}_{1,t+h|t},\ldots,\hat{y}_{n,t+h|t}\right)'$, where $\hat{y}_{i,t+h|t}$ is the $h$-step-ahead point forecast for series $i$, and $\bm{E}:=\left\{e_{i,t}\right\}_{i=1,\dots,n;t=1,\dots,T}$ where $e_{i,t}$ is the residual stacked in the $(n \times T)$ matrix. For each series and model, base probabilistic forecasts for $h=1$ are constructed in the following four ways:
-
-\begin{itemize}
+\begin{compactitem}
 	\item \textbf{Independent Gaussian:} The base probabilistic forecast is made up of independent Gaussian distributions with the forecast mean and variance of variable $i$ given by $\hat{y}_{i,t+h|t}$ and $\hat{\sigma}^2_{i,t+h|t}$, where $\hat{\sigma}^2_{i,t+h|t}$ is the sample variance of the residuals in the $i$th row of $\bm{E}$.
 	\item \textbf{Joint Gaussian:} The base probabilistic forecast is a multivariate Gaussian distribution with the forecast mean $\hat{\bm{y}}_{t+h|t}$ and variance covariance matrix $\hat{\bm\Sigma}$, where $\hat{\bm\Sigma}$ is the variance covariance matrix of the residuals.
 	\item \textbf{Independent Bootstrap:} A draw from the base probabilistic forecast is made independently for each variable as $\hat{y}_{i,t+h|t}+e_{i,\tau}$ where $\tau$ is drawn randomly (with replacement) from $1,2,\ldots, T$.
 	\item \textbf{Joint Bootstrap:} A draw from the joint probabilistic forecast is made as $\hat{\bm{y}}_{t+h|t}+\bm{e}_{\tau}$ where $\bm{e}_{\tau}$ is the $\tau$th column of $\bm{E}$, where $\tau$ is drawn randomly (with replacement) from $1,2,\ldots, T$.
-\end{itemize}
+\end{compactitem}
 
 We restrict our attention to the case of $h=1$ although these methods can be generalised to larger $h$ using the recursive method \citep{FPP2018}. For multi-step-ahead forecasts, methods (c) and (d) should be sampled in blocks to preserve serial dependence in the residuals.
 
 \subsection{Reconciliation}
 
 For each DGP, model and method for obtaining base forecasts, reconciled probabilistic forecasts are obtained using each of the following techniques.
-
-\begin{itemize}
+\begin{compactitem}
 	\item \textbf{Base:} The base forecasts with no reconciliation.
 	\item \textbf{JPP:} The best method of \cite{JeoEtAl2019}. This is equivalent to reconciling quantiles. A sample is drawn from the base forecast, these are ranked, one variable at a time (so that the smallest value drawn from each variable are put together, etc.). These are then pre-multiplied by $\bm{S}\left(\bm{S}'\bm{W}\bm{S}\right)^{-1}\bm{S}'\bm{W}$ where $\bm{W}$ is a diagonal matrix with elements ($1/4^2$,$1/2^2$,$1/2^2$,$1$,$1$,$1$,$1$). These are the squared reciprocals of the number of bottom-level series used to form an aggregate.
 	\item \textbf{BTTH:} The method of \cite{Taieb2017}. This is a method whereby draws from the probabilistic forecasts of the bottom-level series are permuted so that they have the same empirical copula as the residuals. These are then aggregated to form a sample from the distribution of all series. The mean is adjusted to be equivalent to the mean that would be obtained using the MinT method of \cite{WicEtAl2019} described in Table~\ref{tab:recomethods}.
@@ -492,7 +490,7 @@ For each DGP, model and method for obtaining base forecasts, reconciled probabil
 	\item \textbf{MinTShr:} Reconciliation via pre-multiplication using the shrinkage estimator of the covariance matrix used by \cite{WicEtAl2019} but applied to probabilistic rather than point forecasting.
 	\item \textbf{ScoreOptE:} The algorithm described in Section~\ref{sec:scoreoptSGD} used to optimise energy score.
 	\item \textbf{ScoreOptV:} The algorithm described in Section~\ref{sec:scoreoptSGD} used to optimise variogram score.
-\end{itemize}
+\end{compactitem}
 
 Note that JPP and BTTH are two methods previously existing in the literature. The methods BottomUp, OLS, and MinTShr have been used extensively in the point forecasting literature but their application to probabilistic forecasting for general base forecasts is, to the best of our knowledge, novel in this paper.
 
