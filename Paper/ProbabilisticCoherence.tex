@@ -500,35 +500,47 @@ In addition to these methods, two further reconciliation methods were considered
 
 Table~\ref{tab:gse} shows the mean energy score for different reconciliation methods and different methods of generating base forecasts. When base probabilistic forecasts are generated independently, score optimisation with the energy score (ScoreOptE) performs best, while when base forecasts are generated jointly, the MinT method for reconciliation using the shrinkage estimator (MinTShr) yields the most accurate forecasts. The bottom-up method as well as BTTH and JPP fail to even improve upon base forecasts in all cases. As expected score optimisation using the variogram score does not perform as well as score optimisation using energy score, when evaluation is carried out with respect to the latter. However, the results are quite close suggesting that score optimisation is fairly robust to using an alternative proper score.
 
-\textcolor{red}{Suggestions for below. (1) We agreed with Tas to swap the columns so that they are Ind. Gaussian | Ind. Bootstrap | Joint Gaussian | Joint Bootstrap. (2) Was thinking about leaving Base as is and presenting everything as percentage difference to Base Ind. Gaussian (could be messy and hard to read) (3) Maybe present these as the sample plot below~\ref{fig:ES1}. Rob any other ideas?}
-\todo[inline]{I think we should just show the graph sketched in Fig \ref{fig:ES1}, but showing energy scores not ratios.
-}
+%\begin{table}[!htb]
+%	\small
+%	\caption{\label{tab:gse}Mean Energy score for Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
+%	\centering
+%	\begin{tabular}[t]{lrrrr}
+%		\toprule
+%		Method    & Ind. Bootstrap   & Ind. Gaussian    & Joint Bootstrap  & Joint Gaussian\\
+%		\midrule
+%    Base      & 11.3256          & 11.3247          & 11.0662          & 11.0556\\
+%    BottomUp  & 11.9759          & 11.9705          & 11.6429          & 11.6203\\
+%    BTTH      & 21.7508          & 21.8051          & 21.8542          & 21.8826\\
+%    JPP       & 22.8651          & 22.8986          & 22.8573          & 22.8599\\
+%    MinTShr   & 10.8865          & 10.8905          & \textbf{10.7475} & \textbf{10.7428}\\
+%    OLS       & 11.1284          & 11.1264          & 10.8396          & 10.8292\\
+%    ScoreOptE & \textbf{10.8053} & \textbf{10.8297} & 10.8433          & 10.8406\\
+%    ScoreOptV & 11.2066          & 11.2074          & 11.0413          & 11.0262\\
+%		\bottomrule
+%	\end{tabular}
+%\end{table}
 
-\begin{table}[!htb]
-	\small
-	\caption{\label{tab:gse}Mean Energy score for Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
-	\centering
-	\begin{tabular}[t]{lrrrr}
-		\toprule
-		Method    & Ind. Bootstrap   & Ind. Gaussian    & Joint Bootstrap  & Joint Gaussian\\
-		\midrule
-    Base      & 11.3256          & 11.3247          & 11.0662          & 11.0556\\
-    BottomUp  & 11.9759          & 11.9705          & 11.6429          & 11.6203\\
-    BTTH      & 21.7508          & 21.8051          & 21.8542          & 21.8826\\
-    JPP       & 22.8651          & 22.8986          & 22.8573          & 22.8599\\
-    MinTShr   & 10.8865          & 10.8905          & \textbf{10.7475} & \textbf{10.7428}\\
-    OLS       & 11.1284          & 11.1264          & 10.8396          & 10.8292\\
-    ScoreOptE & \textbf{10.8053} & \textbf{10.8297} & 10.8433          & 10.8406\\
-    ScoreOptV & 11.2066          & 11.2074          & 11.0413          & 11.0262\\
-		\bottomrule
-	\end{tabular}
-\end{table}
+
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=.85\textwidth]{Figs/ForEval_Sim1.jpg}
-	\caption{}
-	\label{fig:ES1}
+	\includegraphics[width=\textwidth]{Figs/tableasplot_gse}
+	\caption{Mean Energy score for Gaussian DGP\@ using different base forecast and reconciliation methods.}
+	\label{fig:meanscore_gse}
+\end{figure}
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=\textwidth]{Figs/gaussian_meanscore}
+	\caption{Mean scores for Gaussian DGP\@ using different base forecast and reconciliation methods. The left panel is the energy score, the right panel is the variogram score.}
+	\label{fig:meanscore_g}
+\end{figure}
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=\textwidth]{Figs/nongaussian_meanscore}
+	\caption{Mean scores for non-Gaussian DGP\@ using different base forecast and reconciliation methods.  The left panel is the energy score, the right panel is the variogram score.}
+	\label{fig:meanscore_n}
 \end{figure}
 
 To assess significant differences between the reported results, we use post-hoc Nemenyi tests \citep{HolEtAl2013}. The Nemenyi test is a non-parametric test that identifies groups of forecasts which cannot be significantly distinguished from one another. We use the implementation of the tests available in the \verb|tsutils| R package \citep{tsutilspackage}. Figure~\ref{fig:gse} reports the results which should be looked at column-wise. A blue square indicates that the method in the corresponding row, is statistically indistinguishable from the method in that column. For all four methods of generating base forecasts, MinTShr, ScoreOptE and OLS significantly outperform base forecasts, bottom-up forecasts, BTTH and JPP.
@@ -545,27 +557,25 @@ To assess significant differences between the reported results, we use post-hoc 
 
 Table~\ref{tab:gsv} and Figure~\ref{fig:gsv} report the same output but using the variogram score for evaluation. For this specific DGP, base model and score, BTTH significantly outperforms all other methods. However, this result was not observed when using BTTH for any other simulation scenario, including those reported only in the online supplement. Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well. Score optimisation, OLS, MinTShr and BTTH all lead to significantly improvements relative to base, bottom-up and JPP.
 
-\todo[inline]{Suggest Table~\ref{tab:gsv} be replaced with a graph similar to Fig \ref{fig:ES1}.}
-
-\begin{table}[!htb]
-	\small
-	\caption{\label{tab:gsv}Mean Variogram score for Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
-	\centering
-	\begin{tabular}[t]{lrrrr}
-		\toprule
-    Method    & Ind. Bootstrap    & Ind Gaussian      & Joint Bootstrap   & Joint Gaussian\\
-		\midrule
-    Base      & 694.5012          & 694.6362          & 694.7861          & 694.5443\\
-    BottomUp  & 888.7264          & 891.1163          & 697.9468          & 697.7384\\
-    BTTH      & \textbf{630.8518} & \textbf{632.3063} & \textbf{632.7646} & \textbf{631.8727}\\
-    JPP       & 1032.9742         & 1039.0791         & 1033.3112         & 1038.1928\\
-    MinTShr   & 683.3065          & 683.0490          & 677.8987          & 677.4923\\
-    OLS       & 713.4531          & 713.5246          & 680.3692          & 680.1407\\
-    ScoreOptE & 686.0447          & 686.8067          & 683.5021          & 684.2645\\
-    ScoreOptV & 675.1864          & 675.2327          & 673.5918          & 672.3905\\
-		\bottomrule
-	\end{tabular}
-\end{table}
+%\begin{table}[!htb]
+%	\small
+%	\caption{\label{tab:gsv}Mean Variogram score for Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
+%	\centering
+%	\begin{tabular}[t]{lrrrr}
+%		\toprule
+%    Method    & Ind. Bootstrap    & Ind Gaussian      & Joint Bootstrap   & Joint Gaussian\\
+%		\midrule
+%    Base      & 694.5012          & 694.6362          & 694.7861          & 694.5443\\
+%    BottomUp  & 888.7264          & 891.1163          & 697.9468          & 697.7384\\
+%    BTTH      & \textbf{630.8518} & \textbf{632.3063} & \textbf{632.7646} & \textbf{631.8727}\\
+%    JPP       & 1032.9742         & 1039.0791         & 1033.3112         & 1038.1928\\
+%    MinTShr   & 683.3065          & 683.0490          & 677.8987          & 677.4923\\
+%    OLS       & 713.4531          & 713.5246          & 680.3692          & 680.1407\\
+%    ScoreOptE & 686.0447          & 686.8067          & 683.5021          & 684.2645\\
+%    ScoreOptV & 675.1864          & 675.2327          & 673.5918          & 672.3905\\
+%		\bottomrule
+%	\end{tabular}
+%\end{table}
 
 \begin{figure}[!htb]
 	\centering
@@ -578,50 +588,47 @@ Table~\ref{tab:gsv} and Figure~\ref{fig:gsv} report the same output but using th
 
 Table~\ref{tab:nse} reports the mean energy score for the non-Gaussian DGP\@. Overall, the results are quite similar to the Gaussian DGP\@. The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent. The Nemenyi matrix is omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results. However, these lead to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MinTShr and OLS are statistically indistinguishable from one another but are significantly better than base forecasts and the bottom-up method. The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts.
 
-\todo[inline]{Suggest Tables~\ref{tab:nse} and~\ref{tab:nsv} be replaced with a graph similar to Fig \ref{fig:ES1}.}
-
-
-\begin{table}[!htb]
-	\small
-	\caption{\label{tab:nse} Mean Energy score for non-Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
-	\centering
-	\begin{tabular}[t]{lrrrr}
-		\toprule
-    Method    & Ind. Bootstrap  & Ind. Gaussian   & Joint Bootstrap & Joint Gaussian\\
-		\midrule
-    Base      & 1.4169          & 1.4246          & 1.3850          & 1.3912\\
-    BottomUp  & 1.5071          & 1.5305          & 1.4658          & 1.4731\\
-    BTTH      & 2.7704          & 2.9271          & 2.7817          & 2.9335\\
-    JPP       & 2.8805          & 2.9737          & 2.8788          & 2.9672\\
-    MinTShr   & 1.3514          & 1.3504          & \textbf{1.3297} & \textbf{1.3367}\\
-    OLS       & 1.3643          & 1.3638          & 1.3409          & 1.3483\\
-    ScoreOptE & \textbf{1.3391} & \textbf{1.3379} & 1.3384          & 1.3391\\
-    ScoreOptV & 1.3772          & 1.3772          & 1.3746          & 1.3738\\
-		\bottomrule
-	\end{tabular}
-\end{table}
+%\begin{table}[!htb]
+%	\small
+%	\caption{\label{tab:nse} Mean Energy score for non-Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
+%	\centering
+%	\begin{tabular}[t]{lrrrr}
+%		\toprule
+%    Method    & Ind. Bootstrap  & Ind. Gaussian   & Joint Bootstrap & Joint Gaussian\\
+%		\midrule
+%    Base      & 1.4169          & 1.4246          & 1.3850          & 1.3912\\
+%    BottomUp  & 1.5071          & 1.5305          & 1.4658          & 1.4731\\
+%    BTTH      & 2.7704          & 2.9271          & 2.7817          & 2.9335\\
+%    JPP       & 2.8805          & 2.9737          & 2.8788          & 2.9672\\
+%    MinTShr   & 1.3514          & 1.3504          & \textbf{1.3297} & \textbf{1.3367}\\
+%    OLS       & 1.3643          & 1.3638          & 1.3409          & 1.3483\\
+%    ScoreOptE & \textbf{1.3391} & \textbf{1.3379} & 1.3384          & 1.3391\\
+%    ScoreOptV & 1.3772          & 1.3772          & 1.3746          & 1.3738\\
+%		\bottomrule
+%	\end{tabular}
+%\end{table}
 
 Finally, Table~\ref{tab:nsv} and Figure~\ref{fig:nsv} report results for the non-Gaussian DGP using the variogram score to evaluate forecasts. In this case, score optimisation with respect to the variogram score yields the best performance when base forecasts are dependent, while MinTShr yields the best performance when base forecasts are independent. In contrast to the Gaussian DGP, the JPP method leads to significant improvements over base forecasts, while the BTTH method leads to a significantly worse performance than base forecasts.
 
-\begin{table}[!htb]
-	\small
-	\caption{\label{tab:nsv}Mean Variogram score for non-Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
-	\centering
-	\begin{tabular}[t]{lrrrr}
-		\toprule
-    Method    & Ind. Bootstrap   & Ind. Gaussian    & Joint Bootstrap  & Joint Gaussian\\
-		\midrule
-    Base      & 26.2480          & 26.2638          & 26.2339          & 26.2643\\
-    BottomUp  & 28.5977          & 28.7956          & 27.6925          & 27.7625\\
-    BTTH      & 29.2544          & 29.1507          & 29.0767          & 29.0854\\
-    JPP       & 26.3968          & 26.3993          & 26.3833          & 26.4030\\
-    MinTShr   & \textbf{25.4412} & \textbf{25.4215} & 25.4799          & 25.5248\\
-    OLS       & 25.6498          & 25.6362          & 25.6860          & 25.7348\\
-    ScoreOptE & 25.6992          & 25.6954          & 25.5763          & 25.6889\\
-    ScoreOptV & 25.5433          & 25.5325          & \textbf{25.4541} & \textbf{25.4798}\\
-		\bottomrule
-	\end{tabular}
-\end{table}
+%\begin{table}[!htb]
+%	\small
+%	\caption{\label{tab:nsv}Mean Variogram score for non-Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
+%	\centering
+%	\begin{tabular}[t]{lrrrr}
+%		\toprule
+%    Method    & Ind. Bootstrap   & Ind. Gaussian    & Joint Bootstrap  & Joint Gaussian\\
+%		\midrule
+%    Base      & 26.2480          & 26.2638          & 26.2339          & 26.2643\\
+%    BottomUp  & 28.5977          & 28.7956          & 27.6925          & 27.7625\\
+%    BTTH      & 29.2544          & 29.1507          & 29.0767          & 29.0854\\
+%    JPP       & 26.3968          & 26.3993          & 26.3833          & 26.4030\\
+%    MinTShr   & \textbf{25.4412} & \textbf{25.4215} & 25.4799          & 25.5248\\
+%    OLS       & 25.6498          & 25.6362          & 25.6860          & 25.7348\\
+%    ScoreOptE & 25.6992          & 25.6954          & 25.5763          & 25.6889\\
+%    ScoreOptV & 25.5433          & 25.5325          & \textbf{25.4541} & \textbf{25.4798}\\
+%		\bottomrule
+%	\end{tabular}
+%\end{table}
 
 \begin{figure}[!htb]
 	\centering
