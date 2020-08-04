@@ -136,7 +136,7 @@ all<-read_csv('all.csv')
 all%>%
   filter(ScoreEval=='Energy',
          Method!='ScoreOptEIn',
-         Method!='ScoreOptV',
+         #Method!='ScoreOptV',
          Method!='ScoreOptVIn',
          Method!='WLS',
          Method!='MinTSam')%>%
@@ -157,6 +157,27 @@ MeanScoreEnergy%>%
   kable(digits=2, format='latex')->me
   
 capture.output(print(me),file = 'forPaper/meanenergyscore.tex')
+
+
+all%>%
+  filter(ScoreEval=='Variogram',
+         Method!='ScoreOptEIn',
+         #Method!='ScoreOptV',
+         Method!='ScoreOptVIn',
+         Method!='WLS',
+         Method!='MinTSam')%>%
+  mutate(BaseMethod=paste(BaseDep,BaseDist,sep='_'),
+         RecoMethod=Method)%>%
+  select(-BaseDep,-BaseDist)%>%
+  group_by(BaseMethod,RecoMethod)%>%
+  summarise(meanScore=mean(Score))%>%
+  pivot_wider(id_cols = RecoMethod,
+              names_from=BaseMethod,values_from=meanScore)%>%
+  select(RecoMethod,
+         `Ind. Bootstrap`=bootstrap_independent,
+         `Ind. Gaussian`=gaussian_independent,
+         `Joint Bootstrap`=bootstrap_joint,
+         `Joint Gaussian`=gaussian_joint)->MeanScoreVariogram
 
 all%>%
   filter(BaseDep=='gaussian',
@@ -193,4 +214,65 @@ all%>%filter(BaseDep=='bootstrap',
   as.matrix()->nn
 pdf(paste('forPaper/nemenyi_jb.pdf'))
 nemenyi(nn,plottype = 'matrix',main='')
+dev.off()
+
+
+pdf('forPaper/meanscore.pdf')
+
+MeanScoreEnergy%>%
+  pivot_longer(cols = -RecoMethod,
+               names_to = 'Base Method',
+               values_to='Score')%>%
+  mutate(`Base Method`=ordered(`Base Method`,
+                               levels = c('Ind. Gaussian',
+                                          'Ind. Bootstrap',
+                                          'Joint Gaussian',
+                                          'Joint Bootstrap'),
+                               labels = c('Indep.\n Gaussian',
+                                          'Indep.\n Bootstrap',
+                                          'Joint\n Gaussian',
+                                          'Joint\n Bootstrap')))%>%
+  rename(`Reconciliation\n Method`=RecoMethod)%>%
+  add_column(Sc='Energy')->p1
+
+MeanScoreVariogram%>%
+  pivot_longer(cols = -RecoMethod,
+               names_to = 'Base Method',
+               values_to='Score')%>%
+  mutate(`Base Method`=ordered(`Base Method`,
+                               levels = c('Ind. Gaussian',
+                                          'Ind. Bootstrap',
+                                          'Joint Gaussian',
+                                          'Joint Bootstrap'),
+                               labels = c('Indep.\n Gaussian',
+                                          'Indep.\n Bootstrap',
+                                          'Joint\n Gaussian',
+                                          'Joint\n Bootstrap')))%>%
+  rename(`Reconciliation\n Method`=RecoMethod)%>%
+  add_column(Sc='Variogram')->p2
+
+rbind(p1,p2)%>%  
+  ggplot(aes(x=`Base Method`,
+             y=`Score`,
+             col=`Reconciliation\n Method`,
+             group=`Reconciliation\n Method`))+
+  geom_point()+
+  geom_line()+
+  scale_y_log10()+
+  facet_wrap(~Sc,scales = 'free_y')+
+  scale_color_colorblind()
+
+dev.off()
+
+pdf('forPaper/meanenergyscore.pdf')
+p1%>%  
+  ggplot(aes(x=`Base Method`,
+             y=`Score`,
+             col=`Reconciliation\n Method`,
+             group=`Reconciliation\n Method`))+
+  geom_point()+
+  geom_line()+
+  scale_y_log10()+
+  scale_color_colorblind()
+
 dev.off()

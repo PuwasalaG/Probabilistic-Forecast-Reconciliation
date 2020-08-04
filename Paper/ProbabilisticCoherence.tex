@@ -697,29 +697,38 @@ Four situations were considered where base forecasts are assumed to be either Ga
 
 The same methods were used for reconciliation as in the simulation study with score optimisation based on an objective function containing 56 days (8 weeks) of score evaluations. For brevity, only the results for energy score are presented here; please refer to \url{https://git.io/JJwQB} for a full set of results.
 
-\begin{table}[!htb]
-\small
-\centering
-\caption{\label{tab:appres} Mean Energy Score for electricity application. Values in bold indicate the best reconciliation method for a given base forecasting method.}
+%\begin{table}[!htb]
+%\small
+%\centering
+%\caption{\label{tab:appres} Mean Energy Score for electricity application. Values in bold indicate the best reconciliation method for a given base forecasting method.}
 
-\begin{tabular}{lrrrr}
-	\toprule
-	RecoMethod & Ind. Bootstrap & Ind. Gaussian & Joint Bootstrap & Joint Gaussian\\
-	\midrule
-	Base & 36.41 & 95.02 & 36.54 & 36.32\\
-	BottomUp & 35.89 & 90.64 & 35.72 & 35.51\\
-	BTTH & 58.57 & 269.40 & 58.23 & 59.07\\
-	JPP & 55.15 & 292.27 & 55.16 & 55.89\\
-	MinTShr & 37.89 & 54.80 & 38.52 & 38.33\\
-	OLS & \textbf{35.42} & 73.72 & \textbf{34.71} & \textbf{34.48}\\
-	ScoreOptE & 38.23 & \textbf{39.96} & 39.39 & 39.07\\
-	\bottomrule
-\end{tabular}
-\end{table}
+%\begin{tabular}{lrrrr}
+%	\toprule
+%	RecoMethod & Ind. Bootstrap & Ind. Gaussian & Joint Bootstrap & Joint Gaussian\\
+%	\midrule
+%	Base & 36.41 & 95.02 & 36.54 & 36.32\\
+%	BottomUp & 35.89 & 90.64 & 35.72 & 35.51\\
+%	BTTH & 58.57 & 269.40 & 58.23 & 59.07\\
+%	JPP & 55.15 & 292.27 & 55.16 & 55.89\\
+%	MinTShr & 37.89 & 54.80 & 38.52 & 38.33\\
+%	OLS & \textbf{35.42} & 73.72 & \textbf{34.71} & \textbf{34.48}\\
+%	ScoreOptE & 38.23 & \textbf{39.96} & 39.39 & 39.07\\
+%	\bottomrule
+%\end{tabular}
+%\end{table}
 
 \begin{figure}
-	\centerline{\includegraphics[width=.45\textwidth]{Figs/nemenyi_ig.pdf}
-  \includegraphics[width=.45\textwidth]{Figs/nemenyi_jb.pdf}}
+    \includegraphics[width=.95\textwidth]{Figs/meanenergyscore}
+	\caption{Mean Energy score for the electricity application for different base forecasting methods and different reconciliation methods}\label{fig:meanenergy_app}
+\end{figure}
+
+\begin{figure}
+	\includegraphics[width=.95\textwidth]{Figs/meanscore}
+	\caption{Mean score for the electricity application for different base forecasting methods and different reconciliation methods.  The left panel refers to energy score and the right panel to variogram score.}\label{fig:meanscore_app}
+\end{figure}
+
+\begin{figure}
+	\centerline{\includegraphics[width=.45\textwidth]{Figs/nemenyi_ig.pdf}\includegraphics[width=.45\textwidth]{Figs/nemenyi_jb.pdf}}
 	\caption{Nemenyi matrices for Energy score for the electricity application. Left: base forecasts are independent and Gaussian. Right: base forecasts are obtained by jointly bootstrapping residuals.}\label{fig:nem_app}
 \end{figure}
 
