@@ -51,7 +51,7 @@ capture.output(print(tabgse),file = 'PaperTabFigs/tabgse.tex')
 
 pdf('PaperTabFigs/gse.pdf')
         
-par(mfrow=c(2,2),cex.axis=0.8,mai=c(0,0,0.25,0))
+par(mfrow=c(2,2),cex.axis=0.7,mai=c(0,0,0.25,0))
 for (b in BaseMs){
   res_energy%>%
     filter(BaseModel=='arima')%>%

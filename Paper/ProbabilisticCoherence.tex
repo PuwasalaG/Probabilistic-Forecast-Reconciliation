@@ -52,7 +52,7 @@
 
 	\if1\blind
 	{
-		\title{\textbf{Probabilistic Forecasts for Hierarchical~Time~Series}}
+		\title{\textbf{Probabilistic Forecast Reconciliation: Properties, Evaluation and Score Optimisation }}
 		        \author{
 			    Anastasios Panagiotelis\thanks{
 			    	The authors gratefully acknowledge the support of Australian Research Council Grant DP140103220. We also thank Professor Mervyn Silvapulle for valuable comments.}\hspace{.2cm}\\
@@ -498,7 +498,7 @@ In addition to these methods, two further reconciliation methods were considered
 
 \subsection{Results for Gaussian probabilistic forecasts}\label{sec:SimAnalysticalResults}
 
-Table~\ref{tab:gse} shows the mean energy score for different reconciliation methods and different methods of generating base forecasts. When base probabilistic forecasts are generated independently, score optimisation with the energy score (ScoreOptE) performs best, while when base forecasts are generated jointly, the MinT method for reconciliation using the shrinkage estimator (MinTShr) yields the most accurate forecasts. The bottom-up method as well as BTTH and JPP fail to even improve upon base forecasts in all cases. As expected score optimisation using the variogram score does not perform as well as score optimisation using energy score, when evaluation is carried out with respect to the latter. However, the results are quite close suggesting that score optimisation is fairly robust to using an alternative proper score.
+The left panel of Figure~\ref{fig:meanscore_g} shows the mean energy score for different reconciliation methods and different methods of generating base forecasts. When base probabilistic forecasts are generated independently, score optimisation with the energy score (ScoreOptE) performs best, while when base forecasts are generated jointly, the MinT method for reconciliation using the shrinkage estimator (MinTShr) yields the most accurate forecasts. The bottom-up method as well as BTTH and JPP fail to even improve upon base forecasts in all cases. As expected score optimisation using the variogram score does not perform as well as score optimisation using energy score, when evaluation is carried out with respect to the latter. However, the results are quite close suggesting that score optimisation is fairly robust to using an alternative proper score.
 
 %\begin{table}[!htb]
 %	\small
@@ -520,49 +520,32 @@ Table~\ref{tab:gse} shows the mean energy score for different reconciliation met
 %	\end{tabular}
 %\end{table}
 
-
-
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=\textwidth]{Figs/tableasplot_gse}
-	\caption{Mean Energy score for Gaussian DGP\@ using different base forecast and reconciliation methods.}
-	\label{fig:meanscore_gse}
-\end{figure}
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=\textwidth]{Figs/gaussian_meanscore}
+	\includegraphics[width=0.85\textwidth]{Figs/gaussian_meanscore}
 	\caption{Mean scores for Gaussian DGP\@ using different base forecast and reconciliation methods. The left panel is the energy score, the right panel is the variogram score.}
 	\label{fig:meanscore_g}
 \end{figure}
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=\textwidth]{Figs/nongaussian_meanscore}
+	\includegraphics[width=0.85\textwidth]{Figs/nongaussian_meanscore}
 	\caption{Mean scores for non-Gaussian DGP\@ using different base forecast and reconciliation methods.  The left panel is the energy score, the right panel is the variogram score.}
 	\label{fig:meanscore_n}
 \end{figure}
 
 To assess significant differences between the reported results, we use post-hoc Nemenyi tests \citep{HolEtAl2013}. The Nemenyi test is a non-parametric test that identifies groups of forecasts which cannot be significantly distinguished from one another. We use the implementation of the tests available in the \verb|tsutils| R package \citep{tsutilspackage}. Figure~\ref{fig:gse} reports the results which should be looked at column-wise. A blue square indicates that the method in the corresponding row, is statistically indistinguishable from the method in that column. For all four methods of generating base forecasts, MinTShr, ScoreOptE and OLS significantly outperform base forecasts, bottom-up forecasts, BTTH and JPP.
 
-\textcolor{red}{I had the idea of joining these like shown on the bottom of page 24 (in the annotated by George pdf) with the average rank shown on the rows of the left had side - as we really don't care that much about these (we do not even comment on them). From discussions with Tas he suggested an alternative may be a 32$\times$32 where everything is compared to everything. It may be that the best way to present these is the current Figure~\ref{fig:gse}. Rob what do you think?}
-\todo[inline]{I think what is here is probably ok without complicating things. But show Nemenyi matrices side-by-side to save space. No need to repeat row labels in that case -- as per George's diagram on p24.}
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=.85\textwidth]{Figs/gse.pdf}
+	\includegraphics[width=.6\textheight]{Figs/gse.pdf}
 	\caption{Nemenyi matrix for Energy Score for Gaussian DGP.}
 	\label{fig:gse}
 \end{figure}
 
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=.85\textwidth]{Figs/gse2.pdf}
-	\caption{Nemenyi matrix for Energy Score for Gaussian DGP (different spacing).}
-	\label{fig:gse2}
-\end{figure}
 
-Table~\ref{tab:gsv} and Figure~\ref{fig:gsv} report the same output but using the variogram score for evaluation. For this specific DGP, base model and score, BTTH significantly outperforms all other methods. However, this result was not observed when using BTTH for any other simulation scenario, including those reported only in the online supplement. Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well. Score optimisation, OLS, MinTShr and BTTH all lead to significantly improvements relative to base, bottom-up and JPP.
+The right panel of Figure~\ref{fig:meanscore_g} and Figure~\ref{fig:gsv} report the same output but using the variogram score for evaluation. For this specific DGP, base model and score, BTTH significantly outperforms all other methods. However, this result was not observed when using BTTH for any other simulation scenario, including those reported only in the online supplement. Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well. Score optimisation, OLS, MinTShr and BTTH all lead to significantly improvements relative to base, bottom-up and JPP.
 
 %\begin{table}[!htb]
 %	\small
@@ -586,14 +569,14 @@ Table~\ref{tab:gsv} and Figure~\ref{fig:gsv} report the same output but using th
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=.75\textwidth]{Figs/gsv.pdf}
+	\includegraphics[width=.6\textheight]{Figs/gsv.pdf}
 	\caption{Nemenyi matrix for Variogram score for Gaussian Stationary DGP.}
 	\label{fig:gsv}
 \end{figure}
 
 \subsection{Results for non-Gaussian probabilistic forecast} \label{sec:SimSamplingResults}
 
-Table~\ref{tab:nse} reports the mean energy score for the non-Gaussian DGP\@. Overall, the results are quite similar to the Gaussian DGP\@. The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent. The Nemenyi matrix is omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results. However, these lead to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MinTShr and OLS are statistically indistinguishable from one another but are significantly better than base forecasts and the bottom-up method. The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts.
+The left panel of Figure~\ref{fig:meanscore_n} reports the mean energy score for the non-Gaussian DGP\@. Overall, the results are quite similar to the Gaussian DGP\@. The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent. The Nemenyi matrix is omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results. However, these lead to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MinTShr and OLS are statistically indistinguishable from one another but are significantly better than base forecasts and the bottom-up method. The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts.
 
 %\begin{table}[!htb]
 %	\small
@@ -615,7 +598,7 @@ Table~\ref{tab:nse} reports the mean energy score for the non-Gaussian DGP\@. Ov
 %	\end{tabular}
 %\end{table}
 
-Finally, Table~\ref{tab:nsv} and Figure~\ref{fig:nsv} report results for the non-Gaussian DGP using the variogram score to evaluate forecasts. In this case, score optimisation with respect to the variogram score yields the best performance when base forecasts are dependent, while MinTShr yields the best performance when base forecasts are independent. In contrast to the Gaussian DGP, the JPP method leads to significant improvements over base forecasts, while the BTTH method leads to a significantly worse performance than base forecasts.
+Finally, the right panel of Figure~\ref{fig:meanscore_n} and Figure~\ref{fig:nsv} report results for the non-Gaussian DGP using the variogram score to evaluate forecasts. In this case, score optimisation with respect to the variogram score yields the best performance when base forecasts are dependent, while MinTShr yields the best performance when base forecasts are independent. In contrast to the Gaussian DGP, the JPP method leads to significant improvements over base forecasts, while the BTTH method leads to a significantly worse performance than base forecasts.
 
 %\begin{table}[!htb]
 %	\small
@@ -639,7 +622,7 @@ Finally, Table~\ref{tab:nsv} and Figure~\ref{fig:nsv} report results for the non
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[width=.75\textwidth]{Figs/nsv.pdf}
+	\includegraphics[width=.6\textheight]{Figs/nsv.pdf}
 	\caption{Nemenyi matrix for Variogram score with a non-Gaussian DGP.}
 	\label{fig:nsv}
 \end{figure}
@@ -717,22 +700,18 @@ The same methods were used for reconciliation as in the simulation study with sc
 %\end{tabular}
 %\end{table}
 
-\begin{figure}
-    \includegraphics[width=.95\textwidth]{Figs/meanenergyscore}
+\begin{figure}[!htb]
+	\centering
+    \includegraphics[width=.7\textwidth]{Figs/meanenergyscore}
 	\caption{Mean Energy score for the electricity application for different base forecasting methods and different reconciliation methods}\label{fig:meanenergy_app}
 \end{figure}
 
-\begin{figure}
-	\includegraphics[width=.95\textwidth]{Figs/meanscore}
-	\caption{Mean score for the electricity application for different base forecasting methods and different reconciliation methods.  The left panel refers to energy score and the right panel to variogram score.}\label{fig:meanscore_app}
-\end{figure}
-
-\begin{figure}
+\begin{figure}[!htb]
 	\centerline{\includegraphics[width=.45\textwidth]{Figs/nemenyi_ig.pdf}\includegraphics[width=.45\textwidth]{Figs/nemenyi_jb.pdf}}
 	\caption{Nemenyi matrices for Energy score for the electricity application. Left: base forecasts are independent and Gaussian. Right: base forecasts are obtained by jointly bootstrapping residuals.}\label{fig:nem_app}
 \end{figure}
 
-The mean energy score for all four base forecasting methods is summarised in Table~\ref{tab:appres}. When base forecasts are generated assuming both independence and a Gaussian distribution, score optimisation achieves a mean energy score that is considerably smaller than all other competing methods, with MinT providing the second smallest value. Figure~\ref{fig:nem_app} (left) provides the Nemenyi matrix for this set of base forecasts, and shows that the superior forecasting performance of score optimisation is statistically significant. This suggests that score optimisation is best for guarding against severe model misspecification.
+The mean energy score for all four base forecasting methods is summarised in Figure~\ref{fig:meanenergy_app}. When base forecasts are generated assuming both independence and a Gaussian distribution, score optimisation achieves a mean energy score that is considerably smaller than all other competing methods, with MinT providing the second smallest value. Figure~\ref{fig:nem_app} (left) provides the Nemenyi matrix for this set of base forecasts, and shows that the superior forecasting performance of score optimisation is statistically significant. This suggests that score optimisation is best for guarding against severe model misspecification.
 
 For all other methods the best performing method is OLS. This difference is statistically significant as seen in Figure~\ref{fig:nem_app} (right), which shows the Nemenyi matrix for jointly bootstrapped base forecasts. The corresponding figures for joint Gaussian and independent bootstrap look mostly similar to Figure~\ref{fig:nem_app}; please refer to \url{https://git.io/JJwQB} for a full set of results. Although score optimisation does not improve upon base, the differences are not significant. For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
 
