@@ -266,6 +266,7 @@ dev.off()
 
 pdf('forPaper/meanenergyscore.pdf')
 p1%>%  
+  filter(`Reconciliation\n Method`!='ScoreOptV')%>%
   ggplot(aes(x=`Base Method`,
              y=`Score`,
              col=`Reconciliation\n Method`,
