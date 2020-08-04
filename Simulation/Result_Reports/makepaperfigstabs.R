@@ -26,7 +26,7 @@ res_all%>%
   mutate(BaseMethod=paste(.simpleCap(BaseDependence),.simpleCap(BaseDistribution),sep = ' '))%>%
   select(EvaluationPeriod,Method,Score,DGP,BaseMethod,BaseModel)->res_variogram
 
-BaseMs<-unique(res_energy$BaseMethod)
+BaseMs<-unique(res_energy$BaseMethod)[c(2,1,4,3)]
 
 res_energy%>%
   filter(BaseModel=='arima')%>%
@@ -51,7 +51,7 @@ capture.output(print(tabgse),file = 'PaperTabFigs/tabgse.tex')
 
 pdf('PaperTabFigs/gse.pdf')
         
-par(mfrow=c(2,2))
+par(mfrow=c(2,2),cex.axis=0.8,mai=c(0,0,0.25,0))
 for (b in BaseMs){
   res_energy%>%
     filter(BaseModel=='arima')%>%
@@ -65,7 +65,8 @@ for (b in BaseMs){
     pivot_wider(names_from = Method, values_from = Score)%>%
     select(-EvaluationPeriod)->dat
   datm<-as.matrix(dat) 
-  nemenyi(datm,plottype = 'matrix',main=b)
+  nemenyi(datm,plottype = 'matrix',sort=FALSE,main=b)
+  
 }
 dev.off()
 
@@ -94,7 +95,7 @@ capture.output(print(tabgsv),file = 'PaperTabFigs/tabgsv.tex')
 
 pdf('PaperTabFigs/gsv.pdf')
 
-par(mfrow=c(2,2))
+par(mfrow=c(2,2),cex.axis=0.8,mai=c(0,0,0.25,0))
 for (b in BaseMs){
   res_variogram%>%
     filter(BaseModel=='arima')%>%
@@ -136,7 +137,7 @@ capture.output(print(tabnse),file = 'PaperTabFigs/tabnse.tex')
 
 pdf('PaperTabFigs/nse.pdf')
 
-par(mfrow=c(2,2))
+par(mfrow=c(2,2),cex.axis=0.8,mai=c(0,0,0.25,0))
 for (b in BaseMs){
   res_energy%>%
     filter(BaseModel=='arima')%>%
@@ -175,7 +176,7 @@ fignsv%>%
 
 pdf('PaperTabFigs/nsv.pdf')
 
-par(mfrow=c(2,2))
+par(mfrow=c(2,2),cex.axis=0.8,mai=c(0,0,0.25,0))
 for (b in BaseMs){
   res_variogram%>%
     filter(BaseModel=='arima')%>%
