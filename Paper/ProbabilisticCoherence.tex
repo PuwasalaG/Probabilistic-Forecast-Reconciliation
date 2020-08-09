@@ -113,18 +113,9 @@ In contrast to the point forecasts, the entire probability distribution of futur
 
 There are a number of shortcomings to \citet{JeoEtAl2019} and \citet{Taieb2017} which to the best of our knowledge represent the only attempts to develop algorithms for probabilistic forecast reconciliation. First, little formal justification is provided for the algorithms, or for the sense in which they generalise forecast reconciliation to the probabilistic domain. As such, both algorithms are based on sampling and neither can be used to obtain a reconciled density analytically. Both algorithms are tailored towards specific applications and conflate reconciliation with steps that involve reordering the base forecasts. For example, while \citet{JeoEtAl2019} show that ranking draws from independent base probabilistic forecasts before reconciliation is effective, this may only be true due to the highly dependent time series considered in their application. A limitation of \citet{Taieb2017} is that to ensure their sample from the base probabilistic forecast has the same empirical copula as the data, it must be of the same size as the training data. This will be problematic in applications with fewer observations than the smart meter data they consider. Further, \citet{Taieb2017} only incorporate information from the forecast mean of aggregate variables, missing out on potentially valuable information in the probabilistic forecasts of aggregate data.
 
-In this paper we seek to address a number of open issues in probabilistic forecast reconciliation. First, we develop in a formal way, definitions and a framework that generalise reconciliation from the point setting to the probabilistic setting. This is achieved by extending the geometric framework proposed by \cite{PanEtAl2020_Geometry} for point forecast reconciliation. Second, we utilise these definitions to show how a reconciled forecast can be constructed from an arbitrary base forecast. Solutions are provided in the case where a density of the base probabilistic forecast is available and in the case where it is only possible to draw a sample from the base forecasting distribution. Third, we show that in the elliptical case, the correct predictive distribution can be recovered via linear reconciliation irrespective of the location and scale parameters of the base forecasts. We also derive conditions for when this also holds for the special case of reconciliation via projection. Fourth, we derive theoretical results on the evaluation of reconciled probabilistic forecasts using multivariate scoring rules, including showing that the log score is improper when used to compare reconciled to unreconciled forecasts. Fifth, we propose an algorithm for choosing reconciliation weights by optimising a scoring rule. This algorithm takes advantages of advances in stochastic gradient descent and is thus suited to scoring rules that are themselves often only known up to an approximation. The algorithm and other methodological contributions described in this paper are implemented in the \emph{ProbReco} package \citep{RProbReco}.
+In this paper we seek to address a number of open issues in probabilistic forecast reconciliation. First, we develop in a formal way, definitions and a framework that generalise reconciliation from the point setting to the probabilistic setting. This is achieved by extending the geometric framework proposed by \cite{PanEtAl2020_Geometry} for point forecast reconciliation. Second, we utilise these definitions to show how a reconciled forecast can be constructed from an arbitrary base forecast. Solutions are provided in the case where a density of the base probabilistic forecast is available and in the case where it is only possible to draw a sample from the base forecasting distribution. Third, we show that in the elliptical case, the correct predictive distribution can be recovered via linear reconciliation irrespective of the location and scale parameters of the base forecasts. We also derive conditions for when this also holds for the special case of reconciliation via projection. Fourth, we derive theoretical results on the evaluation of reconciled probabilistic forecasts using multivariate scoring rules, including showing that the log score is improper when used to compare reconciled to unreconciled forecasts. Fifth, we propose an algorithm for choosing reconciliation weights by optimising a scoring rule. This algorithm takes advantage of advances in stochastic gradient descent and is thus suited to scoring rules that are themselves often only known up to an approximation. The algorithm and other methodological contributions described in this paper are implemented in the \emph{ProbReco} package \citep{RProbReco}.
 
-
-%Extending the geometric interpretation related to point forecast reconciliation derived in \citep{PanEtAl2020_Geometry} we provide new definitions of coherence and forecast reconciliation in the probabilistic setting. We also cover the topic of forecast evaluation of probabilistic forecasts via scoring rules. In particular, we prove that for a coherent data generating process, the log score is not proper with respect to incoherent forecasts. Therefore we recommend the use of the energy score or variogram score for comparing reconciled to unreconciled forecasts. Two or more reconciled forecasts can be compared using log score, energy score or variogram score, although we show that comparisons should be made on the full hierarchy for the latter two scores.
-
-%When parametric density assumptions are made we describe how the probabilistic forecast definitions lead to a reconciliation procedure that merely involves a change of basis and marginalisation. We show that probabilistic reconciliation via linear transformations can recover the true predictive distribution as long as the latter is in the elliptical class. We provide conditions for which this linear transformation is a projection, and although this projection cannot be feasibly estimated in practice, we provide a heuristic argument in favour of MinT reconciliation.
-
-%Further we propose a new method to generate coherent forecasts when the parametric distributional assumptions are not applicable. This method uses a non-parametric bootstrap based approach to generate future paths for all series in the hierarchy and then reconcile each sample path using projections. This will provide a possible sample from the reconciled predictive density of the hierarchy. An extensive simulation study was carried out to find the optimal reconciliation of bootstrap future paths with respect to a proper scoring rule. This has shown that the MinT method is at least as good as the optimal method for reconciling future paths.
-
-%Finally we applied both parametric and non-parametric approaches to generate probabilistic forecasts for domestic tourism flow in Australia. The results show that reconciliation improves forecast accuracy compared to incoherent forecasts in both parametric and non-parametric approaches and furthermore, MinT reconciliation performs best.
-
-The remainder of the paper is structured as follows. In Section~\ref{sec:ProbForecasts}, after a brief review of point forecast reconciliation, novel definitions are provided for coherent forecasts and reconciliation in the probabilistic setting. In Section~\ref{sec:AnalyticalSolution}, we outline how reconciliation can be achieved in the both the case where the density of the base probabilistic forecast is available, and in the case where a sample has been generated from the base probabilistic forecast. In Section~\ref{sec:evaluation}, we consider the evaluation of probabilistic hierarchical forecasts via scoring rules, including theoretical results on the impropriety of the log score in the context of forecast reconciliation. The use of scoring rules motivates our algorithm for finding optimal reconciliation weights using stochastic gradient descent, which is described in Section~\ref{sec:scoreoptSGD} and evaluated in an extensive simulation study in Section~\ref{sec:simulations}. An empirical application on forecasting electricity generation from different sources is contained in Section~\ref{sec:Application}. Finally Section~\ref{sec:conclusion} concludes with some discussion and thoughts on future research.
+The remainder of the paper is structured as follows. In Section~\ref{sec:ProbForecasts}, after a brief review of point forecast reconciliation, novel definitions are provided for coherent forecasts and reconciliation in the probabilistic setting. In Section~\ref{sec:AnalyticalSolution}, we outline how reconciliation can be achieved in both the case where the density of the base probabilistic forecast is available, and in the case where a sample has been generated from the base probabilistic forecast. In Section~\ref{sec:evaluation}, we consider the evaluation of probabilistic hierarchical forecasts via scoring rules, including theoretical results on the impropriety of the log score in the context of forecast reconciliation. The use of scoring rules motivates our algorithm for finding optimal reconciliation weights using stochastic gradient descent, which is described in Section~\ref{sec:scoreoptSGD} and evaluated in an extensive simulation study in Section~\ref{sec:simulations}. An empirical application on forecasting electricity generation from different sources is contained in Section~\ref{sec:Application}. Finally Section~\ref{sec:conclusion} concludes with some discussion and thoughts on future research.
 
 \section{Hierarchical probabilistic forecasts}\label{sec:ProbForecasts}
 
@@ -134,7 +125,7 @@ Before introducing coherence and reconciliation to the probabilistic setting, we
 
 A \emph{hierarchical time series} is a collection of time series adhering to some known linear constraints. Stacking the value of each series at time $t$ into an $n$-vector $\bm{y}_t$, the constraints imply that $\bm{y}_t$ lies in an $m$-dimensional linear subspace of $\mathbb{R}^n$ for all $t$. This subspace is referred to as the \emph{coherent subspace} and is denoted as $\mathfrak{s}$. A typical (and the original) motivating example is a collection of time series some of which are aggregates of other series. In this case $\bm{b}_t \in \mathbb{R}^m$ can be defined as the values of the most disaggregated or \emph{bottom-level series} at time $t$ and the aggregation constraints can be formulated as,
 \begin{equation*}
-\bm{y}_t = \bm{S}\bm{b}_t,
+	\bm{y}_t = \bm{S}\bm{b}_t,
 \end{equation*}
 where $\bm{S}$ is an $n \times m$ constant matrix for a given hierarchical structure.
 
@@ -240,19 +231,19 @@ The following theorem shows how a reconciled density can be derived from any bas
 \begin{theo}[Reconciled density of full hierarchy]\label{theo:fulldens}
 	Consider the case where a reconciled density for the bottom-level series has been obtained using Theorem~\ref{theo:bottomdens}. The density of the full hierarchy under the reconciled distribution is
 	\[
-	 \tilde{f}_{\bm{y}}(\bm{y}) =
-     |\bm{S}^*| \tilde{f}_{\bm{b}}({\bm{S}^-\bm{y}})
-     \mathbb{1}\{\bm{y}\in\mathfrak{s}\}\,,
+	\tilde{f}_{\bm{y}}(\bm{y}) =
+	|\bm{S}^*| \tilde{f}_{\bm{b}}({\bm{S}^-\bm{y}})
+	\mathbb{1}\{\bm{y}\in\mathfrak{s}\}\,,
 	\]
 	where $\mathbb{1}\{\cdot\}$ equals $1$ when the statement in braces is true and 0 otherwise,
 	\[
-    \bm{S}^*=\begin{pmatrix}
-      \bm{S}^-\\
-      \bm{S}'_\perp
-    \end{pmatrix}\,,
-  \]
+	\bm{S}^*=\begin{pmatrix}
+	\bm{S}^-\\
+	\bm{S}'_\perp
+	\end{pmatrix}\,,
+	\]
 	$\bm{S^-}$ is an $m\times n$ generalised inverse of $\bm{S}$ such that $\bm{S}^-\bm{S}=\bm{I}$,
-  and $\bm{S_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{S}$ such that $\bm{S}'_\perp\bm{S}=\bm{0}$.
+	and $\bm{S_\perp}$ is an $n\times (n-m)$ orthogonal complement to $\bm{S}$ such that $\bm{S}'_\perp\bm{S}=\bm{0}$.
 \end{theo}
 
 \begin{proof}
@@ -267,7 +258,7 @@ Suppose the incoherent base forecasts are Gaussian with mean $\hat{\bm{\mu}}$, c
 \end{equation}
 Then, using Theorem~\ref{theo:bottomdens}, the reconciled density for the bottom-level series is given by
 \begin{equation}
-\tilde{f}_{\bm{b}}(\bm{b})=\int(2\pi)^{-\frac{n}{2}}|\hat{\bm{\Sigma}}|^{-\frac{1}{2}}|\bm{G}^*|e^{q/2} d\bm{a}\nonumber\,,
+\tilde{f}_{\bm{b}}(\bm{b})=\int(2\pi)^{-\frac{n}{2}}|\hat{\bm{\Sigma}}|^{-\frac{1}{2}}|\bm{G}^*|e^{-q/2} d\bm{a}\nonumber\,,
 \end{equation}
 where
 \begin{align*}
@@ -275,7 +266,7 @@ where
 	\bigg[\bm{G}^*\bt-\hat{\bm{\mu}}\bigg]' \hat{\bm{\Sigma}}^{-1}\bigg[\bm{G}^*\bt-\hat{\bm{\mu}}\bigg]\\
 	& =
 	\bigg[\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\bigg]'
-  \bigg[\bm{G}^{*-1}\hat{\bm{\Sigma}}(\bm{G}^{*-1})'\bigg]^{-1}
+	\bigg[\bm{G}^{*-1}\hat{\bm{\Sigma}}(\bm{G}^{*-1})'\bigg]^{-1}
 	\bigg[\bt-\bm{G}^{*-1}\hat{\bm{\mu}}\bigg]\,.
 \end{align*}
 Noting that
@@ -286,9 +277,9 @@ Noting that
 \]
 where $\bm{G}_{\perp}^-$ is an $(n-m)\times n$ matrix such that $\bm{G}_{\perp}^-\bm{G}_{\perp}=\bm{I}$, $q$ can be rearranged as
 \[
- \bigg[\bt-\PQ\hat{\bm{\mu}}\bigg]'
- \bigg[\PQ\hat{\bm{\Sigma}}\PQ'\bigg]^{-1}
- \bigg[\bt-\PQ\hat{\bm{\mu}}\bigg]\,.
+\bigg[\bt-\PQ\hat{\bm{\mu}}\bigg]'
+\bigg[\PQ\hat{\bm{\Sigma}}\PQ'\bigg]^{-1}
+\bigg[\bt-\PQ\hat{\bm{\mu}}\bigg]\,.
 \]
 After the change of variables, the density can be recognised as a multivariate Gaussian in $\bm{b}$ and $\bm{a}$. The mean and covariance matrix for the margins of the first $m$ elements are $\bm{G}\hat{\bm{\mu}}$ and $\bm{G}\hat{\bm{\Sigma}}\bm{G}'$ respectively. Marginalising out $\bm{a}$, the reconciled forecast for the bottom-level is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$. Using standard results from matrix algebra of normals, $\tilde{\bm{y}} \sim \mathcal{N}(\bm{S}\bm{G}\hat{\bm{\mu}}, \bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$.
 
@@ -302,11 +293,11 @@ More generally, consider linear reconciliation of the form $\psi(\hat{\bm{y}})=\
 \begin{proof}
 	First consider finding a $\bm{G}_{\text{opt}}$ for which the following holds,
 	\begin{equation*}
-	\bm{\Sigma}=\bm{S}\bm{G}_{\text{opt}}\hat{\bm{\Sigma}}\bm{G}'_{\text{opt}}\bm{S}'\,.
+		\bm{\Sigma}=\bm{S}\bm{G}_{\text{opt}}\hat{\bm{\Sigma}}\bm{G}'_{\text{opt}}\bm{S}'\,.
 	\end{equation*}
-	This can be solved as $\bm{G}_{\text{opt}}=\bm{\Omega}_0^{1/2}\hat{\bm{\Sigma}}^{-1/2}$, where $\hat{\bm{\Sigma}}^{1/2}$ is any matrix such that $\hat{\bm{\Sigma}}=\hat{\bm{\Sigma}}^{1/2}(\hat{\bm{\Sigma}}^{1/2})'$ (for example a Cholesky factor), ${\bm{\Omega}}_0^{1/2}({\bm{\Omega}}_0^{1/2})'={\bm\Omega}$ and ${\bm\Omega}$ is the true scale matrix for the bottom-level series. To ensure conformability of matrix multiplication, ${\bm{\Omega}}^{1/2}$ must be an $m\times n$ matrix; so it can be set to the Cholesky factor of ${\bm{\Omega}}$ augmented with an additional $n-m$ columns of zeros. To reconcile the location. solve the following for $\bm{d}_{\text{opt}}$
+	This can be solved as $\bm{G}_{\text{opt}}=\bm{\Omega}_0^{1/2}\hat{\bm{\Sigma}}^{-1/2}$, where $\hat{\bm{\Sigma}}^{1/2}$ is any matrix such that $\hat{\bm{\Sigma}}=\hat{\bm{\Sigma}}^{1/2}(\hat{\bm{\Sigma}}^{1/2})'$ (for example a Cholesky factor), ${\bm{\Omega}}_0^{1/2}({\bm{\Omega}}_0^{1/2})'={\bm\Omega}$ and ${\bm\Omega}$ is the true scale matrix for the bottom-level series. To ensure conformability of matrix multiplication, ${\bm{\Omega}}^{1/2}$ must be an $m\times n$ matrix; so it can be set to the Cholesky factor of ${\bm{\Omega}}$ augmented with an additional $n-m$ columns of zeros. To reconcile the location, solve the following for $\bm{d}_{\text{opt}}$
 	\begin{equation*}
-	\bm{\mu}=\bm{S}(\bm{d}_{\text{opt}}+\bm{G}_{\text{opt}}\hat{\bm{\mu}})\,
+		\bm{\mu}=\bm{S}(\bm{d}_{\text{opt}}+\bm{G}_{\text{opt}}\hat{\bm{\mu}})\,
 	\end{equation*}
 	which is given by $\bm{d}_{\text{opt}}=\bm{\beta}-\bm{G}_{\text{opt}}\hat{\bm\mu}$, where $\bm{\beta}$ is defined so that $\bm{\mu}=\bm{S}\bm{\beta}$.
 \end{proof}
@@ -329,24 +320,15 @@ In practice it is often the case that samples are drawn from a probabilistic for
 \end{theo}
 \begin{proof}
 	For any $\mathcal{A}\in\mathscr{F}_{\mathfrak{s}}$
-\begin{align}
-	\mbox{Pr}(\hat{\bm{y}}\in\psi^{-1}(\mathcal{A}))&=\underset{L\rightarrow\infty}{\lim}\sum\limits_{\ell=1}^L\mathbb{1}\big\{\hat{\bm{y}}^{[\ell]}\in\psi^{-1}(\mathcal{A})\big\}\nonumber\\
-	&=\underset{L\rightarrow\infty}{\lim}\sum\limits_{\ell=1}^L\mathbb{1}\big\{\psi(\hat{\bm{y}}^{[\ell]})\in(\mathcal{A})\big\}\nonumber\\
-	&=\mbox{Pr}(\tilde{\bm{y}}\in(\mathcal{A}))\nonumber
-\end{align}
+	\begin{align}
+		\mbox{Pr}(\hat{\bm{y}}\in\psi^{-1}(\mathcal{A}))&=\underset{L\rightarrow\infty}{\lim}\sum\limits_{\ell=1}^L\mathbb{1}\big\{\hat{\bm{y}}^{[\ell]}\in\psi^{-1}(\mathcal{A})\big\}\nonumber\\
+		&=\underset{L\rightarrow\infty}{\lim}\sum\limits_{\ell=1}^L\mathbb{1}\big\{\psi(\hat{\bm{y}}^{[\ell]})\in(\mathcal{A})\big\}\nonumber\\
+		&=\mbox{Pr}(\tilde{\bm{y}}\in(\mathcal{A}))\nonumber
+	\end{align}
 \end{proof}
 
 This result implies that reconciling each member of a sample drawn from an incoherent distribution provides a sample from the reconciled distribution. Such a strategy has already been used by \cite{JeoEtAl2019}, without formal justification. This result allows coherent forecasts to be built in a general and modular fashion, the mechanism for simulating base forecasts is separated from the question of reconciliation. This will become clear in the simulation study covered in Section~\ref{sec:simulations}.
 
-%In the point forecasting setting it is common to generate forecasts from independent statistical models, allowing forecast reconciliation to be scaled up to large hierarchies. Since a single point forecast is generated for each series there is no ambiguity as to how these should be stacked into a vector of base forecasts $\hat{\bm{y}}$. This is no longer the case in the probabilistic setting where multiple draws are made for each series. \cite{JeoEtAl2019} recommend some crude heuristics that can be used to form joint samples. In Section~\ref{sec:drawbase} we provide an alternative based on resampling forecast errors. This provides a sample from a base probabilistic forecast. A sample from the reconciled distribution can be obtained by premultiplying these draws by $\bm{S}\bm{G}$. Strategies for choosing $\bm{G}$ are discussed in Section~\ref{sec:OptRec}.
-
-%\subsection{Drawing base probabilistic forecasts}\label{sec:drawbase}
-%
-%The following method only requires that one-step-ahead in-sample `forecasts' $\hat{y}_{i,t}$ can be computed for each series $i$. These are not true forecasts since they are computed over the training data $t=1,\ldots,T$; for instance $\hat{y}_{i,t}$ may be the fitted values of $E(y_{i,t}|y_{i,t-1})$ implied by some statistical model. Let the errors $e_{i,t} = y_{i,t} - \hat{y}_{i,t}$ be stacked in a $(n \times T)$ matrix $\bm{\mathcal{E}}:=\left\{e_{i,t}\right\}_{i=1,\dots,n,t=1,\dots,T}$. When up to $H$-step-ahead forecasts are required, we randomly select $H$ consecutive columns from $\bm{\mathcal{E}}$ to form $\bm{\mathcal{E}}^b$ and repeat for $b = 1,\dots,B$. This preserves both serial correlation of errors as well as dependence across different series.
-%
-%The $\bm{\mathcal{E}}^b$ can then be used together with forecasts $\hat{\bm{y}}_{T+h}$ for $h=1,\ldots,H$ to recursively form $B$ sample paths of the full hierarchy. As a simple example consider the case where each forecast comes from (the same) AR(1) model and $H=2$. Then $\hat{{y}}^b_{i,T+1}=\phi{{y}}_{i,T}+e^b_{i,1}$ and $\hat{{y}}^b_{i,T+2}=\phi\hat{{y}}^b_{i,T+1}+e^b_{i,2}$ for each $i=1,\ldots,n$ and $b=1,\ldots,B$ and where $e^b_{i,h}$ is the element in row $i$ and column $h$ of $\bm{\mathcal{E}}^b$. Each future path can be stacked into a vector $\hat{\bm{y}}^b_{T+h}:=(\hat{{y}}^b_{1,T+h},\ldots,\hat{{y}}^b_{n,T+h})'$ which in turn are stacked into a $n\times B$ matrix $\hat{\bm{\Upsilon}}_{T+h} = (\hat{\bm{y}}^1_{T+h},\dots,\hat{\bm{y}}^B_{T+h})$.
-%
-%As discussed previously, reconciling each draw from an incoherent distribution yields a sample from the reconciled distribution. Therefore setting $\tilde{\bm{\Upsilon}}_{T+h} = \bm{S}\bm{G}\hat{\bm{\Upsilon}}_{T+h}$ yields a matrix whose columns $\tilde{\bm{y}}^b_{T+h} := \bm{S}\bm{G}\hat{\bm{y}}^b_{T+h}$ are a sample from the reconciled distribution. In principle $\bm{G}$ matrices from popular point forecasting reconciliation methods can be used. In Section~\ref{sec:OptRec}, we propose a way to find an optimal $\bm{G}$ for reconciling future paths by minimising a proper multivariate scoring rule.
 
 \section{Evaluation of Hierarchical Probabilistic Forecasts} \label{sec:evaluation}
 
@@ -360,15 +342,7 @@ Alternatively there are a number of other multivariate scoring rules that are di
 \E_{P}
 ||{\bm{y}}-\bm{\omega}||^\alpha -\frac{1}{2}\E_{P}||\bm{y}-\bm{y}^*||^\alpha, \,\, \alpha \in (0,2]\,,
 \end{equation}
-where $\bm{y}$ and $\bm{y}^*$ are independent copies drawn from the distribution $P$. In the empirical results described later, we follow common convention by setting $\alpha=0.5$. While the expectations in Equation~\eqref{eq:Energy_score} may have no closed form, they can be easily approximated via simulations using a sample drawn from the probabilistic forecast. Other scores with similar behaviour are kernel-based scores \citep{dawid2007,Gneiting2007} and the variogram score \citep{SCHEUERER2015}.
-
-%The energy score has been criticised by \citet{Pinson2013a} for its low discriminative ability for incorrectly specified covariances. The variogram score \citep{SCHEUERER2015}, overcomes this issue and is defined as
-%\begin{equation*}
-%\text{VS}({P}, \bm{\omega}) = \displaystyle\sum_{i=1}^{n}\displaystyle\sum_{j=1}^{n}w_{ij}\left(|\omega_{i} - \omega_{j}|^p - E_{P} |{y}_{i}-{y}_{j}|^p\right)^2\,,
-%\end{equation*}
-%where $y_i$ and $y_j$ are the $i^{th}$ and $j^{th}$ elements of $\bm{y}\sim P$ and we follow common convention by setting $p=0.5$.
-
-%In the context of probabilistic forecast reconciliation there could be two motivations for using scoring rules. The first is to compare incoherent base probabilistic forecasts to their reconciled counterparts, to see whether reconciliation improves forecast accuracy. The second is to compare two reconciled probabilistic forecasts to one another, to evaluate which choice of $\bm{G}$ performs best in practice.
+where $\bm{y}$ and $\bm{y}^*$ are independent copies drawn from the distribution $P$. In the empirical results described later, we follow common convention by setting $\alpha=1$. While the expectations in Equation~\eqref{eq:Energy_score} may have no closed form, they can be easily approximated via simulations using a sample drawn from the probabilistic forecast. Other scores with similar behaviour are kernel-based scores \citep{dawid2007,Gneiting2007} and the variogram score \citep{SCHEUERER2015}.
 
 \subsection{The Log Score for Hierarchical Time Series}
 
@@ -388,8 +362,8 @@ If a probabilistic forecast is available for any $m$ series, then a probabilisti
 
 Consider a coherent probabilistic forecast with density $\tilde{f}_{\bm{y}}$ for the full hierarchy and $\tilde{f}_{\bm{b}}$ for the bottom-level series. By Theorem~\ref{theo:fulldens}, $\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{y})\mathbb{1}\{\bm{y}\in\mathfrak{s}\}$. Any realisation $\bm{y}^*$ will lie on the coherent subspace and can be written as $\bm{S}\bm{b}^*$. The expression for the log score is therefore
 \begin{align}
-\text{LS}(\tilde{f}_{\bm{y}},\bm{y}^*)&=-\log\left(|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{S}\bm{b}^*)\right)\nonumber\\
-&=-\log|\bm{S}^*|-\log \tilde{f}_{\bm{b}}(\bm{b}^*).\nonumber
+	\text{LS}(\tilde{f}_{\bm{y}},\bm{y}^*)&=-\log\left(|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{S}\bm{b}^*)\right)\nonumber\\
+	&=-\log|\bm{S}^*|-\log \tilde{f}_{\bm{b}}(\bm{b}^*).\nonumber
 \end{align}
 For coherent densities, the log score for the full hierarchy differs from the log score for the bottom-level series only by $-\log|\bm{S}^*|$. This term is independent of the choice of $\bm{G}$. Consequently, rankings of different reconciliation methods using the log score for the full hierarchy will not change if only the bottom-level series is used.
 
@@ -405,7 +379,7 @@ The same property does not hold for all scores. For example, the energy score is
 		Energy Score & Proper & Full hierarchy should be used\\
 		\hline
 	\end{tabular}
-
+	
 	\label{tab:prop}
 \end{table}
 
@@ -413,31 +387,31 @@ The same property does not hold for all scores. For example, the energy score is
 
 We now propose an algorithm for finding reconciliation weights by optimising an objective function based on scores. For clarity of exposition, we consider the special case of the energy score. However, the algorithm can be generalised to any score that is computed by sampling from the probabilistic forecast. For example, in the simulations and the empirical application of Sections~\ref{sec:simulations} and~\ref{sec:Application} we consider optimising with respect to both the energy and variogram scores. We consider linear reconciliation of the form $\tilde{\bm{y}}=\psi_{\bm{\gamma}}({\bm{\hat{y}}})={\bm{S}}\left(\bm{d}+\bm{G}{\bm{\hat{y}}}\right)$, where ${\bm\gamma}:=\left(\bm{d},vec(\bm{G})\right)$. This allows for more flexibility than a projection, which would imply the constraints $\bm{d}=\bm{0}$ and $\bm{G}\bm{S}=\bm{I}$. This added flexibility is motivated by Theorem~\ref{theo:OptRec} which shows that projections in general are not guaranteed to recover the true predictive distribution even in the elliptical case. When making an $h$-step-ahead forecast at time $T$, the objective used to determine an optimal value of $\bm{\gamma}$ is the total energy score based on in-sample information, given by
 \begin{equation}
-\mathcal{E}\left(\bm{\gamma}\right)=\sum\limits_{t=T}^{T+R} \textit{ES}(\tilde{f}^{\bm{\gamma}}_{t+h|t},\bm{y}_{t+h})\,,
+\mathcal{E}\left(\bm{\gamma}\right)=\sum\limits_{t=T}^{T+R-1} \textit{ES}(\tilde{f}^{\bm{\gamma}}_{t+h|t},\bm{y}_{t+h})\,,
 \label{eq:tes}
 \end{equation}
 where $\tilde{f}^{\bm{\bm{\gamma}}}_{t+h|t}$ a is probabilistic forecast for $\bm{y}_{t+h}$ made at time $t$ and reconciled with respect to $\psi_{\bm{\gamma}}(.)$, and $R$ is the number of score evaluations used in forming the objective function.
 
 One of the challenges in optimising this objective function is that there is, in general, no closed form expression for the energy score. However, it can be easily approximated by simulation as
 \begin{equation}
-\hat{\mathcal{E}}\left(\bm{\gamma}\right)=\sum\limits_{t=T}^{T+R}\left[\frac{1}{Q}\bigg(\sum\limits_{q=1}^{Q}||\tilde{\bm{y}}^{[q]}_{t+h|t}-\bm{y}_{t+h}||-\frac{1}{2}||\tilde{\bm{y}}_{t+h|t}^{[q]}-\tilde{\bm{y}}^{*[q]}_{t+h|t}||\bigg)\right]\,,
+\hat{\mathcal{E}}\left(\bm{\gamma}\right)=\sum\limits_{t=T}^{T+R-1}\left[\frac{1}{Q}\bigg(\sum\limits_{q=1}^{Q}||\tilde{\bm{y}}^{[q]}_{t+h|t}-\bm{y}_{t+h}||-\frac{1}{2}||\tilde{\bm{y}}_{t+h|t}^{[q]}-\tilde{\bm{y}}^{*[q]}_{t+h|t}||\bigg)\right]\,,
 \label{eq:obj_mc}
 \end{equation}
-where $\tilde{\bm{y}}^{[q]}_{t+h|t}=\bm{S}\big(\bm{d}+\bm{G}{\hat{\bm{y}}}^{[q]}_{t+h|t}\big)$, $\tilde{\bm{y}}^{*[q]}_{t+h|t}=\bm{S}\big(\bm{d}+\bm{G}{\hat{\bm{y}}}^{*[q]}_{t+h|t}\big)$ and ${\hat{\bm{y}}}^{[q]}_{t+h|t},{\hat{\bm{y}}}^{*[q]}_{t+h|t}\overset{iid}{\sim} \hat{f}_{t+h|t}$ for $q=1,\ldots,Q$, and $t=1,\ldots,T-h$.
+where $\tilde{\bm{y}}^{[q]}_{t+h|t}=\bm{S}\big(\bm{d}+\bm{G}{\hat{\bm{y}}}^{[q]}_{t+h|t}\big)$, $\tilde{\bm{y}}^{*[q]}_{t+h|t}=\bm{S}\big(\bm{d}+\bm{G}{\hat{\bm{y}}}^{*[q]}_{t+h|t}\big)$ and ${\hat{\bm{y}}}^{[q]}_{t+h|t},{\hat{\bm{y}}}^{*[q]}_{t+h|t}\overset{iid}{\sim} \hat{f}_{t+h|t}$ for $q=1,\ldots,Q$.
 
 The objective function is optimised by Stochastic Gradient Descent (SGD). The SGD technique has become increasingly popular in machine learning and statistics over the past decade having been applied to training neural networks \citep{bottou2010} and Variational Bayes \citep{kingma2013}. The method requires an estimate of the gradient $\partial\hat{\mathcal{E}}/\partial{\gamma}$ which is computed by automatically differentiating Equation~\eqref{eq:obj_mc} using the header only C++ library of the Stan project~\citep{carpenter2015}. The learning rates used for SGD are those of the Adam method \citep[see][for details]{kingma2014}. Pseudo-code for the full procedure in the case where $h=1$ is provided in Algorithm~\ref{alg:scoreopt} and is implemented in the R package \textit{ProbReco} \citep{RProbReco}.
 
 \begin{algorithm}[!thb]
 	\caption{SGD with Adam for score optimal reconciliation (one-step-ahead forecasts). The initial value of $\bm{\gamma}$ is given by OLS reconciliation. Steps 9--14 are the standard steps for SGD with Adam. Squaring $\bm{g}_j$ in Step 11 and division and addition in Step 14 are element-wise operations.}\label{alg:scoreopt}.
 	\begin{algorithmic}[1]
-		\Procedure{ScoreOpt}{$\hat{f}_{2|1},\ldots,\hat{f}_{T|T-1|1}$, $\bm{y}_1,\ldots,\bm{y}_T$, $\beta_1$,$\beta_2$,$\epsilon$,$\eta$}.
-		\For{$t=T:T+R$}
-		  \State Find base forecasts $\hat{f}_{t+1|t}$ using $t-T+1,t-T+2,\ldots,t$ as training data.
+		\Procedure{ScoreOpt}{$\bm{y}_1,\ldots,\bm{y}_{T+R}$, $\beta_1$,$\beta_2$,$\epsilon$,$\eta$}.
+		\For{$t=T:T+R-1$}
+		\State Find base forecasts $\hat{f}_{t+1|t}$ using $t-T+1,t-T+2,\ldots,t$ as training data.
 		\EndFor
 		\State Initialise $\bm{m}_0=\bm{0}, \bm{v}_0=\bm{0}$ and $\bm{\gamma}_0=\left(\bm{0},\text{vec}\left((\bm{S}'\bm{S})^{-1}\bm{S}'\right)\right)$
 		\For{$j = 1,2,3,\ldots$ up to convergence}
-		\State Draw ${\hat{\bm{y}}}^{[q]}_{t+1|t},{\hat{\bm{y}}}^{*[q]}_{t+1|t}\sim \hat{f}_{t+1|t}$ for $q=1,\ldots,Q$, $t=1,\ldots T-1$.
-		\State Compute $\tilde{\bm{y}}^{[q]}_{t+1|t}$ and $\tilde{\bm{y}}^{*[q]}_{t+1|t}$ for $q=1,\ldots,Q$, $t=1,\ldots T-1$ using $\bm{\gamma}_{j-1}$.
+		\State Draw ${\hat{\bm{y}}}^{[q]}_{t+1|t},{\hat{\bm{y}}}^{*[q]}_{t+1|t}\sim \hat{f}_{t+1|t}$ for $q=1,\ldots,Q$, $t=T,\ldots T+R-1$.
+		\State Compute $\tilde{\bm{y}}^{[q]}_{t+1|t}$ and $\tilde{\bm{y}}^{*[q]}_{t+1|t}$ for $q=1,\ldots,Q$, $t=T,\ldots T+R-1$ using $\bm{\gamma}_{j-1}$.
 		\State $\bm{g}_j \gets \left.\partial\hat{\mathcal{E}}/\partial{\bm{\gamma}}\right|_{\bm{\gamma}=\bm{\gamma}_{j-1}}$ \Comment{Compute gradient}
 		\State $\bm{m}_j\gets\beta_1\bm{m}_{j-1}+(1-\beta_1)\bm{g}_j$ \Comment{Moving average of gradient}
 		\State $\bm{v}_j\gets\beta_2\bm{v}_{j-1}+(1-\beta_2)\bm{g}^2_j$ \Comment{Moving average of squared gradient}
@@ -445,7 +419,7 @@ The objective function is optimised by Stochastic Gradient Descent (SGD). The SG
 		\State $\hat{\bm{v}}_j\gets \bm{v}_j/(1-\beta_2^j)$ \Comment{Bias correct}
 		\State $\bm{\gamma}_j\gets\bm{\gamma}_{j-1}+\eta\frac{\hat{\bm{m}}_j}{(\hat{\bm{v}}_j+\epsilon)}$ \Comment{Update weights}
 		\EndFor
-		\State Set the reconciled forecast as $\tilde{f}^{\bm{\gamma}_{\text{opt}}}_{T+1|T}$ where $\bm{\gamma}_{\text{opt}}$ is the converged value of $\bm{\gamma}$.
+		\State Set the reconciled forecast as $\tilde{f}^{\bm{\gamma}_{\text{opt}}}_{T+R+1|T+R}$ where $\bm{\gamma}_{\text{opt}}$ is the converged value of $\bm{\gamma}$.
 		\EndProcedure
 	\end{algorithmic}
 \end{algorithm}
@@ -458,17 +432,16 @@ The aim of the simulations that follow is to demonstrate probabilistic forecast 
 
 \subsection{Data Generating Processes}\label{sec:dgp}
 
-The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure~\ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in-turn aggregated to form the middle and top-level series. The orders $p$ and $q$ are randomly selected from $\{1,2\}$ for each bottom-level series. The AR and MA parameters are randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively, and only accepted if they belong to the stationary and invertible region. In addition a non-stationary case where $d$ is randomly chosen for each bottom-level from $\{0,1\}$ was considered, these results are omitted for brevity. A complete set of results are available at the github repository \url{https://git.io/JJwQB}.
+The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure~\ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in turn aggregated to form the middle and top-level series. The orders $p$ and $q$ are randomly selected from $\{1,2\}$ for each bottom-level series. The AR and MA parameters are randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively, and only accepted if they belong to the stationary and invertible region. In addition a non-stationary case where $d$ is randomly chosen for each bottom-level from $\{0,1\}$ was considered, these results are omitted for brevity. A complete set of results are available at the github repository \url{https://git.io/JJwQB}.
 
 We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. Specifically, the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with $\text{Beta}(1,3)$ margins. After simulating from the ARIMA models, additional noise is added to ensure bottom-level series have a lower signal-to-noise ratio than top level series with details provided in Appendix~\ref{app:DGP}. For each series the first 500 observations are ignored to avoid the impact of initial values.
 
-%All forecasts are evaluated using a rolling window with a training sample of 500. This yields 1,000 probabilistic forecasts for evaluation. The predictive accuracy of the alternative methods is evaluated using the scoring rules presented in Section~\ref{sec:evaluation}. Results are reported in terms of skill scores, i.e., the percentage improvement of a probabilistic forecast over a reference method. A positive (negative) value indicates a percentage gain (loss) in forecast accuracy over the reference method.
 
 \subsection{Modelling and Base Forecasts}
 
 We fit univariate ARIMA models to each series using the \verb|ARIMA()| function in the \verb|fable| package \citep{Rfable} in R \citep{Rcore}. Note that the order of the ARIMA models is not set to the true order but is chosen using the algorithm of \cite{HynKha2008}, allowing for the possibility of misspecification. Indeed, an advantage of forecast reconciliation is the ability to down-weight the forecasts of series within the hierarchy that come from misspecified models. We also considered exponential smoothing (ETS) models using the \verb|ETS()| function in the \verb|fable| package. These are omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results.
 
-Let $\hat{\bm{y}}_{t+h|t}=\left(\hat{y}_{1,t+h|t},\ldots,\hat{y}_{n,t+h|t}\right)'$, where $\hat{y}_{i,t+h|t}$ is the $h$-step-ahead point forecast for series $i$, and $\bm{E}:=\left\{e_{i,t}\right\}_{i=1,\dots,n;t=1,\dots,T}$ where $e_{i,t}$ is the residual stacked in the $(n \times T)$ matrix. For each series and model, base probabilistic forecasts for $h=1$ are constructed in the following four ways:
+Let $\hat{\bm{y}}_{t+h|t}=\left(\hat{y}_{1,t+h|t},\ldots,\hat{y}_{n,t+h|t}\right)'$, where $\hat{y}_{i,t+h|t}$ is the $h$-step-ahead point forecast for series $i$, and $\bm{E}:=\left\{e_{i,t}\right\}_{i=1,\dots,n;t=1,\dots,T}$ is an $(n \times T)$ matrix of stacked residuals $e_{i,t}$. For each series and model, base probabilistic forecasts for $h=1$ are constructed in the following four ways:
 \begin{compactitem}
 	\item \textbf{Independent Gaussian:} The base probabilistic forecast is made up of independent Gaussian distributions with the forecast mean and variance of variable $i$ given by $\hat{y}_{i,t+h|t}$ and $\hat{\sigma}^2_{i,t+h|t}$, where $\hat{\sigma}^2_{i,t+h|t}$ is the sample variance of the residuals in the $i$th row of $\bm{E}$.
 	\item \textbf{Joint Gaussian:} The base probabilistic forecast is a multivariate Gaussian distribution with the forecast mean $\hat{\bm{y}}_{t+h|t}$ and variance covariance matrix $\hat{\bm\Sigma}$, where $\hat{\bm\Sigma}$ is the variance covariance matrix of the residuals.
@@ -500,26 +473,6 @@ In addition to these methods, two further reconciliation methods were considered
 
 The left panel of Figure~\ref{fig:meanscore_g} shows the mean energy score for different reconciliation methods and different methods of generating base forecasts. When base probabilistic forecasts are generated independently, score optimisation with the energy score (ScoreOptE) performs best, while when base forecasts are generated jointly, the MinT method for reconciliation using the shrinkage estimator (MinTShr) yields the most accurate forecasts. The bottom-up method as well as BTTH and JPP fail to even improve upon base forecasts in all cases. As expected score optimisation using the variogram score does not perform as well as score optimisation using energy score, when evaluation is carried out with respect to the latter. However, the results are quite close suggesting that score optimisation is fairly robust to using an alternative proper score.
 
-%\begin{table}[!htb]
-%	\small
-%	\caption{\label{tab:gse}Mean Energy score for Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
-%	\centering
-%	\begin{tabular}[t]{lrrrr}
-%		\toprule
-%		Method    & Ind. Bootstrap   & Ind. Gaussian    & Joint Bootstrap  & Joint Gaussian\\
-%		\midrule
-%    Base      & 11.3256          & 11.3247          & 11.0662          & 11.0556\\
-%    BottomUp  & 11.9759          & 11.9705          & 11.6429          & 11.6203\\
-%    BTTH      & 21.7508          & 21.8051          & 21.8542          & 21.8826\\
-%    JPP       & 22.8651          & 22.8986          & 22.8573          & 22.8599\\
-%    MinTShr   & 10.8865          & 10.8905          & \textbf{10.7475} & \textbf{10.7428}\\
-%    OLS       & 11.1284          & 11.1264          & 10.8396          & 10.8292\\
-%    ScoreOptE & \textbf{10.8053} & \textbf{10.8297} & 10.8433          & 10.8406\\
-%    ScoreOptV & 11.2066          & 11.2074          & 11.0413          & 11.0262\\
-%		\bottomrule
-%	\end{tabular}
-%\end{table}
-
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=0.85\textwidth]{Figs/gaussian_meanscore}
@@ -545,32 +498,12 @@ To assess significant differences between the reported results, we use post-hoc 
 \end{figure}
 
 
-The right panel of Figure~\ref{fig:meanscore_g} and Figure~\ref{fig:gsv} report the same output but using the variogram score for evaluation. For this specific DGP, base model and score, BTTH significantly outperforms all other methods. However, this result was not observed when using BTTH for any other simulation scenario, including those reported only in the online supplement. Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well. Score optimisation, OLS, MinTShr and BTTH all lead to significantly improvements relative to base, bottom-up and JPP.
-
-%\begin{table}[!htb]
-%	\small
-%	\caption{\label{tab:gsv}Mean Variogram score for Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
-%	\centering
-%	\begin{tabular}[t]{lrrrr}
-%		\toprule
-%    Method    & Ind. Bootstrap    & Ind Gaussian      & Joint Bootstrap   & Joint Gaussian\\
-%		\midrule
-%    Base      & 694.5012          & 694.6362          & 694.7861          & 694.5443\\
-%    BottomUp  & 888.7264          & 891.1163          & 697.9468          & 697.7384\\
-%    BTTH      & \textbf{630.8518} & \textbf{632.3063} & \textbf{632.7646} & \textbf{631.8727}\\
-%    JPP       & 1032.9742         & 1039.0791         & 1033.3112         & 1038.1928\\
-%    MinTShr   & 683.3065          & 683.0490          & 677.8987          & 677.4923\\
-%    OLS       & 713.4531          & 713.5246          & 680.3692          & 680.1407\\
-%    ScoreOptE & 686.0447          & 686.8067          & 683.5021          & 684.2645\\
-%    ScoreOptV & 675.1864          & 675.2327          & 673.5918          & 672.3905\\
-%		\bottomrule
-%	\end{tabular}
-%\end{table}
+The right panel of Figure~\ref{fig:meanscore_g} and Figure~\ref{fig:gsv} report the same output but using the variogram score for evaluation. For this specific DGP, base model and score, BTTH significantly outperforms all other methods. However, this result was not observed when using BTTH for any other simulation scenario, including those reported only in the online supplement. Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well. Score optimisation, OLS, MinTShr and BTTH all lead to significant improvements relative to base, bottom-up and JPP.
 
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[width=.6\textheight]{Figs/gsv.pdf}
-	\caption{Nemenyi matrix for Variogram score for Gaussian Stationary DGP.}
+	\caption{Nemenyi matrix for Variogram score for Gaussian DGP.}
 	\label{fig:gsv}
 \end{figure}
 
@@ -578,47 +511,7 @@ The right panel of Figure~\ref{fig:meanscore_g} and Figure~\ref{fig:gsv} report 
 
 The left panel of Figure~\ref{fig:meanscore_n} reports the mean energy score for the non-Gaussian DGP\@. Overall, the results are quite similar to the Gaussian DGP\@. The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent. The Nemenyi matrix is omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results. However, these lead to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MinTShr and OLS are statistically indistinguishable from one another but are significantly better than base forecasts and the bottom-up method. The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts.
 
-%\begin{table}[!htb]
-%	\small
-%	\caption{\label{tab:nse} Mean Energy score for non-Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
-%	\centering
-%	\begin{tabular}[t]{lrrrr}
-%		\toprule
-%    Method    & Ind. Bootstrap  & Ind. Gaussian   & Joint Bootstrap & Joint Gaussian\\
-%		\midrule
-%    Base      & 1.4169          & 1.4246          & 1.3850          & 1.3912\\
-%    BottomUp  & 1.5071          & 1.5305          & 1.4658          & 1.4731\\
-%    BTTH      & 2.7704          & 2.9271          & 2.7817          & 2.9335\\
-%    JPP       & 2.8805          & 2.9737          & 2.8788          & 2.9672\\
-%    MinTShr   & 1.3514          & 1.3504          & \textbf{1.3297} & \textbf{1.3367}\\
-%    OLS       & 1.3643          & 1.3638          & 1.3409          & 1.3483\\
-%    ScoreOptE & \textbf{1.3391} & \textbf{1.3379} & 1.3384          & 1.3391\\
-%    ScoreOptV & 1.3772          & 1.3772          & 1.3746          & 1.3738\\
-%		\bottomrule
-%	\end{tabular}
-%\end{table}
-
 Finally, the right panel of Figure~\ref{fig:meanscore_n} and Figure~\ref{fig:nsv} report results for the non-Gaussian DGP using the variogram score to evaluate forecasts. In this case, score optimisation with respect to the variogram score yields the best performance when base forecasts are dependent, while MinTShr yields the best performance when base forecasts are independent. In contrast to the Gaussian DGP, the JPP method leads to significant improvements over base forecasts, while the BTTH method leads to a significantly worse performance than base forecasts.
-
-%\begin{table}[!htb]
-%	\small
-%	\caption{\label{tab:nsv}Mean Variogram score for non-Gaussian DGP\@. Values in bold indicate the best reconciliation method for a given base forecasting method.}
-%	\centering
-%	\begin{tabular}[t]{lrrrr}
-%		\toprule
-%    Method    & Ind. Bootstrap   & Ind. Gaussian    & Joint Bootstrap  & Joint Gaussian\\
-%		\midrule
-%    Base      & 26.2480          & 26.2638          & 26.2339          & 26.2643\\
-%    BottomUp  & 28.5977          & 28.7956          & 27.6925          & 27.7625\\
-%    BTTH      & 29.2544          & 29.1507          & 29.0767          & 29.0854\\
-%    JPP       & 26.3968          & 26.3993          & 26.3833          & 26.4030\\
-%    MinTShr   & \textbf{25.4412} & \textbf{25.4215} & 25.4799          & 25.5248\\
-%    OLS       & 25.6498          & 25.6362          & 25.6860          & 25.7348\\
-%    ScoreOptE & 25.6992          & 25.6954          & 25.5763          & 25.6889\\
-%    ScoreOptV & 25.5433          & 25.5325          & \textbf{25.4541} & \textbf{25.4798}\\
-%		\bottomrule
-%	\end{tabular}
-%\end{table}
 
 \begin{figure}[!htb]
 	\centering
@@ -633,23 +526,22 @@ Overall, the main conclusion from the simulation study is that score optimisatio
 
 \subsection{Data Description}\label{sec:datadesc}
 
-To demonstrate the potential of the proposed methods, we consider an application to forecasting Australian electricity generation from different sources of energy. Daily time series were obtained form \url{opennem.org.au}, a website that compiles publicly available data from the Australian Energy Market Operator (AEMO)\@. Probabilistic day-ahead forecasts are crucial inputs into operational and planning decisions that ensure the efficiency and stability of the power network. This has become a more challenging problem with the growth in intermittent sources of generation such as wind and solar.
+To demonstrate the potential of the proposed methods, we consider an application to forecasting Australian electricity generation from different sources of energy. Daily time series were obtained from \url{opennem.org.au}, a website that compiles publicly available data from the Australian Energy Market Operator (AEMO)\@. Probabilistic day-ahead forecasts are crucial inputs into operational and planning decisions that ensure the efficiency and stability of the power network. This has become a more challenging problem with the growth in intermittent sources of generation such as wind and solar.
 
 The hierarchy comprises three levels of aggregation.
 \begin{compactenum}
-  \item \textit{Total} generation is the sum of generation from \textit{Renewable} and \textit{non-Renewable} sources.
-  \item \textit{Renewable} generation is the sum of \textit{Batteries}, \textit{Hydro (inc. Pumps)}, \textit{Solar}, \textit{Wind} and \textit{Biomass}. \textit{Non-Renewable} is the sum of \textit{Coal}, \textit{Gas} and \textit{Distillate}
-  \item \textit{Battery} generation is given by \textit{Battery (Discharging)} minus \textit{Battery (Charging)}, \textit{Hydro (inc. Pumps)} is \textit{Hydro} generation minus \textit{Pumps} (energy used to pump water upstream), while \textit{Solar} generation is the sum of \textit{Solar (Rooftop)} and \textit{Solar (Utility)}. \textit{Coal} generation is the sum of \textit{Black Coal} and \textit{Brown Coal}, while \textit{Gas} is the sum of \textit{Gas (OCGT)}, \textit{Gas (CCGT)}, \textit{Gas (Steam)}, \textit{Gas (Reciprocating)}.
+	\item \textit{Total} generation is the sum of generation from \textit{Renewable} and \textit{non-Renewable} sources.
+	\item \textit{Renewable} generation is the sum of \textit{Batteries}, \textit{Hydro (inc. Pumps)}, \textit{Solar}, \textit{Wind} and \textit{Biomass}. \textit{Non-Renewable} is the sum of \textit{Coal}, \textit{Gas} and \textit{Distillate}
+	\item \textit{Battery} generation is given by \textit{Battery (Discharging)} minus \textit{Battery (Charging)}, \textit{Hydro (inc. Pumps)} is \textit{Hydro} generation minus \textit{Pumps} (energy used to pump water upstream), while \textit{Solar} generation is the sum of \textit{Solar (Rooftop)} and \textit{Solar (Utility)}. \textit{Coal} generation is the sum of \textit{Black Coal} and \textit{Brown Coal}, while \textit{Gas} is the sum of \textit{Gas (OCGT)}, \textit{Gas (CCGT)}, \textit{Gas (Steam)}, \textit{Gas (Reciprocating)}.
 \end{compactenum}
 In total, there are $n=23$ series of which $m=15$ are bottom-level series.
 
-%\textit{Total} generation is the sum of generation from \textit{Renewable} sources and \textit{non-Renewable} sources. \textit{Non-Renewable} is the sum of \textit{Coal}, \textit{Gas} and \textit{Distillate}, where \textit{Coal} generation is the sum of \textit{Black Coal} and \textit{Brown Coal}, while \textit{Gas} is the sum of \textit{Gas (OCGT)}, \textit{Gas (CCGT)}, \textit{Gas (Steam)}, \textit{Gas (Reciprocating)}. \textit{Renewable} generation is the sum of \textit{Biomass}, \textit{Batteries}, \textit{Hydro (inc. Pumps)}, \textit{Solar} and \textit{Wind}. \textit{Battery} generation given by \textit{Battery (Discharging)} minus \textit{Battery (Charging)}, \textit{Hydro (inc. Pumps)} is \textit{Hydro} generation minus \textit{Pumps} (energy used to pump water upstream), while \textit{Solar} generation is the sum of \textit{Solar (Rooftop)} and \textit{Solar (Utility)}. In total there are $n=23$ series of which $m=15$ are bottom-level series.
 
 \begin{figure}[!b]
-  \centering
-  \includegraphics[width=.90\textwidth]{Figs/selected.pdf}
-  \caption{Time series plots for selected series from 11 June 2019 to 10 June 2020.}
-  \label{fig:selected}
+	\centering
+	\includegraphics[width=.90\textwidth]{Figs/selected.pdf}
+	\caption{Time series plots for selected series from 11 June 2019 to 10 June 2020.}
+	\label{fig:selected}
 \end{figure}
 
 Figure~\ref{fig:selected} shows time plots for some selected series\footnote{Time plots for the remaining series area available from \url|https://git.io/JJwd0|.}. The series exhibit some interesting and unique features. At the aggregate level, \textit{Total} generation shows strong weekly seasonality, with troughs corresponding to weekends. An annual seasonal pattern is also displayed with peaks occurring during the months of June--August as well as December--February. These periods correspond to the winter and summer months in Australia for which electricity demand peaks for heating and cooling purposes respectively. As expected, generation from \textit{Solar} peaks during the summer months of December--February. There are also some unusually large spikes observed in both the \textit{Total} and \textit{Solar} series during February and January 2020 respectively. \textit{Wind} displays higher volatility (especially outside the summer months), while generation from \textit{Distillate} exhibits aperiodic spikes.
@@ -668,10 +560,10 @@ The forecast evaluation is based on a rolling window. Each training window consi
 \end{figure}
 
 \begin{figure}[!htb]
-\centering
-\includegraphics[width=.8\textwidth]{Figs/corr.pdf}
-\caption{Correlation heatmap of residuals from a typical training window of 2 October 2019 to 21 January 2020. Blue circles indicate positive correlation, while red circles indicate negative correlation with larger circles indicating stronger correlations.}
-\label{fig:emp_corr}
+	\centering
+	\includegraphics[width=.8\textwidth]{Figs/corr.pdf}
+	\caption{Correlation heatmap of residuals from a typical training window of 2 October 2019 to 21 January 2020. Blue circles indicate positive correlation, while red circles indicate negative correlation with larger circles indicating stronger correlations.}
+	\label{fig:emp_corr}
 \end{figure}
 
 Four situations were considered where base forecasts are assumed to be either Gaussian or bootstrapped from residuals, and either dependent or independent. The histograms in Figure~\ref{fig:emp_hist} demonstrate departures from normality while the correlation heatmap in Figure~\ref{fig:emp_corr} demonstrates departures from independence. Therefore, independent Gaussian probabilistic forecasts are likely to represent a case of severe misspecification.
@@ -680,29 +572,9 @@ Four situations were considered where base forecasts are assumed to be either Ga
 
 The same methods were used for reconciliation as in the simulation study with score optimisation based on an objective function containing 56 days (8 weeks) of score evaluations. For brevity, only the results for energy score are presented here; please refer to \url{https://git.io/JJwQB} for a full set of results.
 
-%\begin{table}[!htb]
-%\small
-%\centering
-%\caption{\label{tab:appres} Mean Energy Score for electricity application. Values in bold indicate the best reconciliation method for a given base forecasting method.}
-
-%\begin{tabular}{lrrrr}
-%	\toprule
-%	RecoMethod & Ind. Bootstrap & Ind. Gaussian & Joint Bootstrap & Joint Gaussian\\
-%	\midrule
-%	Base & 36.41 & 95.02 & 36.54 & 36.32\\
-%	BottomUp & 35.89 & 90.64 & 35.72 & 35.51\\
-%	BTTH & 58.57 & 269.40 & 58.23 & 59.07\\
-%	JPP & 55.15 & 292.27 & 55.16 & 55.89\\
-%	MinTShr & 37.89 & 54.80 & 38.52 & 38.33\\
-%	OLS & \textbf{35.42} & 73.72 & \textbf{34.71} & \textbf{34.48}\\
-%	ScoreOptE & 38.23 & \textbf{39.96} & 39.39 & 39.07\\
-%	\bottomrule
-%\end{tabular}
-%\end{table}
-
 \begin{figure}[!htb]
 	\centering
-    \includegraphics[width=.7\textwidth]{Figs/meanenergyscore}
+	\includegraphics[width=.7\textwidth]{Figs/meanenergyscore}
 	\caption{Mean Energy score for the electricity application for different base forecasting methods and different reconciliation methods}\label{fig:meanenergy_app}
 \end{figure}
 
@@ -713,7 +585,7 @@ The same methods were used for reconciliation as in the simulation study with sc
 
 The mean energy score for all four base forecasting methods is summarised in Figure~\ref{fig:meanenergy_app}. When base forecasts are generated assuming both independence and a Gaussian distribution, score optimisation achieves a mean energy score that is considerably smaller than all other competing methods, with MinT providing the second smallest value. Figure~\ref{fig:nem_app} (left) provides the Nemenyi matrix for this set of base forecasts, and shows that the superior forecasting performance of score optimisation is statistically significant. This suggests that score optimisation is best for guarding against severe model misspecification.
 
-For all other methods the best performing method is OLS. This difference is statistically significant as seen in Figure~\ref{fig:nem_app} (right), which shows the Nemenyi matrix for jointly bootstrapped base forecasts. The corresponding figures for joint Gaussian and independent bootstrap look mostly similar to Figure~\ref{fig:nem_app}; please refer to \url{https://git.io/JJwQB} for a full set of results. Although score optimisation does not improve upon base, the differences are not significant. For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
+For all other methods the best performing method is OLS. This difference is statistically significant as seen in Figure~\ref{fig:nem_app} (right), which shows the Nemenyi matrix for jointly bootstrapped base forecasts. The corresponding figures for joint Gaussian and independent bootstrap look mostly similar to the right panel of Figure~\ref{fig:nem_app}; please refer to \url{https://git.io/JJwQB} for a full set of results. Although score optimisation does not improve upon base, the differences are not significant. For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
 
 
 \section{Conclusions}\label{sec:conclusion}
@@ -739,9 +611,9 @@ Consider the region $\mathcal{I}$ given by the Cartesian product of intervals $(
 where $\hat{f}$ is the density of the base probabilistic forecast. Now consider a change of variables to an $n$-dimensional vector $\bm{z}$ where $\bm{y}=\bm{G}^*\bm{z}$. Recall, $\bm{G}^*=\big(\bm{G}^{-}\,\vdots\,\bm{G}_\perp\big)$, $\bm{G}^{-}$ is a generalised inverse of $\bm{G}$, and $\bm{G}_\perp$ is an orthogonal complement of $\bm{G}$. By the change of variables
 
 \begin{align}
-\mbox{Pr}(\bm{\ell}\succ\bm{b}\succ\bm{u})&=\int\limits_{\bm{\ell}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d\bm{y}\nonumber\\
-&=\int\limits_{\bm{\ell}\succ\bm{G}\bm{G}^*\bm{z}\succ\bm{u}}\hat{f}(\bm{G}^*\bm{z})|\bm{G}^*|d\bm{z}\nonumber\\
-&=\int\limits_{\bm{\ell}\succ\bm{z}_1\succ\bm{u}}\hat{f}(\bm{G}^*\bm{z})|\bm{G}^*|d\bm{z}\nonumber\,,
+	\mbox{Pr}(\bm{\ell}\succ\bm{b}\succ\bm{u})&=\int\limits_{\bm{\ell}\succ\bm{G}\bm{y}\succ\bm{u}}\hat{f}(\bm{y})d\bm{y}\nonumber\\
+	&=\int\limits_{\bm{\ell}\succ\bm{G}\bm{G}^*\bm{z}\succ\bm{u}}\hat{f}(\bm{G}^*\bm{z})|\bm{G}^*|d\bm{z}\nonumber\\
+	&=\int\limits_{\bm{\ell}\succ\bm{z}_1\succ\bm{u}}\hat{f}(\bm{G}^*\bm{z})|\bm{G}^*|d\bm{z}\nonumber\,,
 \end{align}
 where $\bm{z}_1$ denotes the first $m$ elements of $\bm{z}$. Letting $\bm{a}$ denote the last $n-m$ elements of $\bm{z}$ the integral above can be written as
 \[
@@ -788,10 +660,10 @@ Let
 \]
 If reconciliation is carried out via a projection onto $\mathfrak{s}$, then $\bm{S}\bm{G}\bm{S}=\bm{S}$ and
 \begin{align}
-\tilde{\bm{\Sigma}}&=\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'\nonumber\\
-&\bm{S}\bm{G}\bm{S}\bm{\Omega}\bm{S}'\bm{G}'{\bm{S}}'+\bm{S}\bm{G}\bm{D}\bm{G}'\bm{S}'\nonumber\\
-&\bm{S}\bm{\Omega}{\bm{S}}'+\bm{S}\bm{G}\bm{D}\bm{G}'\bm{S}'\nonumber\\
-&\bm{\Sigma}+\bm{S}\bm{G}\bm{D}\bm{G}'\bm{S}'\nonumber\,.
+	\tilde{\bm{\Sigma}}&=\bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}'\nonumber\\
+	&\bm{S}\bm{G}\bm{S}\bm{\Omega}\bm{S}'\bm{G}'{\bm{S}}'+\bm{S}\bm{G}\bm{D}\bm{G}'\bm{S}'\nonumber\\
+	&\bm{S}\bm{\Omega}{\bm{S}}'+\bm{S}\bm{G}\bm{D}\bm{G}'\bm{S}'\nonumber\\
+	&\bm{\Sigma}+\bm{S}\bm{G}\bm{D}\bm{G}'\bm{S}'\nonumber\,.
 \end{align}
 Therefore to recover the true predictive using a projection, some $\bm{G}_{\text{opt}}$ must be found such that $\bm{G}_{\text{opt}}\bm{D}=\bm{0}$. Let the eigenvalue decomposition of $\bm{D}$ be given by $\bm{R}\bm{\Lambda}\bm{R}'$ , where $\bm{R}$ is an $n\times q$ matrix with $q=\textrm{rank}({\bm{D}})$ and ${\bm\Lambda}$ is an $q\times q$ diagonal matrix containing non-zero eigenvalues of $\bm{D}$. By the rank nullity theorem, $\bm{R}$ will have an orthogonal complement $\bm{R}_{\perp}$ of dimension $n\times (n-q)$. If $q=n-m$ then the number of columns of $\bm{R}_{\perp}$ is $m$ and $\bm{G}_{\text{opt}}$ can be formed as the $m\times n$ matrix $(\bm{R}_{\perp}'\bm{S})^{-1}\bm{R}_{\perp}'$. If $q<n-m$ the number of columns of $\bm{R}_{\perp}$ is greater than $m$, and any $m$ columns of $\bm{R}_{\perp}$ can be used to form $\bm{G}_{\text{opt}}$ in a similar fashion. However when $q>n-m$, the number of columns of $\bm{R}_{\perp}$ is less than $m$ and no such $m\times n$ matrix $\bm{G}_{\text{opt}}$ can be formed. Therefore the true predictive can only be recovered via a projection when $\textrm{rank}(\bm{D})\leq n-m$.
 
@@ -807,11 +679,11 @@ The proof relies on the following change of variables,
 \]
 Also recall from the proof of Theorem~\ref{theo:fulldens} that $\bm{S}^*=\big(\bm{S}\,\vdots\,\bm{S}_\perp\big)^{-1}$
 
-Let the density of the true predictive $f(\bm{y})$ after a change of variables, be given by $|\bm{S}^*|^{-1}f_{\bm{b}}(\bm{b})\mathbb{1}\{\bm{u}=\bm{0}\}$. To prove that the log score is improper we construct an incoherent base density $\hat{f}$ such that $E_f\big[LS(\hat{f},\bm{y})\big]<E_f\left[LS\left(f,\bm{y}\right)\right]$. This incoherent density is constructed, so that after the same change of variables it can be written as $|\bm{S}^*|^{-1}\hat{f}_{\bm{b}}(\bm{b})\hat{f}_{\bm{u}}(\bm{u})$. We require $\hat{f}_{\bm{u}}(\bm{0})>1$, i.e., $\bm{u}$ is highly concentrated around $\bm{0}$ but still non-degenerate. An example is an independent normal with mean 0 and variances less than $(2\pi)^{-1}$. Now, let $\bm{y}^*$ be a realisation from $f$. Let the first $m$ elements of $\bm{S}^*\bm{y}^*$ be $\bm{b}^*$, and the remaining elements be $\bm{u}^*$. The log score for $f$ is thus,
+Let the density of the true predictive $f(\bm{y})$ after a change of variables, be given by $|\bm{S}^*|^{-1}f_{\bm{b}}(\bm{b})\mathbb{1}\{\bm{u}=\bm{0}\}$. To prove that the log score is improper we construct an incoherent base density $\hat{f}$ such that $E_f\big[LS(\hat{f},\bm{y})\big]<E_f\left[LS\left(f,\bm{y}\right)\right]$. This incoherent density is constructed, so that after the same change of variables it can be written as $|\bm{S}^*|^{-1}\hat{f}_{\bm{b}}(\bm{b})\hat{f}_{\bm{u}}(\bm{u})$. We require $\hat{f}_{\bm{u}}(\bm{0})>1$, i.e., $\bm{u}$ is highly concentrated around $\bm{0}$ but still non-degenerate. An example is an independent normal with mean 0 and variance less than $(2\pi)^{-1}$. Now, let $\bm{y}^*$ be a realisation from $f$. Let the first $m$ elements of $\bm{S}^*\bm{y}^*$ be $\bm{b}^*$, and the remaining elements be $\bm{u}^*$. The log score for $f$ is thus,
 \begin{align}
-LS\left(f,\bm{y}^*\right) &= -\log f(\bm{y}^*) \nonumber\\
-&=-\log|\bm{S}^*|-\log f_{\bm{b}}\left(\bm{b}^*\right)-\log\left(\mathbb{1}\{\bm{u}^*=\bm{0}\}\right)\label{eq:diraccancel}\\
-&=-\log|\bm{S}^*|-\log f_{\bm{b}}\left(\bm{b}^*\right),\nonumber
+	LS\left(f,\bm{y}^*\right) &= -\log f(\bm{y}^*) \nonumber\\
+	&=-\log|\bm{S}^*|-\log f_{\bm{b}}\left(\bm{b}^*\right)-\log\left(\mathbb{1}\{\bm{u}^*=\bm{0}\}\right)\label{eq:diraccancel}\\
+	&=-\log|\bm{S}^*|-\log f_{\bm{b}}\left(\bm{b}^*\right),\nonumber
 \end{align}
 where the third term in Equation~\eqref{eq:diraccancel} is equal to zero since the fact that $\bm{y}^*\in\mathfrak{s}$ implies that $\bm{u}^*=\bm{0}$. The log score for $\hat{f}$ is
 \[
@@ -829,71 +701,40 @@ Since this holds for any possible realisation, it will also hold after taking ex
 
 To ensure that bottom-level series are noisier than top level series (a feature often observed empirically), noise is added to the bottom-level series in the following manner
 \begin{align*}
-y_{AA,t} &= w_{AA,t} + u_t - 0.5v_t,\\
-y_{AB,t} &= w_{AB,t} - u_t - 0.5v_t,\\
-y_{BA,t} &= w_{BA,t} + u_t + 0.5v_t,\\
-y_{BB,t} &= w_{BB,t} - u_t + 0.5v_t,
+	y_{AA,t} &= w_{AA,t} + u_t - 0.5v_t,\\
+	y_{AB,t} &= w_{AB,t} - u_t - 0.5v_t,\\
+	y_{BA,t} &= w_{BA,t} + u_t + 0.5v_t,\\
+	y_{BB,t} &= w_{BB,t} - u_t + 0.5v_t,
 \end{align*}
-where $w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}$ are generated from ARIMA processes as described in Section~\ref{sec:dgp} with innovations $\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}$. %Aggregating the bottom-level series gives the following for the aggregated levels,
-%\begin{align*}
-%y_{A,t} &= w_{AA,t} + w_{AB,t} - v_t,\\
-%y_{B,t} &= w_{BA,t} + w_{BB,t} + v_t,\\
-%y_{Tot,t} &= w_{AA,t} + w_{AB,t} + w_{BA,t} + w_{BB,t}.
-%\end{align*}
+where $w_{AA,t},w_{AB,t},w_{BA,t},w_{BB,t}$ are generated from ARIMA processes as described in Section~\ref{sec:dgp} with innovations $\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}$. 
 
 For the Gaussian DGP, $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathcal{N}(0,\sigma^2_v)$ and $\{\varepsilon_{AA,t},\varepsilon_{AB,t},\varepsilon_{BA,t},\varepsilon_{BB,t}\} \overset{iid}{\sim} \mathcal{N}(\bm{0}, \bm{\Sigma})~\forall t$. We follow \cite{WicEtAl2019} and set
 \begin{equation*}\label{eq:SigmaGaussian}
-\bm{\Sigma} =
-\begin{pmatrix}
-5.0 & 3.1 & 0.6 & 0.4 \\
-3.1 & 4.0 & 0.9 & 1.4 \\
-0.6 & 0.9 & 2.0 & 1.8 \\
-0.4 & 1.4 & 1.8 & 3.0 \\
-\end{pmatrix}
+	\bm{\Sigma} =
+	\begin{pmatrix}
+		5.0 & 3.1 & 0.6 & 0.4 \\
+		3.1 & 4.0 & 0.9 & 1.4 \\
+		0.6 & 0.9 & 2.0 & 1.8 \\
+		0.4 & 1.4 & 1.8 & 3.0 \\
+	\end{pmatrix}
 \end{equation*} and $\sigma^2_u=28$ and $\sigma^2_v=22$. This ensures that the following inequalities are satisfied,
 \begin{align*}
-\var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
-\le \var(\varepsilon_{AA,t}+\varepsilon_{AB,t}-v_t)
-\le \var(\varepsilon_{AA,t}+u_t-0.5v_t),\\
-\var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
-\le \var(\varepsilon_{AA,t}+\varepsilon_{AB,t}-v_t)
-\le \var(\varepsilon_{AB,t}-u_t-0.5v_t),\\
-\var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
-\le \var(\varepsilon_{BA,t}+\varepsilon_{BB,t}+v_t)
-\le \var(\varepsilon_{BA,t}+u_t+0.5v_t),\\
-\var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
-\le \var(\varepsilon_{BA,t}+\varepsilon_{BB,t}+v_t)
-\le \var(\varepsilon_{BB,t}-u_t+0.5v_t).\\
+	\var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
+	\le \var(\varepsilon_{AA,t}+\varepsilon_{AB,t}-v_t)
+	\le \var(\varepsilon_{AA,t}+u_t-0.5v_t),\\
+	\var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
+	\le \var(\varepsilon_{AA,t}+\varepsilon_{AB,t}-v_t)
+	\le \var(\varepsilon_{AB,t}-u_t-0.5v_t),\\
+	\var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
+	\le \var(\varepsilon_{BA,t}+\varepsilon_{BB,t}+v_t)
+	\le \var(\varepsilon_{BA,t}+u_t+0.5v_t),\\
+	\var(\varepsilon_{AA,t} + \varepsilon_{AB,t} + \varepsilon_{BA,t} + \varepsilon_{BB,t})
+	\le \var(\varepsilon_{BA,t}+\varepsilon_{BB,t}+v_t)
+	\le \var(\varepsilon_{BB,t}-u_t+0.5v_t).\\
 \end{align*}
 
 For the non-Gaussian case, errors are generated from a Gumbel copula with Beta margins as described in Section~\ref{sec:dgp}. Rather than add Gaussian noise, we simulate $u_t$ and $v_t$ from skew t distributions using the \texttt{sn} package \citep{snpackage}. The scale, skew and degrees of freedom parameters are chosen as 0.5,1.5 and 4 and 0.9,2 and 8 for $u_t$ and $v_t$ respectively. Monte Carlo simulations show that these values satisfy the inequalities described above.
 
-\clearpage
-
-%\section{Application}
-%
-%\subsection{Results from ETS base forecasts}
-%
-%\begin{figure}[!hbt]
-%	\centering
-%	\small
-%%	\includegraphics[width= .95\textwidth]{Empirical-results/AllTS_MultiVScores_ETS.pdf}
-%	\caption{Skill scores with reference to ETS base forecasts for multivariate predictive distribution of the whole hierarchy from different reconciliation methods are presented. Top panel shows the results from Gaussian approach and the bottom panel shows the results from non-parametric approach. Left and right panels shows the skill scores based on energy score and variogram score respectively.}\label{fig:EmpResults_AllTS_ETS}
-%\end{figure}
-%
-%\begin{figure}[!hbt]
-%	\centering
-%	\small
-%%	\includegraphics[width= 0.8\textwidth, height= 0.85\textheight]{Empirical-results/Levels_MultiVScores_ETS.pdf}
-%	\caption{Skill score (with reference to ETS base forecasts) for multivariate probabilistic forecasts of different levels of the hierarchy are presented. Results from Gaussian approach are presented in the top three panels and results from the non-parametric approach are presented in the bottom three panels.}\label{fig:EmpResults_Levels_ETS}
-%\end{figure}
-%
-%\begin{figure}[!hbt]
-%	\centering
-%	\small
-%%	\includegraphics[width= \textwidth]{Empirical-results/UniVScore_TopLevel_ETS.pdf}
-%	\caption{Skill score based on CRPS (with reference to the ETS base forecasts) for univariate probabilistic forecasts for the Total (top level) overnight trips are presented. Left panel shows the results from Gaussian approach and right panel shows the results from non-parametric approach. }\label{fig:EmpResults_TopLevel_ETS}
-%\end{figure}
 
 \clearpage
 
