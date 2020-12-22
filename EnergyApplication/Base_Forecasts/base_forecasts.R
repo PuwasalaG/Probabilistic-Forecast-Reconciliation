@@ -8,7 +8,7 @@ library(fable)
 #Clear workspace
 rm(list=ls())
 
-#j<- 36 #If running within R uncomment this.  This will only run one window
+# j<- 36 #If running within R uncomment this.  This will only run one window
 j<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this should go from 1 to J-L-N+1
 
 
@@ -63,8 +63,8 @@ S<-rbind(S,diag(1,15))
 #Read in data
 data<-readRDS('../Data/nem_generation_by_source.rds')
 
-
-
+data <- data %>% 
+  as_tsibble(key = Source, index = date, regular = FALSE)
 arrange(data,match(Source,order))->datlong
 
 
@@ -81,13 +81,15 @@ J<-length(alldate)
 #Function to forecast window j
 forecast_j<-function(j){
   dat_j<-filter(datlong,(date>=alldate[j])&(date<=alldate[L+N+j-1]))
+  dat_j <- tsibble::update_tsibble(dat_j, regular = TRUE)
   m<-model(dat_j,nn=NNETAR())
   
   #Residuals (as matrix)
   m%>%
     residuals%>%
     arrange(match(Source,order))%>%
-    pivot_wider(id_cols = date,names_from = Source,values_from = .resid)%>%
+    pivot_wider(id_cols = date,names_from = Source,
+                values_from = .resid)%>%
     select(-date)%>%as.matrix()->r
   
   r<-r[(L+1):(L+N),] #remove NA rows
