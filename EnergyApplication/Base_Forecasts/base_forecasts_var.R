@@ -9,8 +9,8 @@ library(BigVAR)
 #Clear workspace
 rm(list=ls())
 
-j<- 36 #If running within R uncomment this.  This will only run one window
-# j<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this should go from 1 to J-L-N+1
+#j<- 36 #If running within R uncomment this.  This will only run one window
+j<-as.numeric(commandArgs()[[6]]) # If running batch job uncomment this should go from 1 to J-L-N+1
 
 
 #Function for Shaefer Strimmer Shrinkage
@@ -120,11 +120,13 @@ forecast_j<-function(j){
   
   
 }
-base_forecasts_results <- map(range_j, forecast_j)
-names(base_forecasts_results) <- paste("base_", N + range_j - 1, sep = "")
+
+out<-forecast_j(j)
 
 #Save output
-save(base_forecasts_results, file = "../Base_Results/base_forecasts_results.rda")
+saveRDS(out,paste0('../Base_Results/base_',N+L+j-1,'.rds'))
+
+
 
 # #Save output
 # saveRDS(mable,paste0('../Base_Results/mable_',N+L+j-1,'.rds'))
