@@ -41,6 +41,9 @@ S<-rbind(S,diag(1,15))
 
 #Read in data
 data<-readRDS('../Data/nem_generation_by_source.rds')
+# datlong <- data %>% 
+#   as_tibble() %>% 
+#   mutate(Source = factor(Source, levels = order)) 
 
 
 
@@ -49,8 +52,8 @@ arrange(data,match(Source,order))->datlong
 
 
 #Sample sizes
-N<-112 # Size of window
-L<-28 # Lags to leave at beginning of window
+N<-133 # Size of window
+L<-7 # maximum Lags used in VAR model
 Q<-10000 #Number of draws to estimate energy score
 inW<-56 #inner window for training reco weights
 m<-23 #Number of series
@@ -214,11 +217,11 @@ eval<-function(bb){
   BTTH<-energy_score(y,x_btth,xs_btth)
   BTTHv<-variogram_score(y,x_btth,xs_btth)
       
-  #MinT (sam)
-  SW_MinTSam<-solve(fc_i$fc_Sigma_sam,S)
-  SG_MinTSam<-S%*%solve(t(SW_MinTSam)%*%S,t(SW_MinTSam))
-  MinTSam<-energy_score(y,SG_MinTSam%*%x,SG_MinTSam%*%xs)
-  MinTSamv<-variogram_score(y,SG_MinTSam%*%x,SG_MinTSam%*%xs)
+  # #MinT (sam)
+  # SW_MinTSam<-solve(fc_i$fc_Sigma_sam,S)
+  # SG_MinTSam<-S%*%solve(t(SW_MinTSam)%*%S,t(SW_MinTSam))
+  # MinTSam<-energy_score(y,SG_MinTSam%*%x,SG_MinTSam%*%xs)
+  # MinTSamv<-variogram_score(y,SG_MinTSam%*%x,SG_MinTSam%*%xs)
   
   #Score opt in
   
@@ -290,10 +293,10 @@ eval<-function(bb){
   ScoreOptV<-energy_score(y,xopt,xsopt)
   ScoreOptVv<-variogram_score(y,xopt,xsopt)
     
-res<-tibble(Base,BottomUp,JPP,BTTH,OLS,WLS,MinTSam,MinTShr,ScoreOptE,ScoreOptEIn,ScoreOptV,ScoreOptVIn)%>%
+res<-tibble(Base,BottomUp,JPP,BTTH,OLS,WLS,MinTShr,ScoreOptE,ScoreOptEIn,ScoreOptV,ScoreOptVIn)%>%
   add_column(ScoreEval='Energy')
 res_long_energy<-pivot_longer(res,cols = -ScoreEval,names_to = 'Method',values_to = 'Score')
-resv<-tibble(Basev,BottomUpv,JPPv,BTTHv,OLSv,WLSv,MinTSamv,MinTShrv,ScoreOptEv,ScoreOptEInv,ScoreOptVv,ScoreOptVInv)%>%
+resv<-tibble(Basev,BottomUpv,JPPv,BTTHv,OLSv,WLSv,MinTShrv,ScoreOptEv,ScoreOptEInv,ScoreOptVv,ScoreOptVInv)%>%
   add_column(ScoreEval='Variogram')
 res_long_variogram<-pivot_longer(resv,-ScoreEval,names_to = 'Method',values_to = 'Score')%>%
     mutate(Method=gsub('.{1}$','',Method))

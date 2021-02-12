@@ -9,4 +9,4 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --export=NONE
 module load R/3.6.2-mkl
-Rscript base_forecasts.R $SLURM_ARRAY_TASK_ID 
+Rscript base_forecasts_var.R $SLURM_ARRAY_TASK_ID 

@@ -8,6 +8,7 @@ library(fable)
 library(kableExtra)
 library(corrplot)
 library(tsibble)
+library(ggthemes)
 
 #Plots of data
 
@@ -107,14 +108,47 @@ dat%>%
 
 dev.off()
 
+# #Base Results
+# 
+# #Pull data for 21st January
+# b30<-readRDS('../Base_Results/base_30.rds')
+# 
+# dates<-seq.Date(from=as.Date('2019/10/2'),to=as.Date('2020/01/21'),by=1)
+# as_tibble(b30$resid)%>%
+#   add_column(Date=dates)->resid_df
+# 
+# pdf('forPaper/densities.pdf')
+# resid_df%>%
+#   select(Date,Total,Coal,Gas,Wind,Distillate,`Solar (Rooftop)`, `Solar (Utility)`,Pumps,Biomass)%>%
+#   pivot_longer(cols = -Date,names_to = 'Source', values_to = 'Generation')%>%
+#   ggplot(aes(x=Generation))+
+#   geom_histogram()+
+#   facet_wrap(~Source,nrow = 3,3,scales = 'free')
+# dev.off()
+# 
+# pdf('forPaper/corr.pdf')
+# b30$fc_Sigma_shr%>%cov2cor%>%corrplot  
+# dev.off()
+
 #Base Results
 
 #Pull data for 21st January
-b30<-readRDS('../Base_Results/base_30.rds')
+b225<-readRDS('../Base_Results/base_226.rds')
 
-dates<-seq.Date(from=as.Date('2019/10/2'),to=as.Date('2020/01/21'),by=1)
-as_tibble(b30$resid)%>%
+dates<-seq.Date(from=as.Date('2019/09/11'),to=as.Date('2020/01/21'),by=1)
+as_tibble(b225$resid %>% t())%>%
   add_column(Date=dates)->resid_df
+
+order<-c("Total","non-Renewable","Renewable",
+         "Coal","Gas","Solar",
+         'Hydro (inc. Pumps)',"Battery",
+         "Black Coal","Brown Coal",
+         "Gas (CCGT)", "Gas (OCGT)", "Gas (Reciprocating)", "Gas (Steam)",
+         "Solar (Rooftop)","Solar (Utility)",
+         "Hydro", "Pumps",
+         "Battery (Charging)", "Battery (Discharging)",
+         "Distillate","Biomass","Wind")
+names(resid_df) <- c(order, "Date")
 
 pdf('forPaper/densities.pdf')
 resid_df%>%
@@ -126,8 +160,12 @@ resid_df%>%
 dev.off()
 
 pdf('forPaper/corr.pdf')
-b30$fc_Sigma_shr%>%cov2cor%>%corrplot  
+fc_sigma_shr <- b225$fc_Sigma_shr
+rownames(fc_sigma_shr) <- order
+colnames(fc_sigma_shr) <- order
+fc_sigma_shr%>%cov2cor%>%corrplot  
 dev.off()
+
 
 #Reconciliation results
 

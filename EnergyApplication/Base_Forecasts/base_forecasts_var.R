@@ -62,7 +62,7 @@ S<-rbind(S,diag(1,15))
 
 
 #Read in data
-data<-readRDS('../Data/nem_generation_by_source.rds')
+data<-readRDS('./Data/nem_generation_by_source.rds')
 data <- data %>% 
   as_tibble() %>% 
   mutate(Source = factor(Source, levels = order)) %>% 
@@ -72,7 +72,7 @@ data <- data %>%
 
 #Sample sizes
 N<-140 # Size of window
-# L<-28 # Lags to leave at beginning of window
+L<-0 # Lags to leave at beginning of window
 
 startdate<-min(data$date)
 enddate<-max(data$date)

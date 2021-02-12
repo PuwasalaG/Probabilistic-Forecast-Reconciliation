@@ -104,6 +104,7 @@ forecast_j<-function(j){
   #Forecast mean
   f<-forecast(m,h = 1)
   
+  
   f%>%
     arrange(match(Source,order))%>%
     use_series(Generation)->fc_mean
