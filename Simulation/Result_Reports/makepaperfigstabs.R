@@ -5,7 +5,7 @@ library(tsutils)
 library(kableExtra)
 library(ggthemes)
 library(gridExtra)
-res_all<-read_csv('../Evaluate/all_results.csv')
+res_all<-readRDS('../Evaluate/all_results.rds')
 
 .simpleCap <- function(s, strict = FALSE) {
   cap <- function(s) paste(toupper(substring(s, 1, 1)),
@@ -200,7 +200,7 @@ capture.output(print(tabnsv),file = 'PaperTabFigs/tabnsv.tex')
 ##Tables as plots
 
 
-pdf('PaperTabFigs/gaussian_meanscore.pdf')
+pdf('PaperTabFigs/energy_meanscore.pdf')
 figgse%>%
   rename(`Reconciliation\n Method`=Method)%>%
   mutate(`Base Method`=ordered(BaseMethod,
@@ -212,40 +212,7 @@ figgse%>%
                                           'Indep.\n Bootstrap',
                                           'Joint\n Gaussian',
                                           'Joint\n Bootstrap')))%>%
-  add_column(Sc='Energy Score')->p1
-
-
-figgsv%>%
-  rename(`Reconciliation\n Method`=Method)%>%
-  mutate(`Base Method`=ordered(BaseMethod,
-                               levels = c('Independent Gaussian',
-                                          'Independent Bootstrap',
-                                          'Joint Gaussian',
-                                          'Joint Bootstrap'),
-                               labels = c('Indep.\n Gaussian',
-                                          'Indep.\n Bootstrap',
-                                          'Joint\n Gaussian',
-                                          'Joint\n Bootstrap')))%>%
-  add_column(Sc='Variogram Score')->p2
-both<-rbind(p1,p2)
-both%>%  
-  ggplot(aes(x=`Base Method`,
-             y=`Score`,
-             col=`Reconciliation\n Method`,
-             group=`Reconciliation\n Method`))+
-  geom_point()+
-  geom_line()+
-  scale_y_log10()+
-  facet_wrap(~Sc,scales = 'free_y')+
-  scale_color_colorblind()
-
-
-dev.off()
-
-
-
-
-pdf('PaperTabFigs/nongaussian_meanscore.pdf')
+  add_column(DGP='Gaussian DGP')->p1
 
 fignse%>%
   rename(`Reconciliation\n Method`=Method)%>%
@@ -258,7 +225,44 @@ fignse%>%
                                           'Indep.\n Bootstrap',
                                           'Joint\n Gaussian',
                                           'Joint\n Bootstrap')))%>%
-  add_column(Sc='Energy Score')->p1
+  add_column(DGP='Non-Gaussian DGP')->p2
+
+
+both<-rbind(p1,p2)
+both%>%  
+  ggplot(aes(x=`Base Method`,
+             y=`Score`,
+             col=`Reconciliation\n Method`,
+             group=`Reconciliation\n Method`))+
+  geom_point()+
+  geom_line()+
+  scale_y_log10()+
+  facet_wrap(~DGP,scales = 'free_y')+
+  scale_color_colorblind()
+
+
+
+dev.off()
+
+
+
+
+pdf('PaperTabFigs/variogram_meanscore.pdf')
+
+figgsv%>%
+  rename(`Reconciliation\n Method`=Method)%>%
+  mutate(`Base Method`=ordered(BaseMethod,
+                               levels = c('Independent Gaussian',
+                                          'Independent Bootstrap',
+                                          'Joint Gaussian',
+                                          'Joint Bootstrap'),
+                               labels = c('Indep.\n Gaussian',
+                                          'Indep.\n Bootstrap',
+                                          'Joint\n Gaussian',
+                                          'Joint\n Bootstrap')))%>%
+  add_column(DGP='Gaussian DGP')->p1
+
+
 
 
 fignsv%>%
@@ -272,7 +276,7 @@ fignsv%>%
                                           'Indep.\n Bootstrap',
                                           'Joint\n Gaussian',
                                           'Joint\n Bootstrap')))%>%
-  add_column(Sc='Variogram Score')->p2
+  add_column(DGP='Non-Gaussian DGP')->p2
 both<-rbind(p1,p2)
 both%>%  
   ggplot(aes(x=`Base Method`,
@@ -282,7 +286,7 @@ both%>%
   geom_point()+
   geom_line()+
   scale_y_log10()+
-  facet_wrap(~Sc,scales = 'free_y')+
+  facet_wrap(~DGP,scales = 'free_y')+
   scale_color_colorblind()
 
 dev.off()

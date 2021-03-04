@@ -25,16 +25,15 @@
 \titlespacing{\subsection}{0pt}{1ex}{0ex}
 \titlespacing{\subsubsection}{0pt}{0.5ex}{0ex}
 
-
 % NOTE: To produce blinded version, replace "0" with "1" below.
 \newcommand{\blind}{1}
 
 % DON'T change margins - should be 1 inch all around.
-\addtolength{\oddsidemargin}{-.5in}%
-\addtolength{\evensidemargin}{-.5in}%
-\addtolength{\textwidth}{1in}%
-\addtolength{\textheight}{+.2in}%
-\addtolength{\topmargin}{-.3in}%
+\addtolength{\oddsidemargin}{-0.7in}%
+\addtolength{\evensidemargin}{-0.7in}%
+\addtolength{\textwidth}{1.4in}%
+\addtolength{\textheight}{+.7in}%
+\addtolength{\topmargin}{-.8in}%
 \usepackage{caption}
 \DeclareCaptionStyle{italic}[justification=centering]
 {labelfont={bf},textfont={it},labelsep=colon}
@@ -82,7 +81,7 @@
   and \\
   George Athanasopoulos\\
   Department of Econometrics and Business Statistics,\\
-  Monash University, VIC 3800, Australia.\\
+  Monash University, VIC 3145, Australia.\\
   Email: george.athanasopoulos@monash.edu \\ 
   and \\
   Rob J Hyndman\\
@@ -116,16 +115,16 @@ We develop a framework for prediction of multivariate data that follow known lin
 \vfill
 
 \newpage
-\spacingset{1.5} % DON'T change the spacing!
+\spacingset{1.4} % DON'T change the spacing!
 \section{Introduction}\label{sec:intro}
 
 Many multivariate prediction problems involve data that follow some linear constraints. For instance, in energy, retail or tourism it is important to forecast demand in individual regions as well as aggregate demand of a whole country. In recent years reconciliation has become an increasingly popular method for handling such problems \citep[see][for an overview]{FPP2018}. Reconciliation involves producing predictions for all variables and making a subsequent adjustment to ensure these adhere to known linear constraints. While this methodology has been extensively developed for point prediction, there is a paucity of literature dealing with probabilistic prediction. This paper develops a formal framework for probabilistic reconciliation, derives theoretical results that allow reconciled probabilistic predictions to be constructed and evaluated, and proposes an algorithm for optimal probabilistic reconciliation with respect to a proper scoring rule.
 
-Before describing the need for probabilistic reconciliation we briefly review the literature on point forecast\footnote{Such has been the dominance of forecasting in the literature on reconciliation, that we will refer to forecasting throughout the remainder of the paper. However, we note that the techniques discussed throughout the paper generalise to prediction problems in general and are not limited to time series.} reconciliation. Prior to the development of forecast reconciliation, the focus was on finding a subset of variables that could be subsequently aggregated or disaggregated to find forecasts for all series \citep[see][and references therein]{Dunn1976,Gross1990}. An alternative approach emerged with \cite{AthEtAl2009} and \cite{HynEtAl2011} who recommended producing forecasts of all series and then adjusting, or `reconciling', these forecasts to be `coherent', i.e. adhere to the aggregation constraints. These papers formulated reconciliation as a regression model, however subsequent work has formulated reconciliation as an optimisation problem where weights are chosen to minimise a loss, such as a weighted squared error \citep{VanErven2015a,nystrup2020}, a penalised version thereof \citep{bentaiebkoo}, or the trace of the forecast error covariance \citep{WicEtAl2019}.
+Before describing the need for probabilistic reconciliation we briefly review the literature on point forecast\footnote{Such has been the dominance of forecasting in the literature on reconciliation, that we will refer to forecasting throughout the remainder of the paper. However, we note that the techniques discussed throughout the paper generalise to prediction problems in general and are not limited to time series.} reconciliation. Prior to the development of forecast reconciliation, the focus was on finding a subset of variables that could be subsequently aggregated or disaggregated to find forecasts for all series \citep[see][and references therein]{Dunn1976,Gross1990}. An alternative approach emerged with \cite{AthEtAl2009} and \cite{HynEtAl2011} who recommended producing forecasts of all series \textcolor{blue}{(referred to as `base' forecasts)} and then adjusting, or `reconciling', these forecasts to be `coherent', i.e. adhere to the aggregation constraints. These papers formulated reconciliation as a regression model, however subsequent work has formulated reconciliation as an optimisation problem where weights are chosen to minimise a loss, such as a weighted squared error \citep{VanErven2015a,nystrup2020}, a penalised version thereof \citep{bentaiebkoo}, or the trace of the forecast error covariance \citep{WicEtAl2019}.
 
-\textcolor{blue}{There is now substantial theoretical and empirical evidence that reconciliation improves forecast accuracy relative to base forecasts, bottom-up and top-down methods. The improvement relative to bottom-up, may at first seem counter-intuitive since aggregates contain no additional information relative to the disaggregate series.  The additional information arises since certain models will more easily detect signals in the aggregate data.  In contrast the disaggregate data which can be noisy and the impact of parameter uncertainty and model mis-specification are potentially high.  In this way, reconciliation provides a mechanism for combining information between different forecasting approaches.}
+\textcolor{blue}{There is now substantial theoretical and empirical evidence that reconciliation improves forecast accuracy relative to base forecasts, bottom-up and top-down methods. The improvement relative to bottom-up, may at first seem counter-intuitive since aggregates contain no additional information relative to the disaggregate series.  However, aggregation can filter out noise leading to smoother signals that can be detected by certain statistical models.  In contrast the disaggregate data can be noisy, leading to higher parameter uncertainty and risk model of model mis-specification.  Reconciliation thus provides a mechanism for combining information between different forecasting approaches at different levels of aggregation.}
 
-In contrast to point forecasts, the entire probability distribution of future values provides a full description of the uncertainty associated with the predictions \citep{Gneiting2014}. Therefore probabilistic forecasting has become of great interest in many disciplines such as, economics \citep{rossi2014}, meteorological studies \citep{mclean2013}, energy forecasting \citep{BenTaieb2017} and retail forecasting \citep{bose2017}. \textcolor{blue}{The importance of probabilistic forecasts can be seen in decision making settings in risk management, when it is critical to quantify the probability of extreme events.}  An early attempt towards probabilistic forecast reconciliation came from \cite{ShaHyn2017} who applied reconciliation to forecast quantiles, rather than to the point forecasts, in order to construct prediction intervals. This idea was extended to constructing a full probabilistic forecast by \citet{JeoEtAl2019} who propose a number of algorithms, one of which is equivalent to reconciling a large number of forecast quantiles. \citet{Taieb2017} also propose an algorithm to obtain probabilistic forecasts that cohere to linear constraints. In particular, \citet{Taieb2017} draw a sample from the probabilistic forecasts of univariate models for the bottom level data, reorder these to match the empirical copula of residuals, and aggregate these in a bottom-up fashion. The only sense in which top level forecasts are used is in the mean, which is adjusted to match that obtained using the MinT reconciliation method \citep{WicEtAl2019}.
+In contrast to point forecasts, the entire probability distribution of future values provides a full description of the uncertainty associated with the predictions \citep{Gneiting2014}. \textcolor{blue}{The importance of probabilistic forecasts can be seen in decision making settings in risk management, when it is critical to quantify the probability of extreme events.}  Therefore probabilistic forecasting has become of great interest in many disciplines such as, economics \citep{rossi2014}, meteorological studies \citep{mclean2013}, energy forecasting \citep{BenTaieb2017} and retail forecasting \citep{bose2017}.   An early attempt towards probabilistic forecast reconciliation came from \cite{ShaHyn2017} who applied reconciliation to forecast quantiles, rather than to the point forecasts, in order to construct prediction intervals. This idea was extended to constructing a full probabilistic forecast by \citet{JeoEtAl2019} who propose a number of algorithms, one of which is equivalent to reconciling a large number of forecast quantiles. \citet{Taieb2017} also propose an algorithm to obtain probabilistic forecasts that cohere to linear constraints. In particular, \citet{Taieb2017} draw a sample from the probabilistic forecasts of univariate models for the bottom-level data, reorder these to match the empirical copula of residuals, and aggregate these in a bottom-up fashion. The only sense in which bottom-level forecasts are used is in the mean, which is adjusted to match that obtained using the MinT reconciliation method \citep{WicEtAl2019}.
 
 There are a number of shortcomings to \citet{JeoEtAl2019} and \citet{Taieb2017} which to our best knowledge represent the only attempts to develop algorithms for probabilistic forecast reconciliation. First, little formal justification is provided for the algorithms, or for the sense that they generalise forecast reconciliation to the probabilistic domain. As such, both algorithms are based on sampling and neither can be used to obtain a reconciled density analytically. Both algorithms are tailored towards specific applications and conflate reconciliation with steps that reorder the base forecasts. For example, while \citet{JeoEtAl2019} show that ranking draws from independent base probabilistic forecasts before reconciliation is effective, this may only be true due to the highly dependent time series considered in their application. A limitation of \citet{Taieb2017} is that to ensure their sample from the base probabilistic forecast has the same empirical copula as the data, it must be of the same size as the training data. This will be problematic in applications with fewer observations than the smart meter data they consider. Further, \citet{Taieb2017} only incorporate information from the forecast mean of aggregate variables, missing out on potentially valuable information in the probabilistic forecasts of aggregate data.
 
@@ -165,7 +164,23 @@ where $\bm{I}_4$ is the $4\times 4$ identity matrix.
 
 The connection between this characterisation and the coherent subspace is that the columns of $\bm{S}$ span $\mathfrak{s}$. Below, the notation $s:\mathbb{R}^m\rightarrow\mathbb{R}^n$ is used when premultiplication by $\bm{S}$ is thought of as a mapping. Finally, while $\bm{S}$ is defined in terms of $m$ bottom-level series here, in general any $m$ series can be chosen with the $\bm{S}$ matrix redefined accordingly. The columns of all appropriately defined $\bm{S}$ matrices span the same coherent subspace $\mathfrak{s}$.
 
-When forecasts of all $n$ series are produced, they may not adhere to constraints. Such forecasts are called \emph{incoherent base} forecasts and are denoted $\hat{\bm{y}}$. To exploit the fact that the target of the forecast adheres to known linear constraints, base forecasts can be adjusted in a process known as \emph{forecast reconciliation}. This involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm{y}}=\psi(\hat{\bm{y}})$, where $\tilde{\bm{y}}\in\mathfrak{s}$ is called the \emph{reconciled} forecast. The mapping $\psi$ may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ combines incoherent base forecasts of all series to produce new bottom-level forecasts, which are then aggregated via $s$. Many existing point forecasting approaches including the bottom-up \citep{Dunn1976}, OLS \citep{HynEtAl2011}, WLS \citep[][]{AthEtAl2017} and MinT \citep{WicEtAl2019} methods, are special cases where $g$ is premultiplication by a matrix $\bm{G}$ and where $\bm{S}\bm{G}$ is a projection matrix. These are summarised in Table~\ref{tab:ReconMethods} found in Appendix~\ref{app:pointfor} the online supplement.
+When forecasts of all $n$ series are produced, they may not adhere to constraints. Such forecasts are called \emph{incoherent base} forecasts and are denoted $\hat{\bm{y}}$. To exploit the fact that the target of the forecast adheres to known linear constraints, base forecasts can be adjusted in a process known as \emph{forecast reconciliation}. This involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm{y}}=\psi(\hat{\bm{y}})$, where $\tilde{\bm{y}}\in\mathfrak{s}$ is called the \emph{reconciled} forecast. The mapping $\psi$ may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ combines incoherent base forecasts of all series to produce new bottom-level forecasts, which are then aggregated via $s$. Many existing point forecasting approaches including the bottom-up \citep{Dunn1976}, OLS \citep{HynEtAl2011}, WLS \citep[][]{AthEtAl2017} and MinT \citep{WicEtAl2019} methods, are special cases where $g$ is premultiplication by a matrix $\bm{G}$ and where $\bm{S}\bm{G}$ is a projection matrix. These are summarised in Table~\ref{tab:ReconMethods}.
+
+\begin{table}[H]
+	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix. Here $\bm{W}$ is some diagonal matrix, $\hat{\bm{\Sigma}}_{\text{sam}}$ is a sample estimate of the residual covariance matrix and $\hat{\bm{\Sigma}}_{\text{shr}}$ is a shrinkage estimator proposed by \citet{Schafer2005}, given by $\tau \textrm{diag}(\hat{\bm{\Sigma}}_{\text{sam}})+(1-\tau)\hat{\bm{\Sigma}}_{\text{sam}}$ where $\tau = \displaystyle\frac{\sum_{i \neq j}\hat{\var}(\hat{\sigma}_{ij})}{\sum_{i \neq j}{\hat{\sigma}}^2_{ij}}$ and $\sigma_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{\Sigma}}_{\text{sam}}$.} \label{tab:ReconMethods}
+	\centering
+	\begin{tabular}{l@{\hskip 0.4in}l}
+		\toprule
+		\textbf{Reconciliation method} & $\bm{G}$ \\
+		\midrule
+		OLS             & $(\bm{S}'\bm{S})^{-1}\bm{S}'$ \\
+		WLS             & $(\bm{S}'\bm{W}\bm{S})^{-1}\bm{S}'\bm{W}$ \\
+		MinT(Sample)    & $(\bm{S}'\hat{\bm{\Sigma}}_{\text{sam}}^{-1}\bm{S})^{-1}\bm{S}' \hat{\bm{\Sigma}}_{\text{sam}}^{-1}$  \\
+		MinT(Shrink)    & $(\bm{S}'\hat{\bm{\Sigma}}_{\text{shr}}^{-1}\bm{S})^{-1}\bm{S}' \hat{\bm{\Sigma}}_{\text{shr}}^{-1}$  \\
+		\bottomrule
+	\end{tabular}
+	\label{tab:recomethods}
+\end{table}
 
 \subsection{Coherent probabilistic forecasts}
 
@@ -184,7 +199,7 @@ To our best knowledge, the only other definition of coherent probabilistic forec
 
 Let $(\mathbb{R}^n, \mathscr{F}_{\mathbb{R}^n}, \hat{\nu})$ be a probability triple characterising a probabilistic forecast for all $n$ series. The hat is used for $\hat{\nu}$ analogously with $\hat{\bm{y}}$ in the point forecasting case. The objective is to derive a reconciled measure $\tilde{\nu}$, assigning probability to each element of the $\sigma$-algebra $\mathscr{F}_\mathfrak{s}$.
 
-\begin{definition} \label{def:reconprob}
+\begin{definition}[Reconciled Probabilistic Forecasts] \label{def:reconprob}
 	The reconciled probability measure of $\hat{\nu}$ with respect to the mapping $\psi(.)$ is a probability measure $\tilde{\nu}$ on $\mathfrak{s}$ with $\sigma$-algebra $\mathscr{F}_\mathfrak{s}$ such that
 	\[
 	\tilde{\nu}(\mathcal{A}) = \hat{\nu}(\psi^{-1}(\mathcal{A})) \qquad \forall \mathcal{A} \in \mathscr{F}_{\mathfrak{s}}\,,
@@ -192,20 +207,20 @@ Let $(\mathbb{R}^n, \mathscr{F}_{\mathbb{R}^n}, \hat{\nu})$ be a probability tri
 	where $\psi^{-1}(\mathcal{A}):=\{{\bm{y}}\in \mathbb{R}^n:\psi({\bm{y}})\in \mathcal{A}\}$ is the pre-image of $\mathcal{A}$, that is the set of all points in $\mathbb{R}^n$ that $\psi(.)$ maps to a point in $\mathcal{A}$.
 \end{definition}
 
-This definition naturally extends forecast reconciliation to the probabilistic setting. In the point forecasting case, the reconciled forecast is obtained by transforming an incoherent forecast. For probabilistic forecasts, sets of points are transformed to sets of points, with the same probabilities are assigned to these sets under the base and reconciled measures respectively. Also, since $\psi$ can be expressed as a composition $s\circ g$, a reconciled probabilistic distribution $\nu$ can be obtained for $m$ series such that $\nu(\mathcal{B})= \hat{\nu}(g^{-1}(\mathcal{B}))$ for all $\mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}$. A probabilistic forecast for the full hierarchy can then be obtained via Definition~\ref{def:cohprob}. This construction will be used in Section~\ref{sec:AnalyticalSolution}.
+This definition naturally extends forecast reconciliation to the probabilistic setting. In the point forecasting case, the reconciled forecast is obtained by transforming an incoherent forecast. For probabilistic forecasts, sets of points are transformed to sets of points, with the same probabilities assigned to these sets under the base and reconciled measures respectively. Also, since $\psi$ can be expressed as a composition $s\circ g$, a reconciled probabilistic distribution $\nu$ can be obtained for $m$ series such that $\nu(\mathcal{B})= \hat{\nu}(g^{-1}(\mathcal{B}))$ for all $\mathcal{B} \in \mathscr{F}_{\mathbb{R}^m}$. A probabilistic forecast for the full hierarchy can then be obtained via Definition~\ref{def:cohprob}. This construction will be used in Section~\ref{sec:AnalyticalSolution}.
 
 Definition~\ref{def:reconprob} can use any continuous mapping $\psi$, where continuity is required to ensure that open sets in $\mathbb{R}^n$ used to construct $\mathscr{F}_{\mathbb{R}^n}$ are mapped to open sets in $\mathfrak{s}$. However, hereafter, we restrict our attention to $\psi$ as a linear mapping. This is depicted in Figure~\ref{fig:probfr_sch} when $\psi$ is a projection. This figure is only a schematic, since most applications are high-dimensional. The arrow labelled $\bm{S}$ spans an $m$-dimensional coherent subspace $\mathfrak{s}$, while the arrow labelled $\bm{R}$ spans an $(n-m)$-dimensional direction of projection. The mapping $g$ collapses all points in the blue shaded region $g^{-1}(\mathcal{B})$, to the black interval $\mathcal{B}$. Under $s$, $\mathcal{B}$ is mapped to $s(\mathcal{B})$ shown in red. Under our definition of reconciliation, the same probability is assigned to the red region under the reconciled measure as is assigned to the blue region under the incoherent measure.
 
+\begin{figure}[!h]
+	\centering \includegraphics[height=0.3\textheight]{Figs/probforerec_schematic.pdf}
+	\caption{Summary of probabilistic forecast reconciliation. The probability that $\bm{y}_{t+h}$ lies in the red segment under the reconciled probabilistic forecast equals the probability that $\bm{y}_{t+h}$ lies in the shaded blue area under the unreconciled probabilistic forecast. Since most applications are high-dimensional, this figure is only a schematic.}\label{fig:probfr_sch}
+\end{figure}
 
 
 \section{Construction of Reconciled Distribution} \label{sec:AnalyticalSolution}
 
 In this section we derive theoretical results on how distributions on $\mathbb{R}^n$ can be reconciled to a distribution on $\mathfrak{s}$. In Section~\ref{sec:andens} we show how this can be achieved analytically by a change of coordinates and marginalisation when the density is available. In Section~\ref{sec:elliptical} we explore this result further in the specific case of elliptical distributions. In Section~\ref{sec:SampleSolution} we consider reconciliation in the case where the density may be unavailable but it is possible to draw a sample from the base probabilistic forecast distribution. Throughout we restrict our attention to linear reconciliation.
 
-\begin{figure}[!htb]
-	\centering \includegraphics[height=0.3\textheight]{Figs/probforerec_schematic.pdf}
-	\caption{Summary of probabilistic forecast reconciliation. The probability that $\bm{y}_{t+h}$ lies in the red segment under the reconciled probabilistic forecast equals the probability that $\bm{y}_{t+h}$ lies in the shaded blue area under the unreconciled probabilistic forecast. Since most applications are high-dimensional, this figure is only a schematic.}\label{fig:probfr_sch}
-\end{figure}
 
 \subsection{Analytical derivation of reconciled densities}\label{sec:andens}
 
@@ -263,7 +278,7 @@ More generally, consider linear reconciliation of the form $\psi(\hat{\bm{y}})=\
 	\label{eq:recovertrue}
 	\bm{\Sigma}=\bm{S}\bm{G}_{\text{opt}}\hat{\bm{\Sigma}}\bm{G}'_{\text{opt}}\bm{S}'\,.
 	\end{equation}
-	\textcolor{blue}{Note that since the true data must be coherent $\bm{\Sigma}$ will not be full rank, while in contrast $\hat{\bm{\Sigma}}$ usually will be (but need not be) full rank. Equation~\ref{eq:recovertrue} can} be solved as $\bm{G}_{\text{opt}}=\bm{\Omega}_0^{1/2}\hat{\bm{\Sigma}}^{-1/2}$, where $\hat{\bm{\Sigma}}^{1/2}$ is any matrix such that $\hat{\bm{\Sigma}}=\hat{\bm{\Sigma}}^{1/2}(\hat{\bm{\Sigma}}^{1/2})'$ \footnote{\textcolor{blue}{for example a Cholesky factor which will be unique if $\hat{\bm{\Sigma}}$.  If $\hat{\bm{\Sigma}}$ is rank deficient, then although the Cholesky factor is no longer unique, any $\hat{\bm{\Sigma}}^{1/2}$ such that $\hat{\bm{\Sigma}}=\hat{\bm{\Sigma}}^{1/2}(\hat{\bm{\Sigma}}^{1/2})'$ can be used}}. Here, ${\bm{\Omega}}_0^{1/2}({\bm{\Omega}}_0^{1/2})'={\bm\Omega}$ and ${\bm\Omega}$ is the true scale matrix for the bottom-level series. To ensure conformability of matrix multiplication, ${\bm{\Omega}}^{1/2}$ must be an $m\times n$ matrix; so it can be set to the Cholesky factor of ${\bm{\Omega}}$ augmented with an additional $n-m$ columns of zeros. To reconcile the location, solve the following for $\bm{d}_{\text{opt}}$
+	\textcolor{blue}{Note that since the true data must be coherent $\bm{\Sigma}$ will not be full rank, while in contrast $\hat{\bm{\Sigma}}$ usually will be (but need not be) full rank. Equation~\ref{eq:recovertrue} can} be solved as $\bm{G}_{\text{opt}}=\bm{\Omega}_0^{1/2}\hat{\bm{\Sigma}}^{-1/2}$, where $\hat{\bm{\Sigma}}^{1/2}$ is any matrix such that $\hat{\bm{\Sigma}}=\hat{\bm{\Sigma}}^{1/2}(\hat{\bm{\Sigma}}^{1/2})'$. \footnote{\textcolor{blue}{For example a Cholesky factor which will be unique if $\hat{\bm{\Sigma}}$ is full rank.  If $\hat{\bm{\Sigma}}$ is rank deficient, then although the Cholesky factor is no longer unique, any $\hat{\bm{\Sigma}}^{1/2}$ such that $\hat{\bm{\Sigma}}=\hat{\bm{\Sigma}}^{1/2}(\hat{\bm{\Sigma}}^{1/2})'$ can be used}} Here, ${\bm{\Omega}}_0^{1/2}({\bm{\Omega}}_0^{1/2})'={\bm\Omega}$ and ${\bm\Omega}$ is the true scale matrix for the bottom-level series. To ensure conformability of matrix multiplication, ${\bm{\Omega}}^{1/2}$ must be an $m\times n$ matrix; so it can be set to the Cholesky factor of ${\bm{\Omega}}$ augmented with an additional $n-m$ columns of zeros. To reconcile the location, solve the following for $\bm{d}_{\text{opt}}$
 	\begin{equation*}
 	\bm{\mu}=\bm{S}(\bm{d}_{\text{opt}}+\bm{G}_{\text{opt}}\hat{\bm{\mu}})\,
 	\end{equation*}
@@ -380,7 +395,7 @@ The aim of the simulations that follow is to demonstrate probabilistic forecast 
 
 The data generating process we consider corresponds to the 3-level hierarchical structure presented in Figure~\ref{fig:twoL-hier}. Bottom-level series are first generated from ARIMA$(p,d,q)$ processes, which are in turn aggregated to form the middle and top-level series. The orders $p$ and $q$ are randomly selected from $\{1,2\}$ for each bottom-level series. The AR and MA parameters are randomly and uniformly generated from $[0.3,0.5]$ and $[0.3,0.7]$ respectively, and only accepted if they belong to the stationary and invertible region. In addition a non-stationary case where $d$ is randomly chosen for each bottom-level from $\{0,1\}$ was considered, these results are omitted for brevity. A complete set of results are available at the github repository \url{https://git.io/JJwQB}.
 
-We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. Specifically, the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with $\text{Beta}(1,3)$ margins. After simulating from the ARIMA models, additional noise is added to ensure bottom-level series have a lower signal-to-noise ratio than top level series with details provided in Appendix~\ref{app:DGP} of the online supplement. For each series the first 500 observations are ignored to avoid the impact of initial values.
+We consider a multivariate Gaussian and a non-Gaussian setting for the errors driving the ARIMA processes. Specifically, the non-Gaussian errors are drawn from a meta-distribution of a Gumbel copula with $\text{Beta}(1,3)$ margins. After simulating from the ARIMA models, additional noise is added to ensure bottom-level series have a lower signal-to-noise ratio than bottom-level series with details provided in Appendix~\ref{app:DGP} of the online supplement. For each series the first 500 observations are ignored to avoid the impact of initial values.
 
 
 \subsection{Modelling and Base Forecasts}
@@ -417,20 +432,13 @@ In addition to these, two further reconciliation methods were considered; WLS, w
 
 \subsection{Results for Gaussian probabilistic forecasts}\label{sec:SimAnalysticalResults}
 
-The left panel of Figure~\ref{fig:meanscore_g} shows the mean energy score for different reconciliation methods and different methods of generating base forecasts. When base probabilistic forecasts are generated independently, score optimisation with the energy score (ScoreOptE) performs best, while when base forecasts are generated jointly, the MinT method for reconciliation using the shrinkage estimator (MinTShr) yields the most accurate forecasts. The bottom-up method as well as BTTH and JPP fail to even improve upon base forecasts in all cases. As expected score optimisation using the variogram score does not perform as well as score optimisation using energy score, when evaluation is carried out with respect to the latter. However, the results are quite close suggesting that score optimisation is fairly robust to using an alternative proper score.
+The left panel of Figure~\ref{fig:meanscore_e} shows the mean energy score for different reconciliation methods and different methods of generating base forecasts. When base probabilistic forecasts are generated independently, score optimisation with the energy score (ScoreOptE) performs best, while when base forecasts are generated jointly, the MinT method for reconciliation using the shrinkage estimator (MinTShr) yields the most accurate forecasts. The bottom-up method as well as BTTH and JPP fail to even improve upon base forecasts in all cases. As expected score optimisation using the variogram score does not perform as well as score optimisation using energy score, when evaluation is carried out with respect to the latter. However, the results are quite close suggesting that score optimisation is fairly robust to using an alternative proper score.
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[height=0.55\textheight]{Figs/gaussian_meanscore}
-	\caption{Mean scores for Gaussian DGP\@ using different base forecast and reconciliation methods. Left panel is the energy score, right panel is the variogram score.}
-	\label{fig:meanscore_g}
-\end{figure}
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=0.55\textheight]{Figs/nongaussian_meanscore}
-	\caption{Mean scores for non-Gaussian DGP\@ using different base forecast and reconciliation methods.  Left panel is energy score, right panel is variogram score.}
-	\label{fig:meanscore_n}
+	\includegraphics[height=0.55\textheight]{Figs/energy_meanscore}
+	\caption{Mean energy scores using different base forecast and reconciliation methods. Left panel is the Gaussian data, right panel is the non-Gaussian data.}
+	\label{fig:meanscore_e}
 \end{figure}
 
 To assess significant differences between the reported results, we use post-hoc Nemenyi tests \citep{HolEtAl2013}. The Nemenyi test is a non-parametric test that identifies groups of forecasts which cannot be significantly distinguished from one another. We use the implementation of the tests available in the \verb|tsutils| R package \citep{tsutilspackage}. Figure~\ref{fig:gse} reports the results which should be looked at column-wise. A blue square indicates that the method in the corresponding row, is statistically indistinguishable from the method in that column. For all four methods of generating base forecasts, MinTShr, ScoreOptE and OLS significantly outperform base forecasts, bottom-up forecasts, BTTH and JPP.
@@ -444,14 +452,14 @@ To assess significant differences between the reported results, we use post-hoc 
 \end{figure}
 
 
-The right panel of Figure~\ref{fig:meanscore_g} and Figure~\ref{fig:gsv} (in Appendix~\ref{app:nemenyi} of the online supplement) report the same output but using the variogram score for evaluation. For this specific DGP, base model and score, BTTH significantly outperforms all other methods. However, this result was not observed when using BTTH for any other simulation scenario, including those results omitted for brevity. Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well. Score optimisation, OLS, MinTShr and BTTH all lead to significant improvements relative to base, bottom-up and JPP.
+The right panel of Figure~\ref{fig:meanscore_e} and Figure~\ref{fig:gsv} (in Appendix~\ref{app:nemenyi} of the online supplement) report the same output but using the variogram score for evaluation. For this specific DGP, base model and score, BTTH significantly outperforms all other methods. However, this result was not observed when using BTTH for any other simulation scenario, including those results omitted for brevity. Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well. Score optimisation, OLS, MinTShr and BTTH all lead to significant improvements relative to base, bottom-up and JPP.
 
 
 \subsection{Results for non-Gaussian probabilistic forecast} \label{sec:SimSamplingResults}
 
-The left panel of Figure~\ref{fig:meanscore_n} reports the mean energy score for the non-Gaussian DGP\@. Overall, the results are quite similar to the Gaussian DGP\@. The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent. The Nemenyi matrix is omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results. However, these lead to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MinTShr and OLS are statistically indistinguishable from one another but are significantly better than base forecasts and the bottom-up method. The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts.
+The left panel of Figure~\ref{fig:meanscore_v} reports the mean energy score for the non-Gaussian DGP\@. Overall, the results are quite similar to the Gaussian DGP\@. The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent. The Nemenyi matrix is omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results. However, these lead to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MinTShr and OLS are statistically indistinguishable from one another but are significantly better than base forecasts and the bottom-up method. The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts.
 
-Finally, the right panel of Figure~\ref{fig:meanscore_n} and Figure~\ref{fig:nsv} (in Appendix~\ref{app:nemenyi} of the online supplement) report results for the non-Gaussian DGP using the variogram score to evaluate forecasts. In this case, score optimisation with respect to the variogram score yields the best performance when base forecasts are dependent, while MinTShr yields the best performance when base forecasts are independent. In contrast to the Gaussian DGP, the JPP method leads to significant improvements over base forecasts, while the BTTH method leads to a significantly worse performance than base forecasts.
+Finally, the right panel of Figure~\ref{fig:meanscore_v} and Figure~\ref{fig:nsv} (in Appendix~\ref{app:nemenyi} of the online supplement) report results for the non-Gaussian DGP using the variogram score to evaluate forecasts. In this case, score optimisation with respect to the variogram score yields the best performance when base forecasts are dependent, while MinTShr yields the best performance when base forecasts are independent. In contrast to the Gaussian DGP, the JPP method leads to significant improvements over base forecasts, while the BTTH method leads to a significantly worse performance than base forecasts.
 
 
 Overall, the main conclusion from the simulation study is that score optimisation leads to significant improvements in forecast performance over base forecasts irrespective of whether the DGP is Gaussian or non-Gaussian and irrespective of whether the energy or variogram score is used for evaluation. For the DGPs considered in the simulation study, MinTShr and to a lesser extent OLS also provided significant improvements over base and bottom-up forecasts. While the existing probabilistic forecast reconciliation methods considered in the literature (BTTH and JPP) performed well in some scenarios (particularly BTTH for the Gaussian DGP evaluated by variogram score), overall results for these methods was mixed and even led to a statistically significant deterioration in forecast quality relative to base forecasts in some settings.
@@ -460,12 +468,43 @@ Overall, the main conclusion from the simulation study is that score optimisatio
 
 \subsection{Data Description and Base Forecasts}\label{sec:datadesc}
 
-To demonstrate the potential of the proposed methods, we consider an application to forecasting electricity generation from different sources of energy. Daily time series were obtained from \url{opennem.org.au}, a website that compiles publicly available data from the Australian Energy Market Operator (AEMO)\@. Probabilistic day-ahead forecasts are crucial inputs into operational and planning decisions that ensure efficiency and stability of the power network. This has become a more challenging problem with growth in intermittent sources of generation such as wind and solar.  In total, there are $n=23$ series of which $m=15$ are bottom-level series.  The hierarchy construction and some preliminary  data analysis that highlight interesting and unique features of the data can be found in Appendix~\ref{app:electricity} of the online supplement.  The diversity and prominence of the features in each series and each level of aggregation highlights the importance of modelling and forecasting each series on its own merits and then applying a reconciliation approach.
+To demonstrate the potential of the proposed methods, we consider an application to forecasting electricity generation from different sources of energy. Daily time series were obtained from \url{opennem.org.au}, a website that compiles publicly available data from the Australian Energy Market Operator (AEMO)\@. Probabilistic day-ahead forecasts are crucial inputs into operational and planning decisions that ensure efficiency and stability of the power network. This has become a more challenging problem with growth in intermittent sources of generation such as wind and solar. The hierarchy comprises three levels of aggregation.
+\begin{compactenum}
+	\item \textit{Total} generation is the sum of generation from \textit{Renewable} and \textit{non-Renewable} sources.
+	\item \textit{Renewable} generation is the sum of \textit{Batteries}, \textit{Hydro (inc. Pumps)}, \textit{Solar}, \textit{Wind} and \textit{Biomass}. \textit{Non-Renewable} is the sum of \textit{Coal}, \textit{Gas} and \textit{Distillate}
+	\item \textit{Battery} generation is given by \textit{Battery (Discharging)} minus \textit{Battery (Charging)}, \textit{Hydro (inc. Pumps)} is \textit{Hydro} generation minus \textit{Pumps} (energy used to pump water upstream), while \textit{Solar} generation is the sum of \textit{Solar (Rooftop)} and \textit{Solar (Utility)}. \textit{Coal} generation is the sum of \textit{Black Coal} and \textit{Brown Coal}, while \textit{Gas} is the sum of \textit{Gas (OCGT)}, \textit{Gas (CCGT)}, \textit{Gas (Steam)}, \textit{Gas (Reciprocating)}.
+\end{compactenum}
+In total, there are $n=23$ series of which $m=15$ are bottom-level series.
+
+
+\begin{figure}[!b]
+	\centering
+	\includegraphics[width=.90\textwidth]{Figs/selected.pdf}
+	\caption{Time series plots for selected series from 11 June 2019 to 10 June 2020.}
+	\label{fig:selected}
+\end{figure}
+
+Figure~\ref{fig:selected} shows time plots for some selected series\footnote{Time plots for the remaining series area available from \url|https://git.io/JJwd0|.}. The series exhibit some interesting and unique features. At the aggregate level, \textit{Total} generation shows strong weekly seasonality, with troughs corresponding to weekends. An annual seasonal pattern is also displayed with peaks occurring during the months of June--August as well as December--February. These periods correspond to the winter and summer months in Australia for which electricity demand peaks for heating and cooling purposes respectively. As expected, generation from \textit{Solar} peaks during the summer months of December--February. There are also some unusually large spikes observed in both the \textit{Total} and \textit{Solar} series during February and January 2020 respectively. \textit{Wind} displays higher volatility (especially outside the summer months), while generation from \textit{Distillate} exhibits aperiodic spikes.  The diversity and prominence of the features in each series and each level of aggregation highlights the importance of modelling and forecasting each series on its own merits and then applying a reconciliation approach.
 %\subsection{Base Forecasts}\label{sec:applbase}
 
 The forecast evaluation is based on a rolling window. Each training window consists of 140 days (20 weeks) of data. One-step-ahead forecasts were generated leading to 170 daily forecasts for evaluation. Each series was independently modelled using a one-layer feed-forward neural network with up to 28 lags of the target variable as inputs. This was implemented using the \verb|NNETAR| function in the \verb|fable| package. Neural networks are used to highlight the versatility of reconciliation to different forecasting approaches. While including more layers or meteorological variables as predictors will probably lead to improved base forecasts, the primary objective is to assess the effectiveness of different forecast reconciliation methods. \textcolor{blue}{For base forecasts, we also considered a multivariate model, namely a Vector Autoregression (VAR) with shrinkage, implemented using the R package BigVAR package \citep{bigvar}.  Since, for both base forecasts and reconciled forecasts the neural network outperformed the VAR, we focus only on the former. However, we note that even for the VAR results (summarised in Appendix~\ref{app:var} of the online supplement) reconciliation methods improve upon base forecasts.  This highlights that forecast reconciliation should not be thought of as an alternative for forecasting from multivariate models, but rather as an option for improving both univariate and multivariate approaches.}
 
-Four situations were considered where base forecasts are assumed to be either Gaussian or bootstrapped from residuals, and either dependent or independent. Histograms of residuals demonstrate departures from normality and a correlation heatmap demonstrates departures from independence (both can be found in Appendix~\ref{app:electricity} of the online supplement).  Therefore, independent Gaussian probabilistic forecasts are likely to represent severe misspecification.
+Four situations were considered where base forecasts are assumed to be either Gaussian or bootstrapped from residuals, and either dependent or independent. Figure~\ref{fig:emp_hist} demonstrates departures from normality in the residuals of base forecasting models, while the correlation heatmap of these residuals in Figure~\ref{fig:emp_corr} demonstrates departures from independence. Therefore, independent Gaussian probabilistic forecasts are likely to represent severe misspecification.
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=.8\textwidth]{Figs/densities.pdf}
+	\caption{Densities of residuals for selected series from a typical training window of 2 October 2019 to 21 January 2020.}
+	\label{fig:emp_hist}
+\end{figure}
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=.8\textwidth]{Figs/corr.pdf}
+	\caption{Correlation heatmap of residuals from a typical training window of 2 October 2019 to 21 January 2020. Blue circles indicate positive correlation, while red circles indicate negative correlation with larger circles indicating stronger correlations.}
+	\label{fig:emp_corr}
+\end{figure}
+
 
 \subsection{Reconciliation}\label{sec:applreco}
 
@@ -485,7 +524,7 @@ The same reconciliation methods were used as in the simulation study with score 
 
 The mean energy score for all four base forecasting methods is summarised in Figure~\ref{fig:meanenergy_app}. When base forecasts are generated assuming both independence and a Gaussian distribution, score optimisation achieves a mean energy score that is considerably smaller than all other competing methods, with MinT providing the second smallest value. The superior forecasting performance of score optimisation is statistically significant, \textcolor{blue}{see the Nemenyi matrix in Figure~\ref{fig:nem_app} (left)}. This suggests that score optimisation is best for guarding against severe model misspecification.
 
-For all other methods the best performing method is OLS. This difference is statistically significant \footnote{\textcolor{blue}{see the Nemenyi matrix for jointly bootstrapped base forecasts in Figure~\ref{fig:nem_app} (right)}. The corresponding figures for joint Gaussian and independent bootstrap look mostly similar to the right panel of Figure~\ref{fig:nem_app}; please refer to \url{https://git.io/JJMEH} for a full set of results}. Although score optimisation does not improve upon base, the differences are not significant. For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
+For all other methods the best performing method is OLS. This difference is statistically significant. \footnote{\textcolor{blue}{see the Nemenyi matrix for jointly bootstrapped base forecasts in Figure~\ref{fig:nem_app} (right)} The corresponding figures for joint Gaussian and independent bootstrap look mostly similar to the right panel of Figure~\ref{fig:nem_app}; please refer to \url{https://git.io/JJMEH} for a full set of results}. Although score optimisation does not improve upon base, the differences are not significant. For all base forecasts, both JPP and BTTH are significantly worse than base forecasts.
 
 
 \section{Conclusions}\label{sec:conclusion}
@@ -589,23 +628,8 @@ Since this holds for any possible realisation, it will also hold after taking ex
 
 \clearpage
 \setcounter{page}{1}
-\section{Summary of point forecasting reconciliation methods}\label{app:pointfor}
 
-\begin{table}[H]
-	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix. Here $\bm{W}$ is some diagonal matrix, $\hat{\bm{\Sigma}}_{\text{sam}}$ is a sample estimate of the residual covariance matrix and $\hat{\bm{\Sigma}}_{\text{shr}}$ is a shrinkage estimator proposed by \citet{Schafer2005}, given by $\tau \textrm{diag}(\hat{\bm{\Sigma}}_{\text{sam}})+(1-\tau)\hat{\bm{\Sigma}}_{\text{sam}}$ where $\tau = \displaystyle\frac{\sum_{i \neq j}\hat{\var}(\hat{\sigma}_{ij})}{\sum_{i \neq j}{\hat{\sigma}}^2_{ij}}$ and $\sigma_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{\Sigma}}_{\text{sam}}$.} \label{tab:ReconMethods}
-	\centering
-	\begin{tabular}{l@{\hskip 0.4in}l}
-		\toprule
-		\textbf{Reconciliation method} & $\bm{G}$ \\
-		\midrule
-		OLS             & $(\bm{S}'\bm{S})^{-1}\bm{S}'$ \\
-		WLS             & $(\bm{S}'\bm{W}\bm{S})^{-1}\bm{S}'\bm{W}$ \\
-		MinT(Sample)    & $(\bm{S}'\hat{\bm{\Sigma}}_{\text{sam}}^{-1}\bm{S})^{-1}\bm{S}' \hat{\bm{\Sigma}}_{\text{sam}}^{-1}$  \\
-		MinT(Shrink)    & $(\bm{S}'\hat{\bm{\Sigma}}_{\text{shr}}^{-1}\bm{S})^{-1}\bm{S}' \hat{\bm{\Sigma}}_{\text{shr}}^{-1}$  \\
-		\bottomrule
-	\end{tabular}
-	\label{tab:recomethods}
-\end{table}
+
 
 \section{Reconciled Forecast for Gaussian Distribution}\label{app:gauss_ex}
 
@@ -640,7 +664,7 @@ where $\bm{G}_{\perp}^-$ is an $(n-m)\times n$ matrix such that $\bm{G}_{\perp}^
 \]
 After the change of variables, the density can be recognised as a multivariate Gaussian in $\bm{b}$ and $\bm{a}$. The mean and covariance matrix for the margins of the first $m$ elements are $\bm{G}\hat{\bm{\mu}}$ and $\bm{G}\hat{\bm{\Sigma}}\bm{G}'$ respectively. Marginalising out $\bm{a}$, the reconciled forecast for the bottom-level is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$. Using standard results from matrix algebra of normals, $\tilde{\bm{y}} \sim \mathcal{N}(\bm{S}\bm{G}\hat{\bm{\mu}}, \bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$.
 
-\section{Comparison using only bottom level series}\label{app:bl_comp}
+\section{Comparison using only bottom-level series}\label{app:bl_comp}
 
 If a probabilistic forecast is available for any $m$ series, then a probabilistic forecast for the full hierarchy can be derived. Definition~\ref{def:cohprob} provides an example using the bottom-level series. This suggests that it may be adequate to merely compare two coherent forecasts to one another using the bottom-level series only. This is true for the log score.
 
@@ -669,7 +693,7 @@ The same property does not hold for all scores. For example, the energy score is
 
 \section{Data generating process} \label{app:DGP}
 
-To ensure that bottom-level series are noisier than top level series (a feature often observed empirically), noise is added to the bottom-level series in the following manner
+To ensure that bottom-level series are noisier than bottom-level series (a feature often observed empirically), noise is added to the bottom-level series in the following manner
 \begin{align*}
 y_{AA,t} &= w_{AA,t} + u_t - 0.5v_t,\\
 y_{AB,t} &= w_{AB,t} - u_t - 0.5v_t,\\
@@ -705,7 +729,14 @@ For the Gaussian DGP, $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathca
 
 For the non-Gaussian case, errors are generated from a Gumbel copula with Beta margins as described in Section~\ref{sec:dgp}. Rather than add Gaussian noise, we simulate $u_t$ and $v_t$ from skew t distributions using the \texttt{sn} package \citep{snpackage}. The scale, skew and degrees of freedom parameters are chosen as 0.5,1.5 and 4 and 0.9,2 and 8 for $u_t$ and $v_t$ respectively. Monte Carlo simulations show that these values satisfy the inequalities described above.
 
-\section{Nemenyi Matrices for Simulation}\label{app:nemenyi}
+\section{Results for Variogram Score for Simulation}\label{app:nemenyi}
+
+\begin{figure}[!htb]
+	\centering
+	\includegraphics[width=0.55\textheight]{Figs/variogram_meanscore}
+	\caption{Mean variogram scores using different base forecast and reconciliation methods. Left panel is the Gaussian data, right panel is the non-Gaussian data.}
+	\label{fig:meanscore_v}
+\end{figure}
 
 \begin{figure}[!htb]
 	\centering
@@ -721,45 +752,6 @@ For the non-Gaussian case, errors are generated from a Gumbel copula with Beta m
 	\caption{Nemenyi matrix for Variogram score with a non-Gaussian DGP.}
 	\label{fig:nsv}
 \end{figure}
-
-\section{Electricity Data}\label{app:electricity}
-
-The hierarchy comprises three levels of aggregation.
-\begin{compactenum}
-	\item \textit{Total} generation is the sum of generation from \textit{Renewable} and \textit{non-Renewable} sources.
-	\item \textit{Renewable} generation is the sum of \textit{Batteries}, \textit{Hydro (inc. Pumps)}, \textit{Solar}, \textit{Wind} and \textit{Biomass}. \textit{Non-Renewable} is the sum of \textit{Coal}, \textit{Gas} and \textit{Distillate}
-	\item \textit{Battery} generation is given by \textit{Battery (Discharging)} minus \textit{Battery (Charging)}, \textit{Hydro (inc. Pumps)} is \textit{Hydro} generation minus \textit{Pumps} (energy used to pump water upstream), while \textit{Solar} generation is the sum of \textit{Solar (Rooftop)} and \textit{Solar (Utility)}. \textit{Coal} generation is the sum of \textit{Black Coal} and \textit{Brown Coal}, while \textit{Gas} is the sum of \textit{Gas (OCGT)}, \textit{Gas (CCGT)}, \textit{Gas (Steam)}, \textit{Gas (Reciprocating)}.
-\end{compactenum}
-In total, there are $n=23$ series of which $m=15$ are bottom-level series.
-
-
-\begin{figure}[!b]
-	\centering
-	\includegraphics[width=.90\textwidth]{Figs/selected.pdf}
-	\caption{Time series plots for selected series from 11 June 2019 to 10 June 2020.}
-	\label{fig:selected}
-\end{figure}
-
-Figure~\ref{fig:selected} shows time plots for some selected series\footnote{Time plots for the remaining series area available from \url|https://git.io/JJwd0|.}. The series exhibit some interesting and unique features. At the aggregate level, \textit{Total} generation shows strong weekly seasonality, with troughs corresponding to weekends. An annual seasonal pattern is also displayed with peaks occurring during the months of June--August as well as December--February. These periods correspond to the winter and summer months in Australia for which electricity demand peaks for heating and cooling purposes respectively. As expected, generation from \textit{Solar} peaks during the summer months of December--February. There are also some unusually large spikes observed in both the \textit{Total} and \textit{Solar} series during February and January 2020 respectively. \textit{Wind} displays higher volatility (especially outside the summer months), while generation from \textit{Distillate} exhibits aperiodic spikes.
-
-Figure~\ref{fig:emp_hist} demonstrates departures from normality in the residuals of base forecasting models, while the correlation heatmap of these residuals in Figure~\ref{fig:emp_corr} demonstrates departures from independence.
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=.8\textwidth]{Figs/densities.pdf}
-	\caption{Densities of residuals for selected series from a typical training window of 2 October 2019 to 21 January 2020.}
-	\label{fig:emp_hist}
-\end{figure}
-
-\begin{figure}[!htb]
-	\centering
-	\includegraphics[width=.8\textwidth]{Figs/corr.pdf}
-	\caption{Correlation heatmap of residuals from a typical training window of 2 October 2019 to 21 January 2020. Blue circles indicate positive correlation, while red circles indicate negative correlation with larger circles indicating stronger correlations.}
-	\label{fig:emp_corr}
-\end{figure}
-
-
-
 
 \section{Results from Vector Autoregression}\label{app:var}
 
