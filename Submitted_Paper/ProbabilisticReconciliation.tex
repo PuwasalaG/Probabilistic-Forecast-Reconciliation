@@ -29,10 +29,10 @@
 \newcommand{\blind}{1}
 
 % DON'T change margins - should be 1 inch all around.
-\addtolength{\oddsidemargin}{-0.7in}%
-\addtolength{\evensidemargin}{-0.7in}%
-\addtolength{\textwidth}{1.4in}%
-\addtolength{\textheight}{+.7in}%
+\addtolength{\oddsidemargin}{-0.8in}%
+\addtolength{\evensidemargin}{-0.8in}%
+\addtolength{\textwidth}{1.6in}%
+\addtolength{\textheight}{+.9in}%
 \addtolength{\topmargin}{-.8in}%
 \usepackage{caption}
 \DeclareCaptionStyle{italic}[justification=centering]
@@ -358,7 +358,7 @@ One of the challenges in optimising this objective function is that there is, in
 \end{equation}
 where $\tilde{\bm{y}}^{[q]}_{t+h|t}=\bm{S}\big(\bm{d}+\bm{G}{\hat{\bm{y}}}^{[q]}_{t+h|t}\big)$, $\tilde{\bm{y}}^{*[q]}_{t+h|t}=\bm{S}\big(\bm{d}+\bm{G}{\hat{\bm{y}}}^{*[q]}_{t+h|t}\big)$ and ${\hat{\bm{y}}}^{[q]}_{t+h|t},{\hat{\bm{y}}}^{*[q]}_{t+h|t}\overset{iid}{\sim} \hat{f}_{t+h|t}$ for $q=1,\ldots,Q$.
 
-The objective function is optimised by Stochastic Gradient Descent (SGD). The SGD method has become increasingly popular in machine learning and statistics over the past decade having been applied to training neural networks \citep{bottou2010} and Variational Bayes \citep{kingma2013}. \textcolor{blue}{These are typically high dimensional problems, deep neural networks handle millions of parameters, so this tool is well suited to our problem.} It requires an estimate of the gradient $\partial\hat{\mathcal{E}}/\partial{\gamma}$ which is computed by automatically differentiating Equation~\eqref{eq:obj_mc} using the header only C++ library of the Stan project~\citep{carpenter2015}. The learning rates used for SGD are those of the Adam method \citep[see][for details]{kingma2014}. Pseudo-code for the full procedure in the case where $h=1$ is provided in Algorithm~\ref{alg:scoreopt} and is implemented in the R package \textit{ProbReco} \citep{RProbReco}.
+The objective function is optimised by Stochastic Gradient Descent (SGD). The SGD method has become increasingly popular in machine learning and statistics over the past decade having been applied to training neural networks \citep{bottou2010} and Variational Bayes \citep{kingma2013}. \textcolor{blue}{There is also a recent but growing literature on using SGD to optimise scoring rules \citep[see][and references therein for examples]{GasEtAl2019,JanSte2020,HofEtAl2020}. These are typically high dimensional problems, deep neural networks handle millions of parameters, so this tool is well suited to our problem.} It requires an estimate of the gradient $\partial\hat{\mathcal{E}}/\partial{\gamma}$ which is computed by automatically differentiating Equation~\eqref{eq:obj_mc} using the header only C++ library of the Stan project~\citep{carpenter2015}. The learning rates used for SGD are those of the Adam method \citep[see][for details]{kingma2014}. Pseudo-code for the full procedure in the case where $h=1$ is provided in Algorithm~\ref{alg:scoreopt} and is implemented in the R package \textit{ProbReco} \citep{RProbReco}.
 
 \begin{algorithm}[!htb]
 	\caption{SGD with Adam for score optimal reconciliation (one-step-ahead forecasts). The initial value of $\bm{\gamma}$ is given by OLS reconciliation. Steps 9--14 are the standard steps for SGD with Adam. Squaring $\bm{g}_j$ in Step 11 and division and addition in Step 14 are element-wise operations.}\label{alg:scoreopt}.
@@ -430,7 +430,7 @@ Note that JPP and BTTH previously exist in the literature. The methods BottomUp,
 
 In addition to these, two further reconciliation methods were considered; WLS, which reconciles via pre-multiplication by the matrix used in \cite{JeoEtAl2019} but with no reordering of the draws, and MinTSam which uses a sample estimate of the covariance matrix rather than a shrinkage estimator. These methods were mostly dominated by OLS and MinTShr respectively and are omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results.
 
-\subsection{Results for Gaussian probabilistic forecasts}\label{sec:SimAnalysticalResults}
+\subsection{Energy score results for Gaussian probabilistic forecasts}\label{sec:SimAnalysticalResults}
 
 The left panel of Figure~\ref{fig:meanscore_e} shows the mean energy score for different reconciliation methods and different methods of generating base forecasts. When base probabilistic forecasts are generated independently, score optimisation with the energy score (ScoreOptE) performs best, while when base forecasts are generated jointly, the MinT method for reconciliation using the shrinkage estimator (MinTShr) yields the most accurate forecasts. The bottom-up method as well as BTTH and JPP fail to even improve upon base forecasts in all cases. As expected score optimisation using the variogram score does not perform as well as score optimisation using energy score, when evaluation is carried out with respect to the latter. However, the results are quite close suggesting that score optimisation is fairly robust to using an alternative proper score.
 
@@ -451,18 +451,14 @@ To assess significant differences between the reported results, we use post-hoc 
 	\label{fig:gse}
 \end{figure}
 
+%\subsection{Results for non-Gaussian probabilistic forecast} \label{sec:SimSamplingResults}
 
-The right panel of Figure~\ref{fig:meanscore_e} and Figure~\ref{fig:gsv} (in Appendix~\ref{app:nemenyi} of the online supplement) report the same output but using the variogram score for evaluation. For this specific DGP, base model and score, BTTH significantly outperforms all other methods. However, this result was not observed when using BTTH for any other simulation scenario, including those results omitted for brevity. Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well. Score optimisation, OLS, MinTShr and BTTH all lead to significant improvements relative to base, bottom-up and JPP.
+The right panel of Figure~\ref{fig:meanscore_e} reports the mean energy score for the non-Gaussian DGP\@. Overall, the results are quite similar to the Gaussian DGP\@. The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent. The Nemenyi matrix is omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results. However, these lead to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MinTShr and OLS are statistically indistinguishable from one another but are significantly better than base forecasts and the bottom-up method. The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts.
 
-
-\subsection{Results for non-Gaussian probabilistic forecast} \label{sec:SimSamplingResults}
-
-The left panel of Figure~\ref{fig:meanscore_v} reports the mean energy score for the non-Gaussian DGP\@. Overall, the results are quite similar to the Gaussian DGP\@. The best performing reconciliation method is ScoreOptE when base probabilistic forecasts are independent, and MinTShr when base forecasts are dependent. The Nemenyi matrix is omitted for brevity; please refer to \url{https://git.io/JJwQB} for a full set of results. However, these lead to similar conclusion to Figure~\ref{fig:gse}. The methods ScoreOptE, MinTShr and OLS are statistically indistinguishable from one another but are significantly better than base forecasts and the bottom-up method. The methods BTTH and JPP lead to a statistically significant deterioration in forecast quality relative to base forecasts.
-
-Finally, the right panel of Figure~\ref{fig:meanscore_v} and Figure~\ref{fig:nsv} (in Appendix~\ref{app:nemenyi} of the online supplement) report results for the non-Gaussian DGP using the variogram score to evaluate forecasts. In this case, score optimisation with respect to the variogram score yields the best performance when base forecasts are dependent, while MinTShr yields the best performance when base forecasts are independent. In contrast to the Gaussian DGP, the JPP method leads to significant improvements over base forecasts, while the BTTH method leads to a significantly worse performance than base forecasts.
+Similar conclusions can be drawn based on the results for both Gaussian and non-Gaussian probabilistic forecasts considering the mean variogram score. These are presented in Appendix~\ref{app:nemenyi}. 
 
 
-Overall, the main conclusion from the simulation study is that score optimisation leads to significant improvements in forecast performance over base forecasts irrespective of whether the DGP is Gaussian or non-Gaussian and irrespective of whether the energy or variogram score is used for evaluation. For the DGPs considered in the simulation study, MinTShr and to a lesser extent OLS also provided significant improvements over base and bottom-up forecasts. While the existing probabilistic forecast reconciliation methods considered in the literature (BTTH and JPP) performed well in some scenarios (particularly BTTH for the Gaussian DGP evaluated by variogram score), overall results for these methods was mixed and even led to a statistically significant deterioration in forecast quality relative to base forecasts in some settings.
+%Overall, the main conclusion from the simulation study is that score optimisation leads to significant improvements in forecast performance over base forecasts irrespective of whether the DGP is Gaussian or non-Gaussian and irrespective of whether the energy or variogram score is used for evaluation. For the DGPs considered in the simulation study, MinTShr and to a lesser extent OLS also provided significant improvements over base and bottom-up forecasts. While the existing probabilistic forecast reconciliation methods considered in the literature (BTTH and JPP) performed well in some scenarios (particularly BTTH for the Gaussian DGP evaluated by variogram score), overall results for these methods was mixed and even led to a statistically significant deterioration in forecast quality relative to base forecasts in some settings.
 
 \section{Forecasting Australian Electricity Generation}\label{sec:Application}
 
@@ -730,6 +726,10 @@ For the Gaussian DGP, $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathca
 For the non-Gaussian case, errors are generated from a Gumbel copula with Beta margins as described in Section~\ref{sec:dgp}. Rather than add Gaussian noise, we simulate $u_t$ and $v_t$ from skew t distributions using the \texttt{sn} package \citep{snpackage}. The scale, skew and degrees of freedom parameters are chosen as 0.5,1.5 and 4 and 0.9,2 and 8 for $u_t$ and $v_t$ respectively. Monte Carlo simulations show that these values satisfy the inequalities described above.
 
 \section{Results for Variogram Score for Simulation}\label{app:nemenyi}
+
+Figure~\ref{fig:meanscore_v} shows the mean variogram score for different reconciliation methods and different methods of generating base forecasts. The results on the left panel are for a Gaussian DGP while the results on the right panel are for a non-Gaussian DGP.  For this specific DGP, base model and score, BTTH significantly outperforms all other methods. However, this result was not observed when using BTTH for any other simulation scenario, including those discussed earlier in the paper as well as the results for the non-Gaussian DGP shown in the right panel. Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well. Score optimisation, OLS, MinTShr and BTTH all lead to significant improvements relative to base, bottom-up and JPP.
+
+For the non-Gaussian DGP score optimisation with respect to the variogram score yields the best performance when base forecasts are dependent, while MinTShr yields the best performance when base forecasts are independent. In contrast to the Gaussian DGP, the JPP method leads to significant improvements over base forecasts, while the BTTH method leads to a significantly worse performance than base forecasts. The Nemenyi matrix is presented in Figure~\ref{fig:nsv}. 
 
 \begin{figure}[!htb]
 	\centering
