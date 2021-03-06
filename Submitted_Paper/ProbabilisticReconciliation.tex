@@ -385,7 +385,7 @@ The objective function is optimised by Stochastic Gradient Descent (SGD). The SG
 	\end{algorithmic}
 \end{algorithm}
 
-While Algorithm~\ref{alg:scoreopt} is not the first instance of calibrating parameters by optimising scoring rules \citep[see][for an earlier example]{gneiting2005}, to the best of our knowledge it is the first instance of doing so using SGD and the first application to forecast reconciliation. It is amenable to parallel computing architectures: the loop beginning at line 2 of the pseudo-code of Algorithm~\ref{alg:scoreopt} can be done in parallel as can the computation of the gradient. Finally, the total score in Equation~\eqref{eq:tes} can be replaced with a weighted sum where appropriate; for instance weights that decay for scores computed further in the past will favour choices of $\bm{\gamma}$ that produced better forecasting performance for more recent forecast windows.
+While Algorithm~\ref{alg:scoreopt} is not the first instance of calibrating parameters by optimising scoring rules \citep[see][for an earlier example]{gneiting2005}, to the best of our knowledge it is the first instance of doing so \textcolor{blue}{in the context of} forecast reconciliation. It is amenable to parallel computing architectures: the loop beginning at line 2 of the pseudo-code of Algorithm~\ref{alg:scoreopt} can be done in parallel as can the computation of the gradient. Finally, the total score in Equation~\eqref{eq:tes} can be replaced with a weighted sum where appropriate; for instance weights that decay for scores computed further in the past will favour choices of $\bm{\gamma}$ that produced better forecasting performance for more recent forecast windows.
 
 \section{Simulations}\label{sec:simulations}
 
