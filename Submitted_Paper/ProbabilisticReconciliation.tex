@@ -25,6 +25,13 @@
 \titlespacing{\subsection}{0pt}{1ex}{0ex}
 \titlespacing{\subsubsection}{0pt}{0.5ex}{0ex}
 
+%% LINE AND PAGE BREAKING
+\sloppy
+\clubpenalty = 10000
+\widowpenalty = 10000
+\brokenpenalty = 10000
+\RequirePackage{microtype}
+
 % NOTE: To produce blinded version, replace "0" with "1" below.
 \newcommand{\blind}{1}
 
@@ -88,7 +95,7 @@
   Department of Econometrics and Business Statistics,\\
   Monash University, VIC 3800, Australia.\\
   Email: rob.hyndman@monash.edu \\}
-  \maketitle
+  \maketitle\newpage
 } \fi
 
 \if0\blind
@@ -112,9 +119,9 @@ We develop a framework for prediction of multivariate data that follow known lin
 
 \noindent%
 {\it Keywords:}  Scoring Rules, Hierarchical Time Series, Stochastic Gradient Descent.
-\vfill
+%\vfill
 
-\newpage
+%\newpage
 \spacingset{1.4} % DON'T change the spacing!
 \section{Introduction}\label{sec:intro}
 
@@ -166,7 +173,7 @@ The connection between this characterisation and the coherent subspace is that t
 
 When forecasts of all $n$ series are produced, they may not adhere to constraints. Such forecasts are called \emph{incoherent base} forecasts and are denoted $\hat{\bm{y}}$. To exploit the fact that the target of the forecast adheres to known linear constraints, base forecasts can be adjusted in a process known as \emph{forecast reconciliation}. This involves selecting a mapping $\psi:\mathbb{R}^n\rightarrow\mathfrak{s}$ and then setting $\tilde{\bm{y}}=\psi(\hat{\bm{y}})$, where $\tilde{\bm{y}}\in\mathfrak{s}$ is called the \emph{reconciled} forecast. The mapping $\psi$ may be considered as the composition of two mappings $\psi=s\circ g$. Here, $g:\mathbb{R}^{n}\rightarrow\mathbb{R}^{m}$ combines incoherent base forecasts of all series to produce new bottom-level forecasts, which are then aggregated via $s$. Many existing point forecasting approaches including the bottom-up \citep{Dunn1976}, OLS \citep{HynEtAl2011}, WLS \citep[][]{AthEtAl2017} and MinT \citep{WicEtAl2019} methods, are special cases where $g$ is premultiplication by a matrix $\bm{G}$ and where $\bm{S}\bm{G}$ is a projection matrix. These are summarised in Table~\ref{tab:ReconMethods}.
 
-\begin{table}[H]
+\begin{table}[!htb]
 	\caption{Summary of reconciliation methods for which $\bm{S}\bm{G}$ is a projection matrix. Here $\bm{W}$ is some diagonal matrix, $\hat{\bm{\Sigma}}_{\text{sam}}$ is a sample estimate of the residual covariance matrix and $\hat{\bm{\Sigma}}_{\text{shr}}$ is a shrinkage estimator proposed by \citet{Schafer2005}, given by $\tau \textrm{diag}(\hat{\bm{\Sigma}}_{\text{sam}})+(1-\tau)\hat{\bm{\Sigma}}_{\text{sam}}$ where $\tau = \displaystyle\frac{\sum_{i \neq j}\hat{\var}(\hat{\sigma}_{ij})}{\sum_{i \neq j}{\hat{\sigma}}^2_{ij}}$ and $\sigma_{ij}$ denotes the $(i,j)$th element of $\hat{\bm{\Sigma}}_{\text{sam}}$.} \label{tab:ReconMethods}
 	\centering
 	\begin{tabular}{l@{\hskip 0.4in}l}
@@ -533,6 +540,7 @@ An interesting result is that projection methods with certain optimality propert
 
 A final important avenue of future research is the development of probabilistic forecast reconciliation for domains other than the real line. These may include domains constrained above zero, discrete domains, or domains that are a mixture of continuous distributions and discrete point masses. While such problems are challenging, the geometric interpretation of probabilistic forecast introduced in this paper, lays the foundation for this research agenda.
 
+\clearpage
 \appendix
 
 \section{Theorem Proofs} \label{app:proofs}
@@ -623,10 +631,7 @@ LS(\hat{f},\bm{y}^*) <-\log|\bm{S}^*|-\log f_{\bm{b}}(\bm{b}^*)=LS\left(f,\bm{y}
 Since this holds for any possible realisation, it will also hold after taking expectations (by the monotonicity of expectations). Thus $\hat{f}$ violates the condition for a proper scoring rule.
 
 \clearpage
-\setcounter{page}{1}
-
-
-
+%\setcounter{page}{1}
 \section{Reconciled Forecast for Gaussian Distribution}\label{app:gauss_ex}
 
 Suppose the incoherent base forecasts are Gaussian with mean $\hat{\bm{\mu}}$, covariance matrix $\hat{\bm{\Sigma}}$ and density,
@@ -660,6 +665,7 @@ where $\bm{G}_{\perp}^-$ is an $(n-m)\times n$ matrix such that $\bm{G}_{\perp}^
 \]
 After the change of variables, the density can be recognised as a multivariate Gaussian in $\bm{b}$ and $\bm{a}$. The mean and covariance matrix for the margins of the first $m$ elements are $\bm{G}\hat{\bm{\mu}}$ and $\bm{G}\hat{\bm{\Sigma}}\bm{G}'$ respectively. Marginalising out $\bm{a}$, the reconciled forecast for the bottom-level is $\tilde{\bm{b}} \sim \mathcal{N}(\bm{G}\hat{\bm{\mu}}, \bm{G}\hat{\bm{\Sigma}}\bm{G}')$. Using standard results from matrix algebra of normals, $\tilde{\bm{y}} \sim \mathcal{N}(\bm{S}\bm{G}\hat{\bm{\mu}}, \bm{S}\bm{G}\hat{\bm{\Sigma}}\bm{G}'\bm{S}')$.
 
+\clearpage
 \section{Comparison using only bottom-level series}\label{app:bl_comp}
 
 If a probabilistic forecast is available for any $m$ series, then a probabilistic forecast for the full hierarchy can be derived. Definition~\ref{def:cohprob} provides an example using the bottom-level series. This suggests that it may be adequate to merely compare two coherent forecasts to one another using the bottom-level series only. This is true for the log score.
@@ -687,6 +693,7 @@ The same property does not hold for all scores. For example, the energy score is
 	\label{tab:prop}
 \end{table}
 
+\clearpage
 \section{Data generating process} \label{app:DGP}
 
 To ensure that bottom-level series are noisier than bottom-level series (a feature often observed empirically), noise is added to the bottom-level series in the following manner
@@ -725,6 +732,7 @@ For the Gaussian DGP, $u_t \sim \mathcal{N}(0,\sigma^2_u)$ and $v_t \sim \mathca
 
 For the non-Gaussian case, errors are generated from a Gumbel copula with Beta margins as described in Section~\ref{sec:dgp}. Rather than add Gaussian noise, we simulate $u_t$ and $v_t$ from skew t distributions using the \texttt{sn} package \citep{snpackage}. The scale, skew and degrees of freedom parameters are chosen as 0.5,1.5 and 4 and 0.9,2 and 8 for $u_t$ and $v_t$ respectively. Monte Carlo simulations show that these values satisfy the inequalities described above.
 
+\clearpage
 \section{Results for Variogram Score for Simulation}\label{app:nemenyi}
 
 Figure~\ref{fig:meanscore_v} shows the mean variogram score for different reconciliation methods and different methods of generating base forecasts. The results on the left panel are for a Gaussian DGP while the results on the right panel are for a non-Gaussian DGP.  For this specific DGP, base model and score, BTTH significantly outperforms all other methods. However, this result was not observed when using BTTH for any other simulation scenario, including those discussed earlier in the paper as well as the results for the non-Gaussian DGP shown in the right panel. Excluding this result, score optimisation with respect to the variogram score is the best performing method with MinTShr and OLS also performing well. Score optimisation, OLS, MinTShr and BTTH all lead to significant improvements relative to base, bottom-up and JPP.
@@ -753,6 +761,7 @@ For the non-Gaussian DGP score optimisation with respect to the variogram score 
 	\label{fig:nsv}
 \end{figure}
 
+\clearpage
 \section{Results from Vector Autoregression}\label{app:var}
 
 \textcolor{blue}{The results in this section were applied to the same data as Section~\ref{sec:Application}, however base forecasts were obtained from a vector autoregressive model.  Up to 7 lags (one week) were considered and regularisation was achieved via a lasso penalty on the VAR coefficients.  Similar conclusions can be drawn from Figure~\ref{fig:meanenergy_app_var} as for Figure~\ref{fig:meanenergy_app}, namely that the score optimisation method (and to a lesser extent MinT) lead to substantial improvements in base forecasts under the assumptions of Gaussianity and independence.  For base forecasts that use either bootstrapping or assume dependence (or both), the improvements from applying forecast reconciliation are not as obvious.  However, Figure~\ref{fig:meanenergy_app_var} does show that there is a statistically significant improvement over base forecasts from using OLS reconciliation and the MinT method.}
