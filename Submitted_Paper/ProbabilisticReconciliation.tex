@@ -1,6 +1,9 @@
 \pdfminorversion=4
 \documentclass[a4paper,11pt]{article}
+\newcommand\hmmax{0}
+\newcommand\bmmax{0}
 \usepackage{amsmath, bm, amssymb, amsthm, mathrsfs,bbm}
+\usepackage{bbm}
 \usepackage[bb=boondox]{mathalfa}
 \usepackage{paralist}
 \usepackage{natbib}
@@ -243,9 +246,9 @@ The following theorem shows how a reconciled density can be derived from any bas
 	\[
 	\tilde{f}_{\bm{y}}(\bm{y}) =
 	|\bm{S}^*| \tilde{f}_{\bm{b}}({\bm{S}^-\bm{y}})
-	\bm{1}\{\bm{y}\in\mathfrak{s}\}\,,
+	\mathbbm{1}\{\bm{y}\in\mathfrak{s}\}\,,
 	\]
-	where $\bm{1}\{\cdot\}$ equals $1$ when the statement in braces is true and 0 otherwise,
+	where $\mathbbm{1}\{\cdot\}$ equals $1$ when the statement in braces is true and 0 otherwise,
 	\[
 	\bm{S}^*=\begin{pmatrix}
 	\bm{S}^-\\
@@ -301,8 +304,8 @@ In practice it is often the case that samples are drawn from a probabilistic for
 \begin{proof}
 	For any $\mathcal{A}\in\mathscr{F}_{\mathfrak{s}}$
 	\begin{align}
-	\mbox{Pr}(\hat{\bm{y}}\in\psi^{-1}(\mathcal{A}))&=\underset{L\rightarrow\infty}{\lim}\sum\limits_{\ell=1}^L\bm{1}\big\{\hat{\bm{y}}^{[\ell]}\in\psi^{-1}(\mathcal{A})\big\}\nonumber\\
-	&=\underset{L\rightarrow\infty}{\lim}\sum\limits_{\ell=1}^L\bm{1}\big\{\psi(\hat{\bm{y}}^{[\ell]})\in(\mathcal{A})\big\}\nonumber\\
+	\mbox{Pr}(\hat{\bm{y}}\in\psi^{-1}(\mathcal{A}))&=\underset{L\rightarrow\infty}{\lim}\sum\limits_{\ell=1}^L\mathbbm{1}\big\{\hat{\bm{y}}^{[\ell]}\in\psi^{-1}(\mathcal{A})\big\}\nonumber\\
+	&=\underset{L\rightarrow\infty}{\lim}\sum\limits_{\ell=1}^L\mathbbm{1}\big\{\psi(\hat{\bm{y}}^{[\ell]})\in(\mathcal{A})\big\}\nonumber\\
 	&=\mbox{Pr}(\tilde{\bm{y}}\in(\mathcal{A}))\nonumber
 	\end{align}
 \end{proof}
@@ -559,7 +562,7 @@ Replacing $\bm{z}_1$ with $\bm{b}$, it can be seen that the term inside the oute
 is the density of $\bm{b}$. To obtain the density of the full hierarchy we first augment the density in Equation \eqref{eq:densb} by $n-m$ variables denoted $\bm{u}$
 
 \begin{equation}
-f(\bm{b},\bm{u})=\tilde{f}_b(\bm{b})\bm{1}\{\bm{u}=0\}\,,
+f(\bm{b},\bm{u})=\tilde{f}_b(\bm{b})\mathbbm{1}\{\bm{u}=0\}\,,
 \end{equation}
 such that the density $f(\bm{b},\bm{u})$ is a density for $n$-dimensional vector that is degenerate across the dimensions corresponding to $\bm{u}$. Using the change of variables,
 \[
@@ -573,11 +576,11 @@ where $\bm{S}^-_{\perp}$ is a generalised inverse such that $\bm{S}'_{\perp}\bm{
 \]
 it can be seen that $\bm{b}=\bm{S}^-\bm{y}$ and $\bm{u}=\bm{S}'_\perp\bm{y}$. Applying this change of variables yields the density
 \[
-\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{y})\bm{1}\{\bm{S}'_\perp\bm{y}=\bm{0}\}\,.
+\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{y})\mathbbm{1}\{\bm{S}'_\perp\bm{y}=\bm{0}\}\,.
 \]
 Since $\bm{S}'_\perp$ is the orthogonal complement of $\bm{S}$ and since the columns of $\bm{S}$ span the coherent subspace, the statement $\bm{S}'_\perp\bm{y}=0$ is equivalent to the statement $\bm{y}\in\mathfrak{s}$. As such, the reconciled density is given by
 \[
-\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_b(\bm{S}^-\bm{y})\bm{1}\{\bm{y}\in\mathfrak{s}\}.
+\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_b(\bm{S}^-\bm{y})\mathbbm{1}\{\bm{y}\in\mathfrak{s}\}.
 \]
 
 \subsection{Proof of Theorem~\ref{theo:OptRecProj}}
@@ -602,10 +605,10 @@ The proof relies on the following change of variables,
 \]
 Also recall from the proof of Theorem~\ref{theo:fulldens} that $\bm{S}^*=\big(\bm{S}\,\vdots\,\bm{S}_\perp\big)^{-1}$
 
-Let the density of the true predictive $f(\bm{y})$ after a change of variables, be given by $|\bm{S}^*|^{-1}f_{\bm{b}}(\bm{b})\bm{1}\{\bm{u}=\bm{0}\}$. To prove that the log score is improper we construct an incoherent base density $\hat{f}$ such that $E_f\big[LS(\hat{f},\bm{y})\big]<E_f\left[LS\left(f,\bm{y}\right)\right]$. This incoherent density is constructed, so that after the same change of variables it can be written as $|\bm{S}^*|^{-1}\hat{f}_{\bm{b}}(\bm{b})\hat{f}_{\bm{u}}(\bm{u})$. We require $\hat{f}_{\bm{u}}(\bm{0})>1$, i.e., $\bm{u}$ is highly concentrated around $\bm{0}$ but still non-degenerate. An example is an independent normal with mean 0 and variance less than $(2\pi)^{-1}$. Now, let $\bm{y}^*$ be a realisation from $f$. Let the first $m$ elements of $\bm{S}^*\bm{y}^*$ be $\bm{b}^*$, and the remaining elements be $\bm{u}^*$. The log score for $f$ is thus,
+Let the density of the true predictive $f(\bm{y})$ after a change of variables, be given by $|\bm{S}^*|^{-1}f_{\bm{b}}(\bm{b})\mathbbm{1}\{\bm{u}=\bm{0}\}$. To prove that the log score is improper we construct an incoherent base density $\hat{f}$ such that $E_f\big[LS(\hat{f},\bm{y})\big]<E_f\left[LS\left(f,\bm{y}\right)\right]$. This incoherent density is constructed, so that after the same change of variables it can be written as $|\bm{S}^*|^{-1}\hat{f}_{\bm{b}}(\bm{b})\hat{f}_{\bm{u}}(\bm{u})$. We require $\hat{f}_{\bm{u}}(\bm{0})>1$, i.e., $\bm{u}$ is highly concentrated around $\bm{0}$ but still non-degenerate. An example is an independent normal with mean 0 and variance less than $(2\pi)^{-1}$. Now, let $\bm{y}^*$ be a realisation from $f$. Let the first $m$ elements of $\bm{S}^*\bm{y}^*$ be $\bm{b}^*$, and the remaining elements be $\bm{u}^*$. The log score for $f$ is thus,
 \begin{align}
 LS\left(f,\bm{y}^*\right) &= -\log f(\bm{y}^*) \nonumber\\
-&=-\log|\bm{S}^*|-\log f_{\bm{b}}\left(\bm{b}^*\right)-\log\left(\bm{1}\{\bm{u}^*=\bm{0}\}\right)\label{eq:diraccancel}\\
+&=-\log|\bm{S}^*|-\log f_{\bm{b}}\left(\bm{b}^*\right)-\log\left(\mathbbm{1}\{\bm{u}^*=\bm{0}\}\right)\label{eq:diraccancel}\\
 &=-\log|\bm{S}^*|-\log f_{\bm{b}}\left(\bm{b}^*\right),\nonumber
 \end{align}
 where the third term in Equation~\eqref{eq:diraccancel} is equal to zero since the fact that $\bm{y}^*\in\mathfrak{s}$ implies that $\bm{u}^*=\bm{0}$. The log score for $\hat{f}$ is
@@ -655,7 +658,7 @@ After the change of variables, the density can be recognised as a multivariate G
 
 If a probabilistic forecast is available for any $m$ series, then a probabilistic forecast for the full hierarchy can be derived. Definition~\ref{def:cohprob} provides an example using the bottom-level series. This suggests that it may be adequate to merely compare two coherent forecasts to one another using the bottom-level series only. This is true for the log score.
 
-Consider a coherent probabilistic forecast with density $\tilde{f}_{\bm{y}}$ for the full hierarchy and $\tilde{f}_{\bm{b}}$ for the bottom-level series. By Theorem~\ref{theo:fulldens}, $\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{y})\bm{1}\{\bm{y}\in\mathfrak{s}\}$. Any realisation $\bm{y}^*$ will lie on the coherent subspace and can be written as $\bm{S}\bm{b}^*$. The expression for the log score is therefore
+Consider a coherent probabilistic forecast with density $\tilde{f}_{\bm{y}}$ for the full hierarchy and $\tilde{f}_{\bm{b}}$ for the bottom-level series. By Theorem~\ref{theo:fulldens}, $\tilde{f}_{\bm{y}}(\bm{y})=|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{y})\mathbbm{1}\{\bm{y}\in\mathfrak{s}\}$. Any realisation $\bm{y}^*$ will lie on the coherent subspace and can be written as $\bm{S}\bm{b}^*$. The expression for the log score is therefore
 \begin{align}
 \text{LS}(\tilde{f}_{\bm{y}},\bm{y}^*)&=-\log\left(|\bm{S}^*|\tilde{f}_{\bm{b}}(\bm{S}^-\bm{S}\bm{b}^*)\right)\nonumber\\
 &=-\log|\bm{S}^*|-\log \tilde{f}_{\bm{b}}(\bm{b}^*).\nonumber
