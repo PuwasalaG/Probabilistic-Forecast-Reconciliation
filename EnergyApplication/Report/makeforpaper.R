@@ -28,7 +28,7 @@ dat%>%
   facet_wrap(~Source,
              nrow = 3, 
              ncol = 1,
-             scales = 'free_y')
+             scales = 'free_y')+theme_bw()
 
 dev.off()
 
@@ -49,7 +49,7 @@ dat%>%
   facet_wrap(~Source,
              nrow = 3, 
              ncol = 3,
-             scales = 'free_y')
+             scales = 'free_y')+theme_bw()
        
 dev.off()
 
@@ -70,7 +70,7 @@ dat%>%
   facet_wrap(~Source,
              nrow = 3, 
              ncol = 3,
-             scales = 'free_y')
+             scales = 'free_y')+theme_bw()
 
 dev.off()
 
@@ -84,7 +84,7 @@ dat%>%
   facet_wrap(~Source,
              nrow = 2, 
              ncol = 1,
-             scales = 'free_y')
+             scales = 'free_y')+theme_bw()
 
 dev.off()
 
@@ -104,7 +104,7 @@ dat%>%
   facet_wrap(~Source,
              nrow = 4, 
              ncol = 1,
-             scales = 'free_y')
+             scales = 'free_y')+theme_bw()
 
 dev.off()
 
@@ -156,7 +156,7 @@ resid_df%>%
   pivot_longer(cols = -Date,names_to = 'Source', values_to = 'Generation')%>%
   ggplot(aes(x=Generation))+
   geom_histogram()+
-  facet_wrap(~Source,nrow = 3,3,scales = 'free')
+  facet_wrap(~Source,nrow = 3,3,scales = 'free')+theme_bw()
 dev.off()
 
 pdf('forPaper/corr.pdf')
@@ -298,7 +298,7 @@ rbind(p1,p2)%>%
   geom_line()+
   scale_y_log10()+
   facet_wrap(~Sc,scales = 'free_y')+
-  scale_color_colorblind()
+  scale_color_colorblind()+theme_bw()
 
 dev.off()
 
@@ -312,6 +312,7 @@ p1%>%
   geom_point()+
   geom_line()+
   scale_y_log10()+
-  scale_color_colorblind()
+  scale_color_colorblind()+theme_bw()
 
 dev.off()
+

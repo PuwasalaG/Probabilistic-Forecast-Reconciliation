@@ -238,7 +238,7 @@ both%>%
   geom_line()+
   scale_y_log10()+
   facet_wrap(~DGP,scales = 'free_y')+
-  scale_color_colorblind()
+  scale_color_colorblind()+theme_bw()
 
 
 
@@ -287,7 +287,7 @@ both%>%
   geom_line()+
   scale_y_log10()+
   facet_wrap(~DGP,scales = 'free_y')+
-  scale_color_colorblind()
+  scale_color_colorblind()+theme_bw()
 
 dev.off()
 
